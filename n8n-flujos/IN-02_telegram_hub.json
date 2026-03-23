@@ -1,0 +1,88 @@
+{
+  "name": "IN-02 Notificaciones Telegram Hub",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "hooks/telegram-notify", "responseMode": "onReceived", "options": {} },
+      "id": "webhook-notify",
+      "name": "Webhook Notificación",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            { "conditions": { "conditions": [{ "leftValue": "={{$json.type}}", "rightValue": "alert", "operator": { "type": "string", "operation": "equals" } }] }, "outputKey": "alert" },
+            { "conditions": { "conditions": [{ "leftValue": "={{$json.type}}", "rightValue": "info", "operator": { "type": "string", "operation": "equals" } }] }, "outputKey": "info" },
+            { "conditions": { "conditions": [{ "leftValue": "={{$json.type}}", "rightValue": "success", "operator": { "type": "string", "operation": "equals" } }] }, "outputKey": "success" },
+            { "conditions": { "conditions": [{ "leftValue": "={{$json.type}}", "rightValue": "error", "operator": { "type": "string", "operation": "equals" } }] }, "outputKey": "error" }
+          ]
+        },
+        "options": { "fallbackOutput": "extra" }
+      },
+      "id": "switch-type",
+      "name": "Switch Tipo",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst type = data.type || 'info';\n\nconst icons = { alert: '🚨', info: 'ℹ️', success: '✅', error: '❌' };\nconst icon = icons[type] || 'ℹ️';\n\nlet msg = `${icon} *${data.title || 'Notificación'}*\\n\\n`;\nmsg += data.message || data.body || 'Sin detalle';\n\nif (data.link) {\n  msg += `\\n\\n🔗 [Ver en CRM](${data.link})`;\n}\n\nif (data.metadata) {\n  msg += '\\n\\n📎 _Metadata:_\\n';\n  for (const [k, v] of Object.entries(data.metadata)) {\n    msg += `• ${k}: ${v}\\n`;\n  }\n}\n\nreturn [{ json: { formatted_message: msg, chat_id: data.chat_id || '' } }];"
+      },
+      "id": "format-all",
+      "name": "Formatear Mensaje",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$json.chat_id || $env.TELEGRAM_CHAT_ID}}",
+        "text": "={{$json.formatted_message}}",
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "telegram",
+      "name": "Enviar Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [910, 300],
+      "credentials": { "telegramApi": { "id": "telegram-bot", "name": "Riskitera Telegram Bot" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/notifications",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"title\": \"{{$node['Webhook Notificación'].json.title || 'Notificación'}}\", \"message\": \"{{$node['Webhook Notificación'].json.message || ''}}\", \"type\": \"{{$node['Webhook Notificación'].json.type || 'info'}}\", \"link\": \"{{$node['Webhook Notificación'].json.link || ''}}\"}",
+        "options": {}
+      },
+      "id": "save-notification",
+      "name": "Guardar en CRM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [910, 450],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    }
+  ],
+  "connections": {
+    "Webhook Notificación": { "main": [[{ "node": "Switch Tipo", "type": "main", "index": 0 }]] },
+    "Switch Tipo": {
+      "main": [
+        [{ "node": "Formatear Mensaje", "type": "main", "index": 0 }],
+        [{ "node": "Formatear Mensaje", "type": "main", "index": 0 }],
+        [{ "node": "Formatear Mensaje", "type": "main", "index": 0 }],
+        [{ "node": "Formatear Mensaje", "type": "main", "index": 0 }],
+        [{ "node": "Formatear Mensaje", "type": "main", "index": 0 }]
+      ]
+    },
+    "Formatear Mensaje": { "main": [[{ "node": "Enviar Telegram", "type": "main", "index": 0 }, { "node": "Guardar en CRM", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "integraciones" }, { "name": "high" }, { "name": "phase_1" }],
+  "meta": { "code": "IN-02", "category": "integraciones", "priority": "high", "estimated_hours": 4, "description": "Hub centralizado de notificaciones Telegram. Recibe webhooks del backend y formatea según tipo (alert/info/success/error)." }
+}

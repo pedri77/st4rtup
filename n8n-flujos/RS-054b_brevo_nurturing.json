@@ -1,0 +1,100 @@
+{
+  "name": "RS-054b — Brevo Nurturing Leads Fríos",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 10 * * 1" }] }
+      },
+      "name": "Cron Lunes 10:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "notes": "Cada lunes busca leads fríos (score < 40, status=new/contacted) y los envía a Brevo nurturing"
+    },
+    {
+      "parameters": {
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/leads",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "page_size", "value": "100" },
+            { "name": "status", "value": "new" }
+          ]
+        }
+      },
+      "name": "GET Leads Fríos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [470, 300],
+      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "jsCode": "const leads = $input.first().json.items || [];\nconst coldLeads = leads.filter(l => (l.score || 0) < 40 && l.contact_email);\n\nreturn coldLeads.map(l => ({\n  json: {\n    email: l.contact_email,\n    first_name: l.contact_name ? l.contact_name.split(' ')[0] : '',\n    company: l.company_name || '',\n    score: l.score || 0,\n    sector: l.company_sector || 'general',\n    lead_id: l.id\n  }\n}));"
+      },
+      "name": "Filtrar Score < 40",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [690, 300]
+    },
+    {
+      "parameters": { "batchSize": 1, "options": { "reset": false } },
+      "name": "SplitInBatches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [910, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/analytics/external/brevo/nurturing",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "email", "value": "={{$json.email}}" },
+            { "name": "first_name", "value": "={{$json.first_name}}" },
+            { "name": "company", "value": "={{$json.company}}" },
+            { "name": "icp_score", "value": "={{$json.score}}" }
+          ]
+        }
+      },
+      "name": "Añadir a Brevo Nurturing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1130, 300],
+      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/leads/{{$json.lead_id}}",
+        "method": "PUT",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [{ "name": "status", "value": "nurturing" }]
+        }
+      },
+      "name": "Marcar Lead como Nurturing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1350, 300],
+      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+    }
+  ],
+  "connections": {
+    "Cron Lunes 10:00": { "main": [[{ "node": "GET Leads Fríos", "type": "main", "index": 0 }]] },
+    "GET Leads Fríos": { "main": [[{ "node": "Filtrar Score < 40", "type": "main", "index": 0 }]] },
+    "Filtrar Score < 40": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] },
+    "SplitInBatches": { "main": [[{ "node": "Añadir a Brevo Nurturing", "type": "main", "index": 0 }]] },
+    "Añadir a Brevo Nurturing": { "main": [[{ "node": "Marcar Lead como Nurturing", "type": "main", "index": 0 }]] },
+    "Marcar Lead como Nurturing": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "brevo" }, { "name": "nurturing" }, { "name": "sprint-3" }],
+  "meta": { "code": "RS-054b", "category": "nurturing", "priority": "alta", "estimated_hours": 3 }
+}

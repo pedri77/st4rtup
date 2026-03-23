@@ -1,0 +1,54 @@
+-- Script para crear usuario admin en Supabase Auth
+-- Ejecutar en: Supabase Dashboard → SQL Editor
+
+-- Nota: Este script requiere que la extensión pgcrypto esté habilitada
+-- (por defecto ya viene habilitada en Supabase)
+
+-- Crear usuario david@riskitera.com
+INSERT INTO auth.users (
+    instance_id,
+    id,
+    aud,
+    role,
+    email,
+    encrypted_password,
+    email_confirmed_at,
+    confirmation_sent_at,
+    confirmed_at,
+    recovery_sent_at,
+    last_sign_in_at,
+    raw_app_meta_data,
+    raw_user_meta_data,
+    created_at,
+    updated_at,
+    confirmation_token,
+    email_change,
+    email_change_token_new,
+    recovery_token
+)
+VALUES (
+    '00000000-0000-0000-0000-000000000000',
+    gen_random_uuid(),
+    'authenticated',
+    'authenticated',
+    'david@riskitera.com',
+    crypt('Manuel2018***', gen_salt('bf')),
+    NOW(),
+    NOW(),
+    NOW(),
+    NOW(),
+    NOW(),
+    '{"provider":"email","providers":["email"]}'::jsonb,
+    '{}'::jsonb,
+    NOW(),
+    NOW(),
+    '',
+    '',
+    '',
+    ''
+);
+
+-- Verificar que el usuario se creó correctamente
+SELECT id, email, email_confirmed_at, created_at
+FROM auth.users
+WHERE email = 'david@riskitera.com';

@@ -1,0 +1,13 @@
+-- 032: Extended competitor fields for MOD-COMPETITORS-001
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS region VARCHAR(20) DEFAULT 'global';
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS tier VARCHAR(20) DEFAULT 'medium';
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS scope TEXT;
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS model TEXT;
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS maturity_score INTEGER DEFAULT 50;
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS analysis TEXT;
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS weakness TEXT;
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS vs_riskitera TEXT;
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS tags JSON;
+ALTER TABLE competitors ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
+CREATE INDEX IF NOT EXISTS ix_competitors_region ON competitors(region);
+CREATE INDEX IF NOT EXISTS ix_competitors_tier ON competitors(tier);

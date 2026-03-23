@@ -1,0 +1,48 @@
+{
+  "service": "MAIL",
+  "name": "Riskitera Sales CRM",
+  "apiversion": "1.0",
+  "description": "Integración completa de Riskitera Sales CRM con Zoho Mail. Ver información de leads, sincronizar emails automáticamente y gestionar interacciones directamente desde tu bandeja de entrada.",
+  "icon": "img/icon.png",
+  "category": "CRM",
+  "version": "1.0.0",
+  "developer": {
+    "name": "Riskitera",
+    "email": "sales@riskitera.com",
+    "website": "https://riskitera.com"
+  },
+  "connectedapps": {
+    "scope": [
+      "ZohoMail.messages.READ",
+      "ZohoMail.messages.CREATE",
+      "ZohoMail.messages.UPDATE",
+      "ZohoMail.organization.READ",
+      "ZohoMail.accounts.READ"
+    ]
+  },
+  "settings": {
+    "fields": [
+      {
+        "type": "text",
+        "label": "API URL",
+        "name": "api_url",
+        "hint": "URL de tu backend de Riskitera Sales (ej: https://tu-backend.railway.app)",
+        "mandatory": true
+      },
+      {
+        "type": "password",
+        "label": "API Token",
+        "name": "api_token",
+        "hint": "Token de autenticación JWT de tu usuario",
+        "mandatory": true
+      }
+    ]
+  },
+  "location": [
+    {
+      "type": "SIDEBAR",
+      "name": "Lead Info Panel",
+      "files": ["app/widget.html"]
+    }
+  ]
+}

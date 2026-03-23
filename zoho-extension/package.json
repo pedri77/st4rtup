@@ -1,0 +1,23 @@
+{
+  "name": "riskitera-sales-zoho-extension",
+  "version": "1.0.0",
+  "description": "Extensión de Zoho Mail para Riskitera Sales CRM",
+  "main": "app/widget.html",
+  "scripts": {
+    "dev": "zet run",
+    "pack": "zet pack",
+    "validate": "zet validate"
+  },
+  "keywords": [
+    "zoho",
+    "mail",
+    "crm",
+    "riskitera",
+    "extension"
+  ],
+  "author": "Riskitera",
+  "license": "PROPRIETARY",
+  "devDependencies": {
+    "zoho-extension-toolkit": "^2.0.0"
+  }
+}

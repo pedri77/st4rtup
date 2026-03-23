@@ -1,0 +1,88 @@
+{
+  "name": "LD-04 Lead Scoring Automático",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "hooks/lead-activity", "responseMode": "onReceived", "options": {} },
+      "id": "webhook-activity",
+      "name": "Webhook Actividad Lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/leads/{{$json.lead_id}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "get-lead",
+      "name": "GET Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [470, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $input.first().json;\nconst activity = $node['Webhook Actividad Lead'].json;\nlet score = lead.score || 0;\n\n// Scoring por tipo de actividad\nconst scoreMap = {\n  'form_submit': 20,\n  'email_open': 5,\n  'email_click': 10,\n  'email_reply': 20,\n  'page_visit': 3,\n  'demo_request': 30,\n  'document_download': 15,\n  'linkedin_connect': 10,\n  'call_scheduled': 25,\n  'call_completed': 20,\n  'visit_scheduled': 30,\n  'visit_completed': 25,\n  'proposal_viewed': 20\n};\n\nconst delta = scoreMap[activity.activity_type] || 5;\nscore += delta;\n\n// Scoring por tamaño empresa\nconst size = parseInt(lead.company_size) || 0;\nif (size > 1000) score += 10;\nelse if (size > 200) score += 5;\n\n// Cap at 100\nscore = Math.min(score, 100);\n\n// Determinar si es hot lead (>=70)\nconst isHot = score >= 70;\nconst wasHot = (lead.score || 0) >= 70;\nconst justBecameHot = isHot && !wasHot;\n\nreturn [{ json: { ...lead, score, delta, activity_type: activity.activity_type, is_hot: isHot, just_became_hot: justBecameHot } }];"
+      },
+      "id": "calc-score",
+      "name": "Calcular Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/leads/{{$json.id}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": { "parameters": [{ "name": "score", "value": "={{$json.score}}" }] },
+        "options": {}
+      },
+      "id": "update-score",
+      "name": "Actualizar Score",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [910, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "conditions": { "conditions": [{ "leftValue": "={{$node['Calcular Score'].json.just_became_hot}}", "rightValue": true, "operator": { "type": "boolean", "operation": "equals" } }] }
+      },
+      "id": "if-hot",
+      "name": "¿Se convirtió en Hot?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1130, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$env.TELEGRAM_CHAT_ID}}",
+        "text": "=🔥 *Hot Lead detectado*\n\n🏢 *{{$node['Calcular Score'].json.company_name}}*\n👤 {{$node['Calcular Score'].json.contact_name}}\n📊 Score: {{$node['Calcular Score'].json.score}}/100\n📈 +{{$node['Calcular Score'].json.delta}} por {{$node['Calcular Score'].json.activity_type}}\n\n⚡ Contactar lo antes posible",
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "telegram-hot",
+      "name": "Alerta Hot Lead",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1350, 250],
+      "credentials": { "telegramApi": { "id": "telegram-bot", "name": "Riskitera Telegram Bot" } }
+    }
+  ],
+  "connections": {
+    "Webhook Actividad Lead": { "main": [[{ "node": "GET Lead", "type": "main", "index": 0 }]] },
+    "GET Lead": { "main": [[{ "node": "Calcular Score", "type": "main", "index": 0 }]] },
+    "Calcular Score": { "main": [[{ "node": "Actualizar Score", "type": "main", "index": 0 }]] },
+    "Actualizar Score": { "main": [[{ "node": "¿Se convirtió en Hot?", "type": "main", "index": 0 }]] },
+    "¿Se convirtió en Hot?": { "main": [[{ "node": "Alerta Hot Lead", "type": "main", "index": 0 }], []] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "leads_captacion" }, { "name": "critical" }, { "name": "phase_2" }],
+  "meta": { "code": "LD-04", "category": "leads_captacion", "priority": "critical", "estimated_hours": 6, "description": "Lead scoring automático por actividad. Notifica hot leads (>=70) por Telegram." }
+}

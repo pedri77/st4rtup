@@ -1,0 +1,542 @@
+"""Endpoints de pagos — Stripe + PayPal (MOD-PAYMENTS-001)."""
+import hashlib
+import hmac
+import logging
+from datetime import datetime, timezone
+from typing import Optional
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func, desc
+
+from app.core.config import settings
+from app.core.database import get_db
+from app.core.security import get_current_user
+from app.core.permissions import require_write_access
+from app.models.payment import PaymentPlan, Payment, Invoice
+from app.schemas.base import PaginatedResponse
+from app.services import payment_service
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter()
+
+
+# ─── Helpers ─────────────────────────────────────────────────
+
+def _row_to_dict(row):
+    """Convert SQLAlchemy model instance to dict."""
+    d = {}
+    for c in row.__table__.columns:
+        val = getattr(row, c.name if c.name != "metadata" else "metadata_")
+        if isinstance(val, datetime):
+            val = val.isoformat()
+        elif hasattr(val, "hex"):  # UUID
+            val = str(val)
+        d[c.name] = val
+    return d
+
+
+# ─── LIST PAYMENTS ───────────────────────────────────────────
+
+@router.get("", response_model=PaginatedResponse)
+async def list_payments(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    status: Optional[str] = None,
+    provider: Optional[str] = None,
+    payment_type: Optional[str] = None,
+    search: Optional[str] = Query(None, max_length=200),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Lista pagos con filtros y paginacion."""
+    query = select(Payment)
+
+    if status:
+        query = query.where(Payment.status == status)
+    if provider:
+        query = query.where(Payment.provider == provider)
+    if payment_type:
+        query = query.where(Payment.payment_type == payment_type)
+    if search:
+        query = query.where(
+            Payment.customer_email.ilike(f"%{search}%") |
+            Payment.customer_name.ilike(f"%{search}%") |
+            Payment.description.ilike(f"%{search}%")
+        )
+
+    count_q = select(func.count()).select_from(query.subquery())
+    total = (await db.execute(count_q)).scalar()
+
+    query = query.order_by(desc(Payment.created_at))
+    query = query.offset((page - 1) * page_size).limit(page_size)
+    result = await db.execute(query)
+    items = [_row_to_dict(r) for r in result.scalars().all()]
+
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "pages": (total + page_size - 1) // page_size if total else 0,
+    }
+
+
+# ─── STATS / KPIs ───────────────────────────────────────────
+
+@router.get("/stats")
+async def payment_stats(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """KPIs de pagos: ingresos totales, MRR, suscripciones activas, facturas pendientes."""
+    # Total revenue (completed payments)
+    total_q = select(func.coalesce(func.sum(Payment.amount_eur), 0)).where(Payment.status == "completed")
+    total_revenue = (await db.execute(total_q)).scalar()
+
+    # MRR (subscription payments completed this month)
+    now = datetime.now(timezone.utc)
+    first_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    mrr_q = (
+        select(func.coalesce(func.sum(Payment.amount_eur), 0))
+        .where(Payment.status == "completed")
+        .where(Payment.payment_type == "subscription")
+        .where(Payment.paid_at >= first_of_month)
+    )
+    mrr = (await db.execute(mrr_q)).scalar()
+
+    # Active subscriptions count
+    subs_q = (
+        select(func.count())
+        .select_from(Payment)
+        .where(Payment.payment_type == "subscription")
+        .where(Payment.status == "completed")
+        .where(Payment.provider_subscription_id.isnot(None))
+    )
+    active_subscriptions = (await db.execute(subs_q)).scalar()
+
+    # Pending invoices
+    pending_q = (
+        select(func.count())
+        .select_from(Invoice)
+        .where(Invoice.status.in_(["draft", "sent", "overdue"]))
+    )
+    pending_invoices = (await db.execute(pending_q)).scalar()
+
+    # Total payments count
+    count_q = select(func.count()).select_from(Payment)
+    total_payments = (await db.execute(count_q)).scalar()
+
+    return {
+        "total_revenue": float(total_revenue),
+        "mrr": float(mrr),
+        "active_subscriptions": active_subscriptions,
+        "pending_invoices": pending_invoices,
+        "total_payments": total_payments,
+        "stripe_configured": payment_service.stripe_configured(),
+        "paypal_configured": payment_service.paypal_configured(),
+    }
+
+
+# ─── PLANS ───────────────────────────────────────────────────
+
+@router.get("/plans")
+async def list_plans(
+    active_only: bool = Query(True),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Lista planes de precios."""
+    query = select(PaymentPlan)
+    if active_only:
+        query = query.where(PaymentPlan.is_active == True)
+    query = query.order_by(PaymentPlan.price_eur)
+    result = await db.execute(query)
+    return [_row_to_dict(p) for p in result.scalars().all()]
+
+
+@router.post("/plans")
+async def create_plan(
+    name: str = Query(...),
+    price_eur: float = Query(...),
+    interval: str = Query("month"),
+    description: str = Query(""),
+    trial_days: int = Query(0),
+    max_users: Optional[int] = None,
+    max_leads: Optional[int] = None,
+    stripe_price_id: Optional[str] = None,
+    paypal_plan_id: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_write_access),
+):
+    """Crea un plan de precios."""
+    plan = PaymentPlan(
+        name=name,
+        price_eur=price_eur,
+        interval=interval,
+        description=description,
+        trial_days=trial_days,
+        max_users=max_users,
+        max_leads=max_leads,
+        stripe_price_id=stripe_price_id,
+        paypal_plan_id=paypal_plan_id,
+    )
+    db.add(plan)
+    await db.commit()
+    await db.refresh(plan)
+    return _row_to_dict(plan)
+
+
+# ─── STRIPE CHECKOUT ────────────────────────────────────────
+
+@router.post("/checkout")
+async def create_checkout(
+    amount_eur: float = Query(..., description="Importe en EUR"),
+    customer_email: str = Query(""),
+    description: str = Query("St4rtup GRC"),
+    plan_id: Optional[UUID] = None,
+    lead_id: Optional[UUID] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_write_access),
+):
+    """Crea sesion de Stripe Checkout."""
+    if not payment_service.stripe_configured():
+        raise HTTPException(400, "Stripe no configurado. Configura STRIPE_SECRET_KEY.")
+
+    amount_cents = int(amount_eur * 100)
+    metadata = {}
+    if plan_id:
+        metadata["plan_id"] = str(plan_id)
+    if lead_id:
+        metadata["lead_id"] = str(lead_id)
+
+    session = await payment_service.stripe_create_checkout(
+        amount_cents=amount_cents,
+        customer_email=customer_email,
+        description=description,
+        metadata=metadata,
+    )
+
+    # Record payment in DB
+    payment = Payment(
+        provider="stripe",
+        provider_payment_id=session.get("payment_intent") or session.get("id"),
+        amount_eur=amount_eur,
+        status="pending",
+        payment_type="one_time",
+        customer_email=customer_email,
+        description=description,
+        lead_id=lead_id,
+        plan_id=plan_id,
+    )
+    db.add(payment)
+    await db.commit()
+
+    return {"checkout_url": session.get("url"), "session_id": session.get("id")}
+
+
+# ─── STRIPE SUBSCRIPTION ────────────────────────────────────
+
+@router.post("/subscription")
+async def create_subscription(
+    customer_email: str = Query(...),
+    price_id: str = Query(..., description="Stripe price_id"),
+    trial_days: int = Query(0),
+    plan_id: Optional[UUID] = None,
+    lead_id: Optional[UUID] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_write_access),
+):
+    """Crea suscripcion Stripe."""
+    if not payment_service.stripe_configured():
+        raise HTTPException(400, "Stripe no configurado.")
+
+    sub = await payment_service.stripe_create_subscription(
+        customer_email=customer_email,
+        price_id=price_id,
+        trial_days=trial_days,
+    )
+
+    payment = Payment(
+        provider="stripe",
+        provider_subscription_id=sub.get("id"),
+        provider_customer_id=sub.get("customer"),
+        amount_eur=0,  # Will be updated by webhook
+        status=sub.get("status", "pending"),
+        payment_type="subscription",
+        customer_email=customer_email,
+        lead_id=lead_id,
+        plan_id=plan_id,
+    )
+    db.add(payment)
+    await db.commit()
+
+    return sub
+
+
+# ─── STRIPE INVOICE ─────────────────────────────────────────
+
+@router.post("/invoice")
+async def create_invoice(
+    customer_email: str = Query(...),
+    amount_eur: float = Query(...),
+    description: str = Query("St4rtup GRC Platform"),
+    due_days: int = Query(30),
+    customer_name: str = Query(""),
+    customer_tax_id: str = Query(""),
+    lead_id: Optional[UUID] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_write_access),
+):
+    """Crea y envia factura via Stripe."""
+    if not payment_service.stripe_configured():
+        raise HTTPException(400, "Stripe no configurado.")
+
+    amount_cents = int(amount_eur * 100)
+    stripe_inv = await payment_service.stripe_create_invoice(
+        customer_email=customer_email,
+        amount_cents=amount_cents,
+        description=description,
+        due_days=due_days,
+    )
+
+    # Record payment
+    payment = Payment(
+        provider="stripe",
+        provider_invoice_id=stripe_inv.get("id"),
+        provider_customer_id=stripe_inv.get("customer"),
+        amount_eur=amount_eur,
+        status="pending",
+        payment_type="invoice",
+        customer_email=customer_email,
+        customer_name=customer_name,
+        description=description,
+        invoice_url=stripe_inv.get("hosted_invoice_url"),
+        lead_id=lead_id,
+    )
+    db.add(payment)
+    await db.commit()
+    await db.refresh(payment)
+
+    # Record invoice
+    tax_amount = round(amount_eur * 0.21, 2)
+    invoice = Invoice(
+        payment_id=payment.id,
+        lead_id=lead_id,
+        provider="stripe",
+        provider_invoice_id=stripe_inv.get("id"),
+        invoice_number=stripe_inv.get("number"),
+        amount_eur=amount_eur,
+        tax_rate=21.0,
+        tax_amount=tax_amount,
+        total_eur=round(amount_eur + tax_amount, 2),
+        status="sent",
+        customer_name=customer_name,
+        customer_email=customer_email,
+        customer_tax_id=customer_tax_id,
+        pdf_url=stripe_inv.get("invoice_pdf"),
+    )
+    db.add(invoice)
+    await db.commit()
+
+    return {
+        "invoice_id": str(invoice.id),
+        "stripe_invoice_id": stripe_inv.get("id"),
+        "hosted_invoice_url": stripe_inv.get("hosted_invoice_url"),
+        "invoice_pdf": stripe_inv.get("invoice_pdf"),
+    }
+
+
+# ─── PAYPAL ORDER ────────────────────────────────────────────
+
+@router.post("/paypal/order")
+async def create_paypal_order(
+    amount_eur: float = Query(...),
+    description: str = Query("St4rtup GRC"),
+    lead_id: Optional[UUID] = None,
+    plan_id: Optional[UUID] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_write_access),
+):
+    """Crea orden de pago PayPal."""
+    if not payment_service.paypal_configured():
+        raise HTTPException(400, "PayPal no configurado. Configura PAYPAL_CLIENT_ID y PAYPAL_CLIENT_SECRET.")
+
+    order = await payment_service.paypal_create_order(
+        amount=amount_eur,
+        description=description,
+    )
+
+    payment = Payment(
+        provider="paypal",
+        provider_payment_id=order.get("id"),
+        amount_eur=amount_eur,
+        status="pending",
+        payment_type="one_time",
+        description=description,
+        lead_id=lead_id,
+        plan_id=plan_id,
+    )
+    db.add(payment)
+    await db.commit()
+
+    # Extract approval URL
+    approve_url = ""
+    for link in order.get("links", []):
+        if link.get("rel") == "approve":
+            approve_url = link.get("href")
+            break
+
+    return {"order_id": order.get("id"), "approve_url": approve_url}
+
+
+# ─── PAYPAL CAPTURE ──────────────────────────────────────────
+
+@router.post("/paypal/capture")
+async def capture_paypal_order(
+    order_id: str = Query(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_write_access),
+):
+    """Captura (confirma) una orden PayPal aprobada por el usuario."""
+    if not payment_service.paypal_configured():
+        raise HTTPException(400, "PayPal no configurado.")
+
+    capture = await payment_service.paypal_capture_order(order_id)
+
+    # Update payment in DB
+    query = select(Payment).where(
+        Payment.provider == "paypal",
+        Payment.provider_payment_id == order_id,
+    )
+    result = await db.execute(query)
+    payment = result.scalar_one_or_none()
+
+    if payment:
+        pp_status = capture.get("status", "")
+        payment.status = "completed" if pp_status == "COMPLETED" else "failed"
+        payment.paid_at = datetime.now(timezone.utc) if payment.status == "completed" else None
+
+        # Extract payer info
+        payer = capture.get("payer", {})
+        payment.customer_email = payer.get("email_address", payment.customer_email)
+        name = payer.get("name", {})
+        if name:
+            payment.customer_name = f"{name.get('given_name', '')} {name.get('surname', '')}".strip()
+
+        await db.commit()
+
+    return capture
+
+
+# ─── STRIPE WEBHOOK ──────────────────────────────────────────
+
+@router.post("/stripe-webhook")
+async def stripe_webhook(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """Receptor de webhooks de Stripe (sin auth JWT, validacion via signature)."""
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature", "")
+
+    # Verify webhook signature if secret is configured
+    if settings.STRIPE_WEBHOOK_SECRET:
+        # Simple signature verification (production should use stripe lib)
+        try:
+            elements = dict(item.split("=", 1) for item in sig_header.split(","))
+            timestamp = elements.get("t", "")
+            signature = elements.get("v1", "")
+            signed_payload = f"{timestamp}.{payload.decode()}"
+            expected = hmac.new(
+                settings.STRIPE_WEBHOOK_SECRET.encode(),
+                signed_payload.encode(),
+                hashlib.sha256,
+            ).hexdigest()
+            if not hmac.compare_digest(expected, signature):
+                raise HTTPException(400, "Invalid signature")
+        except Exception as e:
+            logger.warning(f"Stripe webhook signature verification failed: {e}")
+            raise HTTPException(400, "Invalid webhook signature")
+
+    import json
+    event = json.loads(payload)
+    event_type = event.get("type", "")
+    data_obj = event.get("data", {}).get("object", {})
+
+    logger.info(f"Stripe webhook: {event_type}")
+
+    if event_type == "payment_intent.succeeded":
+        pi_id = data_obj.get("id")
+        q = select(Payment).where(Payment.provider_payment_id == pi_id)
+        result = await db.execute(q)
+        payment = result.scalar_one_or_none()
+        if payment:
+            payment.status = "completed"
+            payment.paid_at = datetime.now(timezone.utc)
+            payment.receipt_url = data_obj.get("charges", {}).get("data", [{}])[0].get("receipt_url")
+            await db.commit()
+
+    elif event_type == "payment_intent.payment_failed":
+        pi_id = data_obj.get("id")
+        q = select(Payment).where(Payment.provider_payment_id == pi_id)
+        result = await db.execute(q)
+        payment = result.scalar_one_or_none()
+        if payment:
+            payment.status = "failed"
+            await db.commit()
+
+    elif event_type == "invoice.paid":
+        inv_id = data_obj.get("id")
+        q = select(Invoice).where(Invoice.provider_invoice_id == inv_id)
+        result = await db.execute(q)
+        invoice = result.scalar_one_or_none()
+        if invoice:
+            invoice.status = "paid"
+            invoice.paid_at = datetime.now(timezone.utc)
+            await db.commit()
+
+        # Also update corresponding payment
+        q2 = select(Payment).where(Payment.provider_invoice_id == inv_id)
+        result2 = await db.execute(q2)
+        payment = result2.scalar_one_or_none()
+        if payment:
+            payment.status = "completed"
+            payment.paid_at = datetime.now(timezone.utc)
+            await db.commit()
+
+    elif event_type == "invoice.payment_failed":
+        inv_id = data_obj.get("id")
+        q = select(Invoice).where(Invoice.provider_invoice_id == inv_id)
+        result = await db.execute(q)
+        invoice = result.scalar_one_or_none()
+        if invoice:
+            invoice.status = "overdue"
+            await db.commit()
+
+    elif event_type == "customer.subscription.deleted":
+        sub_id = data_obj.get("id")
+        q = select(Payment).where(Payment.provider_subscription_id == sub_id)
+        result = await db.execute(q)
+        payment = result.scalar_one_or_none()
+        if payment:
+            payment.status = "cancelled"
+            await db.commit()
+
+    return {"received": True}
+
+
+# ─── CONFIG (PUBLIC) ─────────────────────────────────────────
+
+@router.get("/config")
+async def get_payment_config():
+    """Devuelve claves publicas de Stripe y PayPal (sin secretos)."""
+    return {
+        "stripe_publishable_key": settings.STRIPE_PUBLISHABLE_KEY,
+        "paypal_client_id": settings.PAYPAL_CLIENT_ID,
+        "paypal_mode": settings.PAYPAL_MODE,
+        "stripe_configured": payment_service.stripe_configured(),
+        "paypal_configured": payment_service.paypal_configured(),
+    }

@@ -1,0 +1,98 @@
+{
+  "name": "IN-01 Importar Leads Scraping",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "hooks/scraping-results", "responseMode": "onReceived", "options": {} },
+      "id": "webhook-scraping",
+      "name": "Webhook Resultados Scraping",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst results = data.results || data.leads || [];\n\nreturn results.map(r => ({\n  json: {\n    company_name: r.company_name || r.empresa || r.name || '',\n    company_website: r.website || r.url || '',\n    company_sector: r.sector || r.industry || '',\n    company_size: r.size || r.employees || '',\n    company_city: r.city || r.ciudad || '',\n    company_country: r.country || 'España',\n    contact_name: r.contact_name || r.contacto || '',\n    contact_email: r.email || r.contact_email || '',\n    contact_title: r.title || r.cargo || '',\n    contact_phone: r.phone || r.telefono || '',\n    notes: `Fuente: ${data.source || 'scraping'}. ${r.notes || ''}`.trim(),\n    source: data.source || 'scraping',\n    score: 15\n  }\n}));"
+      },
+      "id": "normalize",
+      "name": "Normalizar Datos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [470, 300]
+    },
+    {
+      "parameters": { "batchSize": 3, "options": {} },
+      "id": "batch",
+      "name": "SplitInBatches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/leads?search={{encodeURIComponent($json.company_name)}}&page_size=1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "check-dup",
+      "name": "Check Duplicado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [910, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "conditions": { "conditions": [{ "leftValue": "={{$json.total}}", "rightValue": 0, "operator": { "type": "number", "operation": "equals" } }] }
+      },
+      "id": "if-new",
+      "name": "¿No existe?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1130, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/leads",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify($node['SplitInBatches'].json)}}",
+        "options": {}
+      },
+      "id": "create-lead",
+      "name": "Crear Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1350, 250],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "chatId": "={{$env.TELEGRAM_CHAT_ID}}",
+        "text": "=📥 *Importación scraping completada*\n\nFuente: {{$node['Webhook Resultados Scraping'].json.source || 'scraping'}}\nLeads procesados.",
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "telegram",
+      "name": "Resumen Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1570, 300],
+      "credentials": { "telegramApi": { "id": "telegram-bot", "name": "Riskitera Telegram Bot" } }
+    }
+  ],
+  "connections": {
+    "Webhook Resultados Scraping": { "main": [[{ "node": "Normalizar Datos", "type": "main", "index": 0 }]] },
+    "Normalizar Datos": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] },
+    "SplitInBatches": { "main": [[{ "node": "Check Duplicado", "type": "main", "index": 0 }]] },
+    "Check Duplicado": { "main": [[{ "node": "¿No existe?", "type": "main", "index": 0 }]] },
+    "¿No existe?": { "main": [[{ "node": "Crear Lead", "type": "main", "index": 0 }], [{ "node": "SplitInBatches", "type": "main", "index": 0 }]] },
+    "Crear Lead": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "integraciones" }, { "name": "high" }, { "name": "phase_4" }],
+  "meta": { "code": "IN-01", "category": "integraciones", "priority": "high", "estimated_hours": 5, "description": "Importa leads desde fuentes de scraping externas. Normaliza datos y deduplica." }
+}

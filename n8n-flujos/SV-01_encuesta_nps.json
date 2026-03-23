@@ -1,0 +1,87 @@
+{
+  "name": "SV-01 Encuesta Post-Cierre NPS",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "hooks/deal-closed-won", "responseMode": "onReceived", "options": {} },
+      "id": "webhook-won",
+      "name": "Webhook Deal Ganado",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": { "amount": 7, "unit": "days" },
+      "id": "wait-7d",
+      "name": "Esperar 7 días",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/leads/{{$node['Webhook Deal Ganado'].json.lead_id}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "get-lead",
+      "name": "GET Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [690, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/surveys",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"lead_id\": \"{{$json.id}}\", \"type\": \"nps\", \"title\": \"Encuesta NPS — {{$json.company_name}}\", \"status\": \"pending\"}",
+        "options": {}
+      },
+      "id": "create-survey",
+      "name": "Crear Encuesta NPS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [910, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "lead_id", "value": "={{$node['GET Lead'].json.id}}" },
+            { "name": "to_email", "value": "={{$node['GET Lead'].json.contact_email}}" },
+            { "name": "subject", "value": "={{$node['GET Lead'].json.company_name}} — Tu opinión nos importa" },
+            { "name": "body_html", "value": "=<div style=\"font-family:sans-serif;max-width:600px;margin:0 auto\"><h2 style=\"color:#06b6d4\">Hola {{$node['GET Lead'].json.contact_name}},</h2><p>Ahora que llevamos unos días trabajando juntos, nos encantaría conocer tu experiencia con Riskitera.</p><p><strong>¿Cuán probable es que recomiendes Riskitera a un colega?</strong></p><p style=\"text-align:center;font-size:24px\"><a href=\"https://riskitera.com/nps?survey={{$json.id}}&score=9\" style=\"text-decoration:none\">9-10 😊</a> | <a href=\"https://riskitera.com/nps?survey={{$json.id}}&score=7\" style=\"text-decoration:none\">7-8 😐</a> | <a href=\"https://riskitera.com/nps?survey={{$json.id}}&score=5\" style=\"text-decoration:none\">0-6 😞</a></p><p>Tu feedback nos ayuda a mejorar continuamente.</p><p>Gracias,<br/>El equipo de Riskitera</p></div>" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "send-nps-email",
+      "name": "Enviar Email NPS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1130, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    }
+  ],
+  "connections": {
+    "Webhook Deal Ganado": { "main": [[{ "node": "Esperar 7 días", "type": "main", "index": 0 }]] },
+    "Esperar 7 días": { "main": [[{ "node": "GET Lead", "type": "main", "index": 0 }]] },
+    "GET Lead": { "main": [[{ "node": "Crear Encuesta NPS", "type": "main", "index": 0 }]] },
+    "Crear Encuesta NPS": { "main": [[{ "node": "Enviar Email NPS", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "encuestas" }, { "name": "high" }, { "name": "phase_3" }],
+  "meta": { "code": "SV-01", "category": "encuestas", "priority": "high", "estimated_hours": 5, "description": "Envía encuesta NPS 7 días después de cerrar un deal ganado." }
+}

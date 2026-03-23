@@ -1,0 +1,96 @@
+{
+  "name": "RS-094 — Competitor Website Monitoring",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 8 * * 1" }] }
+      },
+      "name": "Cron Lunes 8:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "notes": "Cada lunes verifica cambios en webs de competidores"
+    },
+    {
+      "parameters": {
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/competitors/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "name": "GET Competidores",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [470, 300],
+      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "jsCode": "const competitors = $input.first().json.competitors || [];\nconst toCheck = competitors.filter(c => c.website && c.tier !== 'low').slice(0, 10);\nreturn toCheck.map(c => ({ json: { name: c.name, website: c.website, tier: c.tier } }));"
+      },
+      "name": "Filtrar Competidores Relevantes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [690, 300]
+    },
+    {
+      "parameters": { "batchSize": 1, "options": { "reset": false } },
+      "name": "SplitInBatches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [910, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://{{$json.website}}",
+        "options": { "timeout": 10000, "redirect": { "redirect": { "followRedirects": true } } }
+      },
+      "name": "Fetch Website",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1130, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.first().json.data || '';\nconst prev = $('Filtrar Competidores Relevantes').first().json;\n\n// Check for pricing changes, new features, etc.\nconst signals = [];\nconst lowerHtml = html.toLowerCase();\n\nif (lowerHtml.includes('pricing') || lowerHtml.includes('precio')) signals.push('Página de pricing detectada');\nif (lowerHtml.includes('new feature') || lowerHtml.includes('nueva función')) signals.push('Nuevas funcionalidades');\nif (lowerHtml.includes('nis2') || lowerHtml.includes('dora') || lowerHtml.includes('ens')) signals.push('Menciona regulaciones EU');\nif (lowerHtml.includes('soc') || lowerHtml.includes('detection')) signals.push('Menciona SOC/Detection');\n\nreturn [{ json: { ...prev, signals, has_signals: signals.length > 0 } }];"
+      },
+      "name": "Analizar Cambios",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1350, 300]
+    },
+    {
+      "parameters": {
+        "conditions": { "boolean": [{ "value1": "={{$json.has_signals}}", "value2": true }] }
+      },
+      "name": "¿Señales?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1570, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/bot{{$env.TELEGRAM_BOT_TOKEN}}/sendMessage",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{$env.TELEGRAM_CHAT_ID}}\",\n  \"text\": \"🔍 <b>Alerta Competidor: {{$json.name}}</b>\\nTier: {{$json.tier}}\\nSeñales: {{$json.signals.join(', ')}}\\nWeb: {{$json.website}}\",\n  \"parse_mode\": \"HTML\"\n}"
+      },
+      "name": "Telegram Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1790, 200]
+    }
+  ],
+  "connections": {
+    "Cron Lunes 8:00": { "main": [[{ "node": "GET Competidores", "type": "main", "index": 0 }]] },
+    "GET Competidores": { "main": [[{ "node": "Filtrar Competidores Relevantes", "type": "main", "index": 0 }]] },
+    "Filtrar Competidores Relevantes": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] },
+    "SplitInBatches": { "main": [[{ "node": "Fetch Website", "type": "main", "index": 0 }]] },
+    "Fetch Website": { "main": [[{ "node": "Analizar Cambios", "type": "main", "index": 0 }]] },
+    "Analizar Cambios": { "main": [[{ "node": "¿Señales?", "type": "main", "index": 0 }]] },
+    "¿Señales?": { "main": [[{ "node": "Telegram Alert", "type": "main", "index": 0 }], [{ "node": "SplitInBatches", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "competitors" }, { "name": "monitoring" }],
+  "meta": { "code": "RS-094", "category": "inteligencia", "priority": "media", "estimated_hours": 1 }
+}

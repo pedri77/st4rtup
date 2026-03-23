@@ -1,0 +1,121 @@
+{
+  "name": "PI-01 Triggers por Cambio de Etapa",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "hooks/opportunity-stage-change", "responseMode": "onReceived", "options": {} },
+      "id": "webhook-stage",
+      "name": "Webhook Cambio Etapa",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/opportunities/{{$json.opportunity_id}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "get-opp",
+      "name": "GET Oportunidad",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [470, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            { "conditions": { "conditions": [{ "leftValue": "={{$node['Webhook Cambio Etapa'].json.new_stage}}", "rightValue": "proposal", "operator": { "type": "string", "operation": "equals" } }] }, "outputKey": "proposal" },
+            { "conditions": { "conditions": [{ "leftValue": "={{$node['Webhook Cambio Etapa'].json.new_stage}}", "rightValue": "negotiation", "operator": { "type": "string", "operation": "equals" } }] }, "outputKey": "negotiation" },
+            { "conditions": { "conditions": [{ "leftValue": "={{$node['Webhook Cambio Etapa'].json.new_stage}}", "rightValue": "closed_won", "operator": { "type": "string", "operation": "equals" } }] }, "outputKey": "won" },
+            { "conditions": { "conditions": [{ "leftValue": "={{$node['Webhook Cambio Etapa'].json.new_stage}}", "rightValue": "closed_lost", "operator": { "type": "string", "operation": "equals" } }] }, "outputKey": "lost" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "switch-stage",
+      "name": "Switch Etapa",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/actions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"lead_id\": \"{{$node['GET Oportunidad'].json.lead_id}}\", \"title\": \"Preparar propuesta: {{$node['GET Oportunidad'].json.name}}\", \"description\": \"Oportunidad movida a fase de propuesta. Valor: {{$node['GET Oportunidad'].json.value}}€\", \"due_date\": \"{{new Date(Date.now() + 3 * 86400000).toISOString().split('T')[0]}}\", \"priority\": \"high\", \"action_type\": \"proposal\"}",
+        "options": {}
+      },
+      "id": "action-proposal",
+      "name": "Acción: Preparar Propuesta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [910, 150],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/actions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"lead_id\": \"{{$node['GET Oportunidad'].json.lead_id}}\", \"title\": \"Negociación activa: {{$node['GET Oportunidad'].json.name}}\", \"description\": \"Oportunidad en negociación. Revisar términos y condiciones.\", \"due_date\": \"{{new Date(Date.now() + 5 * 86400000).toISOString().split('T')[0]}}\", \"priority\": \"high\", \"action_type\": \"negotiation\"}",
+        "options": {}
+      },
+      "id": "action-negotiation",
+      "name": "Acción: Revisión Negociación",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [910, 280],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "chatId": "={{$env.TELEGRAM_CHAT_ID}}",
+        "text": "=🎉 *¡Deal cerrado!*\n\n🏢 *{{$node['GET Oportunidad'].json.name}}*\n💰 Valor: {{$node['GET Oportunidad'].json.value}}€\n\n🥳 ¡Enhorabuena al equipo!",
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "telegram-won",
+      "name": "Alerta Deal Ganado",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [910, 410],
+      "credentials": { "telegramApi": { "id": "telegram-bot", "name": "Riskitera Telegram Bot" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/actions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"lead_id\": \"{{$node['GET Oportunidad'].json.lead_id}}\", \"title\": \"Post-mortem deal perdido: {{$node['GET Oportunidad'].json.name}}\", \"description\": \"Analizar razones de pérdida y lecciones aprendidas.\", \"due_date\": \"{{new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0]}}\", \"priority\": \"medium\", \"action_type\": \"review\"}",
+        "options": {}
+      },
+      "id": "action-lost",
+      "name": "Acción: Post-mortem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [910, 540],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    }
+  ],
+  "connections": {
+    "Webhook Cambio Etapa": { "main": [[{ "node": "GET Oportunidad", "type": "main", "index": 0 }]] },
+    "GET Oportunidad": { "main": [[{ "node": "Switch Etapa", "type": "main", "index": 0 }]] },
+    "Switch Etapa": { "main": [[{ "node": "Acción: Preparar Propuesta", "type": "main", "index": 0 }], [{ "node": "Acción: Revisión Negociación", "type": "main", "index": 0 }], [{ "node": "Alerta Deal Ganado", "type": "main", "index": 0 }], [{ "node": "Acción: Post-mortem", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "pipeline" }, { "name": "high" }, { "name": "phase_2" }],
+  "meta": { "code": "PI-01", "category": "pipeline", "priority": "high", "estimated_hours": 6, "description": "Triggers automáticos por cambio de etapa en pipeline: acciones, alertas y notificaciones." }
+}

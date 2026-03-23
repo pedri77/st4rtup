@@ -1,0 +1,6 @@
+# Instrucciones para instalar xlsx
+# Ejecutar en terminal:
+cd frontend
+npm install xlsx
+
+# Esta librería permite exportar datos a Excel (.xlsx) y CSV

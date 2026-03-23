@@ -1,0 +1,46 @@
+{
+  "name": "HU-01 Hunter Email Verification Batch",
+  "nodes": [
+    {
+      "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "0 8 * * 1" }] } },
+      "id": "cron-monday",
+      "name": "Lunes 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/leads/verify-email-bulk",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": { "parameters": [{ "name": "batch_size", "value": "50" }] },
+        "options": {}
+      },
+      "id": "verify-batch",
+      "name": "Verificar emails (batch 50)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [470, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst verified = data.verified || 0;\nconst results = data.results || [];\n\nconst deliverable = results.filter(r => r.result === 'deliverable').length;\nconst risky = results.filter(r => r.result === 'risky').length;\nconst undeliverable = results.filter(r => r.result === 'undeliverable').length;\n\nconst msg = `📧 *Hunter.io — Verificacion semanal*\\n\\nVerificados: ${verified}\\n✅ Deliverable: ${deliverable}\\n⚠️ Risky: ${risky}\\n❌ Undeliverable: ${undeliverable}`;\n\nreturn [{ json: { message: msg, verified, deliverable, risky, undeliverable } }];"
+      },
+      "id": "summary",
+      "name": "Resumen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [690, 300]
+    }
+  ],
+  "connections": {
+    "Lunes 08:00": { "main": [[{ "node": "Verificar emails (batch 50)", "type": "main", "index": 0 }]] },
+    "Verificar emails (batch 50)": { "main": [[{ "node": "Resumen", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "hunter" }, { "name": "email" }]
+}

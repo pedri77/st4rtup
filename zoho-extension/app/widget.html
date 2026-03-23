@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riskitera CRM</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      font-size: 14px;
+      color: #333;
+      background: #f9fafb;
+      padding: 16px;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .header-text h1 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    .header-text p {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #6366F1;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .lead-info h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 8px;
+    }
+
+    .lead-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .badge-new { background: #DBEAFE; color: #1E40AF; }
+    .badge-contacted { background: #FEF3C7; color: #92400E; }
+    .badge-qualified { background: #D1FAE5; color: #065F46; }
+    .badge-won { background: #D1FAE5; color: #065F46; }
+
+    .score {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+      background: #F3F4F6;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .score-label {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .score-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #6366F1;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .info-item .icon {
+      color: #6366F1;
+      font-size: 16px;
+    }
+
+    .info-item .label {
+      color: #666;
+      min-width: 80px;
+    }
+
+    .info-item .value {
+      color: #111;
+      font-weight: 500;
+    }
+
+    .activity-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 8px;
+    }
+
+    .activity-item {
+      padding: 10px;
+      background: #F9FAFB;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .activity-item .activity-type {
+      font-weight: 600;
+      color: #6366F1;
+      margin-bottom: 4px;
+    }
+
+    .activity-item .activity-date {
+      color: #999;
+      font-size: 11px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-primary {
+      background: #6366F1;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #4F46E5;
+    }
+
+    .btn-secondary {
+      background: #F3F4F6;
+      color: #374151;
+    }
+
+    .btn-secondary:hover {
+      background: #E5E7EB;
+    }
+
+    .no-lead {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .no-lead .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .no-lead h3 {
+      font-size: 16px;
+      color: #111;
+      margin-bottom: 8px;
+    }
+
+    .no-lead p {
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .error {
+      background: #FEE2E2;
+      color: #991B1B;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">R</div>
+      <div class="header-text">
+        <h1>Riskitera CRM</h1>
+        <p id="current-email">Cargando...</p>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Buscando lead...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="error" style="display: none;">
+      <strong>⚠️ Error:</strong> <span id="error-message"></span>
+    </div>
+
+    <!-- No Lead Found -->
+    <div id="no-lead" class="card no-lead" style="display: none;">
+      <div class="icon">🔍</div>
+      <h3>Lead no encontrado</h3>
+      <p>Este email no está registrado en el CRM</p>
+      <button class="btn btn-primary" onclick="createLead()">
+        ➕ Crear Nuevo Lead
+      </button>
+    </div>
+
+    <!-- Lead Info -->
+    <div id="lead-info" style="display: none;">
+      <div class="card lead-info">
+        <h2 id="company-name">-</h2>
+        <div class="lead-meta">
+          <span class="badge" id="status-badge">-</span>
+          <span class="badge badge-new" id="source-badge">-</span>
+        </div>
+
+        <div class="score">
+          <div>
+            <div class="score-label">Lead Score</div>
+            <div class="score-value" id="lead-score">-</div>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="icon">👤</span>
+            <span class="label">Contacto:</span>
+            <span class="value" id="contact-name">-</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">💼</span>
+            <span class="label">Cargo:</span>
+            <span class="value" id="contact-title">-</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">🏢</span>
+            <span class="label">Sector:</span>
+            <span class="value" id="company-sector">-</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">📍</span>
+            <span class="label">Ubicación:</span>
+            <span class="value" id="company-location">-</span>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="openCRM()">
+          🔗 Abrir en CRM
+        </button>
+        <button class="btn btn-primary" onclick="syncEmail()">
+          📧 Sincronizar Email
+        </button>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card activity-section">
+        <h3>📊 Actividad Reciente</h3>
+        <div id="recent-activity">
+          <p style="color: #999; font-size: 12px;">No hay actividad reciente</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
+  <script>
+    let currentLead = null;
+    let apiUrl = '';
+    let apiToken = '';
+
+    // Inicializar SDK de Zoho
+    ZOHO.embeddedApp.on("PageLoad", function(data) {
+      console.log('🚀 Zoho Extension cargada');
+      initializeExtension();
+    });
+
+    ZOHO.embeddedApp.init();
+
+    async function initializeExtension() {
+      try {
+        // Obtener settings de la extensión
+        const settings = await ZOHO.embeddedApp.get("ConnectorKeys");
+        apiUrl = settings.ConnectorKeys?.api_url;
+        apiToken = settings.ConnectorKeys?.api_token;
+
+        if (!apiUrl || !apiToken) {
+          showError('Configura la API URL y Token en la configuración de la extensión');
+          return;
+        }
+
+        // Obtener el email actual
+        const mailInfo = await ZOHO.embeddedApp.get("Mail");
+        const currentEmail = mailInfo.Mail.from;
+
+        document.getElementById('current-email').textContent = currentEmail;
+
+        // Buscar lead por email
+        await searchLead(currentEmail);
+
+      } catch (error) {
+        console.error('Error inicializando:', error);
+        showError('Error al inicializar la extensión: ' + error.message);
+      }
+    }
+
+    async function searchLead(email) {
+      try {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('no-lead').style.display = 'none';
+        document.getElementById('lead-info').style.display = 'none';
+
+        const response = await fetch(`${apiUrl}/api/v1/leads?search=${encodeURIComponent(email)}`, {
+          headers: {
+            'Authorization': `Bearer ${apiToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al buscar lead');
+        }
+
+        const data = await response.json();
+
+        if (data.items && data.items.length > 0) {
+          currentLead = data.items[0];
+          displayLead(currentLead);
+        } else {
+          showNoLead();
+        }
+
+      } catch (error) {
+        console.error('Error buscando lead:', error);
+        showError('Error al buscar lead: ' + error.message);
+      } finally {
+        document.getElementById('loading').style.display = 'none';
+      }
+    }
+
+    function displayLead(lead) {
+      document.getElementById('lead-info').style.display = 'block';
+      document.getElementById('no-lead').style.display = 'none';
+
+      // Información básica
+      document.getElementById('company-name').textContent = lead.company_name || 'Sin nombre';
+      document.getElementById('lead-score').textContent = lead.score || 0;
+      document.getElementById('contact-name').textContent = lead.contact_name || '-';
+      document.getElementById('contact-title').textContent = lead.contact_title || '-';
+      document.getElementById('company-sector').textContent = lead.company_sector || '-';
+      document.getElementById('company-location').textContent =
+        [lead.company_city, lead.company_province].filter(Boolean).join(', ') || '-';
+
+      // Status badge
+      const statusBadge = document.getElementById('status-badge');
+      statusBadge.textContent = lead.status || 'new';
+      statusBadge.className = `badge badge-${lead.status || 'new'}`;
+
+      // Source badge
+      document.getElementById('source-badge').textContent = lead.source || '-';
+
+      // Cargar actividad reciente (simulado por ahora)
+      loadRecentActivity(lead.id);
+    }
+
+    async function loadRecentActivity(leadId) {
+      const activityContainer = document.getElementById('recent-activity');
+      activityContainer.innerHTML = '<p style="color: #999; font-size: 12px;">Cargando actividad...</p>';
+
+      try {
+        // Obtener emails del lead
+        const response = await fetch(`${apiUrl}/api/v1/emails?lead_id=${leadId}`, {
+          headers: {
+            'Authorization': `Bearer ${apiToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const emails = data.items || [];
+
+          if (emails.length === 0) {
+            activityContainer.innerHTML = '<p style="color: #999; font-size: 12px;">No hay actividad reciente</p>';
+            return;
+          }
+
+          activityContainer.innerHTML = emails.slice(0, 3).map(email => `
+            <div class="activity-item">
+              <div class="activity-type">📧 Email: ${email.subject}</div>
+              <div class="activity-date">${new Date(email.sent_at || email.created_at).toLocaleDateString('es-ES')}</div>
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('Error cargando actividad:', error);
+        activityContainer.innerHTML = '<p style="color: #999; font-size: 12px;">Error cargando actividad</p>';
+      }
+    }
+
+    function showNoLead() {
+      document.getElementById('no-lead').style.display = 'block';
+      document.getElementById('lead-info').style.display = 'none';
+    }
+
+    function showError(message) {
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('error-message').textContent = message;
+    }
+
+    async function createLead() {
+      try {
+        const mailInfo = await ZOHO.embeddedApp.get("Mail");
+        const fromEmail = mailInfo.Mail.from;
+        const fromName = mailInfo.Mail.fromAddress?.split('<')[0].trim() || '';
+
+        // Abrir modal de creación de lead (esto requeriría más desarrollo)
+        alert('Funcionalidad de crear lead en desarrollo. Por ahora, crea el lead desde el CRM web.');
+
+      } catch (error) {
+        console.error('Error creando lead:', error);
+        showError('Error al crear lead: ' + error.message);
+      }
+    }
+
+    async function syncEmail() {
+      try {
+        if (!currentLead) {
+          showError('No hay lead seleccionado');
+          return;
+        }
+
+        const mailInfo = await ZOHO.embeddedApp.get("Mail");
+
+        const emailData = {
+          lead_id: currentLead.id,
+          subject: mailInfo.Mail.subject,
+          to_email: mailInfo.Mail.to,
+          from_email: mailInfo.Mail.from,
+          body_text: mailInfo.Mail.content,
+          status: 'sent',
+          sent_at: new Date().toISOString()
+        };
+
+        const response = await fetch(`${apiUrl}/api/v1/emails`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(emailData)
+        });
+
+        if (response.ok) {
+          alert('✅ Email sincronizado correctamente con el CRM');
+          loadRecentActivity(currentLead.id);
+        } else {
+          throw new Error('Error al sincronizar email');
+        }
+
+      } catch (error) {
+        console.error('Error sincronizando email:', error);
+        showError('Error al sincronizar: ' + error.message);
+      }
+    }
+
+    function openCRM() {
+      if (currentLead) {
+        window.open(`https://sales.riskitera.com/leads/${currentLead.id}`, '_blank');
+      }
+    }
+  </script>
+</body>
+</html>

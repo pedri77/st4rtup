@@ -1,0 +1,77 @@
+{
+  "name": "AC-02 Escalado Automático",
+  "nodes": [
+    {
+      "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "0 10 * * 1-5" }] } },
+      "id": "cron-weekdays",
+      "name": "L-V 10:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/actions?status=pending&page_size=200",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "get-actions",
+      "name": "GET Acciones Pendientes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [470, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "jsCode": "const actions = $input.first().json.items || [];\nconst now = new Date();\n\n// Filtrar acciones vencidas hace más de 3 días con prioridad alta\nconst escalable = actions.filter(a => {\n  const due = new Date(a.due_date);\n  const daysOverdue = (now - due) / 86400000;\n  return daysOverdue > 3 && (a.priority === 'high' || a.priority === 'critical');\n});\n\nreturn escalable.map(a => ({\n  json: {\n    ...a,\n    days_overdue: Math.floor((now - new Date(a.due_date)) / 86400000)\n  }\n}));"
+      },
+      "id": "filter-escalable",
+      "name": "Filtrar Escalables",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/actions/{{$json.id}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": { "parameters": [{ "name": "priority", "value": "critical" }, { "name": "notes", "value": "=⚠️ Escalado automático: vencida hace {{$json.days_overdue}} días" }] },
+        "options": {}
+      },
+      "id": "escalate",
+      "name": "Escalar Acción",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [910, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "chatId": "={{$env.TELEGRAM_CHAT_ID}}",
+        "text": "=🚨 *Acción escalada automáticamente*\n\n📋 *{{$json.title}}*\n🏢 {{$json.company_name || 'Sin empresa'}}\n⏰ Vencida hace {{$json.days_overdue}} días\n🔴 Prioridad elevada a CRÍTICA\n\n⚡ Requiere atención inmediata",
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "telegram",
+      "name": "Alerta Escalado",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1130, 300],
+      "credentials": { "telegramApi": { "id": "telegram-bot", "name": "Riskitera Telegram Bot" } }
+    }
+  ],
+  "connections": {
+    "L-V 10:00": { "main": [[{ "node": "GET Acciones Pendientes", "type": "main", "index": 0 }]] },
+    "GET Acciones Pendientes": { "main": [[{ "node": "Filtrar Escalables", "type": "main", "index": 0 }]] },
+    "Filtrar Escalables": { "main": [[{ "node": "Escalar Acción", "type": "main", "index": 0 }]] },
+    "Escalar Acción": { "main": [[{ "node": "Alerta Escalado", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "acciones_alertas" }, { "name": "high" }, { "name": "phase_2" }],
+  "meta": { "code": "AC-02", "category": "acciones_alertas", "priority": "high", "estimated_hours": 4, "description": "Escala automáticamente acciones high/critical vencidas >3 días a prioridad crítica." }
+}

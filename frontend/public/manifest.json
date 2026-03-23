@@ -1,0 +1,57 @@
+{
+  "name": "St4rtup CRM CRM",
+  "short_name": "St4rtup",
+  "description": "CRM de ciberseguridad GRC — St4rtup",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0d14",
+  "theme_color": "#22b8cf",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "es",
+  "scope": "/",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "shortcuts": [
+    {
+      "name": "Mi Dia",
+      "url": "/my-day",
+      "icons": [{"src": "/favicon.svg", "sizes": "96x96"}]
+    },
+    {
+      "name": "Leads",
+      "url": "/leads",
+      "icons": [{"src": "/favicon.svg", "sizes": "96x96"}]
+    },
+    {
+      "name": "Pipeline",
+      "url": "/pipeline",
+      "icons": [{"src": "/favicon.svg", "sizes": "96x96"}]
+    },
+    {
+      "name": "SEO Center",
+      "url": "/marketing/seo-center",
+      "icons": [{"src": "/favicon.svg", "sizes": "96x96"}]
+    }
+  ]
+}

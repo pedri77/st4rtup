@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Shield shape -->
+  <path d="M50 5 L90 20 L90 45 Q90 75 50 95 Q10 75 10 45 L10 20 Z"
+        fill="#2563EB"
+        stroke="#1E40AF"
+        stroke-width="2"/>
+
+  <!-- Inner shield highlight -->
+  <path d="M50 12 L82 24 L82 45 Q82 70 50 87 Q18 70 18 45 L18 24 Z"
+        fill="#3B82F6"
+        opacity="0.8"/>
+
+  <!-- Shield emblem - checkmark/security symbol -->
+  <g transform="translate(50, 50)">
+    <!-- Checkmark -->
+    <path d="M-12 -5 L-5 5 L15 -15"
+          stroke="white"
+          stroke-width="6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"/>
+  </g>
+
+  <!-- Shine effect -->
+  <ellipse cx="35" cy="30" rx="8" ry="12"
+           fill="white"
+           opacity="0.3"
+           transform="rotate(-30 35 30)"/>
+</svg>

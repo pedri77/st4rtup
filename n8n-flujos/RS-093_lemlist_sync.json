@@ -1,0 +1,119 @@
+{
+  "name": "RS-093 — Lemlist Activity Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lemlist-webhook",
+        "responseMode": "onReceived"
+      },
+      "name": "Lemlist Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "notes": "Configura este webhook URL en Lemlist > Settings > Webhooks"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Procesar evento de Lemlist\nconst event = $input.first().json;\nconst type = event.type || ''; // emailsSent, emailsOpened, emailsClicked, emailsReplied, emailsBounced\nconst email = event.email || event.leadEmail || '';\nconst campaignName = event.campaignName || '';\n\nlet action = 'unknown';\nlet score_delta = 0;\nlet create_action = false;\n\nswitch (type) {\n  case 'emailsSent':\n    action = 'email_sent';\n    score_delta = 0;\n    break;\n  case 'emailsOpened':\n    action = 'email_opened';\n    score_delta = 5;\n    break;\n  case 'emailsClicked':\n    action = 'email_clicked';\n    score_delta = 10;\n    break;\n  case 'emailsReplied':\n    action = 'email_replied';\n    score_delta = 20;\n    create_action = true;\n    break;\n  case 'emailsBounced':\n    action = 'email_bounced';\n    score_delta = -10;\n    break;\n  case 'emailsUnsubscribed':\n    action = 'unsubscribed';\n    score_delta = -20;\n    break;\n}\n\nreturn [{\n  json: {\n    email,\n    action,\n    score_delta,\n    create_action,\n    campaign_name: campaignName,\n    raw_type: type,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "name": "Mapear Evento",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/leads",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [{ "name": "search", "value": "={{$json.email}}" }]
+        }
+      },
+      "name": "Buscar Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [690, 300],
+      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "conditions": { "number": [{ "value1": "={{$json.total}}", "operation": "larger", "value2": 0 }] }
+      },
+      "name": "¿Lead Existe?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [910, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $input.first().json.items[0];\nconst prev = $('Mapear Evento').first().json;\nconst newScore = Math.max(0, Math.min(100, (lead.score || 0) + prev.score_delta));\n\nreturn [{\n  json: {\n    lead_id: lead.id,\n    lead_name: lead.company_name || lead.contact_name,\n    new_score: newScore,\n    action: prev.action,\n    create_action: prev.create_action,\n    campaign_name: prev.campaign_name,\n    email: prev.email\n  }\n}];"
+      },
+      "name": "Calcular Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1130, 200]
+    },
+    {
+      "parameters": {
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/leads/{{$json.lead_id}}",
+        "method": "PUT",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [{ "name": "score", "value": "={{$json.new_score}}" }]
+        }
+      },
+      "name": "Actualizar Score",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1350, 200],
+      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "conditions": { "boolean": [{ "value1": "={{$json.create_action}}", "value2": true }] }
+      },
+      "name": "¿Crear Acción?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1350, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/actions",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"Respuesta Lemlist: {{$json.lead_name}}\",\n  \"description\": \"El lead respondió al email de la campaña '{{$json.campaign_name}}'. Contactar en 24h.\",\n  \"lead_id\": \"{{$json.lead_id}}\",\n  \"type\": \"email\",\n  \"priority\": \"high\",\n  \"status\": \"pending\"\n}"
+      },
+      "name": "Crear Acción Follow-up",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1570, 400],
+      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+    }
+  ],
+  "connections": {
+    "Lemlist Webhook": { "main": [[{ "node": "Mapear Evento", "type": "main", "index": 0 }]] },
+    "Mapear Evento": { "main": [[{ "node": "Buscar Lead", "type": "main", "index": 0 }]] },
+    "Buscar Lead": { "main": [[{ "node": "¿Lead Existe?", "type": "main", "index": 0 }]] },
+    "¿Lead Existe?": { "main": [[{ "node": "Calcular Score", "type": "main", "index": 0 }], []] },
+    "Calcular Score": { "main": [[{ "node": "Actualizar Score", "type": "main", "index": 0 }, { "node": "¿Crear Acción?", "type": "main", "index": 0 }]] },
+    "¿Crear Acción?": { "main": [[{ "node": "Crear Acción Follow-up", "type": "main", "index": 0 }], []] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "lemlist" }, { "name": "outreach" }, { "name": "sprint-1" }],
+  "meta": {
+    "code": "RS-093",
+    "category": "integraciones",
+    "priority": "alta",
+    "estimated_hours": 2,
+    "description": "Webhook de Lemlist: recibe eventos (sent/opened/clicked/replied/bounced), busca lead en CRM, actualiza score, crea acción de follow-up si responde"
+  }
+}

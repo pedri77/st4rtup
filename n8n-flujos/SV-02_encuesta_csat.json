@@ -1,0 +1,88 @@
+{
+  "name": "SV-02 Encuesta Trimestral CSAT",
+  "nodes": [
+    {
+      "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "0 9 1 1,4,7,10 *" }] } },
+      "id": "cron-quarterly",
+      "name": "Trimestral día 1",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/leads?status=client&page_size=200",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "get-clients",
+      "name": "GET Clientes Activos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [470, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": { "batchSize": 5, "options": {} },
+      "id": "batch",
+      "name": "SplitInBatches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/surveys",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"lead_id\": \"{{$json.id}}\", \"type\": \"csat\", \"title\": \"CSAT Trimestral — {{$json.company_name}}\", \"status\": \"pending\"}",
+        "options": {}
+      },
+      "id": "create-survey",
+      "name": "Crear Encuesta CSAT",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [910, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://riskitera-sales-backend.fly.dev/api/v1/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "lead_id", "value": "={{$node['SplitInBatches'].json.id}}" },
+            { "name": "to_email", "value": "={{$node['SplitInBatches'].json.contact_email}}" },
+            { "name": "subject", "value": "=¿Cómo valorarías tu experiencia con Riskitera?" },
+            { "name": "body_html", "value": "=<div style=\"font-family:sans-serif;max-width:600px;margin:0 auto\"><h2 style=\"color:#06b6d4\">Hola {{$node['SplitInBatches'].json.contact_name}},</h2><p>Desde <strong>{{$node['SplitInBatches'].json.company_name}}</strong> lleváis un tiempo usando Riskitera y nos encantaría saber cómo va todo.</p><p><strong>¿Cómo valorarías tu satisfacción general?</strong></p><table style=\"width:100%;text-align:center\"><tr><td><a href=\"https://riskitera.com/csat?survey={{$json.id}}&score=5\" style=\"font-size:32px;text-decoration:none\">😍</a><br/>Excelente</td><td><a href=\"https://riskitera.com/csat?survey={{$json.id}}&score=4\" style=\"font-size:32px;text-decoration:none\">😊</a><br/>Bueno</td><td><a href=\"https://riskitera.com/csat?survey={{$json.id}}&score=3\" style=\"font-size:32px;text-decoration:none\">😐</a><br/>Regular</td><td><a href=\"https://riskitera.com/csat?survey={{$json.id}}&score=2\" style=\"font-size:32px;text-decoration:none\">😕</a><br/>Malo</td></tr></table><p>Gracias por tu tiempo,<br/>El equipo de Riskitera</p></div>" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "send-csat-email",
+      "name": "Enviar Email CSAT",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1130, 300],
+      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+    }
+  ],
+  "connections": {
+    "Trimestral día 1": { "main": [[{ "node": "GET Clientes Activos", "type": "main", "index": 0 }]] },
+    "GET Clientes Activos": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] },
+    "SplitInBatches": { "main": [[{ "node": "Crear Encuesta CSAT", "type": "main", "index": 0 }]] },
+    "Crear Encuesta CSAT": { "main": [[{ "node": "Enviar Email CSAT", "type": "main", "index": 0 }]] },
+    "Enviar Email CSAT": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "tags": [{ "name": "encuestas" }, { "name": "medium" }, { "name": "phase_4" }],
+  "meta": { "code": "SV-02", "category": "encuestas", "priority": "medium", "estimated_hours": 4, "description": "Encuesta CSAT trimestral automática a todos los clientes activos." }
+}

@@ -1,0 +1,74 @@
+/* Print-friendly styles for St4rtup CRM CRM */
+@media print {
+  /* Hide non-essential UI */
+  nav, aside, .sidebar, .no-print,
+  [data-no-print], .chat-widget,
+  button:not(.print-visible),
+  .notifications-panel, .keyboard-shortcuts,
+  .tawk-widget, #tawk-widget {
+    display: none !important;
+  }
+
+  /* Reset backgrounds for print */
+  body, main, .main-content, [class*="bg-"] {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Force text colors */
+  h1, h2, h3, h4, h5, h6, p, span, td, th, li, a {
+    color: black !important;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  th, td {
+    border: 1px solid #ccc !important;
+    padding: 4px 8px !important;
+    font-size: 10pt !important;
+  }
+
+  th {
+    background: #f5f5f5 !important;
+    font-weight: bold !important;
+  }
+
+  /* Cards */
+  [class*="card"], [class*="Card"] {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  /* Charts and graphs */
+  canvas, svg {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Page breaks */
+  h1, h2 { page-break-after: avoid; }
+  table, figure { page-break-inside: avoid; }
+
+  /* Header */
+  @page {
+    margin: 1.5cm;
+    @top-center { content: "St4rtup CRM — Impreso el " counter(date); }
+  }
+
+  /* Links */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #666;
+  }
+
+  a[href^="#"]::after,
+  a[href^="javascript"]::after {
+    content: "";
+  }
+}
