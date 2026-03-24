@@ -4,8 +4,8 @@ function LegalLayout({ title, updated, children }) {
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", color: '#0F172A', minHeight: '100vh', backgroundColor: 'white' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
-      <nav style={{ borderBottom: '1px solid #E2E8F0', padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
-        <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 32 }} /></Link>
+      <nav style={{ borderBottom: '1px solid #E2E8F0', padding: '0 24px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+        <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
         <Link to="/" style={{ fontSize: 14, color: '#1E6FD9', textDecoration: 'none', fontWeight: 500 }}>← Volver</Link>
       </nav>
       <main style={{ maxWidth: 760, margin: '0 auto', padding: '60px 24px 100px' }}>

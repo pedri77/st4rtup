@@ -100,8 +100,8 @@ const FAQS = [
 function Nav() {
   return (
     <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E2E8F0' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
-        <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 36 }} /></Link>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
+        <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
         <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
           {NAV_LINKS.map(l => <a key={l.label} href={l.href} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{l.label}</a>)}
           <Link to="/login" style={{ padding: '8px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
@@ -117,7 +117,7 @@ function Footer() {
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 40 }}>
           <div>
-            <img src="/logo.png" alt="st4rtup" style={{ height: 30 }} />
+            <img src="/logo.png" alt="st4rtup" style={{ height: 60 }} />
             <p style={{ fontSize: 13, color: '#94A3B8', marginTop: 12 }}>CRM de ventas y marketing para startups.</p>
           </div>
           {[
