@@ -38,6 +38,29 @@ DRIP_SEQUENCES = {
         "subject": "Tu prueba de Growth termina hoy",
         "body": "Hola {name},\n\nTu prueba gratuita de 14 días del plan Growth termina hoy.\n\nPara mantener acceso a Marketing Hub, IA, SEO y automatizaciones, elige un plan:\n\n{app_url}/pricing\n\nSi necesitas más tiempo, responde a este email.\n\n— El equipo de St4rtup"
     },
+    "day_30_nps": {
+        "day": 30,
+        "subject": "¿Qué tal tu experiencia con St4rtup? (1 minuto)",
+        "body": "Hola {name},
+
+Llevas 30 días usando St4rtup. En una escala del 0 al 10, ¿recomendarías St4rtup a otro founder?
+
+Responde directamente a este email.
+
+— El equipo de St4rtup"
+    },
+    "day_90_nps": {
+        "day": 90,
+        "subject": "3 meses con St4rtup — ¿cómo lo estamos haciendo?",
+        "body": "Hola {name},
+
+¡3 meses juntos! ¿Recomendarías St4rtup a un amigo? (0-10)
+¿Qué mejorarías?
+
+Responde a este email — leemos todo.
+
+— El equipo de St4rtup"
+    },
     "day_30_reactivation": {
         "day": 30,
         "subject": "Te echamos de menos en St4rtup",
@@ -77,3 +100,19 @@ async def run_drip_check():
                             user.preferences = {}
                         user.preferences.setdefault("drips_sent", []).append(key)
                         await db.commit()
+
+
+async def send_weekly_digest():
+    """Send weekly KPI digest to all active users. Called by scheduler Mondays 9:15."""
+    async with AsyncSessionLocal() as db:
+        users = await db.execute(select(User))
+        for user in users.scalars().all():
+            if not user.email:
+                continue
+            subject = "Tu resumen semanal — St4rtup"
+            body = f"Hola {user.full_name or 'there'},\n\nAquí va tu resumen de la semana:\n\nDashboard: {APP_URL}/app/dashboard\nPipeline: {APP_URL}/app/pipeline\nEmails: {APP_URL}/app/emails\n\nEntra para ver tus KPIs en tiempo real.\n\n— El equipo de St4rtup"
+            try:
+                from app.services.email_service import send_email
+                await send_email(to=user.email, subject=subject, body=body)
+            except Exception as e:
+                logger.error("Weekly digest failed for %s: %s", user.email, e)

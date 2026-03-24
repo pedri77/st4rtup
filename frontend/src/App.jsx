@@ -18,6 +18,7 @@ const CookiesPage = lazy(() => import('./pages/legal/CookiesPage'))
 const OnboardingPage = lazy(() => import('./pages/OnboardingPage'))
 const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'))
 const ReferralPage = lazy(() => import('./pages/ReferralPage'))
+const BadgesPage = lazy(() => import('./pages/BadgesPage'))
 const DemoPage = lazy(() => import('./pages/DemoPage'))
 const BlogPage = lazy(() => import('./pages/BlogPage'))
 const ChangelogPage = lazy(() => import('./pages/ChangelogPage'))
@@ -220,6 +221,7 @@ function App() {
           <Route path="gtm/pricing" element={<Suspense fallback={<PageLoader />}><PricingPage /></Suspense>} />
           <Route path="admin" element={<Suspense fallback={<PageLoader />}><AdminDashboardPage /></Suspense>} />
           <Route path="referral" element={<Suspense fallback={<PageLoader />}><ReferralPage /></Suspense>} />
+          <Route path="badges" element={<Suspense fallback={<PageLoader />}><BadgesPage /></Suspense>} />
           <Route path="gtm/competitors" element={<Suspense fallback={<PageLoader />}><CompetitorsPage /></Suspense>} />
           <Route path="gtm/playbook" element={<Suspense fallback={<PageLoader />}><PlaybookPage /></Suspense>} />
           <Route path="gtm/playbook/:tacticId" element={<Suspense fallback={<PageLoader />}><PlaybookDetailPage /></Suspense>} />
