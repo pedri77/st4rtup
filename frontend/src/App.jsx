@@ -17,7 +17,11 @@ const CookiesPage = lazy(() => import('./pages/legal/CookiesPage'))
 // Lazy-loaded pages (code splitting)
 const OnboardingPage = lazy(() => import('./pages/OnboardingPage'))
 const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'))
+const ReferralPage = lazy(() => import('./pages/ReferralPage'))
 const DemoPage = lazy(() => import('./pages/DemoPage'))
+const BlogPage = lazy(() => import('./pages/BlogPage'))
+const ChangelogPage = lazy(() => import('./pages/ChangelogPage'))
+const StatusPage = lazy(() => import('./pages/StatusPage'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const LeadsPage = lazy(() => import('./pages/LeadsPage'))
 const LeadDetailPage = lazy(() => import('./pages/LeadDetailPage'))
@@ -111,6 +115,9 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/pricing" element={<PricingPublicPage />} />
         <Route path="/demo" element={<Suspense fallback={<PageLoader />}><DemoPage /></Suspense>} />
+        <Route path="/blog" element={<Suspense fallback={<PageLoader />}><BlogPage /></Suspense>} />
+        <Route path="/changelog" element={<Suspense fallback={<PageLoader />}><ChangelogPage /></Suspense>} />
+        <Route path="/status" element={<Suspense fallback={<PageLoader />}><StatusPage /></Suspense>} />
         <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><PrivacyPage /></Suspense>} />
         <Route path="/terms" element={<Suspense fallback={<PageLoader />}><TermsPage /></Suspense>} />
         <Route path="/cookies" element={<Suspense fallback={<PageLoader />}><CookiesPage /></Suspense>} />
@@ -212,6 +219,7 @@ function App() {
           <Route path="gtm/brand" element={<Suspense fallback={<PageLoader />}><BrandPage /></Suspense>} />
           <Route path="gtm/pricing" element={<Suspense fallback={<PageLoader />}><PricingPage /></Suspense>} />
           <Route path="admin" element={<Suspense fallback={<PageLoader />}><AdminDashboardPage /></Suspense>} />
+          <Route path="referral" element={<Suspense fallback={<PageLoader />}><ReferralPage /></Suspense>} />
           <Route path="gtm/competitors" element={<Suspense fallback={<PageLoader />}><CompetitorsPage /></Suspense>} />
           <Route path="gtm/playbook" element={<Suspense fallback={<PageLoader />}><PlaybookPage /></Suspense>} />
           <Route path="gtm/playbook/:tacticId" element={<Suspense fallback={<PageLoader />}><PlaybookDetailPage /></Suspense>} />
