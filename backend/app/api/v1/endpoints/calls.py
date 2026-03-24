@@ -184,18 +184,18 @@ async def seed_prompts(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
 ):
-    """Crea 5 prompts semilla para ventas GRC."""
+    """Crea 5 prompts semilla para ventas growth."""
     seeds = [
         {
-            "nombre": "Prospección GRC - Primer contacto",
+            "nombre": "Prospección growth - Primer contacto",
             "objetivo": "prospecting",
-            "persona_target": ["CISO", "DPO", "CTO"],
+            "persona_target": ["CEO", "DPO", "CTO"],
             "regulatory_focus": ["ENS", "NIS2", "DORA"],
             "idioma": "es",
             "system_prompt": (
-                "Eres un consultor de ciberseguridad GRC de St4rtup. "
+                "Eres un consultor de ventas B2B de St4rtup. "
                 "Tu objetivo es presentar la plataforma y generar interés. "
-                "Habla de normativas como ENS, NIS2, DORA e ISO 27001. "
+                "Habla de normativas como ENS, NIS2, DORA e SaaS Best Practices. "
                 "Sé profesional pero cercano. No presiones. "
                 "Si el contacto muestra interés, sugiere agendar una demo."
             ),
@@ -203,7 +203,7 @@ async def seed_prompts(
                 "Hola {{lead_nombre}}, soy de St4rtup. Le llamo porque "
                 "{{lead_empresa}} opera en un sector donde el cumplimiento de "
                 "{{regulatory_focus}} es clave. ¿Tiene un momento para hablar "
-                "sobre cómo simplificar la gestión GRC?"
+                "sobre cómo simplificar la gestión growth?"
             ),
             "variables_dinamicas": ["lead_nombre", "lead_empresa", "regulatory_focus"],
             "objetivo_llamada": "Generar interés y agendar demo",
@@ -213,11 +213,11 @@ async def seed_prompts(
         {
             "nombre": "Seguimiento post-demo",
             "objetivo": "followup_demo",
-            "persona_target": ["CISO", "DPO", "CTO", "IT Manager"],
+            "persona_target": ["CEO", "DPO", "CTO", "IT Manager"],
             "regulatory_focus": ["any"],
             "idioma": "es",
             "system_prompt": (
-                "Eres un consultor GRC de St4rtup haciendo seguimiento tras una demo. "
+                "Eres un consultor growth de St4rtup haciendo seguimiento tras una demo. "
                 "Pregunta qué les pareció la demo, resuelve dudas, y busca avanzar "
                 "hacia una propuesta. Menciona casos de éxito relevantes."
             ),
@@ -234,7 +234,7 @@ async def seed_prompts(
         {
             "nombre": "Cierre - Negociación final",
             "objetivo": "closing",
-            "persona_target": ["CISO", "CFO", "CEO"],
+            "persona_target": ["CEO", "CFO", "CEO"],
             "regulatory_focus": ["any"],
             "idioma": "es",
             "system_prompt": (
@@ -256,18 +256,18 @@ async def seed_prompts(
         {
             "nombre": "Reactivación de lead frío",
             "objetivo": "reactivation",
-            "persona_target": ["CISO", "DPO", "IT Manager"],
+            "persona_target": ["CEO", "DPO", "IT Manager"],
             "regulatory_focus": ["ENS", "NIS2", "DORA"],
             "idioma": "es",
             "system_prompt": (
-                "Eres un consultor GRC de St4rtup recontactando un lead que "
+                "Eres un consultor growth de St4rtup recontactando un lead que "
                 "mostró interés pero no avanzó. Menciona novedades: nuevas "
                 "normativas (NIS2 Oct 2024, DORA Ene 2025), nuevas funcionalidades, "
                 "casos de éxito recientes. No seas agresivo."
             ),
             "primer_mensaje": (
                 "Hola {{lead_nombre}}, soy de St4rtup. Hablamos hace un tiempo "
-                "sobre la gestión GRC en {{lead_empresa}}. Le llamo porque hay "
+                "sobre la gestión growth en {{lead_empresa}}. Le llamo porque hay "
                 "novedades importantes en normativa que podrían afectarles. "
                 "¿Tiene un momento?"
             ),
@@ -279,19 +279,19 @@ async def seed_prompts(
         {
             "nombre": "Cualificación BANT",
             "objetivo": "qualification",
-            "persona_target": ["CISO", "DPO", "CTO", "IT Manager"],
+            "persona_target": ["CEO", "DPO", "CTO", "IT Manager"],
             "regulatory_focus": ["any"],
             "idioma": "es",
             "system_prompt": (
                 "Eres un SDR de St4rtup cualificando un lead usando BANT: "
-                "Budget (presupuesto para GRC), Authority (decisor), "
+                "Budget (presupuesto para growth), Authority (decisor), "
                 "Need (necesidades de cumplimiento), Timeline (plazos). "
                 "Haz preguntas abiertas. Toma notas mentales. "
                 "Si cualifica, sugiere demo con un consultor senior."
             ),
             "primer_mensaje": (
                 "Hola {{lead_nombre}}, soy de St4rtup. Hemos visto que "
-                "{{lead_empresa}} podría beneficiarse de nuestra plataforma GRC. "
+                "{{lead_empresa}} podría beneficiarse de nuestra plataforma growth. "
                 "Me gustaría entender mejor sus necesidades de cumplimiento. "
                 "¿Cómo gestionan actualmente la normativa {{regulatory_focus}}?"
             ),

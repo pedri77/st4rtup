@@ -12,7 +12,7 @@ import toast from 'react-hot-toast'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -244,7 +244,7 @@ function KeywordsTab() {
             </tbody>
           </table>
           {(!data?.items?.length) && (
-            <p className="text-center py-8" style={{ color: T.fgMuted }}>No hay keywords. Usa "Seed" para cargar keywords GRC predefinidas.</p>
+            <p className="text-center py-8" style={{ color: T.fgMuted }}>No hay keywords. Usa "Seed" para cargar keywords growth predefinidas.</p>
           )}
         </div>
       )}
@@ -763,7 +763,7 @@ export default function SEOPage() {
             SEO & Geo-SEO
           </h1>
           <p style={{ fontSize: 14, color: T.fgMuted, marginTop: 4 }}>
-            Keywords, rankings, geo pages, NAP audits y rankings geo-localizados para GRC España.
+            Keywords, rankings, geo pages, NAP audits y rankings geo-localizados para growth España.
           </p>
         </div>
       </div>

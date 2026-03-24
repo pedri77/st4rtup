@@ -66,7 +66,7 @@ export default function ThemeToggle() {
       style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         width: 32, height: 32, borderRadius: '0.5rem',
-        background: 'none', border: '1px solid hsl(220,15%,20%)',
+        background: 'none', border: '1px solid #E2E8F0',
         color: '#0F172A', cursor: 'pointer',
         transition: 'all 0.2s',
       }}

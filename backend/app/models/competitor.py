@@ -5,7 +5,7 @@ from app.models.base import BaseModel
 
 
 class Competitor(BaseModel):
-    """Competidor GRC."""
+    """Competidor growth."""
     __tablename__ = "competitors"
 
     name = Column(String(255), nullable=False, unique=True)

@@ -190,7 +190,7 @@ async def search_prospects(
     """Busca prospectos en Apollo.io por ICP (Ideal Customer Profile).
 
     Args:
-        title_keywords: Cargos objetivo (CISO, CTO, DPO, Director TI)
+        title_keywords: Cargos objetivo (CEO, CTO, DPO, Director TI)
         industries: Sectores (financial services, healthcare, government...)
         employee_ranges: Rangos de empleados (51-200, 201-1000, 1001-5000)
         countries: Países ISO (ES, DE, FR, IT, PT)

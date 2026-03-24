@@ -1,6 +1,6 @@
 """
 MCP Audit Trail — registra cada tool call de los agentes IA.
-Cumple CONST-02 (ENS Alto): input_summary no contiene datos sensibles (PII, tokens).
+Cumple CONST-02 (Enterprise): input_summary no contiene datos sensibles (PII, tokens).
 """
 import time
 import logging

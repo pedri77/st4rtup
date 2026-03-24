@@ -92,7 +92,7 @@ class CallPrompt(BaseModel):
     nombre = Column(String(255), nullable=False)
     objetivo = Column(String(50), nullable=False, index=True)
     # prospecting | followup_demo | closing | reactivation | qualification
-    persona_target = Column(ARRAY(String))  # CISO, DPO, CTO, MSSP
+    persona_target = Column(ARRAY(String))  # CEO, DPO, CTO, MSSP
     regulatory_focus = Column(ARRAY(String))  # ENS, NIS2, DORA, ISO27001, any
     idioma = Column(String(5), default="es")
     voz_id = Column(String(100))

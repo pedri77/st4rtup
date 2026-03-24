@@ -14,7 +14,7 @@ import { llmVisibilityApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -31,7 +31,7 @@ const SENTIMENT_CONFIG = {
   positive: { label: 'Positivo', icon: CheckCircle2, color: T.success },
   neutral: { label: 'Neutral', icon: MinusCircle, color: T.fgMuted },
   negative: { label: 'Negativo', icon: XCircle, color: T.destructive },
-  not_mentioned: { label: 'No mencionado', icon: XCircle, color: 'hsl(220,15%,25%)' },
+  not_mentioned: { label: 'No mencionado', icon: XCircle, color: '#E2E8F0' },
 }
 
 const PROVIDER_COLORS = {
@@ -311,7 +311,7 @@ export default function LLMVisibilityPage() {
             <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 12, padding: 48, textAlign: 'center' }}>
               <Bot className="w-8 h-8 mx-auto mb-2" style={{ color: T.fgMuted }} />
               <p style={{ color: T.fgMuted }}>No hay queries configuradas</p>
-              <p style={{ fontSize: 12, color: T.fgMuted, marginTop: 4 }}>Usa "Seed" para generar queries predefinidas para GRC</p>
+              <p style={{ fontSize: 12, color: T.fgMuted, marginTop: 4 }}>Usa "Seed" para generar queries predefinidas para growth</p>
             </div>
           ) : (
             queries.map(q => {
@@ -589,7 +589,7 @@ export default function LLMVisibilityPage() {
                   value={form.query_text}
                   onChange={(e) => setForm(f => ({ ...f, query_text: e.target.value }))}
                   style={{ ...inputStyle, resize: 'none' }}
-                  placeholder="What are the best GRC platforms for..."
+                  placeholder="What are the best growth platforms for..."
                 />
               </div>
 

@@ -176,7 +176,7 @@ async def seed_tiers(
         {
             "name": "Pilot PoC", "slug": "pilot_poc", "base_price": 19500, "price_unit": "fixed",
             "duration_days": 90, "min_price": 19500, "max_price": 19500,
-            "description": "PoC de 90 días con módulo ENS Alto + soporte dedicado",
+            "description": "PoC de 90 días con módulo Enterprise + soporte dedicado",
             "modules_included": ["grc_core", "ens_alto"], "modules_available": ["nis2", "dora", "soc"],
             "infra_cost_monthly": 1200, "sort_order": 1,
         },

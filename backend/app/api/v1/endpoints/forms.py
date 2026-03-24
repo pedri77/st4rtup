@@ -317,7 +317,7 @@ async def generate_smart_form(
         from app.services.ai_chat_service import AIChatService
         service = AIChatService()
 
-        prompt = f"""Genera los campos ideales para un formulario de tipo '{form_type}' para un prospect de ciberseguridad GRC.
+        prompt = f"""Genera los campos ideales para un formulario de tipo '{form_type}' para un prospect de ventas B2B.
 
 Contexto: {context or 'Generico - empresa espanola'}
 
@@ -338,7 +338,7 @@ Campos en espanol."""
 
         result = await service.chat(
             messages=[{"role": "user", "content": prompt}],
-            system_prompt="Eres un experto en formularios de captacion B2B para ciberseguridad GRC. Responde SOLO en JSON valido.",
+            system_prompt="Eres un experto en formularios de captacion B2B para ventas B2B. Responde SOLO en JSON valido.",
         )
 
         # Parse JSON from response

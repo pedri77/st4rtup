@@ -13,7 +13,7 @@ import { socialApi, youtubeApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -107,7 +107,7 @@ export default function SocialMediaPage() {
   const generateContent = async (platform) => {
     setGenerating(true)
     try {
-      const resp = await socialApi.generate({ platform, topic: genTopic || 'ciberseguridad GRC para empresas españolas' })
+      const resp = await socialApi.generate({ platform, topic: genTopic || 'ventas B2B para empresas españolas' })
       if (resp.data?.generated) {
         setForm(f => ({ ...f, platform, content: resp.data.content }))
         setShowCreate(true)
@@ -277,7 +277,7 @@ export default function SocialMediaPage() {
                     {post.scheduled_at && <span className="text-[10px]" style={{ color: T.fgMuted, fontFamily: fontMono }}>{new Date(post.scheduled_at).toLocaleDateString('es-ES')}</span>}
                     {post.tags?.length > 0 && post.tags.map(t => <span key={t} className="text-[9px]" style={{ color: T.fgMuted }}>#{t}</span>)}
                   </div>
-                  <p className="text-sm whitespace-pre-wrap" style={{ color: 'hsl(220,15%,75%)' }}>{post.content}</p>
+                  <p className="text-sm whitespace-pre-wrap" style={{ color: '#94A3B8' }}>{post.content}</p>
                   {post.impressions > 0 && (
                     <div className="flex gap-3 mt-2 text-xs" style={{ color: T.fgMuted, fontFamily: fontMono }}>
                       <span>👁 {post.impressions}</span>
@@ -384,7 +384,7 @@ export default function SocialMediaPage() {
                   <p className="text-xs" style={{ color: T.fgMuted, fontFamily: fontMono }}>{listeningData.sentiment.total_mentions} menciones analizadas</p>
                   {listeningData.sentiment.analysis && (
                     <div className="mt-2 text-sm whitespace-pre-wrap rounded-lg p-3 max-h-48 overflow-y-auto"
-                      style={{ color: 'hsl(220,15%,75%)', backgroundColor: 'hsla(220,25%,6%,0.5)' }}>
+                      style={{ color: '#94A3B8', backgroundColor: 'hsla(220,25%,6%,0.5)' }}>
                       {listeningData.sentiment.analysis}
                     </div>
                   )}
@@ -444,7 +444,7 @@ export default function SocialMediaPage() {
               <textarea id="socialmedia-textarea-6" aria-label="Texto" value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
                 placeholder="Contenido del post..." rows={6} className="input text-sm" />
               <input type="text" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))}
-                placeholder="Tags separados por coma (ciberseguridad, GRC, ENS...)" className="input text-sm" />
+                placeholder="Tags separados por coma (tecnología, growth, ENS...)" className="input text-sm" />
               <div className="flex gap-2">
                 <button onClick={() => createMutation.mutate(form)} disabled={!form.content || createMutation.isPending}
                   className="btn-primary flex-1 text-sm">{createMutation.isPending ? 'Creando...' : 'Guardar como Draft'}</button>

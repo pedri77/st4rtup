@@ -395,7 +395,7 @@ async def encrypt_existing_credentials(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
-    """Migra credenciales existentes de plaintext a cifrado Fernet (ENS Alto)."""
+    """Migra credenciales existentes de plaintext a cifrado Fernet (Enterprise)."""
     await _require_admin(current_user, db)
     from app.core.credential_store import credential_store, SENSITIVE_KEYS
 

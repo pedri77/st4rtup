@@ -9,13 +9,13 @@ import { brandApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
-const FRAMEWORKS = ['ENS Alto', 'NIS2', 'DORA', 'ISO 27001', 'EU AI Act', 'SOC 2', 'GDPR']
+const FRAMEWORKS = ['Enterprise', 'SaaS Best Practices', 'EU AI Act', 'SOC 2', 'GDPR']
 
 export default function BrandPage() {
   const queryClient = useQueryClient()

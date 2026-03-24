@@ -4,13 +4,13 @@ import { MessageCircle, X, Send, Loader2 } from 'lucide-react'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4',
+  cyan: '#3B82F6',
 }
 
 export default function WebChatWidget() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hola, soy el asistente de St4rtup. En que puedo ayudarte con cumplimiento normativo o ciberseguridad GRC?' }
+    { role: 'assistant', content: 'Hola, soy el asistente de St4rtup. En que puedo ayudarte con cumplimiento normativo o ventas B2B?' }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -46,7 +46,7 @@ export default function WebChatWidget() {
       <button onClick={() => setOpen(true)} style={{
         position: 'fixed', bottom: 24, right: 24, zIndex: 50,
         width: 56, height: 56, borderRadius: '50%',
-        background: `linear-gradient(135deg, ${T.cyan}, hsl(265,60%,58%))`,
+        background: `linear-gradient(135deg, ${T.cyan}, #8B5CF6)`,
         border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
         boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
       }}>
@@ -67,7 +67,7 @@ export default function WebChatWidget() {
       <div style={{ padding: '12px 16px', backgroundColor: T.card, borderBottom: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <p style={{ fontSize: 14, fontWeight: 700, color: T.fg, margin: 0 }}>St4rtup</p>
-          <p style={{ fontSize: 11, color: T.fgMuted, margin: 0 }}>Asistente GRC</p>
+          <p style={{ fontSize: 11, color: T.fgMuted, margin: 0 }}>Asistente growth</p>
         </div>
         <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
           <X size={18} color={T.fgMuted} />

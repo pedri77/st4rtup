@@ -7,8 +7,8 @@ import PlaybookPage from './PlaybookPage'
 vi.mock('@/services/api', () => ({
   playbookApi: {
     list: vi.fn(() => Promise.resolve({ data: { tactics: [
-      { id: '1', name: 'SEO GRC', description: 'Posicionamiento orgánico', category: 'inbound', status: 'active', channel: 'web', responsible: 'Marketing', leads_generated: 12, metrics_target: {}, metrics_actual: {} },
-      { id: '2', name: 'Cold Email', description: 'Email en frío a CISOs', category: 'outbound', status: 'planned', channel: 'email', responsible: 'SDR', leads_generated: 0, metrics_target: {}, metrics_actual: {} },
+      { id: '1', name: 'SEO growth', description: 'Posicionamiento orgánico', category: 'inbound', status: 'active', channel: 'web', responsible: 'Marketing', leads_generated: 12, metrics_target: {}, metrics_actual: {} },
+      { id: '2', name: 'Cold Email', description: 'Email en frío a CEOs', category: 'outbound', status: 'planned', channel: 'email', responsible: 'SDR', leads_generated: 0, metrics_target: {}, metrics_actual: {} },
     ] } })),
     stats: vi.fn(() => Promise.resolve({ data: { stats: [
       { tactic_id: '1', leads_generated: 12 },
@@ -45,7 +45,7 @@ describe('PlaybookPage', () => {
   it('muestra tácticas después de cargar', async () => {
     renderPage()
     await waitFor(() => {
-      expect(screen.getByText('SEO GRC')).toBeInTheDocument()
+      expect(screen.getByText('SEO growth')).toBeInTheDocument()
       expect(screen.getByText('Cold Email')).toBeInTheDocument()
     })
   })

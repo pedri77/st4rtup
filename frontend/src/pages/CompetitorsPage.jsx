@@ -13,7 +13,7 @@ import { competitorsApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -68,7 +68,7 @@ function CompetitorCard({ comp, onSelect }) {
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
           <span style={{ color: T.fgMuted }}>Madurez plataforma</span>
-          <span className="font-medium" style={{ color: 'hsl(220,15%,75%)', fontFamily: fontMono }}>{comp.maturity_score}%</span>
+          <span className="font-medium" style={{ color: '#94A3B8', fontFamily: fontMono }}>{comp.maturity_score}%</span>
         </div>
         <div className="w-full rounded-full h-1.5" style={{ backgroundColor: 'hsla(220,15%,20%,0.5)' }}>
           <div className="h-1.5 rounded-full" style={{ width: `${comp.maturity_score}%`, backgroundColor: maturityColor(comp.maturity_score) }} />
@@ -139,11 +139,11 @@ function CompetitorDrawer({ comp, onClose }) {
             <div className="space-y-4">
               <div>
                 <p className="text-xs mb-1" style={{ color: T.fgMuted }}>Alcance</p>
-                <p className="text-sm" style={{ color: 'hsl(220,15%,75%)' }}>{comp.scope}</p>
+                <p className="text-sm" style={{ color: '#94A3B8' }}>{comp.scope}</p>
               </div>
               <div>
                 <p className="text-xs mb-1" style={{ color: T.fgMuted }}>Modelo de negocio</p>
-                <p className="text-sm" style={{ color: 'hsl(220,15%,75%)' }}>{comp.model || '—'}</p>
+                <p className="text-sm" style={{ color: '#94A3B8' }}>{comp.model || '—'}</p>
               </div>
               <div>
                 <p className="text-xs mb-2" style={{ color: T.fgMuted }}>Madurez de plataforma</p>
@@ -169,18 +169,18 @@ function CompetitorDrawer({ comp, onClose }) {
           )}
 
           {tab === 'analysis' && (
-            <p className="text-sm leading-relaxed" style={{ color: 'hsl(220,15%,75%)' }}>{comp.analysis || 'Sin análisis disponible.'}</p>
+            <p className="text-sm leading-relaxed" style={{ color: '#94A3B8' }}>{comp.analysis || 'Sin análisis disponible.'}</p>
           )}
 
           {tab === 'vs' && (
             <div className="space-y-4">
               <div className="rounded-lg p-3" style={{ backgroundColor: 'hsla(0,72%,51%,0.05)', border: `1px solid hsla(0,72%,51%,0.2)` }}>
                 <p className="text-xs font-medium mb-1" style={{ color: T.destructive }}>Debilidad del competidor</p>
-                <p className="text-sm" style={{ color: 'hsl(220,15%,75%)' }}>{comp.weakness || '—'}</p>
+                <p className="text-sm" style={{ color: '#94A3B8' }}>{comp.weakness || '—'}</p>
               </div>
               <div className="rounded-lg p-3" style={{ backgroundColor: 'hsla(142,71%,45%,0.05)', border: `1px solid hsla(142,71%,45%,0.2)` }}>
                 <p className="text-xs font-medium mb-1" style={{ color: T.success }}>Ventaja St4rtup</p>
-                <p className="text-sm" style={{ color: 'hsl(220,15%,75%)' }}>{comp.vs_riskitera || '—'}</p>
+                <p className="text-sm" style={{ color: '#94A3B8' }}>{comp.vs_riskitera || '—'}</p>
               </div>
             </div>
           )}
@@ -422,7 +422,7 @@ export default function CompetitorsPage() {
                   <option value="critical">Critica</option><option value="high">Alta</option><option value="medium">Media</option><option value="low">Baja</option>
                 </select>
               </div>
-              <input type="text" value={addForm.scope} onChange={e => setAddForm(f => ({ ...f, scope: e.target.value }))} placeholder="Alcance (ej: GRC ENS / NIS2 / ISO 27001)" className="input text-sm" />
+              <input type="text" value={addForm.scope} onChange={e => setAddForm(f => ({ ...f, scope: e.target.value }))} placeholder="Alcance (ej: growth ENS / NIS2 / SaaS Best Practices)" className="input text-sm" />
               <input type="text" value={addForm.website} onChange={e => setAddForm(f => ({ ...f, website: e.target.value }))} placeholder="Website" className="input text-sm" />
               <div>
                 <label className="text-xs mb-1 block" style={{ color: T.fgMuted }} htmlFor="competitors-field-1">Madurez plataforma: <span style={{ fontFamily: fontMono }}>{addForm.maturity_score}%</span></label>

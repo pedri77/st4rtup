@@ -7,7 +7,7 @@ import { gtmApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -113,7 +113,7 @@ export default function InvestorViewPage() {
             </div>
             <h1 className="text-3xl font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>St4rtup CRM</h1>
             <p className="mt-1" style={{ color: T.fgMuted }}>Investor Metrics Dashboard</p>
-            <p className="text-xs mt-2" style={{ color: T.fgMuted }}>Plataforma SaaS GRC de ciberseguridad &middot; ENS Alto &middot; NIS2 &middot; DORA</p>
+            <p className="text-xs mt-2" style={{ color: T.fgMuted }}>Plataforma SaaS growth de tecnología &middot; Enterprise &middot; NIS2 &middot; DORA</p>
           </div>
 
           {/* Hero metrics */}

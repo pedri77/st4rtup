@@ -15,7 +15,7 @@ class BrandConfig(BaseModel):
     vision = Column(Text)
     values = Column(Text)
     segment = Column(String(50), default="enterprise")  # enterprise, smb, both
-    regulatory_frameworks = Column(JSON, default=list)  # ["ENS Alto", "NIS2", "DORA", "ISO 27001"]
+    regulatory_frameworks = Column(JSON, default=list)  # ["Enterprise", "NIS2", "DORA", "SaaS Best Practices"]
     logo_url = Column(String(500))
     primary_color = Column(String(20), default="#0891b2")
     gtm_budget_annual = Column(Float, default=0)  # Presupuesto GTM anual total

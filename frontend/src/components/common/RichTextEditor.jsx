@@ -4,7 +4,7 @@ import { Bold, Italic, Underline, List, ListOrdered, Link, Image, AlignLeft, Ali
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4',
+  cyan: '#3B82F6',
 }
 
 const TOOLBAR_BUTTONS = [

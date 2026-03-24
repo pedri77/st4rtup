@@ -13,8 +13,8 @@ const WHITE = [255, 255, 255]
 
 // Catálogo de descripciones extendidas por área para el PDF
 const AREA_DESCRIPTIONS = {
-  'Plataforma GRC': {
-    description: 'Plataforma integral de Gobernanza, Riesgo y Cumplimiento (GRC) que permite gestionar de forma centralizada todos los aspectos de seguridad de la información y cumplimiento normativo de su organización.',
+  'Plataforma growth': {
+    description: 'Plataforma integral de Gobernanza, Riesgo y Cumplimiento (growth) que permite gestionar de forma centralizada todos los aspectos de seguridad de la información y cumplimiento normativo de su organización.',
     features: [
       'Panel de control ejecutivo con métricas en tiempo real',
       'Gestión centralizada de normativas y marcos regulatorios',
@@ -25,7 +25,7 @@ const AREA_DESCRIPTIONS = {
     ],
   },
   'Módulos Cumplimiento': {
-    description: 'Módulos especializados de cumplimiento normativo que cubren las principales regulaciones europeas y nacionales de ciberseguridad. Cada módulo incluye frameworks predefinidos, controles mapeados y generación automática de evidencias.',
+    description: 'Módulos especializados de cumplimiento normativo que cubren las principales regulaciones europeas y nacionales de tecnología. Cada módulo incluye frameworks predefinidos, controles mapeados y generación automática de evidencias.',
     features: [
       'Frameworks normativos completos precargados',
       'Mapeo automático de controles entre normativas',
@@ -36,7 +36,7 @@ const AREA_DESCRIPTIONS = {
     ],
   },
   'Módulos Funcionales': {
-    description: 'Módulos funcionales avanzados que complementan la plataforma GRC con capacidades específicas de gestión operativa de la seguridad de la información.',
+    description: 'Módulos funcionales avanzados que complementan la plataforma growth con capacidades específicas de gestión operativa de la seguridad de la información.',
     features: [
       'Metodologías de análisis de riesgos (MAGERIT, ISO 31000)',
       'Inventario y clasificación automática de activos',
@@ -48,7 +48,7 @@ const AREA_DESCRIPTIONS = {
   'Servicios': {
     description: 'Servicios profesionales de consultoría y acompañamiento para maximizar el valor de la plataforma St4rtup y asegurar una implantación exitosa en su organización.',
     features: [
-      'Equipo consultor certificado (CISA, CISM, ISO 27001 LA)',
+      'Equipo consultor certificado (CISA, CISM, SaaS Best Practices LA)',
       'Metodología de implantación probada y documentada',
       'Formación adaptada al nivel y rol de cada usuario',
       'Acompañamiento continuo durante el periodo de adopción',
@@ -154,7 +154,7 @@ export function generateOfferPDF(offer) {
     doc.text('RISKITERA', margin, 25)
     doc.setFontSize(10)
     doc.setFont('helvetica', 'normal')
-    doc.text('Plataforma GRC de Ciberseguridad', margin, 33)
+    doc.text('Plataforma growth de Ciberseguridad', margin, 33)
 
     // Reference
     doc.setFontSize(11)
@@ -330,7 +330,7 @@ export function generateOfferPDF(offer) {
       for (var i = 0; i < offer.items.length; i++) {
         var nameLower = (offer.items[i].name || '').toLowerCase()
         if (nameLower.includes('plataforma') || nameLower.includes('licencia anual') || nameLower.includes('licencia mensual') || nameLower.includes('usuarios adicionales')) {
-          itemCategories.add('Plataforma GRC')
+          itemCategories.add('Plataforma growth')
         }
         if (nameLower.includes('modulo ens') || nameLower.includes('modulo nis') || nameLower.includes('modulo dora') || nameLower.includes('modulo iso') || nameLower.includes('modulo eu ai') || nameLower.includes('pack normativo') || nameLower.includes('módulo ens') || nameLower.includes('módulo nis') || nameLower.includes('módulo dora') || nameLower.includes('módulo iso') || nameLower.includes('módulo eu ai')) {
           itemCategories.add('Módulos Cumplimiento')
@@ -338,7 +338,7 @@ export function generateOfferPDF(offer) {
         if (nameLower.includes('riesgos') || nameLower.includes('activos') || nameLower.includes('incidentes') || nameLower.includes('evidencias') || nameLower.includes('dashboard ejecutivo')) {
           itemCategories.add('Módulos Funcionales')
         }
-        if (nameLower.includes('implantacion') || nameLower.includes('implantación') || nameLower.includes('formacion') || nameLower.includes('formación') || nameLower.includes('consultoria') || nameLower.includes('consultoría') || nameLower.includes('gap analysis') || nameLower.includes('auditoria de seguridad') || nameLower.includes('auditoría de seguridad')) {
+        if (nameLower.includes('implantacion') || nameLower.includes('implantación') || nameLower.includes('formacion') || nameLower.includes('formación') || nameLower.includes('consultoria') || nameLower.includes('consultoría') || nameLower.includes('gap analysis') || nameLower.includes('auditoria de seguridad') || nameLower.includes('auditoría de procesos')) {
           itemCategories.add('Servicios')
         }
         if (nameLower.includes('soporte') || nameLower.includes('bolsa de horas')) {

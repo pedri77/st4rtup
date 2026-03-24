@@ -31,8 +31,8 @@ class MarketingDocument(BaseModel):
     )
     language = Column(SAEnum(AssetLanguage), default=AssetLanguage.ES)
     description = Column(Text)
-    regulatory_focus = Column(String(100))  # ENS / NIS2 / DORA / ISO 27001 / Mixto
-    persona_target = Column(String(100))  # CISO / DPO / CTO / Compliance Officer
+    regulatory_focus = Column(String(100))  # ENS / NIS2 / DORA / SaaS Best Practices / Mixto
+    persona_target = Column(String(100))  # CEO / DPO / CTO / Compliance Officer
     tags = Column(JSON)  # ["nis2", "españa", "guía"]
 
     # FK

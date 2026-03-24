@@ -1,6 +1,6 @@
 """
 Encrypted credential store — cifra API keys en reposo con Fernet (AES-128-CBC).
-Cumple ENS Alto: las credenciales de terceros nunca se almacenan en texto plano en DB.
+Cumple Enterprise: las credenciales de terceros nunca se almacenan en texto plano en DB.
 
 Uso:
     from app.core.credential_store import credential_store

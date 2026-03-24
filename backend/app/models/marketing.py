@@ -36,8 +36,8 @@ class Campaign(BaseModel):
     budget_monthly = Column(JSON)  # {"2026-04": 5000, "2026-05": 3000}
 
     # Targeting
-    persona_target = Column(String(100))  # CISO / DPO / CTO / Compliance Officer / MSSP
-    regulatory_focus = Column(String(100))  # ENS / NIS2 / DORA / ISO 27001 / Mixto
+    persona_target = Column(String(100))  # CEO / DPO / CTO / Compliance Officer / MSSP
+    regulatory_focus = Column(String(100))  # ENS / NIS2 / DORA / SaaS Best Practices / Mixto
     geo_target = Column(ARRAY(String))  # ["ES", "PT", "EU"]
 
     # Fechas y objetivos

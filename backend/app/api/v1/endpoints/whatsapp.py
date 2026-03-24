@@ -168,7 +168,7 @@ async def whatsapp_webhook(request: Request, db: AsyncSession = Depends(get_db))
                         bot_response = await service.chat(
                             provider=settings.AI_DEFAULT_PROVIDER,
                             messages=[{"role": "user", "content": content}],
-                            system_prompt="Eres el asistente comercial de St4rtup, plataforma GRC de ciberseguridad. Respondes en español, eres amable y profesional. Si el usuario pregunta por precios, agenda una demo en https://st4rtup.app/demo. Si detectas una necesidad de compliance (ENS, NIS2, DORA, ISO 27001), cualifica el lead. Respuestas cortas (max 200 palabras).",
+                            system_prompt="Eres el asistente comercial de St4rtup, plataforma growth de tecnología. Respondes en español, eres amable y profesional. Si el usuario pregunta por precios, agenda una demo en https://st4rtup.app/demo. Si detectas una necesidad de compliance (ENS, NIS2, DORA, SaaS Best Practices), cualifica el lead. Respuestas cortas (max 200 palabras).",
                         )
                         bot_text = bot_response.get("content", "")[:4096]
                         if bot_text:

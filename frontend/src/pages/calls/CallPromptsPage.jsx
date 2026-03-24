@@ -8,7 +8,7 @@ import { callPromptsApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -75,7 +75,7 @@ function PromptForm({ initial, onSubmit, onCancel, loading }) {
           <input id="prompt-persona" name="persona_target" type="text"
             value={(form.persona_target || []).join(', ')}
             onChange={e => handleArrayChange('persona_target', e.target.value)}
-            placeholder="CISO, DPO, CTO" style={inputStyle} />
+            placeholder="CEO, DPO, CTO" style={inputStyle} />
         </div>
         <div>
           <label htmlFor="prompt-regulatory" className="block text-sm font-medium mb-1" style={{ color: T.fgMuted }}>Regulatory focus (coma sep.)</label>
@@ -213,7 +213,7 @@ export default function CallPromptsPage() {
             className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 disabled:opacity-50"
             style={{ backgroundColor: `${T.warning}10`, border: `1px solid ${T.warning}30`, color: T.warning }}>
             {seedMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sprout className="w-4 h-4" />}
-            Seed GRC
+            Seed growth
           </button>
           <button type="button" onClick={() => { setShowCreate(!showCreate); setEditingId(null) }}
             className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2"
@@ -257,7 +257,7 @@ export default function CallPromptsPage() {
       ) : prompts.length === 0 ? (
         <div className="text-center py-12" style={{ color: T.fgMuted }}>
           <FileText className="w-12 h-12 mx-auto mb-3" />
-          <p>No hay prompts. Usa "Seed GRC" para crear 5 prompts de ejemplo.</p>
+          <p>No hay prompts. Usa "Seed growth" para crear 5 prompts de ejemplo.</p>
         </div>
       ) : (
         <div className="space-y-3">

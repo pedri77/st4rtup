@@ -10,7 +10,7 @@ import { chatApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
 }
 
 function MessageContent({ content }) {
@@ -192,10 +192,10 @@ export default function ChatWidget() {
                 </div>
                 <p style={{ color: T.fg }} className="text-sm font-medium mb-1">Asistente de Ventas</p>
                 <p style={{ color: T.fgMuted }} className="text-xs mb-4">
-                  Pregunta sobre leads, normativas, estrategias de venta o ciberseguridad GRC.
+                  Pregunta sobre leads, normativas, estrategias de venta o ventas B2B.
                 </p>
                 <div className="space-y-1.5 w-full">
-                  {['Redacta un email de seguimiento para NIS2', 'Argumentos de venta para DORA en banca', 'Compara ISO 27001 vs ENS'].map((suggestion, i) => (
+                  {['Redacta un email de seguimiento para NIS2', 'Argumentos de venta para DORA en banca', 'Compara SaaS Best Practices vs ENS'].map((suggestion, i) => (
                     <button key={i} onClick={() => setInputMessage(suggestion)}
                       className="w-full text-left px-3 py-2 rounded-lg text-[11px] transition-colors"
                       style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}>

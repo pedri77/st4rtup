@@ -18,7 +18,7 @@ import { funnelsApi, campaignsApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -516,7 +516,7 @@ export default function FunnelsPage() {
                   value={form.name}
                   onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
                   style={inputStyle}
-                  placeholder="Ej: Funnel NIS2 - CISO España"
+                  placeholder="Ej: Funnel NIS2 - CEO España"
                 />
               </div>
 

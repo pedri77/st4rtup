@@ -14,7 +14,7 @@ import { chatApi, competitorsApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -198,14 +198,14 @@ const CONTENT_TEMPLATES = [
     id: 'email_followup',
     name: 'Email de seguimiento',
     icon: Send,
-    prompt: (vars) => `Redacta un email de seguimiento comercial en español para un lead interesado en ${vars.regulation || 'ciberseguridad GRC'}.
+    prompt: (vars) => `Redacta un email de seguimiento comercial en español para un lead interesado en ${vars.regulation || 'ventas B2B'}.
 Empresa: ${vars.company || '[nombre empresa]'}. Sector: ${vars.sector || 'tecnología'}.
 Tono: profesional pero cercano. Incluye CTA claro. Máximo 200 palabras.
 ${vars.context ? `Contexto adicional: ${vars.context}` : ''}`,
     fields: [
       { key: 'company', label: 'Empresa', placeholder: 'Nombre de la empresa' },
       { key: 'sector', label: 'Sector', placeholder: 'Banca, Salud, Tecnología...' },
-      { key: 'regulation', label: 'Normativa de interés', placeholder: 'NIS2, DORA, ENS, ISO 27001...' },
+      { key: 'regulation', label: 'Normativa de interés', placeholder: 'NIS2, DORA, ENS, SaaS Best Practices...' },
       { key: 'context', label: 'Contexto adicional', placeholder: 'Tras reunión, tras webinar, cold...', multiline: true },
     ],
   },
@@ -213,15 +213,15 @@ ${vars.context ? `Contexto adicional: ${vars.context}` : ''}`,
     id: 'linkedin_post',
     name: 'Post LinkedIn',
     icon: Globe,
-    prompt: (vars) => `Crea un post de LinkedIn en español sobre ${vars.topic || 'ciberseguridad GRC'}.
+    prompt: (vars) => `Crea un post de LinkedIn en español sobre ${vars.topic || 'ventas B2B'}.
 Objetivo: ${vars.goal || 'generar awareness y engagement'}.
-Público: ${vars.audience || 'CISOs, DPOs y responsables de compliance en España'}.
+Público: ${vars.audience || 'CEOs, DPOs y responsables de compliance en España'}.
 Incluye emojis relevantes, hashtags y CTA. Tono: experto pero accesible. Máximo 300 palabras.
 ${vars.context ? `Notas: ${vars.context}` : ''}`,
     fields: [
       { key: 'topic', label: 'Tema', placeholder: 'NIS2 deadline, DORA compliance, AI Act...' },
       { key: 'goal', label: 'Objetivo', placeholder: 'Awareness, leads, engagement...' },
-      { key: 'audience', label: 'Audiencia', placeholder: 'CISOs, CTOs, compliance managers...' },
+      { key: 'audience', label: 'Audiencia', placeholder: 'CEOs, CTOs, compliance managers...' },
       { key: 'context', label: 'Notas adicionales', placeholder: '', multiline: true },
     ],
   },
@@ -229,9 +229,9 @@ ${vars.context ? `Notas: ${vars.context}` : ''}`,
     id: 'blog_outline',
     name: 'Artículo SEO (outline)',
     icon: FileText,
-    prompt: (vars) => `Crea un outline detallado para un artículo de blog SEO en español sobre "${vars.keyword || 'compliance ciberseguridad'}".
+    prompt: (vars) => `Crea un outline detallado para un artículo de blog SEO en español sobre "${vars.keyword || 'compliance tecnología'}".
 Keyword principal: ${vars.keyword || '[keyword]'}. Keywords secundarias: ${vars.secondary || ''}.
-Target: ${vars.audience || 'empresas españolas sujetas a regulación de ciberseguridad'}.
+Target: ${vars.audience || 'empresas españolas sujetas a regulación de tecnología'}.
 Incluye: título H1 optimizado, meta description (155 chars), H2s y H3s con keywords, CTA final.
 Longitud estimada del artículo: ${vars.length || '2000'} palabras.
 ${vars.context ? `Enfoque: ${vars.context}` : ''}`,
@@ -247,7 +247,7 @@ ${vars.context ? `Enfoque: ${vars.context}` : ''}`,
     id: 'sales_battlecard',
     name: 'Battlecard competitiva',
     icon: Shield,
-    prompt: (vars) => `Crea una battlecard de ventas en español comparando St4rtup (plataforma SaaS GRC de ciberseguridad) contra ${vars.competitor || '[competidor]'}.
+    prompt: (vars) => `Crea una battlecard de ventas en español comparando St4rtup (plataforma SaaS growth de tecnología) contra ${vars.competitor || '[competidor]'}.
 Incluye:
 1. Overview del competidor
 2. Fortalezas de St4rtup vs competidor
@@ -255,7 +255,7 @@ Incluye:
 4. Objeciones comunes y respuestas
 5. Preguntas trampa para el competidor
 6. Killer features de St4rtup
-Mercado: España/Europa. Normativas: ENS, NIS2, DORA, ISO 27001.
+Mercado: España/Europa. Normativas: ENS, NIS2, DORA, SaaS Best Practices.
 ${vars.context ? `Info adicional: ${vars.context}` : ''}`,
     fields: [
       { key: 'competitor', label: 'Competidor', placeholder: 'Nombre del competidor' },
@@ -267,10 +267,10 @@ ${vars.context ? `Info adicional: ${vars.context}` : ''}`,
     name: 'Copy para Ads',
     icon: Sparkles,
     prompt: (vars) => `Crea ${vars.count || '3'} variantes de copy para ${vars.platform || 'Google Ads'} en español.
-Producto: St4rtup (plataforma SaaS GRC ciberseguridad).
+Producto: St4rtup (plataforma SaaS growth tecnología).
 Objetivo: ${vars.goal || 'generación de leads'}.
-Audiencia: ${vars.audience || 'CISOs y responsables de compliance en España'}.
-USP: ${vars.usp || 'Cumplimiento normativo simplificado (ENS, NIS2, DORA, ISO 27001)'}.
+Audiencia: ${vars.audience || 'CEOs y responsables de compliance en España'}.
+USP: ${vars.usp || 'Cumplimiento normativo simplificado (ENS, NIS2, DORA, SaaS Best Practices)'}.
 Incluye headline, description y CTA para cada variante.
 ${vars.context ? `Notas: ${vars.context}` : ''}`,
     fields: [
@@ -287,14 +287,14 @@ ${vars.context ? `Notas: ${vars.context}` : ''}`,
     name: 'Email Discovery',
     icon: Send,
     prompt: (vars) => `Redacta un email de primer contacto (discovery) en español para un prospecto que NO nos conoce.
-Empresa: ${vars.company || '[empresa]'}. Sector: ${vars.sector || 'regulado'}. Cargo: ${vars.title || 'CISO/CTO'}.
-Producto: St4rtup (plataforma GRC ciberseguridad: ENS Alto, NIS2, DORA).
+Empresa: ${vars.company || '[empresa]'}. Sector: ${vars.sector || 'regulado'}. Cargo: ${vars.title || 'CEO/CTO'}.
+Producto: St4rtup (plataforma growth tecnología: Enterprise, NIS2, DORA).
 Dolor: ${vars.pain || 'necesidad de cumplimiento normativo'}.
 Tono: profesional, directo, sin rodeos. Máximo 150 palabras. CTA: agendar demo de 15 min.`,
     fields: [
       { key: 'company', label: 'Empresa', placeholder: 'Nombre' },
       { key: 'sector', label: 'Sector', placeholder: 'Banca, Salud, Energía...' },
-      { key: 'title', label: 'Cargo del contacto', placeholder: 'CISO, CTO, DPO...' },
+      { key: 'title', label: 'Cargo del contacto', placeholder: 'CEO, CTO, DPO...' },
       { key: 'pain', label: 'Dolor / necesidad', placeholder: 'Auditoría ENS pendiente, deadline NIS2...' },
     ],
   },
@@ -304,7 +304,7 @@ Tono: profesional, directo, sin rodeos. Máximo 150 palabras. CTA: agendar demo 
     icon: Send,
     prompt: (vars) => `Redacta un email de seguimiento DESPUÉS de una demo en español.
 Empresa: ${vars.company || '[empresa]'}. Contacto: ${vars.contact || '[nombre]'}.
-Puntos tratados: ${vars.points || 'cumplimiento ENS Alto, gestión de riesgos, SOC'}.
+Puntos tratados: ${vars.points || 'cumplimiento Enterprise, gestión de clientes, SOC'}.
 Próximos pasos propuestos: ${vars.next || 'PoC 90 días €19.500'}.
 Incluye resumen de valor demostrado + CTA para avanzar. Máximo 200 palabras.`,
     fields: [
@@ -320,13 +320,13 @@ Incluye resumen de valor demostrado + CTA para avanzar. Máximo 200 palabras.`,
     icon: FileText,
     prompt: (vars) => `Redacta un email en español para acompañar el envío de una propuesta comercial.
 Empresa: ${vars.company || '[empresa]'}. Valor: ${vars.value || '€19.500 PoC'}.
-Módulos incluidos: ${vars.modules || 'GRC Core + ENS Alto'}.
+Módulos incluidos: ${vars.modules || 'growth Core + Enterprise'}.
 Deadline del cliente: ${vars.deadline || 'sin deadline específico'}.
 Tono: ejecutivo, confiado. Incluye urgencia sutil. CTA: revisar y confirmar esta semana. Máximo 150 palabras.`,
     fields: [
       { key: 'company', label: 'Empresa', placeholder: '' },
       { key: 'value', label: 'Valor propuesta', placeholder: '€19.500, €57.000...' },
-      { key: 'modules', label: 'Módulos incluidos', placeholder: 'GRC Core, ENS Alto, NIS2, SOC...' },
+      { key: 'modules', label: 'Módulos incluidos', placeholder: 'growth Core, Enterprise, NIS2, SOC...' },
       { key: 'deadline', label: 'Deadline del cliente', placeholder: 'Auditoría en junio, NIS2 octubre...' },
     ],
   },

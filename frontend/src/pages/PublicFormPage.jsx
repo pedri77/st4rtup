@@ -136,8 +136,8 @@ export default function PublicFormPage() {
         </div>
 
         <p style={{ color: T.fgMuted, fontSize: 11, textAlign: 'center', marginTop: 24 }}>
-          St4rtup | Plataforma GRC de Ciberseguridad<br />
-          ENS Alto | NIS2 | DORA | ISO 27001
+          St4rtup | Plataforma growth de Ciberseguridad<br />
+          Enterprise | NIS2 | DORA | SaaS Best Practices
         </p>
       </div>
     </div>
@@ -257,7 +257,7 @@ export default function PublicFormPage() {
         </form>
 
         <p style={{ color: T.fgMuted, fontSize: 11, textAlign: 'center', marginTop: 32 }}>
-          St4rtup | Plataforma GRC de Ciberseguridad | Documento confidencial
+          St4rtup | Plataforma growth de Ciberseguridad | Documento confidencial
         </p>
       </div>
     </div>

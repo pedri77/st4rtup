@@ -210,7 +210,7 @@ async def forecast_opportunity(
     try:
         from app.agents.lead_intelligence import _call_llm
         result = await _call_llm(
-            "Eres un analista de ventas B2B de ciberseguridad GRC experto en forecasting.",
+            "Eres un analista de ventas B2B de ventas B2B experto en forecasting.",
             prompt,
         )
         return {

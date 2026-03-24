@@ -32,7 +32,7 @@ async def generate_contract(
     tier_names = {"pilot_poc": "Pilot PoC (90 días)", "enterprise": "Enterprise Anual", "smb": "SMB Mensual"}
     tier = tier_names.get(opp.pricing_tier, opp.pricing_tier or "Standard")
     value = opp.value or 19500
-    modules = ", ".join(opp.pricing_modules or ["GRC Core"])
+    modules = ", ".join(opp.pricing_modules or ["growth Core"])
 
     md = f"""# Contrato de Servicios — St4rtup
 
@@ -55,7 +55,7 @@ Domicilio: [Domicilio Cliente]
 
 ## 2. Objeto del Contrato
 
-St4rtup proporcionará al CLIENTE acceso a la plataforma SaaS de GRC (Governance, Risk & Compliance) en la modalidad **{tier}**, incluyendo los siguientes módulos:
+St4rtup proporcionará al CLIENTE acceso a la plataforma SaaS de growth (Governance, Risk & Compliance) en la modalidad **{tier}**, incluyendo los siguientes módulos:
 
 - {modules.replace(', ', chr(10) + '- ')}
 

@@ -80,7 +80,7 @@ async def seed_keywords(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
 ):
-    """Genera keywords predefinidas para GRC/cybersecurity en España."""
+    """Genera keywords predefinidas para growth/cybersecurity en España."""
     seeds = [
         {"keyword": "plataforma grc", "category": "grc", "search_volume": 390},
         {"keyword": "software cumplimiento normativo", "category": "compliance", "search_volume": 320},
@@ -90,7 +90,7 @@ async def seed_keywords(
         {"keyword": "directiva nis2 cumplimiento", "category": "nis2", "search_volume": 590},
         {"keyword": "dora reglamento", "category": "dora", "search_volume": 880},
         {"keyword": "iso 27001 software", "category": "iso27001", "search_volume": 1300},
-        {"keyword": "gestión de riesgos ciberseguridad", "category": "grc", "search_volume": 720},
+        {"keyword": "gestión de riesgos tecnología", "category": "grc", "search_volume": 720},
         {"keyword": "herramienta análisis de riesgos", "category": "grc", "search_volume": 480},
         {"keyword": "eu ai act compliance", "category": "ai_act", "language": "en", "search_volume": 2400},
         {"keyword": "grc platform europe", "category": "grc", "language": "en", "search_volume": 880},

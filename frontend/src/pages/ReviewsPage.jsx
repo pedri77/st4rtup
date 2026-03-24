@@ -17,14 +17,14 @@ import { formatDateForExport } from '@/utils/export'
 import { ListItemSkeleton } from '@/components/LoadingStates'
 
 const T = {
-  bg: 'hsl(220,60%,4%)',
+  bg: '#F8FAFC',
   card: 'hsl(220,40%,8%)',
   muted: 'hsl(220,30%,12%)',
-  border: 'hsl(220,20%,18%)',
-  fg: 'hsl(220,20%,90%)',
-  fgMuted: 'hsl(220,15%,55%)',
-  cyan: '#06B6D4',
-  purple: 'hsl(265,60%,55%)',
+  border: '#F1F5F9',
+  fg: '#0F172A',
+  fgMuted: '#64748B',
+  cyan: '#3B82F6',
+  purple: '#8B5CF6',
   destructive: 'hsl(0,70%,50%)',
   success: 'hsl(150,60%,40%)',
   warning: 'hsl(40,90%,50%)',
@@ -51,11 +51,11 @@ const REVIEW_TEMPLATES = [
   { id: 'general', name: 'Review General', icon: ClipboardList, color: T.cyan, description: 'Revision completa del estado de la cuenta: salud, actividades, proximos pasos', fields: { project_status: 'on_track', health_score: 7 }, suggested_actions: ['Revisar KPIs del mes anterior', 'Evaluar satisfaccion del cliente', 'Actualizar plan de cuenta', 'Preparar agenda proxima reunion'] },
   { id: 'onboarding', name: 'Seguimiento Onboarding', icon: Zap, color: T.purple, description: 'Control del proceso de onboarding: implementacion, formacion, adopcion', fields: { project_status: 'on_track', health_score: 6 }, suggested_actions: ['Verificar progreso de implementacion', 'Comprobar formacion de usuarios completada', 'Medir tasa de adopcion de la plataforma', 'Identificar bloqueadores tecnicos', 'Programar sesion de Q&A con usuario final'] },
   { id: 'risk', name: 'Alerta de Riesgo', icon: AlertTriangle, color: T.destructive, description: 'Cuenta en riesgo de churn: problemas detectados, plan de retencion', fields: { project_status: 'at_risk', health_score: 3 }, suggested_actions: ['Contactar de urgencia al sponsor/decision maker', 'Identificar causa raiz de insatisfaccion', 'Proponer plan de accion correctivo con SLAs', 'Ofrecer sesion de soporte premium gratuita', 'Escalar internamente al equipo de Customer Success', 'Evaluar descuento o extension de servicio'] },
-  { id: 'upsell', name: 'Oportunidad Upsell/Cross-sell', icon: TrendingUp, color: T.success, description: 'Cliente satisfecho con potencial de expansion: nuevos modulos, usuarios, servicios', fields: { project_status: 'on_track', health_score: 9 }, suggested_actions: ['Presentar modulos complementarios (NIS2, DORA, ISO 27001)', 'Proponer ampliacion de usuarios', 'Ofrecer servicios profesionales adicionales', 'Solicitar caso de exito / referencia', 'Explorar necesidades en otras areas de la empresa', 'Preparar propuesta comercial de ampliacion'] },
+  { id: 'upsell', name: 'Oportunidad Upsell/Cross-sell', icon: TrendingUp, color: T.success, description: 'Cliente satisfecho con potencial de expansion: nuevos modulos, usuarios, servicios', fields: { project_status: 'on_track', health_score: 9 }, suggested_actions: ['Presentar modulos complementarios (NIS2, DORA, SaaS Best Practices)', 'Proponer ampliacion de usuarios', 'Ofrecer servicios profesionales adicionales', 'Solicitar caso de exito / referencia', 'Explorar necesidades en otras areas de la empresa', 'Preparar propuesta comercial de ampliacion'] },
   { id: 'renewal', name: 'Pre-Renovacion', icon: FileText, color: 'hsl(35,80%,50%)', description: 'Preparacion para renovacion de contrato: valor entregado, negociacion', fields: { project_status: 'on_track', health_score: 7 }, suggested_actions: ['Preparar informe de valor entregado (ROI)', 'Revisar uso de la plataforma y estadisticas', 'Contactar al decisor para tantear renovacion', 'Preparar propuesta de renovacion con mejoras', 'Identificar nuevas normativas aplicables al cliente', 'Negociar terminos de renovacion anticipada'] },
   { id: 'nps', name: 'Seguimiento NPS/CSAT', icon: Heart, color: 'hsl(330,65%,55%)', description: 'Analisis de resultados de encuesta de satisfaccion y plan de mejora', fields: { project_status: 'on_track', health_score: 6 }, suggested_actions: ['Analizar resultados de la encuesta NPS/CSAT', 'Contactar detractores para entender problemas', 'Agradecer a promotores y solicitar referencia', 'Implementar mejoras basadas en feedback', 'Compartir resultados con equipo interno'] },
   { id: 'quarterly', name: 'QBR (Quarterly Business Review)', icon: BarChart3, color: 'hsl(235,60%,60%)', description: 'Revision trimestral estrategica: resultados, roadmap, alineacion de objetivos', fields: { project_status: 'on_track', health_score: 7 }, suggested_actions: ['Preparar presentacion de resultados del trimestre', 'Mostrar roadmap de producto relevante para el cliente', 'Revisar alineacion con objetivos del cliente', 'Discutir expansion y nuevas necesidades', 'Definir OKRs del proximo trimestre', 'Confirmar stakeholders y roles de decision'] },
-  { id: 'compliance', name: 'Revision de Cumplimiento', icon: Shield, color: 'hsl(170,50%,45%)', description: 'Estado de cumplimiento normativo: ENS, NIS2, DORA, ISO 27001, EU AI Act', fields: { project_status: 'on_track', health_score: 7 }, suggested_actions: ['Revisar estado de cumplimiento por normativa', 'Verificar evidencias generadas en el periodo', 'Identificar gaps de cumplimiento pendientes', 'Actualizar mapa de riesgos del cliente', 'Preparar para proxima auditoria/certificacion', 'Informar sobre cambios regulatorios recientes'] },
+  { id: 'compliance', name: 'Revision de Cumplimiento', icon: Shield, color: 'hsl(170,50%,45%)', description: 'Estado de cumplimiento normativo: ENS, NIS2, DORA, SaaS Best Practices, EU AI Act', fields: { project_status: 'on_track', health_score: 7 }, suggested_actions: ['Revisar estado de cumplimiento por normativa', 'Verificar evidencias generadas en el periodo', 'Identificar gaps de cumplimiento pendientes', 'Actualizar mapa de riesgos del cliente', 'Preparar para proxima auditoria/certificacion', 'Informar sobre cambios regulatorios recientes'] },
 ]
 
 export default function ReviewsPage() {

@@ -3,7 +3,7 @@ import { Check, X, Pencil } from 'lucide-react'
 
 const T = {
   muted: '#F1F5F9', border: '#E2E8F0', fg: '#0F172A',
-  fgMuted: '#64748B', cyan: '#06B6D4', success: '#10B981',
+  fgMuted: '#64748B', cyan: '#3B82F6', success: '#10B981',
   destructive: '#EF4444',
 }
 

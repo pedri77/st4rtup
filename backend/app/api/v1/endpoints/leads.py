@@ -321,8 +321,8 @@ async def auto_tag_lead(
         service = AIChatService()
         result = await service.chat(
             provider=settings.AI_DEFAULT_PROVIDER,
-            messages=[{"role": "user", "content": f"Clasifica esta empresa para GRC. Responde SOLO en JSON:\n{context}\n\nFormato: {{\"sector\": \"...\", \"regulatory_frameworks\": [\"ENS\", \"NIS2\", ...], \"company_size_category\": \"pyme|mediana|gran_empresa\", \"risk_level\": \"bajo|medio|alto\", \"tags\": [\"tag1\", \"tag2\"]}}"}],
-            system_prompt="Eres un clasificador de empresas para ciberseguridad GRC en España. Responde SOLO en JSON.",
+            messages=[{"role": "user", "content": f"Clasifica esta empresa para growth. Responde SOLO en JSON:\n{context}\n\nFormato: {{\"sector\": \"...\", \"regulatory_frameworks\": [\"ENS\", \"NIS2\", ...], \"company_size_category\": \"pyme|mediana|gran_empresa\", \"risk_level\": \"bajo|medio|alto\", \"tags\": [\"tag1\", \"tag2\"]}}"}],
+            system_prompt="Eres un clasificador de empresas para ventas B2B en España. Responde SOLO en JSON.",
         )
         text = result.get("content", "{}")
         if "```json" in text:
@@ -549,7 +549,7 @@ async def deduplicate_leads(
 
 @router.post("/search/prospects")
 async def search_prospects(
-    title_keywords: Optional[str] = Query(None, description="Cargos separados por coma: CISO,CTO,DPO"),
+    title_keywords: Optional[str] = Query(None, description="Cargos separados por coma: CEO,CTO,DPO"),
     industries: Optional[str] = Query(None, description="Sectores separados por coma"),
     employee_ranges: Optional[str] = Query(None, description="Rangos: 51-200,201-1000"),
     countries: Optional[str] = Query(None, description="Países ISO: ES,DE,FR"),

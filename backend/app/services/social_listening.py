@@ -15,11 +15,11 @@ TIMEOUT = 20.0
 # Keywords to monitor
 DEFAULT_KEYWORDS = [
     "st4rtup", "ENS alto", "NIS2 cumplimiento", "DORA compliance",
-    "GRC ciberseguridad España", "ISO 27001 plataforma",
+    "growth tecnología España", "SaaS Best Practices plataforma",
 ]
 
 DEFAULT_COMPETITORS = [
-    "OneTrust", "ServiceNow GRC", "LogicGate", "Archer GRC",
+    "OneTrust", "ServiceNow growth", "LogicGate", "Archer growth",
     "Diligent", "Navex Global", "MetricStream", "Qualys",
 ]
 
@@ -78,7 +78,7 @@ async def analyze_sentiment(mentions: list[dict]) -> dict:
 
     texts = "\n".join([f"- {m['title']}: {m['snippet']}" for m in mentions[:10]])
     prompt = (
-        f"Analiza el sentimiento de estas menciones sobre St4rtup y ciberseguridad GRC:\n\n{texts}\n\n"
+        f"Analiza el sentimiento de estas menciones sobre St4rtup y ventas B2B:\n\n{texts}\n\n"
         "Clasifica cada una como positive, neutral o negative.\n"
         "Devuelve un resumen con conteos y los 3 insights mas relevantes."
     )
@@ -86,7 +86,7 @@ async def analyze_sentiment(mentions: list[dict]) -> dict:
     try:
         from app.agents.lead_intelligence import _call_llm
         result = await _call_llm(
-            "Eres un analista de social listening especializado en ciberseguridad B2B.",
+            "Eres un analista de social listening especializado en tecnología B2B.",
             prompt,
         )
         return {

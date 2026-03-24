@@ -13,7 +13,7 @@ import { dealroomApi, dealRoomDocsApi, opportunitiesApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -560,7 +560,7 @@ export default function DealRoomPage() {
           {!notConfigured && files.length === 0 && !isLoading && (
             <div className="text-center py-12">
               <FolderOpen className="w-16 h-16 mx-auto mb-4" style={{ color: T.fgMuted }} />
-              <h3 className="text-lg font-medium mb-2" style={{ color: 'hsl(220,15%,75%)', fontFamily: fontDisplay }}>Deal Room no creado</h3>
+              <h3 className="text-lg font-medium mb-2" style={{ color: '#94A3B8', fontFamily: fontDisplay }}>Deal Room no creado</h3>
               <p className="text-sm mb-4" style={{ color: T.fgMuted }}>Crea la estructura de carpetas en SharePoint para esta oportunidad.</p>
               <button
                 onClick={() => createRoomMutation.mutate()}

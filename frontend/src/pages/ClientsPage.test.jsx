@@ -10,7 +10,7 @@ vi.mock('@/services/api', () => ({
       data: {
         items: [
           { id: '1', full_name: 'Juan Perez', email: 'juan@acme.com', phone: '+34600111222', job_title: 'CTO', lead_name: 'Acme Corp', lead_id: 'l1', role_type: 'cto', influence_level: 'decision_maker', relationship_status: 'champion' },
-          { id: '2', full_name: 'Maria Lopez', email: 'maria@tech.com', phone: '+34600333444', job_title: 'CISO', lead_name: 'TechSolutions SL', lead_id: 'l2', role_type: 'ciso', influence_level: 'influencer', relationship_status: 'supporter' },
+          { id: '2', full_name: 'Maria Lopez', email: 'maria@tech.com', phone: '+34600333444', job_title: 'CEO', lead_name: 'TechSolutions SL', lead_id: 'l2', role_type: 'ciso', influence_level: 'influencer', relationship_status: 'supporter' },
         ],
         total: 2,
         page: 1,

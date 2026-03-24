@@ -13,7 +13,7 @@ import { marketingDocumentsApi, campaignsApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -50,8 +50,8 @@ const LANGUAGES = [
   { value: 'pt', label: 'PT' },
 ]
 
-const REGULATORY = ['ENS', 'NIS2', 'DORA', 'ISO 27001', 'EU AI Act', 'Mixto']
-const PERSONAS = ['CISO', 'DPO', 'CTO', 'Compliance Officer', 'CEO', 'IT Manager']
+const REGULATORY = ['SaaS Best Practices', 'EU AI Act', 'Mixto']
+const PERSONAS = ['CEO', 'DPO', 'CTO', 'Compliance Officer', 'CEO', 'IT Manager']
 
 function getFileIcon(fileType) {
   const type = (fileType || '').toLowerCase()

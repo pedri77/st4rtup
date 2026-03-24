@@ -8,10 +8,10 @@ import toast from 'react-hot-toast'
 import { chatApi } from '@/services/api'
 
 const T = {
-  bg: 'hsl(220,60%,4%)', card: 'hsl(218,45%,8%)', muted: 'hsl(218,40%,12%)',
-  border: 'hsl(217,40%,18%)', fg: 'hsl(210,40%,92%)', fgMuted: 'hsl(215,20%,55%)',
-  cyan: 'hsl(190,100%,50%)', purple: 'hsl(270,62%,46%)', destructive: 'hsl(345,85%,61%)',
-  success: 'hsl(160,100%,39%)', warning: 'hsl(20,100%,60%)',
+  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
+  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
+  cyan: '#3B82F6', purple: '#8B5CF6', destructive: '#EF4444',
+  success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
@@ -207,12 +207,12 @@ export default function ChatPage() {
                 </div>
                 <h2 className="text-xl font-semibold mb-2" style={{ fontFamily: fontDisplay, color: T.fg }}>Asistente de Ventas IA</h2>
                 <p className="text-sm mb-6" style={{ color: T.fgMuted }}>
-                  Pregunta sobre leads, normativas (ENS, NIS2, DORA), estrategias de venta, o cualquier cosa relacionada con ciberseguridad GRC.
+                  Pregunta sobre leads, normativas (ENS, NIS2, DORA), estrategias de venta, o cualquier cosa relacionada con ventas B2B.
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     'Redacta un email de seguimiento para un lead interesado en NIS2',
-                    'Compara ISO 27001 vs ENS para una empresa mediana',
+                    'Compara SaaS Best Practices vs ENS para una empresa mediana',
                     'Dame argumentos de venta para DORA en banca',
                     'Crea un plan de cuenta para una empresa del IBEX 35',
                   ].map((suggestion, i) => (

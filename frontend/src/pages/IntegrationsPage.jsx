@@ -18,7 +18,7 @@ import { useHasRole } from '@/components/RoleGuard'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -1227,7 +1227,7 @@ function AirtableMcpTab() {
       {/* MCP Gateway Section */}
       <div className="rounded-xl p-5" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(265,60%,58%), hsl(185,72%,48%))' }}>
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8B5CF6, #3B82F6)' }}>
             <BrainCircuit className="w-5 h-5 text-white" />
           </div>
           <div>

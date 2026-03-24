@@ -37,20 +37,20 @@ export default function InstallPrompt() {
   return (
     <div style={{
       position: 'fixed', bottom: 80, left: '50%', transform: 'translateX(-50%)',
-      zIndex: 45, backgroundColor: '#FFFFFF', border: '1px solid hsl(185,72%,48%)',
+      zIndex: 45, backgroundColor: '#FFFFFF', border: '1px solid #3B82F6',
       borderRadius: 12, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12,
       boxShadow: '0 8px 32px rgba(0,0,0,0.5)', maxWidth: 340,
     }}>
-      <Download size={20} color="hsl(185,72%,48%)" />
+      <Download size={20} color="#3B82F6" />
       <div style={{ flex: 1 }}>
         <p style={{ fontSize: 13, fontWeight: 600, color: '#0F172A', margin: 0 }}>Instalar St4rtup</p>
         <p style={{ fontSize: 11, color: '#64748B', margin: '2px 0 0' }}>Acceso rapido desde tu escritorio</p>
       </div>
-      <button onClick={handleInstall} style={{ padding: '6px 14px', backgroundColor: '#06B6D4', color: '#F8FAFC', border: 'none', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+      <button onClick={handleInstall} style={{ padding: '6px 14px', backgroundColor: '#3B82F6', color: '#F8FAFC', border: 'none', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
         Instalar
       </button>
       <button onClick={handleDismiss} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-        <X size={16} color="hsl(220,10%,55%)" />
+        <X size={16} color="#64748B" />
       </button>
     </div>
   )

@@ -45,7 +45,7 @@ async def get_brand_config(
             company_name="St4rtup",
             domain="st4rtup.app",
             segment="enterprise",
-            regulatory_frameworks=["ENS Alto", "NIS2", "DORA", "ISO 27001", "EU AI Act"],
+            regulatory_frameworks=["Enterprise", "NIS2", "DORA", "SaaS Best Practices", "EU AI Act"],
         )
         db.add(config)
         await db.commit()

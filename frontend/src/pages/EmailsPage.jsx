@@ -14,10 +14,10 @@ import { SearchWithFilters, FilterSummary } from '@/components/AdvancedFilters'
 import { usePersistedFilterSearch } from '@/hooks/usePersistedFilters'
 
 const T = {
-  bg: 'hsl(220,60%,4%)', card: 'hsl(218,45%,8%)', muted: 'hsl(218,40%,12%)',
-  border: 'hsl(217,40%,18%)', fg: 'hsl(210,40%,92%)', fgMuted: 'hsl(215,20%,55%)',
-  cyan: 'hsl(190,100%,50%)', purple: 'hsl(270,62%,46%)', destructive: 'hsl(345,85%,61%)',
-  success: 'hsl(160,100%,39%)', warning: 'hsl(20,100%,60%)',
+  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
+  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
+  cyan: '#3B82F6', purple: '#8B5CF6', destructive: '#EF4444',
+  success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"

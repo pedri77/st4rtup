@@ -138,7 +138,7 @@ async def analyze_customer(
         nps_comment=nps_comment or "Sin comentario",
         deal_value=enrichment.get("deal_value", "No disponible"),
         customer_tenure=enrichment.get("customer_tenure", "No disponible"),
-        modules=enrichment.get("modules", "GRC básico"),
+        modules=enrichment.get("modules", "growth básico"),
         enrichment_data=json.dumps(enrichment, ensure_ascii=False)[:300],
     )
 

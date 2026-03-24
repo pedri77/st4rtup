@@ -14,17 +14,17 @@ import { formatDateForExport } from '@/utils/export'
 import { ListItemSkeleton } from '@/components/LoadingStates'
 
 const T = {
-  bg: 'hsl(220,60%,4%)',
-  card: 'hsl(218,45%,8%)',
-  muted: 'hsl(218,40%,12%)',
-  border: 'hsl(217,40%,18%)',
-  fg: 'hsl(210,40%,92%)',
-  fgMuted: 'hsl(215,20%,55%)',
-  cyan: 'hsl(190,100%,50%)',
-  purple: 'hsl(270,62%,46%)',
-  destructive: 'hsl(345,85%,61%)',
-  success: 'hsl(160,100%,39%)',
-  warning: 'hsl(20,100%,60%)',
+  bg: '#F8FAFC',
+  card: '#FFFFFF',
+  muted: '#F1F5F9',
+  border: '#E2E8F0',
+  fg: '#0F172A',
+  fgMuted: '#64748B',
+  cyan: '#3B82F6',
+  purple: '#8B5CF6',
+  destructive: '#EF4444',
+  success: '#10B981',
+  warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
@@ -304,10 +304,10 @@ const chartTooltipStyle = {
 }
 
 const FLOW_COLORS = [
-  'hsl(190,100%,50%)',   // cyan
+  '#3B82F6',   // cyan
   'hsl(210,80%,55%)',    // blue
   'hsl(240,60%,55%)',    // indigo
-  'hsl(270,62%,46%)',    // purple
+  '#8B5CF6',    // purple
 ]
 
 function PipelineFlowChart() {
@@ -606,7 +606,7 @@ function CreateOpportunityModal({ onClose, onSubmit, isLoading }) {
             </div>
             <div>
               <label htmlFor="opp-name" style={lStyle}>Nombre <span style={{ color: T.destructive }}>*</span></label>
-              <input id="opp-name" type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} style={iStyle} placeholder="Ej: Implementacion GRC Enterprise" required />
+              <input id="opp-name" type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} style={iStyle} placeholder="Ej: Implementacion growth Enterprise" required />
             </div>
             <div>
               <label htmlFor="opp-description" style={lStyle}>Descripcion</label>

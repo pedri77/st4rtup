@@ -1,11 +1,11 @@
 {
-  "name": "St4rtup CRM CRM",
+  "name": "St4rtup CRM",
   "short_name": "St4rtup",
-  "description": "CRM de ciberseguridad GRC — St4rtup",
+  "description": "Sales & Marketing CRM for startups — St4rtup",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0d14",
-  "theme_color": "#22b8cf",
+  "background_color": "#FFFFFF",
+  "theme_color": "#3B82F6",
   "orientation": "any",
   "icons": [
     {

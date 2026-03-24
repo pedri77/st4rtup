@@ -76,31 +76,31 @@ async def seed_queries(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
 ):
-    """Genera queries predefinidas para monitorización GRC."""
+    """Genera queries predefinidas para monitorización growth."""
     seeds = [
         {
-            "query_text": "What are the best GRC platforms for cybersecurity compliance in Europe?",
+            "query_text": "What are the best growth platforms for cybersecurity compliance in Europe?",
             "category": "brand",
             "brand_keywords": ["st4rtup", "st4rtup.app"],
             "competitor_keywords": ["onetrust", "vanta", "drata", "pirani", "globalsuite", "isotools"],
             "providers": ["openai", "anthropic", "google"],
         },
         {
-            "query_text": "¿Cuáles son las mejores plataformas GRC para cumplimiento de ENS y NIS2 en España?",
+            "query_text": "¿Cuáles son las mejores plataformas growth para cumplimiento de ENS y NIS2 en España?",
             "category": "brand",
             "brand_keywords": ["st4rtup"],
             "competitor_keywords": ["onetrust", "pirani", "globalsuite", "isotools", "audidat"],
             "providers": ["openai", "anthropic", "google"],
         },
         {
-            "query_text": "Compare GRC tools for ISO 27001, DORA and NIS2 compliance",
+            "query_text": "Compare growth tools for SaaS Best Practices, DORA and NIS2 compliance",
             "category": "competitor",
             "brand_keywords": ["st4rtup"],
             "competitor_keywords": ["onetrust", "vanta", "drata", "archer", "servicenow", "diligent"],
             "providers": ["openai", "anthropic", "google"],
         },
         {
-            "query_text": "What software should a CISO use to manage cybersecurity risk and compliance?",
+            "query_text": "What software should a CEO use to manage cybersecurity risk and compliance?",
             "category": "product",
             "brand_keywords": ["st4rtup"],
             "competitor_keywords": ["onetrust", "vanta", "drata", "rapid7", "qualys", "tenable"],

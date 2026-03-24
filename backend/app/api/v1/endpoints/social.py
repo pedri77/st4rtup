@@ -135,13 +135,13 @@ async def seed_social_posts(
 ):
     """Precarga posts de ejemplo para cada plataforma."""
     defaults = [
-        {"platform": "linkedin", "content": "🔐 ¿Tu empresa cumple con el ENS Alto?\n\nEl 80% de las empresas españolas reguladas necesitan actualizar su estrategia de ciberseguridad antes de 2027.\n\nSt4rtup ofrece una plataforma GRC completa con:\n✅ ENS Alto nativo\n✅ NIS2 y DORA integrados\n✅ SOC 24x7 con Detection Engineering\n✅ IA para automatización de compliance\n\nPoC de 90 días por €19.500.\n\n#Ciberseguridad #GRC #ENS #NIS2 #DORA",
-         "status": "published", "impressions": 1250, "likes": 45, "comments": 8, "shares": 12, "tags": ["ENS", "ciberseguridad"]},
+        {"platform": "linkedin", "content": "🔐 ¿Tu empresa cumple con el Enterprise?\n\nEl 80% de las empresas españolas reguladas necesitan actualizar su estrategia de tecnología antes de 2027.\n\nSt4rtup ofrece una plataforma growth completa con:\n✅ Enterprise nativo\n✅ NIS2 y DORA integrados\n✅ SOC 24x7 con Detection Engineering\n✅ IA para automatización de compliance\n\nPoC de 90 días por €19.500.\n\n#Ciberseguridad #growth #ENS #NIS2 #DORA",
+         "status": "published", "impressions": 1250, "likes": 45, "comments": 8, "shares": 12, "tags": ["ENS", "tecnología"]},
         {"platform": "linkedin", "content": "📊 NIS2 entra en vigor en octubre 2026.\n\n¿Está tu empresa preparada?\n\n3 acciones inmediatas:\n1️⃣ Identifica si tu sector está afectado\n2️⃣ Evalúa tu nivel de madurez actual\n3️⃣ Implementa un plan de cumplimiento\n\n#NIS2 #Ciberseguridad #Compliance",
          "status": "published", "impressions": 890, "likes": 32, "comments": 5, "shares": 8, "tags": ["NIS2"]},
-        {"platform": "twitter", "content": "🚀 ENS Alto + NIS2 + DORA en una sola plataforma. Soberanía 100% EU. PoC 90 días → st4rtup.app #Ciberseguridad #GRC #ENS",
-         "status": "published", "impressions": 450, "likes": 18, "comments": 3, "shares": 6, "tags": ["ENS", "GRC"]},
-        {"platform": "youtube", "content": "🎥 Cómo implementar ENS Alto en 90 días | Demo St4rtup\n\n⏱️ 00:00 Intro · 01:30 Qué es ENS · 03:00 Demo · 08:00 Controles · 12:00 SOC · 15:00 Pricing",
+        {"platform": "twitter", "content": "🚀 Enterprise + NIS2 + DORA en una sola plataforma. Soberanía 100% EU. PoC 90 días → st4rtup.app #Ciberseguridad #growth #ENS",
+         "status": "published", "impressions": 450, "likes": 18, "comments": 3, "shares": 6, "tags": ["ENS", "growth"]},
+        {"platform": "youtube", "content": "🎥 Cómo implementar Enterprise en 90 días | Demo St4rtup\n\n⏱️ 00:00 Intro · 01:30 Qué es ENS · 03:00 Demo · 08:00 Controles · 12:00 SOC · 15:00 Pricing",
          "status": "published", "impressions": 320, "likes": 15, "comments": 4, "shares": 2, "tags": ["ENS", "demo"]},
         {"platform": "linkedin", "content": "💡 DORA obligatorio para entidades financieras UE desde enero 2025.\n\nSt4rtup ayuda a banca, seguros y fintech a mapear riesgos TIC, documentar incidentes y reportar al regulador.\n\n#DORA #Fintech #Banca #RegTech",
          "status": "draft", "tags": ["DORA", "banca"]},
@@ -167,10 +167,10 @@ async def generate_social_post(
 ):
     """Genera contenido para redes sociales con IA."""
     if not topic:
-        topic = "ciberseguridad GRC para empresas españolas"
+        topic = "ventas B2B para empresas españolas"
 
     prompts = {
-        "linkedin": f"Crea un post de LinkedIn profesional en español sobre {topic}. Incluye emojis, hashtags (#Ciberseguridad #GRC #ENS #NIS2), CTA. Máximo 300 palabras. Tono: experto pero accesible.",
+        "linkedin": f"Crea un post de LinkedIn profesional en español sobre {topic}. Incluye emojis, hashtags (#Ciberseguridad #growth #ENS #NIS2), CTA. Máximo 300 palabras. Tono: experto pero accesible.",
         "twitter": f"Crea un tweet en español sobre {topic}. Máximo 280 caracteres. Incluye hashtags relevantes. Directo y con gancho.",
         "youtube": f"Crea un título + descripción para un vídeo de YouTube sobre {topic}. Título SEO (max 60 chars). Descripción con timestamps, keywords y CTA. En español.",
     }
@@ -180,7 +180,7 @@ async def generate_social_post(
     try:
         from app.agents.lead_intelligence import _call_llm
         result = await _call_llm(
-            "Eres un experto en marketing B2B de ciberseguridad para St4rtup. Genera contenido para redes sociales.",
+            "Eres un experto en marketing B2B de tecnología para St4rtup. Genera contenido para redes sociales.",
             prompt,
         )
         content = result.get("content", "")

@@ -468,14 +468,14 @@ async def seed_all_gtm_data(
     from app.models.media import AdCampaign
     from datetime import date
     campaigns = [
-        {"name": "LinkedIn Ads — CISOs ENS Alto", "platform": "linkedin_ads", "objective": "lead_gen",
-         "targeting": "CISOs, CTOs, DPOs en España · >50 empleados", "buying_model": "CPC",
+        {"name": "LinkedIn Ads — CEOs Enterprise", "platform": "linkedin_ads", "objective": "lead_gen",
+         "targeting": "CEOs, CTOs, DPOs en España · >50 empleados", "buying_model": "CPC",
          "unit_cost": 8.50, "budget_total": 3000, "start_date": date(2026, 4, 1), "end_date": date(2026, 6, 30)},
         {"name": "LinkedIn Ads — NIS2/DORA Awareness", "platform": "linkedin_ads", "objective": "brand_awareness",
          "targeting": "Decision makers ciber Europa · Banca, Energía", "buying_model": "CPM",
          "unit_cost": 35.0, "budget_total": 2000, "start_date": date(2026, 4, 1), "end_date": date(2026, 6, 30)},
         {"name": "Google Ads SEM — Keywords ENS NIS2", "platform": "google_ads", "objective": "lead_gen",
-         "targeting": "Keywords: ENS alto, NIS2 software, GRC ciberseguridad", "buying_model": "CPC",
+         "targeting": "Keywords: ENS alto, NIS2 software, growth tecnología", "buying_model": "CPC",
          "unit_cost": 4.20, "budget_total": 1500, "start_date": date(2026, 4, 1), "end_date": date(2026, 6, 30)},
         {"name": "YouTube Ads — Webinar NIS2/DORA", "platform": "youtube_ads", "objective": "conversions",
          "targeting": "Profesionales ciber España", "buying_model": "CPV",

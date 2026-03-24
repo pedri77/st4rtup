@@ -13,7 +13,7 @@ import { playbookApi, leadsApi, externalAnalyticsApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -48,7 +48,7 @@ const CHANNEL_ACTIONS = {
       { label: 'Gestionar assets', href: '/marketing/assets', icon: BookOpen },
     ],
     kpis: ['Downloads ebook', 'Registros webinar', 'Demos solicitadas'],
-    description: 'Ebook ENS Alto, webinar NIS2/DORA, demo interactiva, calculadora ROI. Cada descarga genera un lead con score inicial.',
+    description: 'Ebook Enterprise, webinar NIS2/DORA, demo interactiva, calculadora ROI. Cada descarga genera un lead con score inicial.',
   },
   email: {
     label: 'Email Marketing',
@@ -57,7 +57,7 @@ const CHANNEL_ACTIONS = {
       { label: 'Leads en nurturing', href: '/leads', icon: Users },
     ],
     kpis: ['Emails enviados/mes', 'Open rate', 'Click rate', 'Leads reactivados'],
-    description: 'Newsletter quincenal para CISOs + nurturing automatico via Brevo. Leads frios (score<40) entran en secuencia. Si abren 2+ emails en 7 dias → re-scoring con AGENT-LEAD-001.',
+    description: 'Newsletter quincenal para CEOs + nurturing automatico via Brevo. Leads frios (score<40) entran en secuencia. Si abren 2+ emails en 7 dias → re-scoring con AGENT-LEAD-001.',
   },
   retell_ai: {
     label: 'Llamadas ABM',
@@ -86,7 +86,7 @@ const CHANNEL_ACTIONS = {
       { label: 'Battle cards', href: '/gtm/competitors', icon: BookOpen },
     ],
     kpis: ['Reuniones/mes', 'PoC activos', 'Conversion rate'],
-    description: 'Incluye elevator pitch (CISO/CTO/CFO/CEO en 30s/2min/10min), ventas por solucion (PoC 90d €19.500) y cierre por urgencia regulatoria (deadlines NIS2/DORA/ENS).',
+    description: 'Incluye elevator pitch (CEO/CTO/CFO/CEO en 30s/2min/10min), ventas por solucion (PoC 90d €19.500) y cierre por urgencia regulatoria (deadlines NIS2/DORA/ENS).',
   },
   cs: {
     label: 'Customer Success',
@@ -123,7 +123,7 @@ const CHANNEL_ACTIONS = {
       { label: 'Calendario contenido', href: '/marketing/calendar', icon: Clock },
     ],
     kpis: ['Posts/semana', 'Engagement rate', 'Seguidores/mes', 'Leads de social'],
-    description: 'LinkedIn para CISOs/CTOs + YouTube B2B. Metricool programa posts automaticamente cada lunes desde assets publicados.',
+    description: 'LinkedIn para CEOs/CTOs + YouTube B2B. Metricool programa posts automaticamente cada lunes desde assets publicados.',
   },
 }
 
@@ -195,7 +195,7 @@ export default function PlaybookDetailPage() {
             </div>
             <p className="text-sm ml-8" style={{ color: T.fgMuted }}>
               <span className="capitalize">{tactic.category}</span> · {channelConfig.label}
-              {tactic.responsible && <> · Responsable: <span style={{ color: 'hsl(220,15%,75%)' }}>{tactic.responsible}</span></>}
+              {tactic.responsible && <> · Responsable: <span style={{ color: '#94A3B8' }}>{tactic.responsible}</span></>}
             </p>
           </div>
         </div>
@@ -221,7 +221,7 @@ export default function PlaybookDetailPage() {
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'hsla(185,72%,48%,0.3)'}
                   onMouseLeave={e => e.currentTarget.style.borderColor = T.border}>
                   <ActionIcon className="w-5 h-5 transition-colors" style={{ color: T.fgMuted }} />
-                  <span className="text-sm transition-colors" style={{ color: 'hsl(220,15%,75%)' }}>{action.label}</span>
+                  <span className="text-sm transition-colors" style={{ color: '#94A3B8' }}>{action.label}</span>
                   <ExternalLink className="w-3 h-3 ml-auto" style={{ color: T.fgMuted }} />
                 </Link>
               )
@@ -329,7 +329,7 @@ export default function PlaybookDetailPage() {
                 }} style={{ color: item.done ? T.success : T.fgMuted }}>
                   {item.done ? '☑️' : '⬜'}
                 </button>
-                <span style={{ color: item.done ? T.fgMuted : 'hsl(220,15%,75%)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
+                <span style={{ color: item.done ? T.fgMuted : '#94A3B8', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
               </div>
             ))}
             {(!tactic.checklist || tactic.checklist.length === 0) && (

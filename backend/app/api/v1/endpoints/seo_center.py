@@ -203,7 +203,7 @@ async def archive_article(article_id: UUID, db: AsyncSession = Depends(get_db), 
 @router.post("/articles/generate", response_model=ArticleResponse)
 async def generate_article(
     topic: str = Query(..., max_length=500),
-    audience: str = Query("CISO, DPO, CTO de empresas españolas", max_length=300),
+    audience: str = Query("CEO, DPO, CTO de empresas españolas", max_length=300),
     word_count: int = Query(1500, ge=500, le=5000),
     article_type: str = Query("blog"),
     provider: Optional[str] = Query(None, max_length=30),
@@ -288,7 +288,7 @@ async def repurpose_article(
                 try:
                     resp = await service.chat(
                         messages=[{"role": "user", "content": format_prompts[fmt]}],
-                        system_prompt="Eres un content marketer experto en ciberseguridad GRC para el mercado español. Responde directamente con el contenido solicitado.",
+                        system_prompt="Eres un content marketer experto en ventas B2B para el mercado español. Responde directamente con el contenido solicitado.",
                     )
                     repurposed[fmt] = resp.get("content", "")
                 except Exception as e:
@@ -588,7 +588,7 @@ async def export_to_drive(article_id: UUID, db: AsyncSession = Depends(get_db), 
 @router.post("/keywords/research")
 async def keyword_research(
     topic: str = Query(..., max_length=500),
-    audience: str = Query("CISOs y responsables de compliance en España", max_length=300),
+    audience: str = Query("CEOs y responsables de compliance en España", max_length=300),
     provider: Optional[str] = Query(None),
     model: Optional[str] = Query(None),
     save: bool = Query(False),

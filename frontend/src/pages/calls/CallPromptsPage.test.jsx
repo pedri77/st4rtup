@@ -13,8 +13,8 @@ vi.mock('@/services/api', () => ({
             id: 'p1',
             nombre: 'Prospeccion ENS',
             objetivo: 'prospecting',
-            persona_target: ['CISO', 'DPO'],
-            regulatory_focus: ['ENS', 'NIS2'],
+            persona_target: ['CEO', 'DPO'],
+            regulatory_focus: ['NIS2'],
             idioma: 'es',
             voz_id: '',
             system_prompt: 'Eres un agente de ventas...',
@@ -83,7 +83,7 @@ describe('CallPromptsPage', () => {
   it('muestra botones de accion', () => {
     renderPage()
     expect(screen.getByText('Nuevo prompt')).toBeInTheDocument()
-    expect(screen.getByText('Seed GRC')).toBeInTheDocument()
+    expect(screen.getByText('Seed growth')).toBeInTheDocument()
   })
 
   it('muestra filtros de objetivo', () => {

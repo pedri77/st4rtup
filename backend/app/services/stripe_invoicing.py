@@ -63,7 +63,7 @@ async def create_invoice(
     db: Optional[AsyncSession] = None,
 ) -> dict:
     """Crea una factura draft con line items.
-    items: [{"description": "ENS Alto PoC 90 dias", "amount": 1950000, "quantity": 1}]
+    items: [{"description": "Enterprise PoC 90 dias", "amount": 1950000, "quantity": 1}]
     amount en centimos (19500 EUR = 1950000 cents)
     """
     key = await _get_secret_key(db)
@@ -95,7 +95,7 @@ async def create_invoice(
 
 
 async def create_payment_link(
-    amount: int, description: str = "St4rtup GRC",
+    amount: int, description: str = "St4rtup growth",
     currency: str = "eur", db: Optional[AsyncSession] = None,
 ) -> dict:
     """Crea un link de pago unico."""

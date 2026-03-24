@@ -9,7 +9,7 @@ import { contentPipelineApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -90,7 +90,7 @@ function AgentCard({ agent, result, isActive }) {
 
 export default function ContentPipelinePage() {
   const [topic, setTopic] = useState('')
-  const [audience, setAudience] = useState('CISOs y responsables de compliance en Espana')
+  const [audience, setAudience] = useState('CEOs y responsables de compliance en Espana')
   const [wordCount, setWordCount] = useState(1500)
   const [results, setResults] = useState({})
   const [activeAgent, setActiveAgent] = useState(null)
@@ -148,7 +148,7 @@ export default function ContentPipelinePage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
           <div style={{ gridColumn: 'span 2' }}>
             <label style={{ display: 'block', fontSize: '0.75rem', color: T.fgMuted, marginBottom: '0.25rem', fontFamily: fontMono }} htmlFor="contentpipeline-field-1">Tema del articulo</label>
-            <input id="contentpipeline-field-1" value={topic} onChange={e => setTopic(e.target.value)} placeholder="Ej: Como implementar ENS Alto en 90 dias" style={inputStyle} />
+            <input id="contentpipeline-field-1" value={topic} onChange={e => setTopic(e.target.value)} placeholder="Ej: Como implementar Enterprise en 90 dias" style={inputStyle} />
           </div>
           <div>
             <label style={{ display: 'block', fontSize: '0.75rem', color: T.fgMuted, marginBottom: '0.25rem', fontFamily: fontMono }} htmlFor="contentpipeline-field-2">Audiencia</label>

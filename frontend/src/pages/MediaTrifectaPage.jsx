@@ -13,7 +13,7 @@ import { mediaApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -148,13 +148,13 @@ export default function MediaTrifectaPage() {
                     <p className="text-sm" style={{ color: T.fg }}>{c.name}</p>
                     {c.ad_format && <p className="text-[10px]" style={{ color: T.fgMuted }}>{c.ad_format} · {c.placement}</p>}
                   </td>
-                  <td className="p-3 text-center"><span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: T.muted, color: 'hsl(220,15%,75%)' }}>{c.platform}</span></td>
+                  <td className="p-3 text-center"><span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: T.muted, color: '#94A3B8' }}>{c.platform}</span></td>
                   <td className="p-3 text-center"><span className="text-[10px]" style={{ color: T.cyan, fontFamily: fontMono }}>{c.buying_model || 'CPC'} €{c.unit_cost || 0}</span></td>
                   <td className="p-3 text-xs max-w-48 truncate" style={{ color: T.fgMuted }}>{c.targeting}</td>
                   <td className="p-3 text-right" style={{ color: T.fgMuted, fontFamily: fontMono }}>€{c.budget_total}</td>
                   <td className="p-3 text-right" style={{ color: T.warning, fontFamily: fontMono }}>€{c.spend_total}</td>
                   <td className="p-3 text-right" style={{ color: T.cyan, fontFamily: fontMono }}>{c.leads_generated}</td>
-                  <td className="p-3 text-right" style={{ color: 'hsl(220,15%,75%)', fontFamily: fontMono }}>€{c.cpl}</td>
+                  <td className="p-3 text-right" style={{ color: '#94A3B8', fontFamily: fontMono }}>€{c.cpl}</td>
                 </tr>
               ))}</tbody>
             </table>
@@ -204,7 +204,7 @@ export default function MediaTrifectaPage() {
                   <option value="CPL">CPL</option><option value="CPV">CPV</option><option value="CPA">CPA</option><option value="FIJO">Fijo</option>
                 </select>
               </div>
-              <input type="text" value={adForm.targeting} onChange={e => setAdForm(f => ({ ...f, targeting: e.target.value }))} placeholder="Segmentación: CISOs España, >50 empleados..." className="input text-sm" />
+              <input type="text" value={adForm.targeting} onChange={e => setAdForm(f => ({ ...f, targeting: e.target.value }))} placeholder="Segmentación: CEOs España, >50 empleados..." className="input text-sm" />
               <div className="grid grid-cols-2 gap-2">
                 <input type="text" value={adForm.placement} onChange={e => setAdForm(f => ({ ...f, placement: e.target.value }))} placeholder="Ubicación: Feed, Search..." className="input text-sm" />
                 <input type="text" value={adForm.ad_format} onChange={e => setAdForm(f => ({ ...f, ad_format: e.target.value }))} placeholder="Formato: Video, Carousel..." className="input text-sm" />

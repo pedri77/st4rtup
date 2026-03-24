@@ -17,7 +17,7 @@ import { campaignsApi, dashboardApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -563,7 +563,7 @@ export default function CampaignsPage() {
                   value={form.name}
                   onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
                   style={inputStyle}
-                  placeholder="Ej: LinkedIn Ads Q1 2026 - CISO España"
+                  placeholder="Ej: LinkedIn Ads Q1 2026 - CEO España"
                 />
               </div>
 
@@ -681,7 +681,7 @@ export default function CampaignsPage() {
                     value={form.persona_target}
                     onChange={(e) => setForm(f => ({ ...f, persona_target: e.target.value }))}
                     style={inputStyle}
-                    placeholder="Ej: CISO, CTO, DPO"
+                    placeholder="Ej: CEO, CTO, DPO"
                   />
                 </div>
                 <div>
@@ -815,7 +815,7 @@ function CampaignRoiBubble() {
               if (!payload?.length) return null
               const d = payload[0]?.payload
               return (
-                <div style={{ backgroundColor: '#FFFFFF', border: '1px solid hsl(220,15%,20%)', borderRadius: 8, padding: '8px 12px', fontSize: 12, boxShadow: '0 8px 32px rgba(0,0,0,.4)' }}>
+                <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, padding: '8px 12px', fontSize: 12, boxShadow: '0 8px 32px rgba(0,0,0,.4)' }}>
                   <p style={{ color: T.fg, fontWeight: 600, marginBottom: 4 }}>{d?.name}</p>
                   <p style={{ color: T.fgMuted }}>Presupuesto: <span style={{ color: T.fg }}>€{d?.budget?.toLocaleString()}</span></p>
                   <p style={{ color: T.fgMuted }}>Leads: <span style={{ color: T.fg }}>{d?.leads}</span></p>

@@ -27,13 +27,13 @@ const CHANNEL_COLORS = {
   linkedin_ads: '#3B82F6',
   google_ads: '#22C55E',
   seo: '#F97316',
-  email: '#06B6D4',
+  email: '#3B82F6',
   youtube: '#EF4444',
   webinar: '#A855F7',
   event: '#EC4899',
 }
 
-const PIE_COLORS = ['#06B6D4', '#3B82F6', '#A855F7', '#F97316', '#22C55E', '#EF4444', '#EC4899', '#FBBF24']
+const PIE_COLORS = ['#3B82F6', '#3B82F6', '#A855F7', '#F97316', '#22C55E', '#EF4444', '#EC4899', '#FBBF24']
 
 const STATUS_LABELS = {
   draft: 'Borrador',
@@ -344,7 +344,7 @@ export default function AnalyticsPage() {
                   <PolarGrid stroke="#374151" />
                   <PolarAngleAxis dataKey="name" tick={{ fill: '#9CA3AF', fontSize: 10 }} />
                   <PolarRadiusAxis tick={{ fill: '#6B7280', fontSize: 10 }} />
-                  <Radar name="Campañas" dataKey="campañas" stroke="#06B6D4" fill="#06B6D4" fillOpacity={0.3} />
+                  <Radar name="Campañas" dataKey="campañas" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.3} />
                   <Tooltip content={<CustomTooltip />} />
                 </RadarChart>
               </ResponsiveContainer>
@@ -504,7 +504,7 @@ export default function AnalyticsPage() {
   )
 }
 
-const TREEMAP_COLORS = ['#06B6D4', '#A855F7', '#22C55E', '#F97316', '#3B82F6', '#EF4444', '#EC4899', '#FBBF24']
+const TREEMAP_COLORS = ['#3B82F6', '#A855F7', '#22C55E', '#F97316', '#3B82F6', '#EF4444', '#EC4899', '#FBBF24']
 
 function TreemapCustomContent({ x, y, width, height, name, value: val, index }) {
   if (width < 30 || height < 30) return null
@@ -513,7 +513,7 @@ function TreemapCustomContent({ x, y, width, height, name, value: val, index }) 
       <rect x={x} y={y} width={width} height={height} rx={4}
         fill={TREEMAP_COLORS[index % TREEMAP_COLORS.length]}
         fillOpacity={0.85}
-        stroke="hsl(220,25%,6%)" strokeWidth={2}
+        stroke="#F8FAFC" strokeWidth={2}
       />
       {width > 50 && height > 40 && (
         <>

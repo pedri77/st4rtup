@@ -12,14 +12,14 @@ import ExportButton from '@/components/ExportButton'
 import { ListItemSkeleton } from '@/components/LoadingStates'
 
 const T = {
-  bg: 'hsl(220,60%,4%)',
+  bg: '#F8FAFC',
   card: 'hsl(220,40%,8%)',
   muted: 'hsl(220,30%,12%)',
-  border: 'hsl(220,20%,18%)',
-  fg: 'hsl(220,20%,90%)',
-  fgMuted: 'hsl(220,15%,55%)',
-  cyan: '#06B6D4',
-  purple: 'hsl(265,60%,55%)',
+  border: '#F1F5F9',
+  fg: '#0F172A',
+  fgMuted: '#64748B',
+  cyan: '#3B82F6',
+  purple: '#8B5CF6',
   destructive: 'hsl(0,70%,50%)',
   success: 'hsl(150,60%,40%)',
   warning: 'hsl(40,90%,50%)',
@@ -29,7 +29,7 @@ const fontMono = "'IBM Plex Mono', monospace"
 const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' }
 
 const ROLE_LABELS = {
-  ceo: 'CEO', cto: 'CTO', ciso: 'CISO', dpo: 'DPO', cfo: 'CFO',
+  ceo: 'CEO', cto: 'CTO', ciso: 'CEO', dpo: 'DPO', cfo: 'CFO',
   cio: 'CIO', cco: 'CCO', coo: 'COO', it_director: 'Director IT',
   it_manager: 'IT Manager', security_manager: 'Security Manager',
   compliance_manager: 'Compliance Manager', legal: 'Legal',

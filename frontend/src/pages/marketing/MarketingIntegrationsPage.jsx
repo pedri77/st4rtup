@@ -16,7 +16,7 @@ import { useHasRole } from '@/components/RoleGuard'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -277,7 +277,7 @@ const INTEGRATION_GROUPS = [
         color: 'hsl(170,60%,50%)',
         bgColor: 'rgba(20,184,166,0.1)',
         configKey: 'perplexity_config',
-        description: 'Visibilidad en búsquedas Perplexity para queries GRC/ciberseguridad.',
+        description: 'Visibilidad en búsquedas Perplexity para queries growth/tecnología.',
         fields: [
           { key: 'api_key', label: 'API Key', type: 'password', placeholder: 'pplx-...' },
         ],

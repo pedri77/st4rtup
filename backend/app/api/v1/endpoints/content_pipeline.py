@@ -8,7 +8,7 @@ router = APIRouter()
 @router.post("/run")
 async def run_content_pipeline(
     topic: str = Query(..., description="Tema del articulo"),
-    target_audience: str = Query("CISOs y responsables de compliance en España"),
+    target_audience: str = Query("CEOs y responsables de compliance en España"),
     word_count: int = Query(1500, ge=500, le=5000),
     current_user: dict = Depends(get_current_user),
 ):
@@ -24,7 +24,7 @@ async def run_content_pipeline(
 @router.post("/keywords")
 async def generate_keywords(
     topic: str = Query(...),
-    target_audience: str = Query("CISOs y responsables de compliance en España"),
+    target_audience: str = Query("CEOs y responsables de compliance en España"),
     current_user: dict = Depends(get_current_user),
 ):
     """Agente 1: Keyword research."""

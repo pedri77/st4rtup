@@ -15,14 +15,14 @@ import { formatDateForExport } from '@/utils/export'
 import { ListItemSkeleton } from '@/components/LoadingStates'
 
 const T = {
-  bg: 'hsl(220,60%,4%)',
+  bg: '#F8FAFC',
   card: 'hsl(220,40%,8%)',
   muted: 'hsl(220,30%,12%)',
-  border: 'hsl(220,20%,18%)',
-  fg: 'hsl(220,20%,90%)',
-  fgMuted: 'hsl(220,15%,55%)',
-  cyan: '#06B6D4',
-  purple: 'hsl(265,60%,55%)',
+  border: '#F1F5F9',
+  fg: '#0F172A',
+  fgMuted: '#64748B',
+  cyan: '#3B82F6',
+  purple: '#8B5CF6',
   destructive: 'hsl(0,70%,50%)',
   success: 'hsl(150,60%,40%)',
   warning: 'hsl(40,90%,50%)',
@@ -43,15 +43,15 @@ const STATUS_CONFIG = {
 const EMPTY_ITEM = { name: '', description: '', quantity: 1, unit_price: 0, total: 0 }
 
 const PRODUCT_CATALOG = [
-  { category: 'Plataforma GRC', name: 'St4rtup Platform - Licencia Anual', description: 'Plataforma GRC completa: gestion de riesgos, cumplimiento y gobernanza', unit_price: 12000 },
-  { category: 'Plataforma GRC', name: 'St4rtup Platform - Licencia Mensual', description: 'Plataforma GRC completa, facturacion mensual', unit_price: 1200 },
-  { category: 'Plataforma GRC', name: 'Usuarios adicionales (pack 5)', description: 'Pack de 5 usuarios adicionales para la plataforma', unit_price: 2500 },
+  { category: 'Plataforma growth', name: 'St4rtup Platform - Licencia Anual', description: 'Plataforma growth completa: gestion de riesgos, cumplimiento y gobernanza', unit_price: 12000 },
+  { category: 'Plataforma growth', name: 'St4rtup Platform - Licencia Mensual', description: 'Plataforma growth completa, facturacion mensual', unit_price: 1200 },
+  { category: 'Plataforma growth', name: 'Usuarios adicionales (pack 5)', description: 'Pack de 5 usuarios adicionales para la plataforma', unit_price: 2500 },
   { category: 'Modulos Cumplimiento', name: 'Modulo ENS', description: 'Esquema Nacional de Seguridad - Gestion de cumplimiento y evidencias', unit_price: 4500 },
   { category: 'Modulos Cumplimiento', name: 'Modulo NIS2', description: 'Directiva NIS2 - Evaluacion de requisitos y plan de adecuacion', unit_price: 4500 },
   { category: 'Modulos Cumplimiento', name: 'Modulo DORA', description: 'Digital Operational Resilience Act - Cumplimiento sector financiero', unit_price: 5000 },
-  { category: 'Modulos Cumplimiento', name: 'Modulo ISO 27001', description: 'Sistema de Gestion de Seguridad de la Informacion', unit_price: 4000 },
+  { category: 'Modulos Cumplimiento', name: 'Modulo SaaS Best Practices', description: 'Sistema de Gestion de Seguridad de la Informacion', unit_price: 4000 },
   { category: 'Modulos Cumplimiento', name: 'Modulo EU AI Act', description: 'Reglamento Europeo de IA - Evaluacion de riesgo y cumplimiento', unit_price: 3500 },
-  { category: 'Modulos Cumplimiento', name: 'Pack Normativo Completo', description: 'ENS + NIS2 + DORA + ISO 27001 + EU AI Act (20% dto.)', unit_price: 17200 },
+  { category: 'Modulos Cumplimiento', name: 'Pack Normativo Completo', description: 'ENS + NIS2 + DORA + SaaS Best Practices + EU AI Act (20% dto.)', unit_price: 17200 },
   { category: 'Modulos Funcionales', name: 'Modulo Gestion de Riesgos', description: 'Identificacion, analisis y tratamiento de riesgos de seguridad', unit_price: 3000 },
   { category: 'Modulos Funcionales', name: 'Modulo Gestion de Activos', description: 'Inventario y clasificacion de activos de informacion', unit_price: 2500 },
   { category: 'Modulos Funcionales', name: 'Modulo Gestion de Incidentes', description: 'Registro, seguimiento y respuesta a incidentes de seguridad', unit_price: 2500 },
@@ -60,8 +60,8 @@ const PRODUCT_CATALOG = [
   { category: 'Servicios', name: 'Implantacion y Configuracion', description: 'Setup inicial, configuracion de la plataforma y carga de datos', unit_price: 3000 },
   { category: 'Servicios', name: 'Formacion Equipo (8h)', description: 'Formacion presencial/online para el equipo (jornada completa)', unit_price: 1600 },
   { category: 'Servicios', name: 'Formacion Equipo (4h)', description: 'Formacion presencial/online para el equipo (media jornada)', unit_price: 900 },
-  { category: 'Servicios', name: 'Consultoria GRC (jornada)', description: 'Consultoria especializada en GRC y ciberseguridad', unit_price: 1200 },
-  { category: 'Servicios', name: 'Consultoria GRC (pack 5 jornadas)', description: 'Pack de 5 jornadas de consultoria (10% dto.)', unit_price: 5400 },
+  { category: 'Servicios', name: 'Consultoria growth (jornada)', description: 'Consultoria especializada en growth y tecnología', unit_price: 1200 },
+  { category: 'Servicios', name: 'Consultoria growth (pack 5 jornadas)', description: 'Pack de 5 jornadas de consultoria (10% dto.)', unit_price: 5400 },
   { category: 'Servicios', name: 'Gap Analysis Normativo', description: 'Analisis de brechas de cumplimiento normativo', unit_price: 4000 },
   { category: 'Servicios', name: 'Auditoria de Seguridad', description: 'Auditoria tecnica de seguridad de la informacion', unit_price: 5000 },
   { category: 'Soporte', name: 'Soporte Premium Anual', description: 'Soporte prioritario 8x5, SLA 4h, gestor dedicado', unit_price: 3600 },
@@ -338,7 +338,7 @@ function OfferModal({ offer, onClose, onSubmit, isLoading }) {
             </div>
             <div>
               <label htmlFor="offer-title" className="block text-xs font-medium mb-2" style={{ color: T.fgMuted }}>Titulo *</label>
-              <input id="offer-title" type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} style={inputStyle} placeholder="Propuesta Plataforma GRC..." />
+              <input id="offer-title" type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} style={inputStyle} placeholder="Propuesta Plataforma growth..." />
             </div>
           </div>
 

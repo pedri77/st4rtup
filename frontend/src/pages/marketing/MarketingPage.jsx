@@ -9,7 +9,7 @@ import { campaignsApi, marketingAlertsApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -27,8 +27,8 @@ const modules = [
   { name: 'Analytics', description: 'Dashboard unificado Marketing + Sales: CPL, MQL rate, CAC, pipeline y ROI.', href: '/marketing/analytics', icon: BarChart3, accent: 'hsl(340,65%,55%)' },
   { name: 'Tools', description: 'Calculadora ROI, generador de contenido con IA y tracker de competidores.', href: '/marketing/tools', icon: Calculator, accent: T.warning },
   { name: 'Audit Log', description: 'Registro de acciones sensibles: creación, edición, eliminación y cambios de configuración.', href: '/marketing/audit', icon: Shield, accent: T.fgMuted },
-  { name: 'SEO & Geo-SEO', description: 'Keywords, rankings, geo pages, NAP audits y rankings localizados para GRC España.', href: '/marketing/seo', icon: Search, accent: T.success },
-  { name: 'LLM Visibility', description: 'Monitoriza cómo ChatGPT, Claude y Gemini mencionan tu marca vs competidores GRC.', href: '/marketing/llm-visibility', icon: Bot, accent: T.purple },
+  { name: 'SEO & Geo-SEO', description: 'Keywords, rankings, geo pages, NAP audits y rankings localizados para growth España.', href: '/marketing/seo', icon: Search, accent: T.success },
+  { name: 'LLM Visibility', description: 'Monitoriza cómo ChatGPT, Claude y Gemini mencionan tu marca vs competidores growth.', href: '/marketing/llm-visibility', icon: Bot, accent: T.purple },
   { name: 'Social Media', description: 'Publicaciones en LinkedIn, Twitter/X, Instagram, YouTube. Programación, recurrencia y métricas.', href: '/marketing/social', icon: Share2, accent: 'hsl(210,70%,55%)' },
   { name: 'YouTube', description: 'Analytics del canal, vídeos recientes, suscriptores, watch time y métricas de rendimiento.', href: '/marketing/youtube', icon: Youtube, accent: '#EF4444' },
   { name: 'Integraciones', description: 'Google Drive, Search Console, GA4, LinkedIn, Semrush, Slack, Notion y LLM Visibility.', href: '/marketing/integrations', icon: Plug, accent: T.fgMuted },

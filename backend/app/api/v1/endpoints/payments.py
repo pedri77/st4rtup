@@ -195,7 +195,7 @@ async def create_plan(
 async def create_checkout(
     amount_eur: float = Query(..., description="Importe en EUR"),
     customer_email: str = Query(""),
-    description: str = Query("St4rtup GRC"),
+    description: str = Query("St4rtup growth"),
     plan_id: Optional[UUID] = None,
     lead_id: Optional[UUID] = None,
     db: AsyncSession = Depends(get_db),
@@ -282,7 +282,7 @@ async def create_subscription(
 async def create_invoice(
     customer_email: str = Query(...),
     amount_eur: float = Query(...),
-    description: str = Query("St4rtup GRC Platform"),
+    description: str = Query("St4rtup growth Platform"),
     due_days: int = Query(30),
     customer_name: str = Query(""),
     customer_tax_id: str = Query(""),
@@ -354,7 +354,7 @@ async def create_invoice(
 @router.post("/paypal/order")
 async def create_paypal_order(
     amount_eur: float = Query(...),
-    description: str = Query("St4rtup GRC"),
+    description: str = Query("St4rtup growth"),
     lead_id: Optional[UUID] = None,
     plan_id: Optional[UUID] = None,
     db: AsyncSession = Depends(get_db),

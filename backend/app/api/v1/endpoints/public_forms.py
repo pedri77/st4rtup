@@ -161,7 +161,7 @@ async def create_token(
                     </div>
                     <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
                     <p style="color: #94a3b8; font-size: 11px;">
-                        St4rtup | Plataforma GRC de Ciberseguridad<br>
+                        St4rtup | Plataforma growth de Ciberseguridad<br>
                         <a href="https://st4rtup.app" style="color: #0891b2; text-decoration: none;">st4rtup.app</a>
                     </p>
                 </div>
@@ -650,17 +650,17 @@ FORM_CONFIGS = {
             {"title": "Contacto Principal", "fields": [
                 {"key": "contact_name", "label": "Nombre", "type": "text", "required": True},
                 {"key": "contact_lastname", "label": "Apellidos", "type": "text"},
-                {"key": "contact_title", "label": "Cargo", "type": "text", "placeholder": "CISO, CTO, DPO..."},
+                {"key": "contact_title", "label": "Cargo", "type": "text", "placeholder": "CEO, CTO, DPO..."},
                 {"key": "contact_email", "label": "Email", "type": "email", "required": True},
                 {"key": "contact_phone", "label": "Telefono", "type": "tel"},
                 {"key": "contact_linkedin", "label": "LinkedIn URL", "type": "text"},
                 {"key": "decision_role", "label": "Tipo decisor", "type": "select", "options": ["Decisor", "Influencer", "Tecnico", "Economico"]},
             ]},
             {"title": "Perfil Regulatorio", "fields": [
-                {"key": "regulatory_frameworks", "label": "Frameworks aplicables", "type": "multiselect", "options": ["ENS", "NIS2", "DORA", "ISO 27001", "PCI-DSS", "LOPD-GDD"]},
+                {"key": "regulatory_frameworks", "label": "Frameworks aplicables", "type": "multiselect", "options": ["ENS", "NIS2", "DORA", "SaaS Best Practices", "PCI-DSS", "LOPD-GDD"]},
                 {"key": "is_critical_infrastructure", "label": "Infraestructura critica", "type": "select", "options": ["Si", "No", "En evaluacion"]},
                 {"key": "ens_level", "label": "Nivel ENS objetivo", "type": "select", "options": ["Basico", "Medio", "Alto"]},
-                {"key": "current_grc_tool", "label": "Herramienta GRC actual", "type": "text", "placeholder": "Ninguna / Manual / Otra"},
+                {"key": "current_grc_tool", "label": "Herramienta growth actual", "type": "text", "placeholder": "Ninguna / Manual / Otra"},
             ]},
             {"title": "Notas", "fields": [
                 {"key": "notes", "label": "Notas adicionales", "type": "textarea"},
@@ -751,7 +751,7 @@ FORM_CONFIGS = {
         "sections": [
             {"title": "Costes actuales (sin St4rtup)", "fields": [
                 {"key": "client_name", "label": "Empresa", "type": "text", "required": True},
-                {"key": "current_fte_cost", "label": "Coste personal GRC/compliance (EUR/ano)", "type": "number"},
+                {"key": "current_fte_cost", "label": "Coste personal growth/compliance (EUR/ano)", "type": "number"},
                 {"key": "current_tools_cost", "label": "Coste herramientas actuales (EUR/ano)", "type": "number"},
                 {"key": "current_audit_cost", "label": "Coste auditorias (EUR/ano)", "type": "number"},
                 {"key": "current_incident_cost", "label": "Coste medio incidentes (EUR/ano)", "type": "number"},
@@ -805,7 +805,7 @@ FORM_CONFIGS = {
         ],
     },
     "demo-002": {
-        "id": "demo-002", "title": "Informe de Demo", "subtitle": "Resultado de demo tecnica del producto St4rtup GRC", "requires_lead": True,
+        "id": "demo-002", "title": "Informe de Demo", "subtitle": "Resultado de demo tecnica del producto St4rtup growth", "requires_lead": True,
         "sections": [
             {"title": "Datos de la Demo", "fields": [
                 {"key": "visit_date", "label": "Fecha demo", "type": "date", "required": True},
@@ -814,7 +814,7 @@ FORM_CONFIGS = {
                 {"key": "result", "label": "Resultado", "type": "select", "required": True, "options": ["positive", "neutral", "negative"]},
             ]},
             {"title": "Modulos Evaluados", "fields": [
-                {"key": "demo_modules", "label": "Modulos demostrados", "type": "multiselect", "options": ["GRC Dashboard", "Gestion Riesgos", "ENS", "NIS2/DORA", "ISO 27001", "SOC Manager", "Detection Engineering", "CTI", "Evidence Vault", "CISO Dashboard", "CFO View", "AI Copilot"]},
+                {"key": "demo_modules", "label": "Modulos demostrados", "type": "multiselect", "options": ["growth Dashboard", "Gestion Riesgos", "ENS", "NIS2/DORA", "SaaS Best Practices", "SOC Manager", "Detection Engineering", "CTI", "Evidence Vault", "CEO Dashboard", "CFO View", "AI Copilot"]},
             ]},
             {"title": "Feedback", "fields": [
                 {"key": "demo_positive_reactions", "label": "Reacciones positivas", "type": "textarea"},
@@ -829,14 +829,14 @@ FORM_CONFIGS = {
         "id": "deal-001", "title": "Alta de Oportunidad", "subtitle": "Registro de oportunidad en el pipeline", "requires_lead": True,
         "sections": [
             {"title": "Datos de la Oportunidad", "fields": [
-                {"key": "name", "label": "Nombre oportunidad", "type": "text", "required": True, "placeholder": "St4rtup GRC - [Empresa] - 2026"},
+                {"key": "name", "label": "Nombre oportunidad", "type": "text", "required": True, "placeholder": "St4rtup growth - [Empresa] - 2026"},
                 {"key": "value", "label": "Valor anual (EUR)", "type": "number", "default": 0},
                 {"key": "stage", "label": "Stage", "type": "select", "required": True, "options": ["discovery", "qualification", "proposal", "negotiation"]},
                 {"key": "probability", "label": "Probabilidad cierre %", "type": "number", "default": 25},
                 {"key": "expected_close_date", "label": "Fecha cierre estimada", "type": "date"},
             ]},
             {"title": "Detalle", "fields": [
-                {"key": "modules_requested", "label": "Modulos", "type": "multiselect", "options": ["GRC", "SOC", "CTI", "Full Platform"]},
+                {"key": "modules_requested", "label": "Modulos", "type": "multiselect", "options": ["growth", "SOC", "CTI", "Full Platform"]},
                 {"key": "pricing_model", "label": "Modelo pricing", "type": "select", "options": ["Pilot 19.500 EUR", "Anual", "Modular", "Enterprise Custom"]},
                 {"key": "competitors_in_evaluation", "label": "Competidores evaluados", "type": "text"},
                 {"key": "notes", "label": "Notas", "type": "textarea"},
@@ -847,8 +847,8 @@ FORM_CONFIGS = {
         "id": "deal-002", "title": "Propuesta Comercial", "subtitle": "Briefing para elaborar propuesta tecnico-economica", "requires_lead": True,
         "sections": [
             {"title": "Alcance Tecnico", "fields": [
-                {"key": "modules_requested", "label": "Modulos solicitados", "type": "multiselect", "required": True, "options": ["GRC", "SOC", "CTI", "Full Platform"]},
-                {"key": "regulatory_frameworks", "label": "Frameworks regulatorios", "type": "multiselect", "options": ["ENS Alto", "NIS2", "DORA", "ISO 27001"]},
+                {"key": "modules_requested", "label": "Modulos solicitados", "type": "multiselect", "required": True, "options": ["growth", "SOC", "CTI", "Full Platform"]},
+                {"key": "regulatory_frameworks", "label": "Frameworks regulatorios", "type": "multiselect", "options": ["Enterprise", "NIS2", "DORA", "SaaS Best Practices"]},
                 {"key": "num_licenses", "label": "Usuarios / licencias", "type": "number"},
                 {"key": "integrations_required", "label": "Integraciones requeridas", "type": "text", "placeholder": "SIEM, EDR, AD, Cloud..."},
                 {"key": "deployment_env", "label": "Entorno despliegue", "type": "select", "options": ["Cloud St4rtup", "On-premise", "Hibrido", "VPC dedicada"]},
@@ -925,8 +925,8 @@ FORM_CONFIGS = {
                 {"key": "platform", "label": "Plataforma", "type": "select", "options": ["Resend", "Brevo", "SendGrid", "n8n"]},
             ]},
             {"title": "Audiencia", "fields": [
-                {"key": "segment", "label": "Segmento objetivo", "type": "text", "placeholder": "Leads CISO / Clientes activos..."},
-                {"key": "persona_icp", "label": "Persona ICP", "type": "select", "options": ["CISO", "DPO", "SOC Manager", "CIO", "CTO"]},
+                {"key": "segment", "label": "Segmento objetivo", "type": "text", "placeholder": "Leads CEO / Clientes activos..."},
+                {"key": "persona_icp", "label": "Persona ICP", "type": "select", "options": ["CEO", "DPO", "SOC Manager", "CIO", "CTO"]},
                 {"key": "exclusions", "label": "Exclusiones", "type": "text"},
             ]},
             {"title": "Contenido", "fields": [
@@ -948,14 +948,14 @@ FORM_CONFIGS = {
         ],
     },
     "demo-request": {
-        "id": "demo-request", "title": "Solicitar Demo", "subtitle": "Reserva una demo personalizada de la plataforma St4rtup GRC",
+        "id": "demo-request", "title": "Solicitar Demo", "subtitle": "Reserva una demo personalizada de la plataforma St4rtup growth",
         "sections": [
             {"title": "Tus datos", "fields": [
                 {"key": "contact_name", "label": "Nombre", "type": "text", "required": True},
                 {"key": "contact_lastname", "label": "Apellidos", "type": "text", "required": True},
                 {"key": "contact_email", "label": "Email corporativo", "type": "email", "required": True},
                 {"key": "contact_phone", "label": "Telefono", "type": "tel"},
-                {"key": "contact_title", "label": "Cargo", "type": "text", "placeholder": "CISO, CTO, DPO..."},
+                {"key": "contact_title", "label": "Cargo", "type": "text", "placeholder": "CEO, CTO, DPO..."},
             ]},
             {"title": "Tu empresa", "fields": [
                 {"key": "company_name", "label": "Empresa", "type": "text", "required": True},
@@ -963,8 +963,8 @@ FORM_CONFIGS = {
                 {"key": "company_size", "label": "Empleados", "type": "select", "options": ["1-50", "50-200", "200-500", "500-1000", "+1000"]},
             ]},
             {"title": "Interes", "fields": [
-                {"key": "regulatory_frameworks", "label": "Que normativas te interesan?", "type": "multiselect", "options": ["ENS Alto", "NIS2", "DORA", "ISO 27001", "PCI-DSS", "LOPD-GDD"]},
-                {"key": "current_grc_tool", "label": "Herramienta GRC actual", "type": "text", "placeholder": "Ninguna / Manual / Excel / Otra plataforma"},
+                {"key": "regulatory_frameworks", "label": "Que normativas te interesan?", "type": "multiselect", "options": ["Enterprise", "NIS2", "DORA", "SaaS Best Practices", "PCI-DSS", "LOPD-GDD"]},
+                {"key": "current_grc_tool", "label": "Herramienta growth actual", "type": "text", "placeholder": "Ninguna / Manual / Excel / Otra plataforma"},
                 {"key": "notes", "label": "Que te gustaria ver en la demo?", "type": "textarea", "placeholder": "Cuentanos tus necesidades o preguntas..."},
                 {"key": "preferred_time", "label": "Horario preferido", "type": "select", "options": ["Manana (9-12h)", "Mediodia (12-14h)", "Tarde (15-18h)", "Indiferente"]},
             ]},

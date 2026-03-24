@@ -40,7 +40,7 @@ async def stripe_create_checkout(
         "payment_method_types[]": "card",
         "line_items[0][price_data][currency]": currency,
         "line_items[0][price_data][unit_amount]": str(amount_cents),
-        "line_items[0][price_data][product_data][name]": description or "St4rtup GRC",
+        "line_items[0][price_data][product_data][name]": description or "St4rtup growth",
         "line_items[0][quantity]": "1",
         "success_url": success_url,
         "cancel_url": cancel_url,
@@ -84,7 +84,7 @@ async def stripe_create_invoice(
         "customer": customer["id"],
         "amount": str(amount_cents),
         "currency": "eur",
-        "description": description or "St4rtup GRC Platform",
+        "description": description or "St4rtup growth Platform",
     })
 
     # Create and finalize invoice
@@ -137,7 +137,7 @@ async def paypal_create_order(
                 "intent": "CAPTURE",
                 "purchase_units": [{
                     "amount": {"currency_code": currency, "value": f"{amount:.2f}"},
-                    "description": description or "St4rtup GRC Platform",
+                    "description": description or "St4rtup growth Platform",
                 }],
                 "application_context": {
                     "return_url": return_url,

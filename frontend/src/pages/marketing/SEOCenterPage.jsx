@@ -17,7 +17,7 @@ import {
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#06B6D4', purple: '#6366F1',
+  cyan: '#3B82F6', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -98,12 +98,12 @@ export default function SEOCenterPage() {
 function renderMarkdown(md) {
   if (!md) return ''
   let html = md
-  html = html.replace(/^### (.+)$/gm, '<h3 style="font-size:14px;font-weight:600;margin:12px 0 4px;color:hsl(220,15%,90%)">$1</h3>')
-  html = html.replace(/^## (.+)$/gm, '<h2 style="font-size:16px;font-weight:700;margin:16px 0 6px;color:hsl(220,15%,90%)">$1</h2>')
-  html = html.replace(/^# (.+)$/gm, '<h1 style="font-size:20px;font-weight:700;margin:20px 0 8px;color:hsl(185,72%,48%)">$1</h1>')
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong style="color:hsl(220,15%,90%)">$1</strong>')
-  html = html.replace(/^- (.+)$/gm, '<li style="margin-left:16px;color:hsl(220,10%,55%)">$1</li>')
-  html = html.replace(/^> (.+)$/gm, '<blockquote style="border-left:3px solid hsl(185,72%,48%);padding-left:12px;margin:8px 0;color:hsl(220,10%,55%);font-style:italic">$1</blockquote>')
+  html = html.replace(/^### (.+)$/gm, '<h3 style="font-size:14px;font-weight:600;margin:12px 0 4px;color:#0F172A">$1</h3>')
+  html = html.replace(/^## (.+)$/gm, '<h2 style="font-size:16px;font-weight:700;margin:16px 0 6px;color:#0F172A">$1</h2>')
+  html = html.replace(/^# (.+)$/gm, '<h1 style="font-size:20px;font-weight:700;margin:20px 0 8px;color:#3B82F6">$1</h1>')
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong style="color:#0F172A">$1</strong>')
+  html = html.replace(/^- (.+)$/gm, '<li style="margin-left:16px;color:#64748B">$1</li>')
+  html = html.replace(/^> (.+)$/gm, '<blockquote style="border-left:3px solid #3B82F6;padding-left:12px;margin:8px 0;color:#64748B;font-style:italic">$1</blockquote>')
   html = html.replace(/\n\n/g, '<br/><br/>')
   return html
 }
@@ -323,7 +323,7 @@ function ContentHubTab() {
 
   // Generate form
   const [genTopic, setGenTopic] = useState('')
-  const [genAudience, setGenAudience] = useState('CISO, DPO, CTO de empresas españolas')
+  const [genAudience, setGenAudience] = useState('CEO, DPO, CTO de empresas españolas')
   const [genWords, setGenWords] = useState(1500)
   const [genProvider, setGenProvider] = useState('')
   const [genModel, setGenModel] = useState('')
@@ -432,7 +432,7 @@ function ContentHubTab() {
         <form onSubmit={e => { e.preventDefault(); generateMut.mutate({ topic: genTopic, audience: genAudience, word_count: genWords, provider: genProvider || undefined, model: genModel || undefined }) }}
           className="rounded-xl p-5 space-y-3" style={{ backgroundColor: T.card, border: `1px solid ${T.purple}40` }}>
           <h3 className="text-sm font-semibold flex items-center gap-2" style={{ color: T.purple }}><Sparkles className="w-4 h-4" /> Generar artículo con IA (4 agentes)</h3>
-          <input value={genTopic} onChange={e => setGenTopic(e.target.value)} placeholder="Tema: ej. Guía de cumplimiento ENS Alto para PYMEs" required style={inputStyle} />
+          <input value={genTopic} onChange={e => setGenTopic(e.target.value)} placeholder="Tema: ej. Guía de cumplimiento Enterprise para PYMEs" required style={inputStyle} />
           <div className="grid grid-cols-2 gap-3">
             <input value={genAudience} onChange={e => setGenAudience(e.target.value)} placeholder="Audiencia" style={inputStyle} />
             <input type="number" value={genWords} onChange={e => setGenWords(+e.target.value)} min={500} max={5000} style={inputStyle} />
@@ -1446,7 +1446,7 @@ const PIPELINE_AGENTS = [
 
 function PipelineTab() {
   const [topic, setTopic] = useState('')
-  const [audience, setAudience] = useState('CISOs y responsables de compliance en España')
+  const [audience, setAudience] = useState('CEOs y responsables de compliance en España')
   const [wordCount, setWordCount] = useState(1500)
   const [provider, setProvider] = useState('')
   const [model, setModel] = useState('')
@@ -1496,7 +1496,7 @@ function PipelineTab() {
         <h3 className="text-sm font-semibold flex items-center gap-2" style={{ color: T.fg }}>
           <Sparkles className="w-4 h-4" style={{ color: T.cyan }} /> 4 agentes IA en secuencia
         </h3>
-        <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="Tema: ej. Guía de cumplimiento ENS Alto para PYMEs" style={inputStyle} />
+        <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="Tema: ej. Guía de cumplimiento Enterprise para PYMEs" style={inputStyle} />
         <div className="grid grid-cols-2 gap-3">
           <input value={audience} onChange={e => setAudience(e.target.value)} placeholder="Audiencia" style={inputStyle} />
           <input type="number" value={wordCount} onChange={e => setWordCount(+e.target.value)} min={500} max={5000} style={inputStyle} />

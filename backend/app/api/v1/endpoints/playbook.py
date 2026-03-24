@@ -158,17 +158,17 @@ async def seed_tactics(db: AsyncSession = Depends(get_db), _current_user: dict =
     defaults = [
         {"name": "Marketing de contenido", "category": "inbound", "channel": "blog_youtube", "description": "YouTube + Blog SEO, 48 art/año, pipeline n8n", "sort_order": 1},
         {"name": "SEO orgánico", "category": "inbound", "channel": "seo", "description": "44 keywords ENS/NIS2/DORA, meta top 3 España", "sort_order": 2},
-        {"name": "Lead magnets", "category": "inbound", "channel": "landing", "description": "Ebook ENS Alto, webinar NIS2/DORA, demo, calculadora ROI", "sort_order": 3},
-        {"name": "Email marketing", "category": "inbound", "channel": "email", "description": "Nurturing + newsletter quincenal CISOs", "sort_order": 4},
+        {"name": "Lead magnets", "category": "inbound", "channel": "landing", "description": "Ebook Enterprise, webinar NIS2/DORA, demo, calculadora ROI", "sort_order": 3},
+        {"name": "Email marketing", "category": "inbound", "channel": "email", "description": "Nurturing + newsletter quincenal CEOs", "sort_order": 4},
         {"name": "Llamadas en frío ABM", "category": "outbound", "channel": "retell_ai", "description": "15 cuentas Tier-1, MOD-AICALLS-001 Retell AI", "sort_order": 5},
         {"name": "Emails en frío ABM", "category": "outbound", "channel": "lemlist", "description": "3 touchpoints/cuenta, personalización por vertical", "sort_order": 6},
-        {"name": "Elevator pitch", "category": "outbound", "channel": "direct", "description": "Versiones CISO/CTO/CFO/CEO, 30s/2min/10min", "sort_order": 7},
+        {"name": "Elevator pitch", "category": "outbound", "channel": "direct", "description": "Versiones CEO/CTO/CFO/CEO, 30s/2min/10min", "sort_order": 7},
         {"name": "Ventas por solución", "category": "relacional", "channel": "direct", "description": "PoC 90 días €19.500, dolor NIS2/DORA/ENS", "sort_order": 8},
         {"name": "Retención/fidelización", "category": "relacional", "channel": "cs", "description": "CSM, QBRs, KPIs SOC-CMM, upsell modular", "sort_order": 9},
         {"name": "Referrals y eventos", "category": "relacional", "channel": "events", "description": "RootedCON, Cybercamp, ENISE, partners", "sort_order": 10},
         {"name": "Post-venta y seguimiento", "category": "relacional", "channel": "cs", "description": "Onboarding 30/60/90, Looker Studio, alertas", "sort_order": 11},
         {"name": "Venta directa SMB", "category": "transaccional", "channel": "self_service", "description": "Self-service desde €1.200/mes", "sort_order": 12},
-        {"name": "Redes sociales", "category": "transaccional", "channel": "linkedin", "description": "LinkedIn CISOs/CTOs + YouTube B2B", "sort_order": 13},
+        {"name": "Redes sociales", "category": "transaccional", "channel": "linkedin", "description": "LinkedIn CEOs/CTOs + YouTube B2B", "sort_order": 13},
         {"name": "Cierre por urgencia regulatoria", "category": "transaccional", "channel": "direct", "description": "NIS2/DORA/ENS deadlines como trigger", "sort_order": 14},
     ]
     created = 0

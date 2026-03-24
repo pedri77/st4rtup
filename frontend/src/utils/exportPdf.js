@@ -144,7 +144,7 @@ export function exportToPDF(title, sections) {
     <div style="display:flex;align-items:center;justify-content:space-between">
       <div>
         <div style="font-size:22px;font-weight:800;letter-spacing:-0.5px">RISKITERA SALES</div>
-        <div style="font-size:12px;opacity:0.85;margin-top:2px">Plataforma Comercial GRC</div>
+        <div style="font-size:12px;opacity:0.85;margin-top:2px">Plataforma Comercial growth</div>
       </div>
       <div style="text-align:right">
         <div style="font-size:10px;opacity:0.75">Generado el</div>
