@@ -21,6 +21,7 @@ import api from '@/services/api'
 import Changelog from '@/components/Changelog'
 import QuickActions from '@/components/QuickActions'
 import InstallPrompt from '@/components/InstallPrompt'
+import TrialBanner from '@/components/TrialBanner'
 import { useNotificationStream } from '@/hooks/useNotificationStream'
 import { useTranslation } from '@/i18n/useTranslation'
 

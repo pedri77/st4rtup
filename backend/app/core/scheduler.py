@@ -380,6 +380,20 @@ def init_scheduler():
         replace_existing=True,
         misfire_grace_time=3600,  # Allow 1 hour grace period
     )
+
+    # Drip email sequences
+    async def run_drip_emails():
+        from app.services.drip_emails import run_drip_check
+        await run_drip_check()
+
+    scheduler.add_job(
+        run_drip_emails,
+        trigger=CronTrigger(hour=9, minute=0, timezone="Europe/Madrid"),
+        id="drip_emails",
+        name="Drip Email Sequences",
+        replace_existing=True,
+        misfire_grace_time=3600,
+    )
     logger.info("  ✓ AC-01: Daily Actions Summary (08:30 AM daily)")
 
     # ─── EM-01: Welcome Sequence Day 3 ──────────────────────────────
@@ -391,6 +405,20 @@ def init_scheduler():
         name='EM-01 Day 3: Welcome Sequence',
         replace_existing=True,
         misfire_grace_time=3600,  # Allow 1 hour grace period
+    )
+
+    # Drip email sequences
+    async def run_drip_emails():
+        from app.services.drip_emails import run_drip_check
+        await run_drip_check()
+
+    scheduler.add_job(
+        run_drip_emails,
+        trigger=CronTrigger(hour=9, minute=0, timezone="Europe/Madrid"),
+        id="drip_emails",
+        name="Drip Email Sequences",
+        replace_existing=True,
+        misfire_grace_time=3600,
     )
     logger.info("  ✓ EM-01 Day 3: Welcome Sequence (09:00 AM daily)")
 
@@ -404,6 +432,20 @@ def init_scheduler():
         replace_existing=True,
         misfire_grace_time=3600,  # Allow 1 hour grace period
     )
+
+    # Drip email sequences
+    async def run_drip_emails():
+        from app.services.drip_emails import run_drip_check
+        await run_drip_check()
+
+    scheduler.add_job(
+        run_drip_emails,
+        trigger=CronTrigger(hour=9, minute=0, timezone="Europe/Madrid"),
+        id="drip_emails",
+        name="Drip Email Sequences",
+        replace_existing=True,
+        misfire_grace_time=3600,
+    )
     logger.info("  ✓ EM-01 Day 7: Welcome Sequence (09:15 AM daily)")
 
     # ─── Slack Daily Digest ─────────────────────────────────────────
@@ -412,6 +454,20 @@ def init_scheduler():
         trigger=CronTrigger(hour=8, minute=45, timezone='Europe/Madrid'),
         id='slack_daily_digest',
         name='Slack Daily Digest',
+        replace_existing=True,
+        misfire_grace_time=3600,
+    )
+
+    # Drip email sequences
+    async def run_drip_emails():
+        from app.services.drip_emails import run_drip_check
+        await run_drip_check()
+
+    scheduler.add_job(
+        run_drip_emails,
+        trigger=CronTrigger(hour=9, minute=0, timezone="Europe/Madrid"),
+        id="drip_emails",
+        name="Drip Email Sequences",
         replace_existing=True,
         misfire_grace_time=3600,
     )

@@ -1,3 +1,4 @@
+import WebChatWidget from '@/components/WebChatWidget'
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
@@ -152,7 +153,7 @@ export default function LandingPage() {
             <FadeIn delay={0.2}>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(30,111,217,0.4)' }}>{t.hero.cta1} <ArrowRight size={18} /></Link>
-                <a href="#features" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', border: '2px solid #E2E8F0', color: '#1A1A2E', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none' }}>{t.hero.cta2}</a>
+                <Link to="/demo" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", border: "2px solid #E2E8F0", color: "#1A1A2E", borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: "none" }}>{t.hero.cta2}</Link>
               </div>
             </FadeIn>
           </div>
@@ -343,6 +344,7 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      <WebChatWidget />
     </div>
   )
 }
