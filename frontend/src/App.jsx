@@ -23,6 +23,9 @@ const DemoPage = lazy(() => import('./pages/DemoPage'))
 const BlogPage = lazy(() => import('./pages/BlogPage'))
 const ChangelogPage = lazy(() => import('./pages/ChangelogPage'))
 const StatusPage = lazy(() => import('./pages/StatusPage'))
+const ComparePage = lazy(() => import('./pages/ComparePage'))
+const RoiCalculatorPage = lazy(() => import('./pages/RoiCalculatorPage'))
+const HelpCenterPage = lazy(() => import('./pages/HelpCenterPage'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const LeadsPage = lazy(() => import('./pages/LeadsPage'))
 const LeadDetailPage = lazy(() => import('./pages/LeadDetailPage'))
@@ -119,6 +122,9 @@ function App() {
         <Route path="/blog" element={<Suspense fallback={<PageLoader />}><BlogPage /></Suspense>} />
         <Route path="/changelog" element={<Suspense fallback={<PageLoader />}><ChangelogPage /></Suspense>} />
         <Route path="/status" element={<Suspense fallback={<PageLoader />}><StatusPage /></Suspense>} />
+        <Route path="/vs/:competitor" element={<Suspense fallback={<PageLoader />}><ComparePage /></Suspense>} />
+        <Route path="/roi" element={<Suspense fallback={<PageLoader />}><RoiCalculatorPage /></Suspense>} />
+        <Route path="/help" element={<Suspense fallback={<PageLoader />}><HelpCenterPage /></Suspense>} />
         <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><PrivacyPage /></Suspense>} />
         <Route path="/terms" element={<Suspense fallback={<PageLoader />}><TermsPage /></Suspense>} />
         <Route path="/cookies" element={<Suspense fallback={<PageLoader />}><CookiesPage /></Suspense>} />
