@@ -118,7 +118,8 @@ export default function LandingPage() {
           <div style={{ display: 'flex', gap: 28, alignItems: 'center' }} className="hidden md:flex">
             <a href="#features" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{t.nav.features}</a>
             <a href="#pricing" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{t.nav.pricing}</a>
-            <a href="#testimonials" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{t.nav.testimonials}</a>
+            <Link to="/blog" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>Blog</Link>
+            <Link to="/help" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{lang === 'es' ? 'Ayuda' : 'Help'}</Link>
             <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} style={{ padding: '4px 10px', border: '1px solid #E2E8F0', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer', backgroundColor: 'white', color: '#64748B' }}>{lang === 'es' ? 'EN' : 'ES'}</button>
             <Link to="/login" style={{ fontSize: 14, color: '#1E6FD9', textDecoration: 'none', fontWeight: 600 }}>{t.nav.login}</Link>
             <Link to="/login" style={{ padding: '10px 22px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>{t.nav.cta}</Link>
@@ -329,8 +330,8 @@ export default function LandingPage() {
               <p style={{ fontSize: 13, color: '#94A3B8', marginTop: 12, lineHeight: 1.6 }}>{t.footer.desc}</p>
             </div>
             {[
-              { title: t.footer.producto, links: [{ t: t.nav.features, h: '#features' }, { t: t.nav.pricing, h: '/pricing' }] },
-              { title: t.footer.recursos, links: [{ t: 'Blog', h: '#' }, { t: 'API', h: '#' }] },
+              { title: t.footer.producto, links: [{ t: t.nav.features, h: '#features' }, { t: t.nav.pricing, h: '/pricing' }, { t: 'Demo', h: '/demo' }, { t: 'ROI', h: '/roi' }] },
+              { title: t.footer.recursos, links: [{ t: 'Blog', h: '/blog' }, { t: 'Changelog', h: '/changelog' }, { t: lang === 'es' ? 'Ayuda' : 'Help', h: '/help' }, { t: 'Status', h: '/status' }] },
               { title: t.footer.legal, links: [{ t: lang === 'es' ? 'Privacidad' : 'Privacy', h: '/privacy' }, { t: lang === 'es' ? 'Términos' : 'Terms', h: '/terms' }, { t: 'Cookies', h: '/cookies' }] },
             ].map(col => (
               <div key={col.title}>
