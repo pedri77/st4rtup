@@ -4,7 +4,7 @@ import { MessageCircle, X, Send, Loader2 } from 'lucide-react'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#3B82F6',
+  cyan: '#1E6FD9',
 }
 
 export default function WebChatWidget() {
@@ -46,7 +46,7 @@ export default function WebChatWidget() {
       <button onClick={() => setOpen(true)} style={{
         position: 'fixed', bottom: 24, right: 24, zIndex: 50,
         width: 56, height: 56, borderRadius: '50%',
-        background: `linear-gradient(135deg, ${T.cyan}, #8B5CF6)`,
+        background: `linear-gradient(135deg, ${T.cyan}, #F5820B)`,
         border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
         boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
       }}>

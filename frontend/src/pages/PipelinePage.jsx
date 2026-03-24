@@ -20,8 +20,8 @@ const T = {
   border: '#E2E8F0',
   fg: '#0F172A',
   fgMuted: '#64748B',
-  cyan: '#3B82F6',
-  purple: '#8B5CF6',
+  cyan: '#1E6FD9',
+  purple: '#F5820B',
   destructive: '#EF4444',
   success: '#10B981',
   warning: '#F59E0B',
@@ -304,10 +304,10 @@ const chartTooltipStyle = {
 }
 
 const FLOW_COLORS = [
-  '#3B82F6',   // cyan
+  '#1E6FD9',   // cyan
   'hsl(210,80%,55%)',    // blue
   'hsl(240,60%,55%)',    // indigo
-  '#8B5CF6',    // purple
+  '#F5820B',    // purple
 ]
 
 function PipelineFlowChart() {

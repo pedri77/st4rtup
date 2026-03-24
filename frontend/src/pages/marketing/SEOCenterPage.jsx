@@ -17,7 +17,7 @@ import {
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#3B82F6', purple: '#6366F1',
+  cyan: '#1E6FD9', purple: '#6366F1',
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -100,10 +100,10 @@ function renderMarkdown(md) {
   let html = md
   html = html.replace(/^### (.+)$/gm, '<h3 style="font-size:14px;font-weight:600;margin:12px 0 4px;color:#0F172A">$1</h3>')
   html = html.replace(/^## (.+)$/gm, '<h2 style="font-size:16px;font-weight:700;margin:16px 0 6px;color:#0F172A">$1</h2>')
-  html = html.replace(/^# (.+)$/gm, '<h1 style="font-size:20px;font-weight:700;margin:20px 0 8px;color:#3B82F6">$1</h1>')
+  html = html.replace(/^# (.+)$/gm, '<h1 style="font-size:20px;font-weight:700;margin:20px 0 8px;color:#1E6FD9">$1</h1>')
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong style="color:#0F172A">$1</strong>')
   html = html.replace(/^- (.+)$/gm, '<li style="margin-left:16px;color:#64748B">$1</li>')
-  html = html.replace(/^> (.+)$/gm, '<blockquote style="border-left:3px solid #3B82F6;padding-left:12px;margin:8px 0;color:#64748B;font-style:italic">$1</blockquote>')
+  html = html.replace(/^> (.+)$/gm, '<blockquote style="border-left:3px solid #1E6FD9;padding-left:12px;margin:8px 0;color:#64748B;font-style:italic">$1</blockquote>')
   html = html.replace(/\n\n/g, '<br/><br/>')
   return html
 }

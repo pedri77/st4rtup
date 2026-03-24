@@ -5,8 +5,8 @@ function LegalLayout({ title, updated, children }) {
     <div style={{ fontFamily: "'Inter', sans-serif", color: '#0F172A', minHeight: '100vh', backgroundColor: 'white' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
       <nav style={{ borderBottom: '1px solid #E2E8F0', padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
-        <Link to="/" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 24, fontWeight: 800, background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textDecoration: 'none' }}>st4rtup</Link>
-        <Link to="/" style={{ fontSize: 14, color: '#3B82F6', textDecoration: 'none', fontWeight: 500 }}>← Volver</Link>
+        <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 32 }} /></Link>
+        <Link to="/" style={{ fontSize: 14, color: '#1E6FD9', textDecoration: 'none', fontWeight: 500 }}>← Volver</Link>
       </nav>
       <main style={{ maxWidth: 760, margin: '0 auto', padding: '60px 24px 100px' }}>
         <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 36, fontWeight: 800, marginBottom: 8 }}>{title}</h1>
@@ -93,10 +93,10 @@ export default function PrivacyPage() {
         <li><strong>Limitación:</strong> solicitar la restricción del tratamiento</li>
         <li><strong>Retirar el consentimiento:</strong> en cualquier momento, sin efecto retroactivo</li>
       </ul>
-      <p>Para ejercer estos derechos, escríbenos a <strong>hello@st4rtup.com</strong>. Responderemos en un plazo máximo de 30 días. También puedes presentar una reclamación ante la <strong>Agencia Española de Protección de Datos (AEPD)</strong> en <a href="https://www.aepd.es" style={{ color: '#3B82F6' }}>www.aepd.es</a>.</p>
+      <p>Para ejercer estos derechos, escríbenos a <strong>hello@st4rtup.com</strong>. Responderemos en un plazo máximo de 30 días. También puedes presentar una reclamación ante la <strong>Agencia Española de Protección de Datos (AEPD)</strong> en <a href="https://www.aepd.es" style={{ color: '#1E6FD9' }}>www.aepd.es</a>.</p>
 
       <S>9. Cookies</S>
-      <p>Utilizamos cookies para el funcionamiento del servicio. Consulta nuestra <Link to="/cookies" style={{ color: '#3B82F6' }}>Política de Cookies</Link> para más detalles.</p>
+      <p>Utilizamos cookies para el funcionamiento del servicio. Consulta nuestra <Link to="/cookies" style={{ color: '#1E6FD9' }}>Política de Cookies</Link> para más detalles.</p>
 
       <S>10. Seguridad</S>
       <ul style={{ paddingLeft: 20, marginBottom: 16 }}>

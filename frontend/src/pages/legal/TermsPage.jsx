@@ -11,7 +11,7 @@ export default function TermsPage() {
       <p>St4rtup es una plataforma SaaS de gestión comercial (CRM) y marketing diseñada para startups y empresas B2B. Estos términos constituyen un acuerdo vinculante entre el usuario ("tú") y la entidad operadora de St4rtup ("nosotros").</p>
 
       <S>2. Descripción del servicio</S>
-      <p>El Servicio incluye, según el plan contratado: gestión de leads y pipeline, email marketing, automatizaciones, inteligencia artificial aplicada a ventas, SEO, integraciones con terceros, llamadas IA, deal room, y herramientas de reporting. Las funcionalidades específicas de cada plan están detalladas en la <a href="/pricing" style={{ color: '#3B82F6' }}>página de precios</a>.</p>
+      <p>El Servicio incluye, según el plan contratado: gestión de leads y pipeline, email marketing, automatizaciones, inteligencia artificial aplicada a ventas, SEO, integraciones con terceros, llamadas IA, deal room, y herramientas de reporting. Las funcionalidades específicas de cada plan están detalladas en la <a href="/pricing" style={{ color: '#1E6FD9' }}>página de precios</a>.</p>
 
       <S>3. Registro y cuenta</S>
       <p>Para usar el Servicio debes crear una cuenta proporcionando información veraz y actualizada. Eres responsable de mantener la confidencialidad de tus credenciales de acceso. Debes notificarnos inmediatamente cualquier uso no autorizado de tu cuenta.</p>

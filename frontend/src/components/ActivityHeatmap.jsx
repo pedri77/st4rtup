@@ -4,7 +4,7 @@ import { dashboardApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#3B82F6',
+  cyan: '#1E6FD9',
 }
 const fontMono = "'IBM Plex Mono', monospace"
 const fontDisplay = "'Rajdhani', sans-serif"

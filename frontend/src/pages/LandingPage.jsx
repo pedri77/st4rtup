@@ -69,13 +69,13 @@ export default function LandingPage() {
       {/* Nav */}
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E2E8F0' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
-          <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 24, fontWeight: 800, background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>st4rtup</span>
+          <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 36 }} /></Link>
           <div style={{ display: 'flex', gap: 32, alignItems: 'center' }} className="hidden md:flex">
             <a href="#features" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>Features</a>
             <a href="#pricing" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>Pricing</a>
             <a href="#testimonials" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>Testimonios</a>
-            <Link to="/login" style={{ fontSize: 14, color: '#3B82F6', textDecoration: 'none', fontWeight: 600 }}>Login</Link>
-            <Link to="/login" style={{ padding: '8px 20px', backgroundColor: '#3B82F6', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
+            <Link to="/login" style={{ fontSize: 14, color: '#1E6FD9', textDecoration: 'none', fontWeight: 600 }}>Login</Link>
+            <Link to="/login" style={{ padding: '8px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
           </div>
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -85,18 +85,18 @@ export default function LandingPage() {
           <div className="md:hidden" style={{ padding: '16px 24px', borderTop: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', gap: 16 }}>
             <a href="#features" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Features</a>
             <a href="#pricing" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>Pricing</a>
-            <Link to="/login" style={{ padding: '10px 20px', backgroundColor: '#3B82F6', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none', textAlign: 'center' }}>Empezar gratis</Link>
+            <Link to="/login" style={{ padding: '10px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none', textAlign: 'center' }}>Empezar gratis</Link>
           </div>
         )}
       </nav>
 
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #EFF6FF 100%)', padding: '80px 24px 100px' }}>
+      <section style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF7ED 100%)', padding: '80px 24px 100px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 60, flexWrap: 'wrap' }}>
           <div style={{ flex: '1 1 500px' }}>
             <FadeIn>
               <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(36px, 5vw, 56px)', fontWeight: 800, lineHeight: 1.1, marginBottom: 20, color: '#0F172A' }}>
-                Tu CRM de ventas.<br /><span style={{ background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Simple. Potente. Para startups.</span>
+                Tu CRM de ventas.<br /><span style={{ background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Simple. Potente. Para startups.</span>
               </h1>
             </FadeIn>
             <FadeIn delay={0.1}>
@@ -106,7 +106,7 @@ export default function LandingPage() {
             </FadeIn>
             <FadeIn delay={0.2}>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: '#3B82F6', color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(59,130,246,0.4)' }}>
+                <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(59,130,246,0.4)' }}>
                   Empezar gratis <ArrowRight size={18} />
                 </Link>
                 <a href="#features" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', border: '2px solid #E2E8F0', color: '#0F172A', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none' }}>
@@ -118,7 +118,7 @@ export default function LandingPage() {
           <FadeIn delay={0.3}>
             <div style={{ flex: '1 1 400px', background: 'white', borderRadius: 16, padding: 24, boxShadow: '0 20px 60px rgba(0,0,0,0.08)', border: '1px solid #E2E8F0' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 16 }}>
-                {[{ label: 'Revenue', value: '€47.2K', color: '#3B82F6' }, { label: 'Leads', value: '284', color: '#8B5CF6' }, { label: 'Conversión', value: '12.4%', color: '#10B981' }].map(k => (
+                {[{ label: 'Revenue', value: '€47.2K', color: '#1E6FD9' }, { label: 'Leads', value: '284', color: '#F5820B' }, { label: 'Conversión', value: '12.4%', color: '#10B981' }].map(k => (
                   <div key={k.label} style={{ backgroundColor: '#F8FAFC', borderRadius: 10, padding: 12, textAlign: 'center' }}>
                     <p style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1, color: '#64748B', margin: 0 }}>{k.label}</p>
                     <p style={{ fontSize: 22, fontWeight: 700, color: k.color, margin: '4px 0 0', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{k.value}</p>
@@ -127,7 +127,7 @@ export default function LandingPage() {
               </div>
               <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 80 }}>
                 {[40, 55, 35, 70, 50, 85, 65, 90, 75, 95, 80, 100].map((h, i) => (
-                  <div key={i} style={{ flex: 1, height: `${h}%`, borderRadius: 4, background: `linear-gradient(180deg, #3B82F6, #8B5CF6)`, opacity: 0.7 + (h / 500) }} />
+                  <div key={i} style={{ flex: 1, height: `${h}%`, borderRadius: 4, background: `linear-gradient(180deg, #1E6FD9, #F5820B)`, opacity: 0.7 + (h / 500) }} />
                 ))}
               </div>
             </div>
@@ -152,7 +152,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: 60 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>Features</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: '#1E6FD9', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>Features</p>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 36, fontWeight: 800, marginBottom: 16 }}>Todo lo que necesitas para vender más</h2>
               <p style={{ fontSize: 16, color: '#64748B', maxWidth: 600, margin: '0 auto' }}>9 módulos integrados que cubren el ciclo completo: desde captación hasta cierre y post-venta.</p>
             </div>
@@ -161,10 +161,10 @@ export default function LandingPage() {
             {FEATURES.map((f, i) => (
               <FadeIn key={f.title} delay={i * 0.05}>
                 <div style={{ padding: 28, borderRadius: 16, border: '1px solid #E2E8F0', backgroundColor: 'white', transition: 'all 0.3s', cursor: 'default' }}
-                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.06)'; e.currentTarget.style.borderColor = '#3B82F6' }}
+                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.06)'; e.currentTarget.style.borderColor = '#1E6FD9' }}
                   onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#E2E8F0' }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 10, background: 'linear-gradient(135deg, #EFF6FF, #EDE9FE)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                    <f.icon size={22} color="#3B82F6" />
+                  <div style={{ width: 44, height: 44, borderRadius: 10, background: 'linear-gradient(135deg, #FFF7ED, #FFF7ED)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                    <f.icon size={22} color="#1E6FD9" />
                   </div>
                   <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{f.title}</h3>
                   <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.6 }}>{f.desc}</p>
@@ -180,14 +180,14 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: 60 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#8B5CF6', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>Cómo funciona</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: '#F5820B', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>Cómo funciona</p>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 36, fontWeight: 800 }}>3 pasos para vender más</h2>
             </div>
           </FadeIn>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 32 }}>
             {[
-              { step: '01', title: 'Conecta', desc: 'Integra Gmail, Stripe, WhatsApp y 25+ herramientas en 5 minutos. Sin código.', color: '#3B82F6' },
-              { step: '02', title: 'Automatiza', desc: '22 automatizaciones listas: scoring, emails, alertas, follow-ups. Actívalas con un click.', color: '#8B5CF6' },
+              { step: '01', title: 'Conecta', desc: 'Integra Gmail, Stripe, WhatsApp y 25+ herramientas en 5 minutos. Sin código.', color: '#1E6FD9' },
+              { step: '02', title: 'Automatiza', desc: '22 automatizaciones listas: scoring, emails, alertas, follow-ups. Actívalas con un click.', color: '#F5820B' },
               { step: '03', title: 'Vende', desc: 'Cierra más deals con IA como copiloto. Dashboard en tiempo real con 14 grafos y KPIs.', color: '#10B981' },
             ].map((s, i) => (
               <FadeIn key={s.step} delay={i * 0.1}>
@@ -207,7 +207,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: 60 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>Pricing</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: '#1E6FD9', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>Pricing</p>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 36, fontWeight: 800, marginBottom: 16 }}>Planes para cada etapa</h2>
               <p style={{ fontSize: 16, color: '#64748B' }}>Sin tarjeta de crédito. Cancela cuando quieras.</p>
             </div>
@@ -217,11 +217,11 @@ export default function LandingPage() {
               <FadeIn key={p.name} delay={i * 0.1}>
                 <div style={{
                   padding: 32, borderRadius: 16, backgroundColor: 'white',
-                  border: p.popular ? '2px solid #3B82F6' : '1px solid #E2E8F0',
+                  border: p.popular ? '2px solid #1E6FD9' : '1px solid #E2E8F0',
                   boxShadow: p.popular ? '0 10px 40px rgba(59,130,246,0.15)' : 'none',
                   position: 'relative', transform: p.popular ? 'scale(1.02)' : 'none',
                 }}>
-                  {p.popular && <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', padding: '4px 16px', backgroundColor: '#3B82F6', color: 'white', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>Más popular</span>}
+                  {p.popular && <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', padding: '4px 16px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>Más popular</span>}
                   <h3 style={{ fontSize: 22, fontWeight: 700, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{p.name}</h3>
                   <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.desc}</p>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 24 }}>
@@ -230,7 +230,7 @@ export default function LandingPage() {
                   </div>
                   <Link to="/login" style={{
                     display: 'block', textAlign: 'center', padding: '12px 24px', borderRadius: 10,
-                    backgroundColor: p.popular ? '#3B82F6' : '#F8FAFC', color: p.popular ? 'white' : '#0F172A',
+                    backgroundColor: p.popular ? '#1E6FD9' : '#F8FAFC', color: p.popular ? 'white' : '#0F172A',
                     border: p.popular ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, textDecoration: 'none', marginBottom: 24,
                   }}>{p.cta}</Link>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -252,7 +252,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: 60 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#8B5CF6', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>Testimonios</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: '#F5820B', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>Testimonios</p>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 36, fontWeight: 800 }}>Lo que dicen nuestros clientes</h2>
             </div>
           </FadeIn>
@@ -265,7 +265,7 @@ export default function LandingPage() {
                   </div>
                   <p style={{ fontSize: 15, color: '#334155', lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>"{t.quote}"</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14 }}>{t.name[0]}</div>
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14 }}>{t.name[0]}</div>
                     <div>
                       <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>{t.name}</p>
                       <p style={{ fontSize: 12, color: '#64748B', margin: 0 }}>{t.role}</p>
@@ -280,12 +280,12 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section style={{ padding: '100px 24px' }}>
-        <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', padding: '60px 40px', borderRadius: 24, background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', padding: '60px 40px', borderRadius: 24, background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.1)' }} />
           <div style={{ position: 'absolute', bottom: -60, left: -60, width: 300, height: 300, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.05)' }} />
           <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: 'white', marginBottom: 16, position: 'relative' }}>Empieza a vender más. Hoy.</h2>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.8)', marginBottom: 32, position: 'relative' }}>Sin tarjeta de crédito. Setup en 5 minutos. Cancela cuando quieras.</p>
-          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: 'white', color: '#3B82F6', borderRadius: 12, fontSize: 16, fontWeight: 700, textDecoration: 'none', position: 'relative', boxShadow: '0 4px 14px rgba(0,0,0,0.15)' }}>
+          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: 'white', color: '#1E6FD9', borderRadius: 12, fontSize: 16, fontWeight: 700, textDecoration: 'none', position: 'relative', boxShadow: '0 4px 14px rgba(0,0,0,0.15)' }}>
             Empezar gratis <ChevronRight size={18} />
           </Link>
         </div>
@@ -296,7 +296,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 40 }}>
             <div>
-              <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 22, fontWeight: 800, background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>st4rtup</span>
+              <img src="/logo.png" alt="st4rtup" style={{ height: 30 }} />
               <p style={{ fontSize: 13, color: '#94A3B8', marginTop: 12, lineHeight: 1.6 }}>CRM de ventas y marketing para startups. Simple, potente, con IA.</p>
             </div>
             {[

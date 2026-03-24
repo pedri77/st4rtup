@@ -10,7 +10,7 @@ import { chatApi } from '@/services/api'
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
   border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#3B82F6', purple: '#8B5CF6', destructive: '#EF4444',
+  cyan: '#1E6FD9', purple: '#F5820B', destructive: '#EF4444',
   success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"

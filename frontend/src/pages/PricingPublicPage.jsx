@@ -101,10 +101,10 @@ function Nav() {
   return (
     <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E2E8F0' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
-        <Link to="/" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 24, fontWeight: 800, background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textDecoration: 'none' }}>st4rtup</Link>
+        <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 36 }} /></Link>
         <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
           {NAV_LINKS.map(l => <a key={l.label} href={l.href} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{l.label}</a>)}
-          <Link to="/login" style={{ padding: '8px 20px', backgroundColor: '#3B82F6', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
+          <Link to="/login" style={{ padding: '8px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
         </div>
       </div>
     </nav>
@@ -117,7 +117,7 @@ function Footer() {
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 40 }}>
           <div>
-            <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 22, fontWeight: 800, background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>st4rtup</span>
+            <img src="/logo.png" alt="st4rtup" style={{ height: 30 }} />
             <p style={{ fontSize: 13, color: '#94A3B8', marginTop: 12 }}>CRM de ventas y marketing para startups.</p>
           </div>
           {[
@@ -150,7 +150,7 @@ export default function PricingPublicPage() {
       <Nav />
 
       {/* Hero */}
-      <section style={{ padding: '80px 24px 40px', textAlign: 'center', background: 'linear-gradient(180deg, #FFFFFF 0%, #EFF6FF 100%)' }}>
+      <section style={{ padding: '80px 24px 40px', textAlign: 'center', background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF7ED 100%)' }}>
         <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, marginBottom: 16 }}>Planes para cada etapa de tu startup</h1>
         <p style={{ fontSize: 16, color: '#64748B', marginBottom: 32, maxWidth: 500, margin: '0 auto 32px' }}>Sin tarjeta de crédito. Cancela cuando quieras. Migra tus datos en cualquier momento.</p>
 
@@ -165,8 +165,8 @@ export default function PricingPublicPage() {
         {/* Plan Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, maxWidth: 1000, margin: '0 auto' }}>
           {PLANS.map(p => (
-            <div key={p.name} style={{ padding: 32, borderRadius: 16, backgroundColor: 'white', border: p.popular ? '2px solid #3B82F6' : '1px solid #E2E8F0', boxShadow: p.popular ? '0 10px 40px rgba(59,130,246,0.12)' : '0 1px 3px rgba(0,0,0,0.04)', position: 'relative', textAlign: 'left' }}>
-              {p.popular && <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', padding: '4px 16px', backgroundColor: '#3B82F6', color: 'white', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>Más popular</span>}
+            <div key={p.name} style={{ padding: 32, borderRadius: 16, backgroundColor: 'white', border: p.popular ? '2px solid #1E6FD9' : '1px solid #E2E8F0', boxShadow: p.popular ? '0 10px 40px rgba(59,130,246,0.12)' : '0 1px 3px rgba(0,0,0,0.04)', position: 'relative', textAlign: 'left' }}>
+              {p.popular && <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', padding: '4px 16px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>Más popular</span>}
               <h3 style={{ fontSize: 22, fontWeight: 700, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{p.name}</h3>
               <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.desc}</p>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
@@ -175,7 +175,7 @@ export default function PricingPublicPage() {
               </div>
               {annual && p.monthly > 0 && <p style={{ fontSize: 12, color: '#10B981', marginBottom: 16 }}>Ahorras €{(p.monthly - p.annual) * 12}/año</p>}
               <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.users} usuarios · {p.leads} leads</p>
-              <Link to="/login" style={{ display: 'block', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: p.ctaStyle === 'filled' ? '#3B82F6' : '#F8FAFC', color: p.ctaStyle === 'filled' ? 'white' : '#0F172A', border: p.ctaStyle === 'filled' ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>{p.cta}</Link>
+              <Link to="/login" style={{ display: 'block', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: p.ctaStyle === 'filled' ? '#1E6FD9' : '#F8FAFC', color: p.ctaStyle === 'filled' ? 'white' : '#0F172A', border: p.ctaStyle === 'filled' ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>{p.cta}</Link>
             </div>
           ))}
         </div>
@@ -232,10 +232,10 @@ export default function PricingPublicPage() {
 
       {/* CTA */}
       <section style={{ padding: '80px 24px' }}>
-        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', padding: '50px 40px', borderRadius: 24, background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)' }}>
+        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', padding: '50px 40px', borderRadius: 24, background: 'linear-gradient(135deg, #1E6FD9, #F5820B)' }}>
           <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 32, fontWeight: 800, color: 'white', marginBottom: 16 }}>¿Listo para vender más?</h2>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.8)', marginBottom: 32 }}>Empieza gratis hoy. Setup en 5 minutos.</p>
-          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: 'white', color: '#3B82F6', borderRadius: 12, fontSize: 16, fontWeight: 700, textDecoration: 'none' }}>Empezar gratis <ArrowRight size={18} /></Link>
+          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: 'white', color: '#1E6FD9', borderRadius: 12, fontSize: 16, fontWeight: 700, textDecoration: 'none' }}>Empezar gratis <ArrowRight size={18} /></Link>
         </div>
       </section>
 
