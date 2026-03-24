@@ -118,7 +118,7 @@ function App() {
 
         {/* Protected routes */}
         <Route
-          path="/"
+          path="/app"
           element={
             <PrivateRoute>
               <Layout />

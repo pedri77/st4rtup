@@ -18,7 +18,7 @@ export default function LoginPage() {
 
     try {
       await signIn(email, password)
-      navigate('/')
+      navigate('/app')
     } catch (err) {
       console.error('Login error:', err)
       setError('Credenciales inválidas. Por favor, verifica tu email y contraseña.')
