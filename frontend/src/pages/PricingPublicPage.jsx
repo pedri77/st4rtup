@@ -12,20 +12,20 @@ const PLANS = [
   {
     name: 'Starter', desc: 'Para empezar a vender', popular: false,
     monthly: 0, annual: 0,
-    users: '3', leads: '100',
+    users: '1', leads: '100',
     cta: 'Empezar gratis', ctaStyle: 'outline',
   },
   {
     name: 'Growth', desc: 'Para crecer rápido', popular: true,
-    monthly: 49, annual: 41,
-    users: '10', leads: '5.000',
+    monthly: 19, annual: 16,
+    users: '3', leads: '5.000',
     cta: 'Prueba 14 días gratis', ctaStyle: 'filled',
   },
   {
     name: 'Scale', desc: 'Para escalar sin límites', popular: false,
-    monthly: 149, annual: 124,
-    users: 'Ilimitados', leads: 'Ilimitados',
-    cta: 'Contactar ventas', ctaStyle: 'outline',
+    monthly: 49, annual: 41,
+    users: '10', leads: 'Ilimitados',
+    cta: 'Empezar prueba', ctaStyle: 'outline',
   },
 ]
 
