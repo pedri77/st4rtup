@@ -34,3 +34,6 @@ frontend/dist/
 # Database
 *.db
 *.sqlite3
+
+# Blog image prompts (local only)
+content/blog/IMAGE_PROMPTS.md

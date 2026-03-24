@@ -21,6 +21,7 @@ const ReferralPage = lazy(() => import('./pages/ReferralPage'))
 const BadgesPage = lazy(() => import('./pages/BadgesPage'))
 const DemoPage = lazy(() => import('./pages/DemoPage'))
 const BlogPage = lazy(() => import('./pages/BlogPage'))
+const BlogArticlePage = lazy(() => import('./pages/BlogArticlePage'))
 const ChangelogPage = lazy(() => import('./pages/ChangelogPage'))
 const StatusPage = lazy(() => import('./pages/StatusPage'))
 const ComparePage = lazy(() => import('./pages/ComparePage'))
@@ -120,6 +121,7 @@ function App() {
         <Route path="/pricing" element={<PricingPublicPage />} />
         <Route path="/demo" element={<Suspense fallback={<PageLoader />}><DemoPage /></Suspense>} />
         <Route path="/blog" element={<Suspense fallback={<PageLoader />}><BlogPage /></Suspense>} />
+        <Route path="/blog/:slug" element={<Suspense fallback={<PageLoader />}><BlogArticlePage /></Suspense>} />
         <Route path="/changelog" element={<Suspense fallback={<PageLoader />}><ChangelogPage /></Suspense>} />
         <Route path="/status" element={<Suspense fallback={<PageLoader />}><StatusPage /></Suspense>} />
         <Route path="/vs/:competitor" element={<Suspense fallback={<PageLoader />}><ComparePage /></Suspense>} />
