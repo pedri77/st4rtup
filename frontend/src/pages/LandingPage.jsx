@@ -27,10 +27,11 @@ const T = {
       { n: '02', title: 'Automatiza', desc: '22 automatizaciones listas: puntuación, emails, alertas, seguimientos. Actívalas con un clic.' },
       { n: '03', title: 'Vende', desc: 'Cierra más acuerdos con IA como copiloto. Panel en tiempo real con 14 gráficos y KPIs.' },
     ]},
-    pricing: { tag: 'Precios', h2: 'Planes para cada etapa', sub: 'Sin tarjeta de crédito. Cancela cuando quieras.', popular: 'Más popular', plans: [
+    pricing: { tag: 'Precios', h2: 'Planes para cada etapa', sub: 'Sin tarjeta de crédito. Cancela cuando quieras.', popular: 'Más popular', contact: 'Contactar', plans: [
       { name: 'Starter', price: '0', desc: 'Para empezar a vender', features: ['3 usuarios', '100 leads', 'Pipeline básico', 'Email integrado', '1 integración'], cta: 'Empezar gratis' },
-      { name: 'Growth', price: '49', desc: 'Para crecer rápido', features: ['10 usuarios', 'Leads ilimitados', 'Hub de Marketing completo', 'IA integrada (4 agentes)', 'Todas las integraciones', '22 automatizaciones', 'Centro de SEO', 'Analíticas avanzadas'], cta: 'Prueba 14 días gratis' },
-      { name: 'Scale', price: '149', desc: 'Para escalar sin límites', features: ['Usuarios ilimitados', 'Todo en Growth', 'Sala de Negociación + NDA', 'WhatsApp Business + Bot', 'API pública', 'Soporte prioritario', 'Onboarding personalizado', 'Stripe + PayPal integrado'], cta: 'Contactar ventas' },
+      { name: 'Growth', price: '19', desc: 'Para crecer rápido', features: ['10 usuarios', 'Leads ilimitados', 'Hub de Marketing completo', 'IA integrada (4 agentes)', 'Todas las integraciones', '22 automatizaciones', 'Centro de SEO', 'Analíticas avanzadas'], cta: 'Prueba 14 días gratis' },
+      { name: 'Scale', price: '49', desc: 'Para escalar sin límites', features: ['50 usuarios', 'Todo en Growth', 'Sala de Negociación + NDA', 'WhatsApp Business + Bot', 'API pública', 'Soporte prioritario', 'Onboarding personalizado', 'Stripe + PayPal integrado'], cta: 'Empezar prueba' },
+      { name: 'Enterprise', price: null, desc: 'Para grandes equipos', features: ['Usuarios ilimitados', 'Todo en Scale', 'SSO / SAML', 'SLA 99.9%', 'Gestor de cuenta dedicado', 'Formación personalizada', 'Facturación por transferencia', 'Integraciones a medida'], cta: 'Contactar ventas' },
     ]},
     testimonials: { tag: 'Testimonios', h2: 'Lo que dicen nuestros clientes', items: [
       { quote: 'Pasamos de una hoja de cálculo a cerrar 3 veces más acuerdos en 2 meses. El pipeline visual y las automatizaciones lo cambiaron todo.', name: 'María García', role: 'CEO, TechStartup' },
@@ -61,10 +62,11 @@ const T = {
       { n: '02', title: 'Automate', desc: '22 ready-to-use automations: scoring, emails, alerts, follow-ups. Activate with one click.' },
       { n: '03', title: 'Sell', desc: 'Close more deals with AI as your copilot. Real-time dashboard with 14 charts and KPIs.' },
     ]},
-    pricing: { tag: 'Pricing', h2: 'Plans for every stage', sub: 'No credit card required. Cancel anytime.', popular: 'Most popular', plans: [
+    pricing: { tag: 'Pricing', h2: 'Plans for every stage', sub: 'No credit card required. Cancel anytime.', popular: 'Most popular', contact: 'Contact us', plans: [
       { name: 'Starter', price: '0', desc: 'To start selling', features: ['3 users', '100 leads', 'Basic pipeline', 'Integrated email', '1 integration'], cta: 'Get started free' },
-      { name: 'Growth', price: '49', desc: 'To grow fast', features: ['10 users', 'Unlimited leads', 'Full Marketing Hub', 'Integrated AI (4 agents)', 'All integrations', '22 automations', 'SEO Command Center', 'Advanced analytics'], cta: '14-day free trial' },
-      { name: 'Scale', price: '149', desc: 'To scale without limits', features: ['Unlimited users', 'Everything in Growth', 'Deal Room + NDA', 'WhatsApp Business + Bot', 'Public API', 'Priority support', 'Custom onboarding', 'Stripe + PayPal'], cta: 'Contact sales' },
+      { name: 'Growth', price: '19', desc: 'To grow fast', features: ['10 users', 'Unlimited leads', 'Full Marketing Hub', 'Integrated AI (4 agents)', 'All integrations', '22 automations', 'SEO Command Center', 'Advanced analytics'], cta: '14-day free trial' },
+      { name: 'Scale', price: '49', desc: 'To scale without limits', features: ['50 users', 'Everything in Growth', 'Deal Room + NDA', 'WhatsApp Business + Bot', 'Public API', 'Priority support', 'Custom onboarding', 'Stripe + PayPal'], cta: 'Start free trial' },
+      { name: 'Enterprise', price: null, desc: 'For large teams', features: ['Unlimited users', 'Everything in Scale', 'SSO / SAML', '99.9% SLA', 'Dedicated account manager', 'Custom training', 'Invoice billing', 'Custom integrations'], cta: 'Contact sales' },
     ]},
     testimonials: { tag: 'Testimonials', h2: 'What our customers say', items: [
       { quote: 'We went from a spreadsheet to closing 3x more deals in 2 months. The visual pipeline and automations changed everything.', name: 'María García', role: 'CEO, TechStartup' },
@@ -104,13 +106,13 @@ export default function LandingPage() {
   const t = T[lang]
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#0F172A' }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
       {/* Nav */}
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E2E8F0' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 72 }}>
-          <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 56 }} /></Link>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
+          <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
           <div style={{ display: 'flex', gap: 28, alignItems: 'center' }} className="hidden md:flex">
             <a href="#features" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{t.nav.features}</a>
             <a href="#pricing" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{t.nav.pricing}</a>
@@ -146,7 +148,7 @@ export default function LandingPage() {
             <FadeIn delay={0.2}>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(30,111,217,0.4)' }}>{t.hero.cta1} <ArrowRight size={18} /></Link>
-                <a href="#features" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', border: '2px solid #E2E8F0', color: '#0F172A', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none' }}>{t.hero.cta2}</a>
+                <a href="#features" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', border: '2px solid #E2E8F0', color: '#1A1A2E', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none' }}>{t.hero.cta2}</a>
               </div>
             </FadeIn>
           </div>
@@ -244,20 +246,23 @@ export default function LandingPage() {
               <p style={{ fontSize: 16, color: '#64748B' }}>{t.pricing.sub}</p>
             </div>
           </FadeIn>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20, alignItems: 'start' }}>
             {t.pricing.plans.map((p, i) => {
               const pop = i === 1
               return (
                 <FadeIn key={p.name} delay={i * 0.1}>
-                  <div style={{ padding: 32, borderRadius: 16, backgroundColor: 'white', border: pop ? '2px solid #1E6FD9' : '1px solid #E2E8F0', boxShadow: pop ? '0 10px 40px rgba(30,111,217,0.15)' : 'none', position: 'relative', transform: pop ? 'scale(1.02)' : 'none' }}>
+                  <div style={{ padding: 28, borderRadius: 16, backgroundColor: 'white', border: pop ? '2px solid #1E6FD9' : '1px solid #E2E8F0', boxShadow: pop ? '0 10px 40px rgba(30,111,217,0.15)' : 'none', position: 'relative', transform: pop ? 'scale(1.02)' : 'none' }}>
                     {pop && <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', padding: '4px 16px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{t.pricing.popular}</span>}
-                    <h3 style={{ fontSize: 22, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'" }}>{p.name}</h3>
+                    <h3 style={{ fontSize: 20, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'" }}>{p.name}</h3>
                     <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.desc}</p>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 24 }}>
-                      <span style={{ fontSize: 48, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'" }}>€{p.price}</span>
-                      <span style={{ fontSize: 16, color: '#64748B' }}>/mes</span>
+                      {p.price !== null ? (
+                        <><span style={{ fontSize: 44, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'" }}>€{p.price}</span><span style={{ fontSize: 15, color: '#64748B' }}>/mes</span></>
+                      ) : (
+                        <span style={{ fontSize: 28, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'", color: '#1E6FD9' }}>{t.pricing.contact}</span>
+                      )}
                     </div>
-                    <Link to="/login" style={{ display: 'block', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: pop ? '#1E6FD9' : '#F8FAFC', color: pop ? 'white' : '#0F172A', border: pop ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, textDecoration: 'none', marginBottom: 24 }}>{p.cta}</Link>
+                    <Link to="/login" style={{ display: 'block', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: pop ? '#1E6FD9' : '#F8FAFC', color: pop ? 'white' : '#1A1A2E', border: pop ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, textDecoration: 'none', marginBottom: 24 }}>{p.cta}</Link>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
                       {p.features.map(f => <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#475569' }}><Check size={16} color="#10B981" /> {f}</li>)}
                     </ul>
@@ -283,7 +288,7 @@ export default function LandingPage() {
               <FadeIn key={item.name} delay={i * 0.1}>
                 <div style={{ padding: 28, borderRadius: 16, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
                   <div style={{ display: 'flex', gap: 2, marginBottom: 16 }}>{[1,2,3,4,5].map(j => <Star key={j} size={16} fill="#F59E0B" color="#F59E0B" />)}</div>
-                  <p style={{ fontSize: 15, color: '#334155', lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>"{item.quote}"</p>
+                  <p style={{ fontSize: 15, color: '#2D2D44', lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>"{item.quote}"</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14 }}>{item.name[0]}</div>
                     <div>
@@ -310,11 +315,11 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer style={{ padding: '60px 24px 40px', backgroundColor: '#0F172A', color: 'white' }}>
+      <footer style={{ padding: '60px 24px 40px', backgroundColor: '#1A1A2E', color: 'white' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 40 }}>
             <div>
-              <img src="/logo.png" alt="st4rtup" style={{ height: 44 }} />
+              <img src="/logo.png" alt="st4rtup" style={{ height: 60 }} />
               <p style={{ fontSize: 13, color: '#94A3B8', marginTop: 12, lineHeight: 1.6 }}>{t.footer.desc}</p>
             </div>
             {[

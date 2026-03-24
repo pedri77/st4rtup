@@ -113,7 +113,7 @@ function Nav() {
 
 function Footer() {
   return (
-    <footer style={{ padding: '60px 24px 40px', backgroundColor: '#0F172A', color: 'white' }}>
+    <footer style={{ padding: '60px 24px 40px', backgroundColor: '#1A1A2E', color: 'white' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 40 }}>
           <div>
@@ -145,7 +145,7 @@ export default function PricingPublicPage() {
   const [openCats, setOpenCats] = useState({})
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#0F172A' }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
       <Nav />
 
@@ -156,8 +156,8 @@ export default function PricingPublicPage() {
 
         {/* Toggle */}
         <div style={{ display: 'inline-flex', padding: 4, backgroundColor: '#F1F5F9', borderRadius: 10, marginBottom: 48 }}>
-          <button onClick={() => setAnnual(false)} style={{ padding: '8px 20px', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer', backgroundColor: !annual ? 'white' : 'transparent', color: !annual ? '#0F172A' : '#64748B', boxShadow: !annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>Mensual</button>
-          <button onClick={() => setAnnual(true)} style={{ padding: '8px 20px', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer', backgroundColor: annual ? 'white' : 'transparent', color: annual ? '#0F172A' : '#64748B', boxShadow: annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>
+          <button onClick={() => setAnnual(false)} style={{ padding: '8px 20px', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer', backgroundColor: !annual ? 'white' : 'transparent', color: !annual ? '#1A1A2E' : '#64748B', boxShadow: !annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>Mensual</button>
+          <button onClick={() => setAnnual(true)} style={{ padding: '8px 20px', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer', backgroundColor: annual ? 'white' : 'transparent', color: annual ? '#1A1A2E' : '#64748B', boxShadow: annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>
             Anual <span style={{ fontSize: 11, color: '#10B981', fontWeight: 700, marginLeft: 4 }}>-17%</span>
           </button>
         </div>
@@ -175,7 +175,7 @@ export default function PricingPublicPage() {
               </div>
               {annual && p.monthly > 0 && <p style={{ fontSize: 12, color: '#10B981', marginBottom: 16 }}>Ahorras €{(p.monthly - p.annual) * 12}/año</p>}
               <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.users} usuarios · {p.leads} leads</p>
-              <Link to="/login" style={{ display: 'block', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: p.ctaStyle === 'filled' ? '#1E6FD9' : '#F8FAFC', color: p.ctaStyle === 'filled' ? 'white' : '#0F172A', border: p.ctaStyle === 'filled' ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>{p.cta}</Link>
+              <Link to="/login" style={{ display: 'block', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: p.ctaStyle === 'filled' ? '#1E6FD9' : '#F8FAFC', color: p.ctaStyle === 'filled' ? 'white' : '#1A1A2E', border: p.ctaStyle === 'filled' ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>{p.cta}</Link>
             </div>
           ))}
         </div>
@@ -189,14 +189,14 @@ export default function PricingPublicPage() {
             {/* Header */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px 80px', padding: '16px 24px', backgroundColor: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
               <span style={{ fontSize: 13, fontWeight: 600, color: '#64748B' }}>Feature</span>
-              {['Starter', 'Growth', 'Scale'].map(n => <span key={n} style={{ fontSize: 13, fontWeight: 700, color: '#0F172A', textAlign: 'center' }}>{n}</span>)}
+              {['Starter', 'Growth', 'Scale'].map(n => <span key={n} style={{ fontSize: 13, fontWeight: 700, color: '#1A1A2E', textAlign: 'center' }}>{n}</span>)}
             </div>
             {/* Categories */}
             {FEATURES.map(cat => (
               <div key={cat.category}>
                 <button onClick={() => setOpenCats(prev => ({ ...prev, [cat.category]: !prev[cat.category] }))}
                   style={{ display: 'grid', gridTemplateColumns: '1fr 24px', width: '100%', padding: '14px 24px', backgroundColor: '#F8FAFC', border: 'none', borderBottom: '1px solid #E2E8F0', cursor: 'pointer', textAlign: 'left' }}>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: '#0F172A' }}>{cat.category}</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: '#1A1A2E' }}>{cat.category}</span>
                   {openCats[cat.category] ? <ChevronUp size={16} color="#64748B" /> : <ChevronDown size={16} color="#64748B" />}
                 </button>
                 {openCats[cat.category] && cat.items.map(item => (
@@ -221,7 +221,7 @@ export default function PricingPublicPage() {
           {FAQS.map((f, i) => (
             <div key={i} style={{ borderBottom: '1px solid #E2E8F0', paddingBottom: 0 }}>
               <button onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '16px 0', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', textAlign: 'left' }}>
-                <span style={{ fontSize: 15, fontWeight: 600, color: '#0F172A' }}>{f.q}</span>
+                <span style={{ fontSize: 15, fontWeight: 600, color: '#1A1A2E' }}>{f.q}</span>
                 {openFaq === i ? <ChevronUp size={18} color="#64748B" /> : <ChevronDown size={18} color="#64748B" />}
               </button>
               {openFaq === i && <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.7, paddingBottom: 16 }}>{f.a}</p>}
