@@ -300,14 +300,14 @@ export default function LandingPage() {
               <p style={{ fontSize: 13, color: '#94A3B8', marginTop: 12, lineHeight: 1.6 }}>CRM de ventas y marketing para startups. Simple, potente, con IA.</p>
             </div>
             {[
-              { title: 'Producto', links: ['Features', 'Pricing', 'Integraciones', 'API'] },
-              { title: 'Recursos', links: ['Blog', 'Documentación', 'Changelog', 'Status'] },
-              { title: 'Legal', links: ['Privacidad', 'Términos', 'Cookies', 'RGPD'] },
+              { title: 'Producto', links: [{ t: 'Features', h: '#features' }, { t: 'Pricing', h: '/pricing' }, { t: 'Integraciones', h: '#features' }] },
+              { title: 'Recursos', links: [{ t: 'Blog', h: '#' }, { t: 'Documentación', h: '#' }, { t: 'Status', h: '#' }] },
+              { title: 'Legal', links: [{ t: 'Privacidad', h: '/privacy' }, { t: 'Términos', h: '/terms' }, { t: 'Cookies', h: '/cookies' }] },
             ].map(col => (
               <div key={col.title}>
                 <p style={{ fontSize: 13, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1, color: '#94A3B8', marginBottom: 16 }}>{col.title}</p>
                 {col.links.map(l => (
-                  <p key={l} style={{ fontSize: 14, color: '#CBD5E1', margin: '8px 0', cursor: 'pointer' }}>{l}</p>
+                  <a key={l.t} href={l.h} style={{ display: 'block', fontSize: 14, color: '#CBD5E1', margin: '8px 0', textDecoration: 'none' }}>{l.t}</a>
                 ))}
               </div>
             ))}

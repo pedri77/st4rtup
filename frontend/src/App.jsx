@@ -9,6 +9,10 @@ import RoleGuard from './components/RoleGuard'
 import Layout from './components/layout/Layout'
 import LoginPage from './pages/LoginPage'
 import LandingPage from './pages/LandingPage'
+import PricingPublicPage from './pages/PricingPublicPage'
+const PrivacyPage = lazy(() => import('./pages/legal/PrivacyPage'))
+const TermsPage = lazy(() => import('./pages/legal/TermsPage'))
+const CookiesPage = lazy(() => import('./pages/legal/CookiesPage'))
 
 // Lazy-loaded pages (code splitting)
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
@@ -102,6 +106,10 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/pricing" element={<PricingPublicPage />} />
+        <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><PrivacyPage /></Suspense>} />
+        <Route path="/terms" element={<Suspense fallback={<PageLoader />}><TermsPage /></Suspense>} />
+        <Route path="/cookies" element={<Suspense fallback={<PageLoader />}><CookiesPage /></Suspense>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/survey/:token" element={<Suspense fallback={<PageLoader />}><SurveyPublicPage /></Suspense>} />
         <Route path="/proposal" element={<Suspense fallback={<PageLoader />}><ProposalViewPage /></Suspense>} />
