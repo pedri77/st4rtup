@@ -140,8 +140,12 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 60, flexWrap: 'wrap' }}>
           <div style={{ flex: '1 1 500px' }}>
             <FadeIn>
-              <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(36px, 5vw, 56px)', fontWeight: 800, lineHeight: 1.1, marginBottom: 20 }}>
-                {t.hero.h1a}<br /><span style={{ background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t.hero.h1b}</span>
+              <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(36px, 5vw, 56px)', fontWeight: 800, lineHeight: 1.15, marginBottom: 20 }}>
+                {t.hero.h1a}<br />
+                <span style={{ color: '#1E6FD9' }}>{lang === 'es' ? 'Simple' : 'Simple'}.</span>{' '}
+                <span style={{ color: '#3B8DE8' }}>{lang === 'es' ? 'Potente' : 'Powerful'}.</span>{' '}
+                <span style={{ color: '#5BA3EF' }}>{lang === 'es' ? 'Para' : 'For'}</span>{' '}
+                <span style={{ color: '#F5820B' }}>startups.</span>
               </h1>
             </FadeIn>
             <FadeIn delay={0.1}><p style={{ fontSize: 18, color: '#64748B', lineHeight: 1.7, marginBottom: 32, maxWidth: 500 }}>{t.hero.sub}</p></FadeIn>
