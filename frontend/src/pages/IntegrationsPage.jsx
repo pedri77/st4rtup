@@ -365,7 +365,7 @@ export default function IntegrationsPage() {
         <div className="rounded-xl p-4" style={{ backgroundColor: `${T.cyan}08`, border: `1px solid ${T.cyan}20` }}>
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-medium" style={{ color: T.fg }}>
-              Variables de entorno (Fly.io secrets): <span style={{ color: T.cyan }}>{envStatus.configured_count} configuradas</span>
+              Variables de entorno (Hetzner secrets): <span style={{ color: T.cyan }}>{envStatus.configured_count} configuradas</span>
             </p>
             {envStatus.llm_available ? (
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${T.success}15`, color: T.success }}>
@@ -1105,7 +1105,7 @@ function GeneralTab({ settings, onSave, saving, isAdmin }) {
             <h3 style={{ color: T.warning }} className="text-sm font-semibold">Variables de entorno</h3>
             <p style={{ color: T.fgMuted }} className="text-sm mt-1">
               Las API keys configuradas aqui se almacenan cifradas en la base de datos.
-              Alternativamente, puedes configurarlas como variables de entorno en Fly.io
+              Alternativamente, puedes configurarlas como variables de entorno en Hetzner
               (tienen prioridad sobre la configuracion de la UI).
             </p>
           </div>

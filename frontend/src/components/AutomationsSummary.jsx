@@ -7,8 +7,8 @@ import { clsx } from 'clsx'
 export default function AutomationsSummary() {
   const { data: stats, isLoading, isError } = useQuery({
     queryKey: ['automation-stats'],
-    queryFn: () => automationsApi.stats().then(r => r.data),
-    retry: 1,
+    queryFn: () => automationsApi.stats().then(r => r.data).catch(() => null),
+    retry: 0,
     staleTime: 60000,
   })
 

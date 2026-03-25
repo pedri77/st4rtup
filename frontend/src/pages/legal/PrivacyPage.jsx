@@ -64,7 +64,7 @@ export default function PrivacyPage() {
       <p>Compartimos datos únicamente con los proveedores necesarios para prestar el servicio:</p>
       <ul style={{ paddingLeft: 20, marginBottom: 16 }}>
         <li><strong>Supabase</strong> (autenticación) — UE/US con cláusulas contractuales tipo</li>
-        <li><strong>Fly.io</strong> (hosting backend y base de datos) — región CDG (París, UE)</li>
+        <li><strong>Hetzner</strong> (hosting backend y base de datos) — región CDG (París, UE)</li>
         <li><strong>Cloudflare</strong> (CDN y hosting frontend) — red global con DPA firmado</li>
         <li><strong>Stripe</strong> (pagos) — certificado PCI DSS Level 1</li>
         <li><strong>OpenAI / DeepSeek / Mistral</strong> (IA) — para funcionalidades de IA del CRM</li>

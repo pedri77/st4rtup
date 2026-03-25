@@ -28,8 +28,8 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 export default function ActivityHeatmap({ months = 12 }) {
   const { data } = useQuery({
     queryKey: ['dashboard-heatmap', months],
-    queryFn: () => dashboardApi.heatmap(months).then(r => r.data),
-    staleTime: 5 * 60 * 1000,
+    queryFn: () => dashboardApi.heatmap(months).then(r => r.data).catch(() => ({ days: [] })),
+    retry: 0, staleTime: 5 * 60 * 1000,
   })
 
   if (!data) return null

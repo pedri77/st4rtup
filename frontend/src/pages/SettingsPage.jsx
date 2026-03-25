@@ -369,7 +369,7 @@ function APITab() {
   })
 
   // Build integration status from real settings
-  // AI providers — check from envStatus (Fly.io secrets)
+  // AI providers — check from envStatus (Supabase secrets)
   const aiProviders = [
     { name: 'OpenAI', letter: 'OA', color: T.success, envKey: 'OPENAI_API_KEY' },
     { name: 'Mistral', letter: 'MI', color: T.warning, envKey: 'MISTRAL_API_KEY' },
@@ -403,7 +403,7 @@ function APITab() {
     { name: 'PostHog', letter: 'PH', color: T.warning, configKey: 'general_config', href: '/integrations' },
   ]
 
-  // Map configKey to env var names for services configured via Fly.io secrets
+  // Map configKey to env var names for services configured via Supabase secrets
   const CONFIG_TO_ENV = {
     hubspot_config: 'HUBSPOT_API_KEY',
     hunter_config: 'HUNTER_API_KEY',
@@ -419,7 +419,7 @@ function APITab() {
     // Check DB config first
     const cfg = settings?.[configKey]
     if (cfg && Object.values(cfg).some(v => v && v !== '' && v !== false)) return true
-    // Check env vars (Fly.io secrets)
+    // Check env vars (Supabase secrets)
     const envKey = CONFIG_TO_ENV[configKey]
     if (envKey && envVars[envKey]) return true
     return false
@@ -487,7 +487,7 @@ function APITab() {
       {/* Env status */}
       {envStatus && (
         <div className="rounded-lg p-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
-          <h2 className="text-base font-semibold mb-4" style={{ fontFamily: fontDisplay, color: T.fg }}>Variables de Entorno (Fly.io)</h2>
+          <h2 className="text-base font-semibold mb-4" style={{ fontFamily: fontDisplay, color: T.fg }}>Variables de Entorno (Supabase)</h2>
           <div className="grid grid-cols-2 gap-2">
             {Object.entries(envVars).map(([key, configured]) => (
               <div key={key} className="flex items-center gap-2 text-xs py-1">

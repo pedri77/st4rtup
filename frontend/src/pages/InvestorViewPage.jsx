@@ -31,8 +31,8 @@ const INVESTOR_KPIS = ['arr', 'mrr_growth', 'win_rate', 'pipeline_velocity', 'ac
 
 function formatValue(value, unit) {
   if (value === null || value === undefined) return '\u2014'
-  if (unit === 'eur') return `\u20AC${Number(value).toLocaleString('es-ES')}`
-  if (unit === 'eur_per_day') return `\u20AC${Number(value).toLocaleString('es-ES')}/dia`
+  if (unit === 'eur') return `\€${Number(value).toLocaleString('es-ES')}`
+  if (unit === 'eur_per_day') return `\€${Number(value).toLocaleString('es-ES')}/dia`
   if (unit === 'pct') return `${value}%`
   if (unit === 'days') return `${value} meses`
   if (unit === 'ratio') return `${value}x`

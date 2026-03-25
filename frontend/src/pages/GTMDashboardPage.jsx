@@ -59,8 +59,8 @@ function priorityStyle(priority) {
 
 function formatValue(value, unit) {
   if (value === null || value === undefined) return '\u2014'
-  if (unit === 'eur') return `\u20AC${Number(value).toLocaleString('es-ES')}`
-  if (unit === 'eur_per_day') return `\u20AC${Number(value).toLocaleString('es-ES')}/dia`
+  if (unit === 'eur') return `\€${Number(value).toLocaleString('es-ES')}`
+  if (unit === 'eur_per_day') return `\€${Number(value).toLocaleString('es-ES')}/dia`
   if (unit === 'pct') return `${value}%`
   if (unit === 'days') return `${value} dias`
   if (unit === 'ratio') return `${value}x`
@@ -252,9 +252,9 @@ export default function GTMDashboardPage() {
             </span>
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <span style={{ color: T.fgMuted }}>Total: <span style={{ color: T.fg, fontFamily: fontMono }} className="font-medium">\u20AC{data.budget.annual.toLocaleString('es-ES')}</span></span>
-            <span style={{ color: T.fgMuted }}>Gastado: <span style={{ color: T.cyan, fontFamily: fontMono }}>\u20AC{data.budget.total_spent.toLocaleString('es-ES')}</span></span>
-            <span style={{ color: T.fgMuted }}>Disponible: <span style={{ color: T.success, fontFamily: fontMono }}>\u20AC{data.budget.remaining.toLocaleString('es-ES')}</span></span>
+            <span style={{ color: T.fgMuted }}>Total: <span style={{ color: T.fg, fontFamily: fontMono }} className="font-medium">\€{data.budget.annual.toLocaleString('es-ES')}</span></span>
+            <span style={{ color: T.fgMuted }}>Gastado: <span style={{ color: T.cyan, fontFamily: fontMono }}>\€{data.budget.total_spent.toLocaleString('es-ES')}</span></span>
+            <span style={{ color: T.fgMuted }}>Disponible: <span style={{ color: T.success, fontFamily: fontMono }}>\€{data.budget.remaining.toLocaleString('es-ES')}</span></span>
           </div>
           <div className="w-full rounded-full h-2 mt-2" style={{ backgroundColor: T.muted }}>
             <div className="h-2 rounded-full"

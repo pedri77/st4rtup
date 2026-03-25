@@ -480,7 +480,7 @@ function ContentGenerator() {
               </p>
               <p style={{ fontSize: 10, color: T.fgMuted }}>
                 Configura <code style={{ color: T.cyan }}>MISTRAL_API_KEY</code> o <code style={{ color: T.cyan }}>OPENAI_API_KEY</code> en
-                Fly.io secrets, o añade la API key en <Link to="/app/integrations" style={{ color: T.cyan, textDecoration: 'underline' }}>Integraciones</Link> → IA.
+                Hetzner secrets, o añade la API key en <Link to="/app/integrations" style={{ color: T.cyan, textDecoration: 'underline' }}>Integraciones</Link> → IA.
               </p>
             </div>
           )}

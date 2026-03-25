@@ -98,14 +98,14 @@ function Panel({ title, children, className = '' }) {
 function WaterfallAndRadarSection() {
   const { data: waterfallData, isLoading: wfLoading } = useQuery({
     queryKey: ['dashboard-waterfall'],
-    queryFn: () => dashboardApi.waterfall().then(r => r.data),
-    staleTime: 120000,
+    queryFn: () => dashboardApi.waterfall().then(r => r.data).catch(() => ({ bars: [] })),
+    retry: 0, staleTime: 120000,
   })
 
   const { data: radarData, isLoading: radarLoading } = useQuery({
     queryKey: ['dashboard-activity-radar'],
-    queryFn: () => dashboardApi.activityRadar({ days: 7 }).then(r => r.data),
-    staleTime: 120000,
+    queryFn: () => dashboardApi.activityRadar({ days: 7 }).then(r => r.data).catch(() => ({ axes: [] })),
+    retry: 0, staleTime: 120000,
   })
 
   const waterfallItems = waterfallData?.items || waterfallData || []

@@ -13,13 +13,14 @@ const ICONS = {
 export default function AgentsSummary() {
   const { data: agents, isLoading } = useQuery({
     queryKey: ['agents-summary'],
-    queryFn: () => agentsApi.list().then(r => r.data.agents),
-    staleTime: 60000,
+    queryFn: () => agentsApi.list().then(r => r.data.agents).catch(() => []),
+    retry: 0, staleTime: 60000,
   })
 
   const { data: auditData } = useQuery({
     queryKey: ['agents-audit-summary'],
-    queryFn: () => agentsApi.audit({ limit: 5 }).then(r => r.data),
+    queryFn: () => agentsApi.audit({ limit: 5 }).then(r => r.data).catch(() => ({ items: [] })),
+    retry: 0,
     staleTime: 60000,
   })
 

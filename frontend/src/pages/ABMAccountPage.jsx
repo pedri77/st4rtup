@@ -81,11 +81,11 @@ export default function ABMAccountPage() {
           <p className="text-[10px] uppercase" style={{ color: T.fgMuted }}>Score ICP</p>
         </div>
         <div className="rounded-xl border p-3 text-center" style={{ backgroundColor: T.card, borderColor: T.border }}>
-          <p className="text-2xl font-bold" style={{ color: T.fg, fontFamily: fontMono }}>\u20AC{pipeline.total_value?.toLocaleString('es-ES')}</p>
+          <p className="text-2xl font-bold" style={{ color: T.fg, fontFamily: fontMono }}>\€{pipeline.total_value?.toLocaleString('es-ES')}</p>
           <p className="text-[10px] uppercase" style={{ color: T.fgMuted }}>Pipeline</p>
         </div>
         <div className="rounded-xl border p-3 text-center" style={{ backgroundColor: T.card, borderColor: T.border }}>
-          <p className="text-2xl font-bold" style={{ color: T.success, fontFamily: fontMono }}>\u20AC{pipeline.won_value?.toLocaleString('es-ES')}</p>
+          <p className="text-2xl font-bold" style={{ color: T.success, fontFamily: fontMono }}>\€{pipeline.won_value?.toLocaleString('es-ES')}</p>
           <p className="text-[10px] uppercase" style={{ color: T.fgMuted }}>Won</p>
         </div>
         <div className="rounded-xl border p-3 text-center" style={{ backgroundColor: T.card, borderColor: T.border }}>
@@ -149,7 +149,7 @@ export default function ABMAccountPage() {
                   <span className="text-xs font-medium" style={{ color: stageColor(o.stage) }}>{o.stage}</span>
                 </div>
                 <div className="flex items-center gap-3 mt-1 text-xs" style={{ color: T.fgMuted }}>
-                  <span style={{ fontFamily: fontMono }}>\u20AC{(o.value || 0).toLocaleString('es-ES')}</span>
+                  <span style={{ fontFamily: fontMono }}>\€{(o.value || 0).toLocaleString('es-ES')}</span>
                   {o.pricing_tier && <span className="px-1.5 py-0.5 rounded" style={{ backgroundColor: T.muted }}>{o.pricing_tier}</span>}
                   {o.competitor && <span>vs {o.competitor}</span>}
                   <span style={{ fontFamily: fontMono }}>{o.probability}%</span>

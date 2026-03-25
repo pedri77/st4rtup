@@ -90,7 +90,7 @@ const FAQS = [
   { q: '¿Puedo cambiar de plan en cualquier momento?', a: 'Sí. Puedes subir o bajar de plan cuando quieras. Al subir, se aplica la diferencia prorrateada. Al bajar, el cambio se aplica en el siguiente ciclo de facturación.' },
   { q: '¿Qué métodos de pago aceptáis?', a: 'Aceptamos tarjeta de crédito/débito (Visa, Mastercard, Amex) vía Stripe, y PayPal. Para planes Scale con facturación anual, también transferencia bancaria.' },
   { q: '¿Ofrecéis descuento para startups early-stage?', a: 'Sí. Si tu startup tiene menos de 2 años y está en fase pre-seed o seed, escríbenos a hello@st4rtup.com para un descuento del 50% durante el primer año.' },
-  { q: '¿Mis datos están seguros?', a: 'Absolutamente. Usamos cifrado AES-256 en reposo y TLS 1.3 en tránsito. Los datos se almacenan en la UE (Fly.io región CDG). Cumplimos con RGPD.' },
+  { q: '¿Mis datos están seguros?', a: 'Absolutamente. Usamos cifrado AES-256 en reposo y TLS 1.3 en tránsito. Los datos se almacenan en la UE (Supabase región CDG). Cumplimos con RGPD.' },
   { q: '¿Puedo exportar mis datos si cancelo?', a: 'Sí. Puedes exportar todos tus datos en CSV o JSON en cualquier momento, incluso después de cancelar (durante 30 días). También soportamos export a Google Sheets y Airtable.' },
   { q: '¿Qué incluye el soporte prioritario?', a: 'Respuesta garantizada en menos de 4 horas laborables. Canal de Slack dedicado. Onboarding personalizado con sesión 1:1. Disponible solo en el plan Scale.' },
   { q: '¿Ofrecéis API pública?', a: 'Sí, en el plan Scale. API REST completa con documentación en /public/docs, rate limiting de 100 req/min, y webhooks bidireccionales con firma HMAC.' },

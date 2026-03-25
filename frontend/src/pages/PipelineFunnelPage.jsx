@@ -60,7 +60,7 @@ export default function PipelineFunnelPage() {
                   <div className="h-10 rounded-lg flex items-center px-3 transition-all"
                     style={{ width: `${width}%`, minWidth: '60px', backgroundColor: color }}>
                     <span className="text-sm font-bold" style={{ color: '#fff', fontFamily: fontMono }}>{stage.count}</span>
-                    <span className="text-xs ml-2" style={{ color: 'rgba(255,255,255,0.7)', fontFamily: fontMono }}>\u20AC{(stage.value / 1000).toFixed(0)}k</span>
+                    <span className="text-xs ml-2" style={{ color: 'rgba(255,255,255,0.7)', fontFamily: fontMono }}>\€{(stage.value / 1000).toFixed(0)}k</span>
                   </div>
                 </div>
               </div>

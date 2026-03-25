@@ -30,9 +30,9 @@ export function useDashboardWidgets() {
 
   // Load from backend on mount
   useEffect(() => {
-    dashboardApi.getConfig()
+    dashboardApi.getConfig().catch(() => null)
       .then(res => {
-        const remote = res.data?.widgets
+        const remote = res?.data?.widgets
         if (remote?.length) {
           setWidgets(remote)
           localStorage.setItem(STORAGE_KEY, JSON.stringify(remote))

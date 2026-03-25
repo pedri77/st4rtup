@@ -602,7 +602,7 @@ function IntegrationCard({ integration, settings, isAdmin, onSave }) {
 
           {integration.envVars && (
             <div style={{ backgroundColor: T.bg, borderRadius: 8, padding: 10 }}>
-              <p style={{ fontSize: 10, color: T.fgMuted, fontWeight: 500, marginBottom: 4, fontFamily: fontMono }}>Variables de entorno (Fly.io):</p>
+              <p style={{ fontSize: 10, color: T.fgMuted, fontWeight: 500, marginBottom: 4, fontFamily: fontMono }}>Variables de entorno (Hetzner):</p>
               <div className="flex flex-wrap gap-1">
                 {integration.envVars.map(v => (
                   <code key={v} style={{ fontSize: 10, backgroundColor: T.muted, color: T.cyan, padding: '2px 6px', borderRadius: 4, fontFamily: fontMono }}>{v}</code>
