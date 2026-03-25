@@ -7,7 +7,7 @@ import {
   ChevronLeft, ChevronRight, Download, Package, PenTool, Receipt
 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { offersApi } from '@/services/api'
+import { offersApi, serviceCatalogApi } from '@/services/api'
 import { useLeadsSelect } from '@/hooks/useLeadsSelect'
 import { generateOfferPDF } from '@/utils/offerPdf'
 import ExportButton from '@/components/ExportButton'
@@ -42,41 +42,17 @@ const STATUS_CONFIG = {
 
 const EMPTY_ITEM = { name: '', description: '', quantity: 1, unit_price: 0, total: 0 }
 
-const PRODUCT_CATALOG = [
-  { category: 'Plataforma growth', name: 'St4rtup Platform - Licencia Anual', description: 'Plataforma growth completa: gestion de riesgos, cumplimiento y gobernanza', unit_price: 12000 },
-  { category: 'Plataforma growth', name: 'St4rtup Platform - Licencia Mensual', description: 'Plataforma growth completa, facturacion mensual', unit_price: 1200 },
-  { category: 'Plataforma growth', name: 'Usuarios adicionales (pack 5)', description: 'Pack de 5 usuarios adicionales para la plataforma', unit_price: 2500 },
-  { category: 'Modulos Cumplimiento', name: 'Modulo ENS', description: 'Esquema Nacional de Seguridad - Gestion de cumplimiento y evidencias', unit_price: 4500 },
-  { category: 'Modulos Cumplimiento', name: 'Modulo NIS2', description: 'Directiva NIS2 - Evaluacion de requisitos y plan de adecuacion', unit_price: 4500 },
-  { category: 'Modulos Cumplimiento', name: 'Modulo DORA', description: 'Digital Operational Resilience Act - Cumplimiento sector financiero', unit_price: 5000 },
-  { category: 'Modulos Cumplimiento', name: 'Modulo SaaS Best Practices', description: 'Sistema de Gestion de Seguridad de la Informacion', unit_price: 4000 },
-  { category: 'Modulos Cumplimiento', name: 'Modulo EU AI Act', description: 'Reglamento Europeo de IA - Evaluacion de riesgo y cumplimiento', unit_price: 3500 },
-  { category: 'Modulos Cumplimiento', name: 'Pack Normativo Completo', description: 'ENS + NIS2 + DORA + SaaS Best Practices + EU AI Act (20% dto.)', unit_price: 17200 },
-  { category: 'Modulos Funcionales', name: 'Modulo Gestion de Riesgos', description: 'Identificacion, analisis y tratamiento de riesgos de seguridad', unit_price: 3000 },
-  { category: 'Modulos Funcionales', name: 'Modulo Gestion de Activos', description: 'Inventario y clasificacion de activos de informacion', unit_price: 2500 },
-  { category: 'Modulos Funcionales', name: 'Modulo Gestion de Incidentes', description: 'Registro, seguimiento y respuesta a incidentes de seguridad', unit_price: 2500 },
-  { category: 'Modulos Funcionales', name: 'Modulo Auditoria y Evidencias', description: 'Planificacion de auditorias y gestion documental de evidencias', unit_price: 3000 },
-  { category: 'Modulos Funcionales', name: 'Modulo Dashboard Ejecutivo', description: 'Cuadros de mando y reportes para direccion', unit_price: 1500 },
-  { category: 'Servicios', name: 'Implantacion y Configuracion', description: 'Setup inicial, configuracion de la plataforma y carga de datos', unit_price: 3000 },
-  { category: 'Servicios', name: 'Formacion Equipo (8h)', description: 'Formacion presencial/online para el equipo (jornada completa)', unit_price: 1600 },
-  { category: 'Servicios', name: 'Formacion Equipo (4h)', description: 'Formacion presencial/online para el equipo (media jornada)', unit_price: 900 },
-  { category: 'Servicios', name: 'Consultoria growth (jornada)', description: 'Consultoria especializada en growth y tecnología', unit_price: 1200 },
-  { category: 'Servicios', name: 'Consultoria growth (pack 5 jornadas)', description: 'Pack de 5 jornadas de consultoria (10% dto.)', unit_price: 5400 },
-  { category: 'Servicios', name: 'Gap Analysis Normativo', description: 'Analisis de brechas de cumplimiento normativo', unit_price: 4000 },
-  { category: 'Servicios', name: 'Auditoria de Seguridad', description: 'Auditoria tecnica de seguridad de la informacion', unit_price: 5000 },
-  { category: 'Soporte', name: 'Soporte Premium Anual', description: 'Soporte prioritario 8x5, SLA 4h, gestor dedicado', unit_price: 3600 },
-  { category: 'Soporte', name: 'Soporte Basico Anual', description: 'Soporte estandar 8x5, SLA 24h', unit_price: 1200 },
-  { category: 'Soporte', name: 'Bolsa de Horas Soporte (20h)', description: 'Pack de 20 horas de soporte tecnico especializado', unit_price: 2000 },
-  { category: 'Design Partners', name: 'Design Partner - Licencia Anual Bonificada', description: 'Licencia anual con condiciones especiales para Design Partners (50% dto.)', unit_price: 6000 },
-  { category: 'Design Partners', name: 'Design Partner - Co-desarrollo Modulo', description: 'Participacion en co-desarrollo de nuevo modulo normativo con acceso anticipado', unit_price: 0 },
-  { category: 'Design Partners', name: 'Design Partner - Acceso Beta Features', description: 'Acceso anticipado a nuevas funcionalidades en fase beta', unit_price: 0 },
-  { category: 'Design Partners', name: 'Design Partner - Feedback & Advisory', description: 'Programa de feedback estructurado y participacion en advisory board', unit_price: 0 },
-  { category: 'Design Partners', name: 'Design Partner - Caso de Exito', description: 'Desarrollo de caso de exito conjunto para uso comercial y marketing', unit_price: 0 },
-  { category: 'Design Partners', name: 'Design Partner - Formacion Incluida (16h)', description: 'Formacion completa incluida en el programa Design Partner', unit_price: 0 },
-  { category: 'Design Partners', name: 'Design Partner - Soporte Premium Incluido', description: 'Soporte Premium con SLA prioritario incluido durante el programa', unit_price: 0 },
-]
+// Catalog loaded from API (/service-catalog) — no hardcoded products
 
 export default function OffersPage() {
+  // Load catalog from API
+  const { data: catalogData } = useQuery({
+    queryKey: ['service-catalog'],
+    queryFn: () => serviceCatalogApi.list().then(r => r.data?.items || []).catch(() => []),
+    retry: 0, staleTime: 300000,
+  })
+  const CATALOG = (catalogData || []).map(i => ({ category: i.category || 'General', name: i.name, description: i.description, unit_price: i.price }))
+
   const [showModal, setShowModal] = useState(false)
   const [editingOffer, setEditingOffer] = useState(null)
   const [viewingOffer, setViewingOffer] = useState(null)
@@ -135,6 +111,9 @@ export default function OffersPage() {
         </div>
         <div className="flex items-center gap-3">
           <ExportButton data={offers || []} filename="ofertas" transform={(o) => ({ 'Referencia': o.reference || '', 'Empresa': o.lead_name || '', 'Estado': o.status, 'Importe Total': o.total_amount || 0, 'Valida Hasta': formatDateForExport(o.valid_until), 'Enviada': formatDateForExport(o.sent_at), 'Creado': formatDateForExport(o.created_at) })} size="sm" />
+          <Link to="/app/offers/catalog" className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors" style={{ border: `1px solid ${T.border}`, color: T.fgMuted, textDecoration: 'none' }}>
+            <Package className="w-4 h-4" /> Catálogo
+          </Link>
           <button onClick={() => { setEditingOffer(null); setShowModal(true) }} className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors" style={{ backgroundColor: T.cyan, color: T.bg }}>
             <Plus className="w-4 h-4" /> Nueva Oferta
           </button>
@@ -367,11 +346,11 @@ function OfferModal({ offer, onClose, onSubmit, isLoading }) {
 
             {catalogOpen && (
               <div className="mb-4 rounded-lg p-4 max-h-64 overflow-y-auto" style={{ backgroundColor: T.muted, border: `1px solid ${T.border}` }}>
-                {[...new Set(PRODUCT_CATALOG.map(p => p.category))].map(category => (
+                {[...new Set(CATALOG.map(p => p.category))].map(category => (
                   <div key={category} className="mb-3 last:mb-0">
                     <h4 className="text-xs mb-2" style={{ color: T.cyan, fontFamily: fontMono }}>{category}</h4>
                     <div className="space-y-0.5">
-                      {PRODUCT_CATALOG.filter(p => p.category === category).map((product, idx) => (
+                      {CATALOG.filter(p => p.category === category).map((product, idx) => (
                         <button key={idx} type="button" onClick={() => addCatalogProduct(product)} className="w-full flex items-center justify-between px-3 py-1.5 rounded transition-colors text-left" style={{ color: T.fg }}>
                           <div className="min-w-0 flex-1">
                             <span className="text-sm" style={{ fontFamily: fontMono }}>{product.name}</span>
