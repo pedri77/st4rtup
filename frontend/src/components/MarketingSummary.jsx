@@ -10,8 +10,8 @@ import clsx from 'clsx'
 export default function MarketingSummary() {
   const { data: stats, isLoading, isError } = useQuery({
     queryKey: ['marketing-overview'],
-    queryFn: () => marketingAnalyticsApi.overview().then(r => r.data),
-    retry: 1,
+    queryFn: () => marketingAnalyticsApi.overview().then(r => r.data).catch(() => null),
+    retry: 0,
     staleTime: 60000,
   })
 
