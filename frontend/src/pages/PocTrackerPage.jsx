@@ -22,7 +22,7 @@ export default function PocTrackerPage() {
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: 'GTM', href: '/gtm' }, { label: 'PoC Tracker' }]} />
+      <Breadcrumbs items={[{ label: 'GTM', href: '/app/gtm' }, { label: 'PoC Tracker' }]} />
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
           <Timer className="w-7 h-7 text-cyan-400" /> PoC Tracker

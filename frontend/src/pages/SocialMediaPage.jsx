@@ -128,7 +128,7 @@ export default function SocialMediaPage() {
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen space-y-6" style={{ backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-      <Breadcrumbs items={[{ label: 'Marketing', href: '/marketing' }, { label: 'Social Media' }]} />
+      <Breadcrumbs items={[{ label: 'Marketing', href: '/app/marketing' }, { label: 'Social Media' }]} />
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
           <Globe className="w-7 h-7" style={{ color: T.cyan }} /> Social Media

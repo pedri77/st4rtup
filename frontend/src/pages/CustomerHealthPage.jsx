@@ -45,7 +45,7 @@ export default function CustomerHealthPage() {
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen space-y-6" style={{ backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-      <Breadcrumbs items={[{ label: 'GTM', href: '/gtm' }, { label: 'Customer Health' }]} />
+      <Breadcrumbs items={[{ label: 'GTM', href: '/app/gtm' }, { label: 'Customer Health' }]} />
       <h1 className="text-2xl font-bold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>
         <Heart className="w-7 h-7" style={{ color: T.cyan }} /> Customer Health
       </h1>

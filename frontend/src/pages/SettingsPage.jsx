@@ -455,7 +455,7 @@ function APITab() {
       <div className="rounded-lg p-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-semibold" style={{ fontFamily: fontDisplay, color: T.fg }}>Integraciones Activas</h2>
-          <a href="/integrations" className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+          <a href="/app/integrations" className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
             style={{ color: T.cyan, backgroundColor: `${T.cyan}15` }}>
             Gestionar todas
           </a>

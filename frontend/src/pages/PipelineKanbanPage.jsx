@@ -108,7 +108,7 @@ export default function PipelineKanbanPage() {
         <h1 style={{ fontFamily: fontDisplay, fontSize: '1.75rem', fontWeight: 700, color: T.fg, margin: 0 }}>
           PIPELINE KANBAN
         </h1>
-        <a href="/pipeline" style={{ fontSize: '0.75rem', color: T.fgMuted, marginLeft: 'auto' }}>Vista tabla</a>
+        <a href="/app/pipeline" style={{ fontSize: '0.75rem', color: T.fgMuted, marginLeft: 'auto' }}>Vista tabla</a>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: `repeat(${STAGES.length}, 1fr)`, gap: '0.75rem', minHeight: '70vh' }}>

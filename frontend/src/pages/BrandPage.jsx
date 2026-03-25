@@ -47,7 +47,7 @@ export default function BrandPage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       <div className="max-w-3xl space-y-6">
-        <Breadcrumbs items={[{ label: 'GTM', href: '/gtm' }, { label: 'Brand & Positioning' }]} />
+        <Breadcrumbs items={[{ label: 'GTM', href: '/app/gtm' }, { label: 'Brand & Positioning' }]} />
         <h1 className="text-2xl font-bold flex items-center gap-2 mb-4" style={{ color: T.fg, fontFamily: fontDisplay }}>
           <Building2 className="w-7 h-7" style={{ color: T.cyan }} /> Brand & Positioning
         </h1>

@@ -62,7 +62,7 @@ const CHANNEL_ACTIONS = {
   retell_ai: {
     label: 'Llamadas ABM',
     actions: [
-      { label: 'Consola de llamadas', href: '/calls', icon: Phone },
+      { label: 'Consola de llamadas', href: '/app/calls', icon: Phone },
       { label: 'Historial llamadas', href: '/calls/history', icon: Clock },
       { label: 'Dashboard llamadas', href: '/calls/dashboard', icon: BarChart3 },
     ],
@@ -111,7 +111,7 @@ const CHANNEL_ACTIONS = {
     label: 'Self-service Growth',
     actions: [
       { label: 'Pricing Growth', href: '/gtm/pricing', icon: TrendingUp },
-      { label: 'Trafico web', href: '/gtm', icon: Globe },
+      { label: 'Trafico web', href: '/app/gtm', icon: Globe },
     ],
     kpis: ['Signups/mes', 'Conversion trial→paid', 'MRR Growth'],
     description: 'Venta directa desde €1.200/mes sin intervencion comercial. Landing page + signup automatico.',
