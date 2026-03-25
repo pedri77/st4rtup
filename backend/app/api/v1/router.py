@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.v1.endpoints import (
-    billing, analytics_internal,
+    billing, analytics_internal, service_catalog,
     users, leads, visits, emails, actions, opportunities, offers, accounts,
     reviews, surveys, dashboard, automations, automation_tasks, notifications,
     settings as settings_endpoints, chat, contacts, reports,
@@ -111,3 +111,4 @@ api_router.include_router(whatsapp.router, prefix="/whatsapp", tags=["WhatsApp B
 api_router.include_router(payments.router, prefix="/payments", tags=["Payments"])
 api_router.include_router(billing.router, prefix="/billing", tags=["Billing"])
 api_router.include_router(analytics_internal.router, prefix="/analytics", tags=["Analytics"])
+api_router.include_router(service_catalog.router, prefix="/service-catalog", tags=["Service Catalog"])

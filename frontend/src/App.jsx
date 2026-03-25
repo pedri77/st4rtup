@@ -100,6 +100,7 @@ const MyDayPage = lazy(() => import('./pages/MyDayPage'))
 const WhatsAppPage = lazy(() => import('./pages/WhatsAppPage'))
 const PaymentsPage = lazy(() => import('./pages/PaymentsPage'))
 const AffiliatesPage = lazy(() => import('./pages/AffiliatesPage'))
+const ServiceCatalogPage = lazy(() => import('./pages/ServiceCatalogPage'))
 
 function PageLoader() {
   return (
@@ -161,6 +162,7 @@ function App() {
           <Route path="pipeline" element={<Suspense fallback={<PageLoader />}><PipelinePage /></Suspense>} />
           <Route path="pipeline/kanban" element={<Suspense fallback={<PageLoader />}><PipelineKanbanPage /></Suspense>} />
           <Route path="offers" element={<Suspense fallback={<PageLoader />}><OffersPage /></Suspense>} />
+          <Route path="offers/catalog" element={<Suspense fallback={<PageLoader />}><ServiceCatalogPage /></Suspense>} />
           <Route path="actions" element={<Suspense fallback={<PageLoader />}><ActionsPage /></Suspense>} />
           <Route path="actions/kanban" element={<Suspense fallback={<PageLoader />}><ActionsKanbanPage /></Suspense>} />
           <Route path="customer-health" element={<Suspense fallback={<PageLoader />}><CustomerHealthPage /></Suspense>} />

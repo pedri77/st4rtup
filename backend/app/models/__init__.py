@@ -54,6 +54,7 @@ from app.models.publication import Publication, PublicationPlatform, Publication
 from app.models.wa_conversation import WAConversation, WAMessage
 from app.models.payment import PaymentPlan, Payment, Invoice
 from app.models.deal_room_doc import DealRoom, DealRoomDocument, DealRoomPageEvent
+from app.models.service_catalog import ServiceCatalogItem
 
 __all__ = [
     "Base", "BaseModel",

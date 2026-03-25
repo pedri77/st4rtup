@@ -264,6 +264,14 @@ export const chatApi = {
   sendMessage: (conversationId, data) => api.post(`/chat/conversations/${conversationId}/messages`, data),
 }
 
+export const serviceCatalogApi = {
+  list: (params) => api.get('/service-catalog', { params }),
+  create: (params) => api.post('/service-catalog', null, { params }),
+  update: (id, params) => api.put(`/service-catalog/${id}`, null, { params }),
+  delete: (id) => api.delete(`/service-catalog/${id}`),
+  seed: () => api.post('/service-catalog/seed'),
+}
+
 export const offersApi = {
   list: (params) => api.get('/offers', { params }),
   get: (id) => api.get(`/offers/${id}`),
