@@ -215,7 +215,7 @@ export default function MyDayPage() {
               </p>
             )}
           </div>
-          <Link to="/actions" className="flex items-center gap-1 text-xs mt-3 hover:underline"
+          <Link to="/app/actions" className="flex items-center gap-1 text-xs mt-3 hover:underline"
             style={{ color: T.cyan }}>
             Ver todas <ChevronRight className="w-3 h-3" />
           </Link>
@@ -233,7 +233,7 @@ export default function MyDayPage() {
               </p>
             )}
           </div>
-          <Link to="/actions" className="flex items-center gap-1 text-xs mt-3 hover:underline"
+          <Link to="/app/actions" className="flex items-center gap-1 text-xs mt-3 hover:underline"
             style={{ color: T.destructive }}>
             Ver todas <ChevronRight className="w-3 h-3" />
           </Link>
@@ -267,7 +267,7 @@ export default function MyDayPage() {
               </p>
             )}
           </div>
-          <Link to="/visits" className="flex items-center gap-1 text-xs mt-3 hover:underline"
+          <Link to="/app/visits" className="flex items-center gap-1 text-xs mt-3 hover:underline"
             style={{ color: T.purple }}>
             Ver todas <ChevronRight className="w-3 h-3" />
           </Link>
@@ -301,7 +301,7 @@ export default function MyDayPage() {
               </p>
             )}
           </div>
-          <Link to="/leads" className="flex items-center gap-1 text-xs mt-3 hover:underline"
+          <Link to="/app/leads" className="flex items-center gap-1 text-xs mt-3 hover:underline"
             style={{ color: T.warning }}>
             Ver todos <ChevronRight className="w-3 h-3" />
           </Link>
@@ -342,7 +342,7 @@ export default function MyDayPage() {
               </p>
             )}
           </div>
-          <Link to="/pipeline" className="flex items-center gap-1 text-xs mt-3 hover:underline"
+          <Link to="/app/pipeline" className="flex items-center gap-1 text-xs mt-3 hover:underline"
             style={{ color: T.success }}>
             Ver pipeline <ChevronRight className="w-3 h-3" />
           </Link>

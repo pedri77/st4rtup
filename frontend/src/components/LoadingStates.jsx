@@ -6,8 +6,8 @@
 
 export function Skeleton({ className = "", variant = "default" }) {
   const variantClasses = {
-    default: "bg-gray-700",
-    light: "bg-gray-800",
+    default: "bg-gray-100",
+    light: "bg-white",
     dark: "bg-gray-600",
   }
 
@@ -63,7 +63,7 @@ export function ChartSkeleton({ height = "300px" }) {
 
 export function TableRowSkeleton({ columns = 4 }) {
   return (
-    <tr className="border-b border-gray-700/50">
+    <tr className="border-b border-gray-200/50">
       {[...Array(columns)].map((_, i) => (
         <td key={i} className="px-4 py-3">
           <Skeleton className="h-4 w-full" />
@@ -77,7 +77,7 @@ export function TableRowSkeleton({ columns = 4 }) {
 
 export function ListItemSkeleton() {
   return (
-    <div className="flex items-center gap-3 p-3 bg-gray-800 rounded-lg">
+    <div className="flex items-center gap-3 p-3 bg-white rounded-lg">
       <Skeleton className="w-10 h-10 rounded-lg flex-shrink-0" />
       <div className="flex-1 space-y-2">
         <Skeleton className="h-4 w-3/4" />
@@ -102,7 +102,7 @@ export function DashboardSkeleton() {
       {/* Alerts Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="rounded-xl border-2 border-gray-700/50 p-4">
+          <div key={i} className="rounded-xl border-2 border-gray-200/50 p-4">
             <div className="flex items-center gap-3">
               <Skeleton className="w-10 h-10 rounded-full" />
               <div className="flex-1 space-y-2">
@@ -157,9 +157,9 @@ export function DashboardSkeleton() {
 
 export function TableSkeleton({ rows = 10, columns = 4 }) {
   return (
-    <div className="bg-gray-800/50 rounded-xl shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       <table className="w-full">
-        <thead className="bg-gray-900/50 border-b border-gray-700">
+        <thead className="bg-gray-50/50 border-b border-gray-200">
           <tr>
             {[...Array(columns)].map((_, i) => (
               <th key={i} className="px-4 py-3 text-left">
@@ -189,10 +189,10 @@ export function EmptyState({
 }) {
   return (
     <div className={`text-center py-12 px-4 ${className}`}>
-      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-800 mb-4">
+      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white mb-4">
         {Icon && <Icon className="w-8 h-8 text-gray-500" />}
       </div>
-      <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
+      <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
       <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">{description}</p>
       {action && (
         <div className="flex justify-center">
@@ -218,12 +218,12 @@ export function ErrorState({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
       </div>
-      <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
+      <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
       <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">{description}</p>
       {onRetry && (
         <button
           onClick={onRetry}
-          className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-cyan-600 text-gray-800 rounded-lg hover:bg-cyan-700 transition-colors text-sm font-medium"
         >
           Reintentar
         </button>

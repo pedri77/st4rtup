@@ -87,7 +87,7 @@ export default function SurveyPublicPage() {
       <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <XCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-white mb-2">Encuesta no disponible</h1>
+          <h1 className="text-xl font-bold text-gray-800 mb-2">Encuesta no disponible</h1>
           <p className="text-gray-400">{error}</p>
         </div>
       </div>
@@ -100,7 +100,7 @@ export default function SurveyPublicPage() {
       <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-white mb-2">Encuesta completada</h1>
+          <h1 className="text-xl font-bold text-gray-800 mb-2">Encuesta completada</h1>
           <p className="text-gray-400">Ya has respondido a esta encuesta. Gracias por tu participación.</p>
         </div>
       </div>
@@ -113,7 +113,7 @@ export default function SurveyPublicPage() {
       <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <Clock className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-white mb-2">Encuesta expirada</h1>
+          <h1 className="text-xl font-bold text-gray-800 mb-2">Encuesta expirada</h1>
           <p className="text-gray-400">Esta encuesta ya no está disponible.</p>
         </div>
       </div>
@@ -128,7 +128,7 @@ export default function SurveyPublicPage() {
           <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-green-400" />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-3">Gracias por tu respuesta</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-3">Gracias por tu respuesta</h1>
           <p className="text-gray-400">Tu feedback es muy valioso para nosotros y nos ayuda a mejorar continuamente.</p>
         </div>
       </div>
@@ -145,8 +145,8 @@ export default function SurveyPublicPage() {
           <p className="text-sm text-gray-500">Encuesta de satisfacción</p>
         </div>
 
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
-          <h2 className="text-xl font-bold text-white mb-2">{survey.title}</h2>
+        <div className="bg-gray-50 border border-gray-800 rounded-2xl p-8">
+          <h2 className="text-xl font-bold text-gray-800 mb-2">{survey.title}</h2>
           {survey.lead_name && (
             <p className="text-sm text-gray-400 mb-6">{survey.lead_name}</p>
           )}
@@ -161,7 +161,7 @@ export default function SurveyPublicPage() {
             {/* NPS Score */}
             {survey.survey_type === 'nps' && (
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
                   Del 0 al 10, ¿qué tan probable es que recomiendes nuestro servicio?
                 </label>
                 <div className="grid grid-cols-11 gap-1.5">
@@ -173,10 +173,10 @@ export default function SurveyPublicPage() {
                       className={clsx(
                         'aspect-square rounded-lg flex items-center justify-center font-bold text-sm transition-all',
                         npsScore === i
-                          ? i <= 6 ? 'bg-red-500 text-white scale-110'
+                          ? i <= 6 ? 'bg-red-500 text-gray-800 scale-110'
                             : i <= 8 ? 'bg-yellow-500 text-gray-900 scale-110'
-                            : 'bg-green-500 text-white scale-110'
-                          : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                            : 'bg-green-500 text-gray-800 scale-110'
+                          : 'bg-white text-gray-400 hover:bg-gray-100'
                       )}
                     >
                       {i}
@@ -204,7 +204,7 @@ export default function SurveyPublicPage() {
             {/* CSAT Stars */}
             {survey.survey_type === 'csat' && (
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
                   ¿Cómo calificarías tu satisfacción general con nuestro servicio?
                 </label>
                 <div className="flex justify-center gap-3">
@@ -239,7 +239,7 @@ export default function SurveyPublicPage() {
             {/* Generic score for other types */}
             {survey.survey_type !== 'nps' && survey.survey_type !== 'csat' && (
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor="surveypublic-field-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="surveypublic-field-1">
                   Puntuación general (0-10)
                 </label>
                 <input id="surveypublic-field-1" type="range"
@@ -249,18 +249,18 @@ export default function SurveyPublicPage() {
                   onChange={(e) => setNpsScore(parseInt(e.target.value))}
                   className="w-full accent-cyan-500"
                 />
-                <div className="text-center text-2xl font-bold text-white mt-1">{npsScore ?? 5}</div>
+                <div className="text-center text-2xl font-bold text-gray-800 mt-1">{npsScore ?? 5}</div>
               </div>
             )}
 
             {/* Feedback */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 ¿Algún comentario adicional? <span className="text-gray-500">(opcional)</span>
               </label>
               <textarea id="surveypublic-textarea-2" aria-label="Texto" value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors resize-none"
+                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors resize-none"
                 rows={3}
                 placeholder="Cuéntanos tu experiencia..."
               />
@@ -268,12 +268,12 @@ export default function SurveyPublicPage() {
 
             {/* Improvements */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 ¿Qué podríamos mejorar? <span className="text-gray-500">(opcional)</span>
               </label>
               <textarea id="surveypublic-textarea-3" aria-label="Texto" value={improvements}
                 onChange={(e) => setImprovements(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors resize-none"
+                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors resize-none"
                 rows={2}
                 placeholder="Sugerencias de mejora..."
               />
@@ -283,7 +283,7 @@ export default function SurveyPublicPage() {
             <button
               type="submit"
               disabled={submitting || (survey.survey_type === 'nps' && npsScore === null) || (survey.survey_type === 'csat' && csatScore === null)}
-              className="w-full py-3 px-6 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+              className="w-full py-3 px-6 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-gray-800 font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
             >
               {submitting ? (
                 <>

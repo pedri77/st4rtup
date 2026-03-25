@@ -234,12 +234,12 @@ function FunnelFlowView({ funnel, onBack, onEdit }) {
           >
             <Background color={T.border} gap={20} size={1} />
             <Controls
-              className="!bg-gray-800 !border-gray-700 !rounded-lg [&>button]:!bg-gray-800 [&>button]:!border-gray-700 [&>button]:!text-gray-400 [&>button:hover]:!bg-gray-700"
+              className="!bg-white !border-gray-200 !rounded-lg [&>button]:!bg-white [&>button]:!border-gray-200 [&>button]:!text-gray-400 [&>button:hover]:!bg-gray-100"
             />
             <MiniMap
               nodeColor={(n) => n.data?.colorStart || '#6366f1'}
               maskColor="rgba(0,0,0,0.7)"
-              className="!bg-gray-900 !border-gray-700 !rounded-lg"
+              className="!bg-gray-50 !border-gray-200 !rounded-lg"
             />
           </ReactFlow>
         ) : (
@@ -384,7 +384,7 @@ export default function FunnelsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Link to="/marketing" className="transition-colors" style={{ color: T.fgMuted }}>
+          <Link to="/app/marketing" className="transition-colors" style={{ color: T.fgMuted }}>
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>

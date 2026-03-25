@@ -127,7 +127,7 @@ export default function LeadDetailPage() {
 
       {/* Header */}
       <div className="mb-6">
-        <Link to="/leads" className="inline-flex items-center gap-2 text-sm mb-4 transition-colors" style={{ color: T.fgMuted }}>
+        <Link to="/app/leads" className="inline-flex items-center gap-2 text-sm mb-4 transition-colors" style={{ color: T.fgMuted }}>
           <ArrowLeft className="w-4 h-4" /> Volver a Leads
         </Link>
 
@@ -293,7 +293,7 @@ export default function LeadDetailPage() {
                 <h2 className="text-base font-semibold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>
                   <Users className="w-5 h-5" style={{ color: T.cyan }} /> Contactos ({contacts.length})
                 </h2>
-                <Link to="/clients" className="text-sm" style={{ color: T.cyan }}>Ver todos</Link>
+                <Link to="/app/clients" className="text-sm" style={{ color: T.cyan }}>Ver todos</Link>
               </div>
               <div className="space-y-3">
                 {contacts.map(contact => (
@@ -326,7 +326,7 @@ export default function LeadDetailPage() {
               <h2 className="text-base font-semibold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>
                 <Calendar className="w-5 h-5" style={{ color: T.cyan }} /> Visitas ({leadVisits.length})
               </h2>
-              <Link to="/visits" className="text-sm" style={{ color: T.cyan }}>Ver todas</Link>
+              <Link to="/app/visits" className="text-sm" style={{ color: T.cyan }}>Ver todas</Link>
             </div>
             {leadVisits.length === 0 ? (
               <p className="text-sm" style={{ color: T.fgMuted }}>Sin visitas registradas</p>
@@ -364,7 +364,7 @@ export default function LeadDetailPage() {
               <h2 className="text-base font-semibold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>
                 <Send className="w-5 h-5" style={{ color: T.cyan }} /> Emails ({leadEmails.length})
               </h2>
-              <Link to="/emails" className="text-sm" style={{ color: T.cyan }}>Ver todos</Link>
+              <Link to="/app/emails" className="text-sm" style={{ color: T.cyan }}>Ver todos</Link>
             </div>
             {leadEmails.length === 0 ? (
               <p className="text-sm" style={{ color: T.fgMuted }}>Sin emails registrados</p>
@@ -398,7 +398,7 @@ export default function LeadDetailPage() {
                 <h2 className="text-base font-semibold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>
                   <Phone className="w-5 h-5" style={{ color: T.cyan }} /> Llamadas IA ({leadCalls.length})
                 </h2>
-                <Link to="/calls" className="text-xs" style={{ color: T.cyan }}>Nueva llamada</Link>
+                <Link to="/app/calls" className="text-xs" style={{ color: T.cyan }}>Nueva llamada</Link>
               </div>
               <div className="space-y-2">
                 {leadCalls.map(call => {
@@ -609,10 +609,10 @@ function LeadTimeline({ leadId }) {
         {events.slice(0, 15).map((e, i) => {
           const cfg = typeConfig[e.type] || typeConfig.action
           return (
-            <div key={i} className={`flex items-start gap-3 bg-gray-800/30 border-l-2 ${cfg.color} rounded-r-lg p-3`}>
+            <div key={i} className={`flex items-start gap-3 bg-white/30 border-l-2 ${cfg.color} rounded-r-lg p-3`}>
               <span className="text-sm">{cfg.icon}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-300">{e.title}</p>
+                <p className="text-sm text-gray-700">{e.title}</p>
                 {e.detail && <p className="text-xs text-gray-500">{e.detail}</p>}
               </div>
               <span className="text-[10px] text-gray-600 whitespace-nowrap">

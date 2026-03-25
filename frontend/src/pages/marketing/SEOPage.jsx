@@ -754,7 +754,7 @@ export default function SEOPage() {
 
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link to="/marketing" className="p-2 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
+        <Link to="/app/marketing" className="p-2 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>

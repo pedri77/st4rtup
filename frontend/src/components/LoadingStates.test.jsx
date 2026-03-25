@@ -25,7 +25,7 @@ describe('Skeleton', () => {
 
   it('renders with light variant', () => {
     const { container } = render(<Skeleton variant="light" />)
-    expect(container.firstChild).toHaveClass('bg-gray-800')
+    expect(container.firstChild).toHaveClass('bg-white')
   })
 })
 

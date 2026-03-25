@@ -61,7 +61,7 @@ export default function SEOCenterPage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       <div>
-        <Link to="/marketing" className="inline-flex items-center gap-1.5 text-xs mb-3 transition-colors hover:opacity-80" style={{ color: T.fgMuted }}>
+        <Link to="/app/marketing" className="inline-flex items-center gap-1.5 text-xs mb-3 transition-colors hover:opacity-80" style={{ color: T.fgMuted }}>
           <span style={{ fontSize: '14px' }}>&larr;</span> Marketing Hub
         </Link>
         <h1 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-3xl font-bold tracking-tight flex items-center gap-2">

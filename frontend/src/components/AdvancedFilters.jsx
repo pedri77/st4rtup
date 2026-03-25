@@ -27,7 +27,7 @@ export function MultiSelectDropdown({ label, options, value = [], onChange, clas
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
           "w-full flex items-center justify-between px-3 py-2 rounded-lg border transition-all text-sm",
-          isOpen ? "border-brand ring-2 ring-brand-light" : "border-gray-600 hover:border-gray-500",
+          isOpen ? "border-brand ring-2 ring-brand-light" : "border-gray-200 hover:border-gray-500",
           selectedCount > 0 && "bg-brand-light border-brand"
         )}
       >
@@ -46,20 +46,20 @@ export function MultiSelectDropdown({ label, options, value = [], onChange, clas
       {isOpen && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-          <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-700/50 rounded-lg shadow-lg z-20 max-h-64 overflow-auto animate-slide-up">
+          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200/50 rounded-lg shadow-lg z-20 max-h-64 overflow-auto animate-slide-up">
             {options.map((option) => (
               <label
                 key={option.value}
-                className="flex items-center gap-2 px-3 py-2 hover:bg-gray-700/50 cursor-pointer transition-colors"
+                className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors"
               >
                 <input
                   type="checkbox"
                   id={`msd-${option.value}`}
                   checked={value.includes(option.value)}
                   onChange={() => toggleOption(option.value)}
-                  className="rounded border-gray-600 text-brand focus:ring-brand bg-gray-700"
+                  className="rounded border-gray-200 text-brand focus:ring-brand bg-gray-100"
                 />
-                <span className="text-sm text-gray-300">{option.label}</span>
+                <span className="text-sm text-gray-700">{option.label}</span>
                 {option.count !== undefined && (
                   <span className="ml-auto text-xs text-gray-400">({option.count})</span>
                 )}
@@ -82,7 +82,7 @@ export function MultiSelectDropdown({ label, options, value = [], onChange, clas
 export function DateRangePicker({ label, value, onChange, className = "" }) {
   return (
     <div className={`space-y-1 ${className}`}>
-      <label className="block text-xs font-medium text-gray-300">
+      <label className="block text-xs font-medium text-gray-700">
         <Calendar className="w-3 h-3 inline mr-1" />
         {label}
       </label>
@@ -174,8 +174,8 @@ export function SearchWithFilters({
           className={clsx(
             "px-4 py-2 rounded-lg border transition-all font-medium text-sm flex items-center gap-2",
             showFilters || activeFiltersCount > 0
-              ? "bg-brand text-white border-brand hover:bg-brand-dark"
-              : "bg-gray-800 text-gray-300 border-gray-600 hover:border-gray-500"
+              ? "bg-brand text-gray-800 border-brand hover:bg-brand-dark"
+              : "bg-white text-gray-700 border-gray-200 hover:border-gray-500"
           )}
         >
           <Filter className="w-4 h-4" />

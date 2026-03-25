@@ -147,9 +147,9 @@ export default function CallsConsolePage() {
           <p className="mt-1 text-sm" style={{ color: T.fgMuted }}>Inicia y gestiona llamadas con Retell AI</p>
         </div>
         <div className="flex items-center gap-3">
-          <Link to="/calls/prompts" style={linkStyle}>Prompts</Link>
-          <Link to="/calls/dashboard" style={linkStyle}>Dashboard</Link>
-          <Link to="/calls/history" style={linkStyle}>Historial</Link>
+          <Link to="/app/calls/prompts" style={linkStyle}>Prompts</Link>
+          <Link to="/app/calls/dashboard" style={linkStyle}>Dashboard</Link>
+          <Link to="/app/calls/history" style={linkStyle}>Historial</Link>
         </div>
       </div>
 
@@ -222,7 +222,7 @@ export default function CallsConsolePage() {
             </select>
             {prompts.length === 0 && (
               <p className="text-xs mt-1" style={{ color: T.fgMuted }}>
-                No hay prompts. <Link to="/calls/prompts" style={{ color: T.cyan }}>Crea o importa prompts</Link>
+                No hay prompts. <Link to="/app/calls/prompts" style={{ color: T.cyan }}>Crea o importa prompts</Link>
               </p>
             )}
           </div>

@@ -480,7 +480,7 @@ function ContentGenerator() {
               </p>
               <p style={{ fontSize: 10, color: T.fgMuted }}>
                 Configura <code style={{ color: T.cyan }}>MISTRAL_API_KEY</code> o <code style={{ color: T.cyan }}>OPENAI_API_KEY</code> en
-                Fly.io secrets, o añade la API key en <Link to="/integrations" style={{ color: T.cyan, textDecoration: 'underline' }}>Integraciones</Link> → IA.
+                Fly.io secrets, o añade la API key en <Link to="/app/integrations" style={{ color: T.cyan, textDecoration: 'underline' }}>Integraciones</Link> → IA.
               </p>
             </div>
           )}
@@ -652,7 +652,7 @@ export default function MarketingToolsPage() {
       {/* Header */}
       <div>
         <div className="flex items-center gap-3 mb-1">
-          <Link to="/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }}>
+          <Link to="/app/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }}>
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: T.fg, fontFamily: fontDisplay, display: 'flex', alignItems: 'center', gap: 8 }}>

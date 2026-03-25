@@ -60,14 +60,14 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escribe
   }
 
   return (
-    <div className="border border-gray-700/50 rounded-lg overflow-hidden">
+    <div className="border border-gray-200/50 rounded-lg overflow-hidden">
       {/* Toolbar */}
-      <div className="flex flex-wrap gap-1 px-3 py-2 bg-gray-800/50 border-b border-gray-700/50">
+      <div className="flex flex-wrap gap-1 px-3 py-2 bg-white border-b border-gray-200/50">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           disabled={!editor.can().chain().focus().toggleBold().run()}
-          className={`p-2 rounded hover:bg-gray-700 transition-colors ${
+          className={`p-2 rounded hover:bg-gray-100 transition-colors ${
             editor.isActive('bold') ? 'bg-gray-600' : ''
           }`}
           title="Negrita"
@@ -78,7 +78,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escribe
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           disabled={!editor.can().chain().focus().toggleItalic().run()}
-          className={`p-2 rounded hover:bg-gray-700 transition-colors ${
+          className={`p-2 rounded hover:bg-gray-100 transition-colors ${
             editor.isActive('italic') ? 'bg-gray-600' : ''
           }`}
           title="Cursiva"
@@ -91,7 +91,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escribe
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`p-2 rounded hover:bg-gray-700 transition-colors ${
+          className={`p-2 rounded hover:bg-gray-100 transition-colors ${
             editor.isActive('bulletList') ? 'bg-gray-600' : ''
           }`}
           title="Lista con viñetas"
@@ -101,7 +101,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escribe
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`p-2 rounded hover:bg-gray-700 transition-colors ${
+          className={`p-2 rounded hover:bg-gray-100 transition-colors ${
             editor.isActive('orderedList') ? 'bg-gray-600' : ''
           }`}
           title="Lista numerada"
@@ -114,7 +114,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escribe
         <button
           type="button"
           onClick={setLink}
-          className={`p-2 rounded hover:bg-gray-700 transition-colors ${
+          className={`p-2 rounded hover:bg-gray-100 transition-colors ${
             editor.isActive('link') ? 'bg-gray-600' : ''
           }`}
           title="Insertar enlace"
@@ -128,7 +128,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escribe
           type="button"
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().chain().focus().undo().run()}
-          className="p-2 rounded hover:bg-gray-700 transition-colors disabled:opacity-50"
+          className="p-2 rounded hover:bg-gray-100 transition-colors disabled:opacity-50"
           title="Deshacer"
         >
           <Undo className="w-4 h-4" />
@@ -137,7 +137,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Escribe
           type="button"
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().chain().focus().redo().run()}
-          className="p-2 rounded hover:bg-gray-700 transition-colors disabled:opacity-50"
+          className="p-2 rounded hover:bg-gray-100 transition-colors disabled:opacity-50"
           title="Rehacer"
         >
           <Redo className="w-4 h-4" />

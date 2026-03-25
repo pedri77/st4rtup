@@ -108,7 +108,7 @@ export default function SavedFilterPresets({
           Filtros Guardados
           <ChevronDown className="w-4 h-4 text-gray-400" />
           {presets.length > 0 && (
-            <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 bg-indigo-600 text-gray-800 text-xs rounded-full w-5 h-5 flex items-center justify-center">
               {presets.length}
             </span>
           )}
@@ -123,7 +123,7 @@ export default function SavedFilterPresets({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-80 origin-top-right bg-gray-800 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-700/50">
+          <Menu.Items className="absolute right-0 mt-2 w-80 origin-top-right bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200/50">
             <div className="p-2">
               {/* Save current filters button */}
               <Menu.Item>
@@ -134,7 +134,7 @@ export default function SavedFilterPresets({
                     'w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
                     hasFilters
                       ? 'text-indigo-400 bg-indigo-900/30 hover:bg-indigo-900/50'
-                      : 'text-gray-500 bg-gray-700/30 cursor-not-allowed'
+                      : 'text-gray-500 bg-gray-50 cursor-not-allowed'
                   )}
                 >
                   <Save className="w-4 h-4" />
@@ -144,13 +144,13 @@ export default function SavedFilterPresets({
 
               {/* Divider */}
               {presets.length > 0 && (
-                <div className="my-2 border-t border-gray-700/50" />
+                <div className="my-2 border-t border-gray-200/50" />
               )}
 
               {/* Saved presets list */}
               {presets.length === 0 ? (
                 <div className="px-3 py-8 text-center">
-                  <Star className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                  <Star className="w-8 h-8 text-gray-700 mx-auto mb-2" />
                   <p className="text-sm text-gray-500">
                     No hay filtros guardados
                   </p>
@@ -181,13 +181,13 @@ export default function SavedFilterPresets({
       {/* Save dialog */}
       {showSaveDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-lg max-w-md w-full p-6 border border-gray-700/50">
-            <h3 className="text-lg font-semibold text-white mb-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-6 border border-gray-200/50">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Guardar Filtros
             </h3>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Nombre del filtro
               </label>
               <input
@@ -250,7 +250,7 @@ function PresetItem({ preset, isActive, onLoad, onUpdate, onRename, onDelete }) 
     <div
       className={clsx(
         'group relative rounded-md transition-colors',
-        isActive ? 'bg-indigo-900/30' : 'hover:bg-gray-700/50'
+        isActive ? 'bg-indigo-900/30' : 'hover:bg-gray-100'
       )}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
@@ -263,7 +263,7 @@ function PresetItem({ preset, isActive, onLoad, onUpdate, onRename, onDelete }) 
           <div className="flex-1 min-w-0">
             <p className={clsx(
               'text-sm font-medium flex items-center gap-2',
-              isActive ? 'text-indigo-300' : 'text-white'
+              isActive ? 'text-indigo-300' : 'text-gray-800'
             )}>
               {preset.name}
               {isActive && (
@@ -280,21 +280,21 @@ function PresetItem({ preset, isActive, onLoad, onUpdate, onRename, onDelete }) 
             <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={onUpdate}
-                className="p-1 hover:bg-gray-700/50 rounded transition-colors"
+                className="p-1 hover:bg-gray-100 rounded transition-colors"
                 title="Actualizar con filtros actuales"
               >
                 <Save className="w-3.5 h-3.5 text-gray-500 hover:text-indigo-600" />
               </button>
               <button
                 onClick={onRename}
-                className="p-1 hover:bg-gray-700/50 rounded transition-colors"
+                className="p-1 hover:bg-gray-100 rounded transition-colors"
                 title="Renombrar"
               >
                 <Pencil className="w-3.5 h-3.5 text-gray-500 hover:text-blue-600" />
               </button>
               <button
                 onClick={onDelete}
-                className="p-1 hover:bg-gray-700/50 rounded transition-colors"
+                className="p-1 hover:bg-gray-100 rounded transition-colors"
                 title="Eliminar"
               >
                 <Trash2 className="w-3.5 h-3.5 text-gray-500 hover:text-red-600" />

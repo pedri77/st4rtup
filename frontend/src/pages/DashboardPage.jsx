@@ -303,9 +303,9 @@ export default function DashboardPage() {
       {/* Status Strip */}
       <div className="flex items-center gap-2 flex-wrap">
         <span className="text-xs uppercase tracking-[0.15em] mr-1" style={{ fontFamily: fontDisplay, color: T.fgMuted }}>Estado</span>
-        <StatusIndicator label="vencidas" count={stats?.actions_overdue || 0} severity="danger" to="/actions" />
-        <StatusIndicator label="acciones hoy" count={stats?.actions_due_today || 0} severity="warning" to="/actions" />
-        <StatusIndicator label="deals estancados" count={stats?.stale_opportunities || 0} severity="info" to="/pipeline" />
+        <StatusIndicator label="vencidas" count={stats?.actions_overdue || 0} severity="danger" to="/app/actions" />
+        <StatusIndicator label="acciones hoy" count={stats?.actions_due_today || 0} severity="warning" to="/app/actions" />
+        <StatusIndicator label="deals estancados" count={stats?.stale_opportunities || 0} severity="info" to="/app/pipeline" />
         {(stats?.actions_overdue === 0 && stats?.actions_due_today === 0 && stats?.stale_opportunities === 0) && (
           <span className="text-xs" style={{ fontFamily: fontMono, color: T.fgMuted }}>sin alertas</span>
         )}
@@ -430,7 +430,7 @@ export default function DashboardPage() {
           {stats?.deals_closing_soon && stats.deals_closing_soon.length > 0 ? (
             <div className="space-y-1">
               {stats.deals_closing_soon.map((deal) => (
-                <Link key={deal.id} to="/pipeline"
+                <Link key={deal.id} to="/app/pipeline"
                   className="block px-3 py-2 rounded transition-colors -ml-px"
                   style={{ borderLeft: '2px solid transparent' }}
                   onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = T.muted; e.currentTarget.style.borderLeftColor = `${T.cyan}60` }}
@@ -557,7 +557,7 @@ export default function DashboardPage() {
           {stats?.upcoming_visits && stats.upcoming_visits.length > 0 ? (
             <div className="space-y-0">
               {stats.upcoming_visits.map((visit) => (
-                <Link key={visit.id} to="/visits"
+                <Link key={visit.id} to="/app/visits"
                   className="flex items-center gap-3 py-2 transition-colors -mx-1 px-1 rounded"
                   style={{ borderBottom: `1px solid ${T.border}40` }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = T.muted}

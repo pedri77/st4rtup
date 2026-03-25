@@ -308,7 +308,7 @@ export default function AgentsPage() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <Link to="/dashboard" className="transition-colors hover:opacity-80" style={{ color: T.fgMuted }}>
+            <Link to="/app/dashboard" className="transition-colors hover:opacity-80" style={{ color: T.fgMuted }}>
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <h1 className="text-2xl font-bold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>

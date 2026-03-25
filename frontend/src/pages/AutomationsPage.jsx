@@ -754,7 +754,7 @@ export default function AutomationsPage() {
         <div className="rounded-xl p-5 mb-6" style={{ backgroundColor: T.card, border: `1px solid ${T.purple}30` }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: T.purple }}>
-              <Clock className="w-5 h-5 text-white" />
+              <Clock className="w-5 h-5 text-gray-800" />
             </div>
             <div>
               <h3 className="text-sm font-semibold" style={{ color: T.fg, fontFamily: fontDisplay }}>Jobs Programados</h3>

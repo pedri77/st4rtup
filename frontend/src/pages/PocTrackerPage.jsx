@@ -24,15 +24,15 @@ export default function PocTrackerPage() {
     <div className="space-y-6">
       <Breadcrumbs items={[{ label: 'GTM', href: '/gtm' }, { label: 'PoC Tracker' }]} />
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
           <Timer className="w-7 h-7 text-cyan-400" /> PoC Tracker
         </h1>
         <div className="flex items-center gap-2">
-          <div className="bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-center">
+          <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-center">
             <p className="text-lg font-bold text-cyan-400">{data?.active || 0}</p>
             <p className="text-[10px] text-gray-500 uppercase">Activos</p>
           </div>
-          <div className="bg-gray-800/50 border border-red-500/20 rounded-lg px-3 py-2 text-center">
+          <div className="bg-white border border-red-500/20 rounded-lg px-3 py-2 text-center">
             <p className="text-lg font-bold text-red-400">{data?.at_risk || 0}</p>
             <p className="text-[10px] text-gray-500 uppercase">En riesgo</p>
           </div>
@@ -42,7 +42,7 @@ export default function PocTrackerPage() {
       {pocs.length === 0 ? (
         <div className="text-center py-12">
           <Timer className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-          <h3 className="text-lg text-gray-300 mb-2">Sin PoCs activos</h3>
+          <h3 className="text-lg text-gray-700 mb-2">Sin PoCs activos</h3>
           <p className="text-sm text-gray-500">Crea una oportunidad con tier "Pilot PoC" en el pipeline.</p>
         </div>
       ) : (
@@ -54,7 +54,7 @@ export default function PocTrackerPage() {
               <div key={poc.id} className={clsx('rounded-xl border p-5', s.bg, s.border)}>
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                    <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2">
                       {poc.name}
                       <span className={clsx('text-[10px] font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1', s.bg, s.color)}>
                         <StatusIcon className="w-3 h-3" /> {s.label}
@@ -76,7 +76,7 @@ export default function PocTrackerPage() {
                     <span>Día {poc.days_elapsed} de 90</span>
                     <span>{poc.pct_complete}%</span>
                   </div>
-                  <div className="w-full bg-gray-700/50 rounded-full h-3">
+                  <div className="w-full bg-gray-100 rounded-full h-3">
                     <div className={clsx('h-3 rounded-full transition-all',
                       poc.pct_complete >= 80 ? 'bg-red-500' : poc.pct_complete >= 50 ? 'bg-yellow-500' : 'bg-green-500')}
                       style={{ width: `${poc.pct_complete}%` }} />

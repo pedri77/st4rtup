@@ -1176,7 +1176,7 @@ function AirtableMcpTab() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #FCB400, #18BFFF)' }}>
-              <Database className="w-5 h-5 text-white" />
+              <Database className="w-5 h-5 text-gray-800" />
             </div>
             <div>
               <h3 className="text-sm font-semibold" style={{ color: T.fg }}>Airtable</h3>
@@ -1228,7 +1228,7 @@ function AirtableMcpTab() {
       <div className="rounded-xl p-5" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #F5820B, #1E6FD9)' }}>
-            <BrainCircuit className="w-5 h-5 text-white" />
+            <BrainCircuit className="w-5 h-5 text-gray-800" />
           </div>
           <div>
             <h3 className="text-sm font-semibold" style={{ color: T.fg }}>MCP Gateway</h3>

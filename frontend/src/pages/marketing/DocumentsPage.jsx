@@ -346,7 +346,7 @@ export default function DocumentsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }}>
+          <Link to="/app/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }}>
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
@@ -610,7 +610,7 @@ function UploadModal({ campaigns, onClose, onSubmit, loading }) {
               if (f && !form.name) setForm({ ...form, name: f.name })
             }}
               style={{ width: '100%', fontSize: 14, color: T.fgMuted }}
-              className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-white file:cursor-pointer"
+              className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-gray-800 file:cursor-pointer"
             />
             <style>{`.file\\:mr-4::-webkit-file-upload-button { background-color: ${tealAccent}; }`}</style>
           </div>
@@ -841,7 +841,7 @@ function UploadVersionModal({ docId, onClose, onSubmit, loading }) {
             <label style={labelStyle} htmlFor="documents-field-22">Archivo *</label>
             <input id="documents-field-22" type="file" onChange={(e) => setFile(e.target.files[0])}
               style={{ width: '100%', fontSize: 14, color: T.fgMuted }}
-              className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-white file:cursor-pointer"
+              className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-gray-800 file:cursor-pointer"
             />
           </div>
           <div>

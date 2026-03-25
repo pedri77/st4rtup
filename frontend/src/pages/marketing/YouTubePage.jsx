@@ -72,7 +72,7 @@ export default function YouTubePage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       {/* Back link */}
-      <Link to="/marketing" className="inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: T.fgMuted }}>
+      <Link to="/app/marketing" className="inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: T.fgMuted }}>
         <ArrowLeft className="w-4 h-4" /> Marketing Hub
       </Link>
 

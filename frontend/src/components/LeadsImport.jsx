@@ -195,11 +195,11 @@ export default function LeadsImport({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col border border-gray-700/50">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col border border-gray-200/50">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-700/50 flex items-center justify-between">
+        <div className="px-6 py-4 border-b border-gray-200/50 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-white">Importar Leads</h2>
+            <h2 className="text-xl font-bold text-gray-800">Importar Leads</h2>
             <p className="text-sm text-gray-600 mt-1">
               Paso {step} de 4
             </p>
@@ -250,7 +250,7 @@ function Step1Upload({ onFileSelect, onDownloadTemplate }) {
     <div className="space-y-6">
       <div className="text-center">
         <Upload className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-white mb-2">
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
           Sube tu archivo CSV
         </h3>
         <p className="text-sm text-gray-600">
@@ -259,7 +259,7 @@ function Step1Upload({ onFileSelect, onDownloadTemplate }) {
       </div>
 
       {/* Upload area */}
-      <div className="border-2 border-dashed border-gray-600 rounded-lg p-12 text-center hover:border-cyan-500 transition-colors cursor-pointer">
+      <div className="border-2 border-dashed border-gray-200 rounded-lg p-12 text-center hover:border-cyan-500 transition-colors cursor-pointer">
         <input
           type="file"
           accept=".csv"
@@ -269,7 +269,7 @@ function Step1Upload({ onFileSelect, onDownloadTemplate }) {
         />
         <label htmlFor="csv-upload" className="cursor-pointer">
           <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-          <p className="text-sm font-medium text-white mb-1">
+          <p className="text-sm font-medium text-gray-800 mb-1">
             Click para seleccionar archivo CSV
           </p>
           <p className="text-xs text-gray-500">
@@ -300,11 +300,11 @@ function Step1Upload({ onFileSelect, onDownloadTemplate }) {
       </div>
 
       {/* Instructions */}
-      <div className="bg-gray-700/30 rounded-lg p-4">
-        <h4 className="text-sm font-semibold text-white mb-3">
+      <div className="bg-gray-50 rounded-lg p-4">
+        <h4 className="text-sm font-semibold text-gray-800 mb-3">
           Campos del CSV:
         </h4>
-        <ul className="text-sm text-gray-300 space-y-1">
+        <ul className="text-sm text-gray-700 space-y-1">
           <li>• <strong>company_name</strong> (obligatorio)</li>
           <li>• company_cif, company_website, company_sector, company_size</li>
           <li>• company_city, company_province, company_country</li>
@@ -325,7 +325,7 @@ function Step2Mapping({ csvHeaders, mapping, onMappingChange, onNext, onBack }) 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-white mb-2">
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
           Mapea las columnas
         </h3>
         <p className="text-sm text-gray-600">
@@ -348,9 +348,9 @@ function Step2Mapping({ csvHeaders, mapping, onMappingChange, onNext, onBack }) 
       )}
 
       {/* Mapping table */}
-      <div className="border border-gray-700/50 rounded-lg overflow-hidden">
+      <div className="border border-gray-200/50 rounded-lg overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-700/30">
+          <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Columna CSV
@@ -363,7 +363,7 @@ function Step2Mapping({ csvHeaders, mapping, onMappingChange, onNext, onBack }) 
           <tbody className="divide-y divide-gray-700/50">
             {csvHeaders.map((header) => (
               <tr key={header}>
-                <td className="px-4 py-3 text-sm font-medium text-white">
+                <td className="px-4 py-3 text-sm font-medium text-gray-800">
                   {header}
                 </td>
                 <td className="px-4 py-3">
@@ -404,7 +404,7 @@ function Step2Mapping({ csvHeaders, mapping, onMappingChange, onNext, onBack }) 
       <div className="flex items-center gap-6 text-sm">
         <div>
           <span className="text-gray-600">Columnas mapeadas:</span>{' '}
-          <span className="font-semibold text-white">
+          <span className="font-semibold text-gray-800">
             {csvHeaders.length - unmappedCount}/{csvHeaders.length}
           </span>
         </div>
@@ -436,7 +436,7 @@ function Step3Importing() {
   return (
     <div className="text-center py-12">
       <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600 mb-6"></div>
-      <h3 className="text-lg font-semibold text-white mb-2">
+      <h3 className="text-lg font-semibold text-gray-800 mb-2">
         Importando leads...
       </h3>
       <p className="text-sm text-gray-600">
@@ -457,7 +457,7 @@ function Step4Results({ results, onClose, onImportMore }) {
         ) : (
           <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
         )}
-        <h3 className="text-lg font-semibold text-white mb-2">
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
           Importación completada
         </h3>
         <p className="text-sm text-gray-600">
@@ -469,7 +469,7 @@ function Step4Results({ results, onClose, onImportMore }) {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         <div className="card text-center">
-          <p className="text-2xl font-bold text-white">{results.total}</p>
+          <p className="text-2xl font-bold text-gray-800">{results.total}</p>
           <p className="text-sm text-gray-600">Total</p>
         </div>
         <div className="card text-center">
@@ -485,7 +485,7 @@ function Step4Results({ results, onClose, onImportMore }) {
       {/* Errors list */}
       {hasErrors && (
         <div>
-          <h4 className="text-sm font-semibold text-white mb-3">
+          <h4 className="text-sm font-semibold text-gray-800 mb-3">
             Errores de importación:
           </h4>
           <div className="max-h-60 overflow-y-auto space-y-2">

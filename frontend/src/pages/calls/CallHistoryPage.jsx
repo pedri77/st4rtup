@@ -139,8 +139,8 @@ export default function CallHistoryPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Link to="/calls" style={linkStyle}>Consola</Link>
-          <Link to="/calls/dashboard" style={linkStyle}>Dashboard</Link>
+          <Link to="/app/calls" style={linkStyle}>Consola</Link>
+          <Link to="/app/calls/dashboard" style={linkStyle}>Dashboard</Link>
         </div>
       </div>
 

@@ -91,7 +91,7 @@ export default function ActionsKanbanPage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Acciones — Kanban</h1>
-        <Link to="/actions" className="btn-secondary text-xs flex items-center gap-1">
+        <Link to="/app/actions" className="btn-secondary text-xs flex items-center gap-1">
           <List className="w-3.5 h-3.5" /> Vista lista
         </Link>
       </div>

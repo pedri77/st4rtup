@@ -29,7 +29,7 @@ export default class ErrorBoundary extends Component {
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-white mb-1">Algo salió mal</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-1">Algo salió mal</h3>
             <p className="text-sm text-gray-500 mb-4 max-w-md">
               {this.state.error?.message || 'Error inesperado al renderizar esta sección.'}
             </p>

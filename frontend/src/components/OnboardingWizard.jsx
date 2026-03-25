@@ -54,17 +54,17 @@ export default function OnboardingWizard() {
   const progress = Math.round(completed.length / STEPS.length * 100)
 
   return (
-    <div className="bg-gray-800/50 border border-cyan-500/20 rounded-xl p-5 mb-6">
+    <div className="bg-white border border-cyan-500/20 rounded-xl p-5 mb-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Rocket className="w-5 h-5 text-cyan-400" />
-          <h3 className="text-sm font-semibold text-white">Primeros pasos — St4rtup CRM</h3>
+          <h3 className="text-sm font-semibold text-gray-800">Primeros pasos — St4rtup CRM</h3>
           <span className="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded-full">{progress}%</span>
         </div>
-        <button onClick={dismiss} className="text-gray-500 hover:text-gray-300"><X className="w-4 h-4" /></button>
+        <button onClick={dismiss} className="text-gray-500 hover:text-gray-700"><X className="w-4 h-4" /></button>
       </div>
 
-      <div className="w-full bg-gray-700/50 rounded-full h-1.5 mb-4">
+      <div className="w-full bg-gray-100 rounded-full h-1.5 mb-4">
         <div className="bg-cyan-500 h-1.5 rounded-full transition-all" style={{ width: `${progress}%` }} />
       </div>
 
@@ -73,13 +73,13 @@ export default function OnboardingWizard() {
           const done = completed.includes(step.id)
           const Icon = step.icon
           return (
-            <div key={step.id} className={clsx('flex items-center gap-3 rounded-lg p-3 transition-colors', done ? 'bg-green-500/5' : 'bg-gray-900/30')}>
+            <div key={step.id} className={clsx('flex items-center gap-3 rounded-lg p-3 transition-colors', done ? 'bg-green-500/5' : 'bg-gray-50/30')}>
               <button onClick={() => toggleStep(step.id)} className="flex-shrink-0">
                 <CheckCircle className={clsx('w-5 h-5', done ? 'text-green-400' : 'text-gray-700')} />
               </button>
               <Icon className={clsx('w-4 h-4 flex-shrink-0', done ? 'text-gray-600' : 'text-cyan-400')} />
               <div className="flex-1 min-w-0">
-                <p className={clsx('text-sm', done ? 'text-gray-600 line-through' : 'text-gray-300')}>{step.title}</p>
+                <p className={clsx('text-sm', done ? 'text-gray-600 line-through' : 'text-gray-700')}>{step.title}</p>
                 <p className="text-[10px] text-gray-600">{step.description}</p>
               </div>
               {!done && (

@@ -114,23 +114,23 @@ export default function DashboardCustomizer({ widgets, onToggle, onReset, onMove
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="p-2 rounded-lg transition-colors bg-gray-800 border border-gray-700 hover:border-gray-600"
+      <button onClick={() => setOpen(true)} className="p-2 rounded-lg transition-colors bg-white border border-gray-200 hover:border-gray-200"
         title="Personalizar dashboard">
         <Settings className="w-4 h-4 text-gray-400" />
       </button>
 
       {open && (
         <div className="fixed inset-0 bg-black/60 z-50 flex justify-end" onClick={() => setOpen(false)}>
-          <div className="w-80 bg-gray-900 border-l border-gray-700 h-full overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-4 border-b border-gray-700 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-white">Personalizar Dashboard</h3>
+          <div className="w-80 bg-gray-50 border-l border-gray-200 h-full overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-800">Personalizar Dashboard</h3>
               <button onClick={() => setOpen(false)}><X className="w-4 h-4 text-gray-500" /></button>
             </div>
 
             <div className="p-4 space-y-2">
               {widgets.map((w, i) => (
                 <div key={w.id} className={clsx('rounded-lg p-2.5 transition-colors',
-                  w.visible ? 'bg-gray-800/50' : 'bg-gray-900 opacity-50')}>
+                  w.visible ? 'bg-white' : 'bg-gray-50 opacity-50')}>
                   <div className="flex items-center gap-2">
                     <div className="flex flex-col gap-0.5">
                       <button onClick={() => onMoveUp(w.id)} disabled={i === 0} className="text-gray-600 hover:text-gray-400 disabled:opacity-20">
@@ -140,7 +140,7 @@ export default function DashboardCustomizer({ widgets, onToggle, onReset, onMove
                         <GripVertical className="w-3 h-3" />
                       </button>
                     </div>
-                    <span className="text-sm text-gray-300 flex-1">{w.label}</span>
+                    <span className="text-sm text-gray-700 flex-1">{w.label}</span>
                     <button onClick={() => onToggle(w.id)} className="p-1">
                       {w.visible ? <Eye className="w-4 h-4 text-cyan-400" /> : <EyeOff className="w-4 h-4 text-gray-600" />}
                     </button>
@@ -171,7 +171,7 @@ export default function DashboardCustomizer({ widgets, onToggle, onReset, onMove
               ))}
             </div>
 
-            <div className="p-4 border-t border-gray-700">
+            <div className="p-4 border-t border-gray-200">
               <button onClick={onReset} className="btn-secondary text-xs w-full flex items-center justify-center gap-1.5">
                 <RotateCcw className="w-3.5 h-3.5" /> Restablecer por defecto
               </button>

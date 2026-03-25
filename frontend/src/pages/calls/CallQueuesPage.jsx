@@ -180,7 +180,7 @@ export default function CallQueuesPage() {
           <p className="text-sm mt-1" style={{ color: T.fgMuted }}>Batch calling — crea colas, programa y ejecuta llamadas masivas</p>
         </div>
         <div className="flex gap-2">
-          <Link to="/calls" className="px-3 py-2 rounded-lg text-sm border transition-colors" style={{ borderColor: T.border, color: T.fgMuted }}>
+          <Link to="/app/calls" className="px-3 py-2 rounded-lg text-sm border transition-colors" style={{ borderColor: T.border, color: T.fgMuted }}>
             Consola
           </Link>
           <button onClick={() => setShowCreate(!showCreate)}

@@ -15,23 +15,23 @@ export default function AutomationsSummary() {
   if (isLoading) {
     return (
       <div className="card animate-pulse">
-        <div className="h-4 bg-gray-700 rounded w-1/3 mb-4" />
-        <div className="h-20 bg-gray-700/50 rounded" />
+        <div className="h-4 bg-gray-100 rounded w-1/3 mb-4" />
+        <div className="h-20 bg-gray-100 rounded" />
       </div>
     )
   }
 
   if (isError || !stats) {
     return (
-      <div className="card border border-gray-700/50">
+      <div className="card border border-gray-200/50">
         <div className="flex items-center gap-2 mb-2">
           <div className="w-8 h-8 bg-indigo-900/30 rounded-lg flex items-center justify-center">
             <Zap className="w-4 h-4 text-indigo-600" />
           </div>
-          <h2 className="text-lg font-semibold text-white">Automatizaciones</h2>
+          <h2 className="text-lg font-semibold text-gray-800">Automatizaciones</h2>
         </div>
         <p className="text-sm text-gray-400">No se pudieron cargar las estadísticas de automatizaciones.</p>
-        <Link to="/automations" className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium mt-2">
+        <Link to="/app/automations" className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium mt-2">
           Ir a Automatizaciones <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
@@ -47,28 +47,28 @@ export default function AutomationsSummary() {
           <div className="w-8 h-8 bg-indigo-900/30 rounded-lg flex items-center justify-center">
             <Zap className="w-4 h-4 text-indigo-600" />
           </div>
-          <h2 className="text-lg font-semibold text-white">Automatizaciones</h2>
+          <h2 className="text-lg font-semibold text-gray-800">Automatizaciones</h2>
         </div>
-        <Link to="/automations" className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium">
+        <Link to="/app/automations" className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium">
           Ver todo <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
 
       {/* Mini KPIs */}
       <div className="grid grid-cols-4 gap-3 mb-4">
-        <div className="bg-gray-700/30 rounded-lg p-3 text-center">
-          <p className="text-xl font-bold text-white">{stats.total}</p>
+        <div className="bg-gray-50 rounded-lg p-3 text-center">
+          <p className="text-xl font-bold text-gray-800">{stats.total}</p>
           <p className="text-[10px] text-gray-500 uppercase">Total</p>
         </div>
-        <div className="bg-green-900/30 rounded-lg p-3 text-center">
+        <div className="bg-green-50 rounded-lg p-3 text-center">
           <p className="text-xl font-bold text-green-700">{stats.active_count}</p>
           <p className="text-[10px] text-green-600 uppercase">Activas</p>
         </div>
-        <div className={clsx('rounded-lg p-3 text-center', stats.error_count > 0 ? 'bg-red-900/30' : 'bg-gray-700/30')}>
+        <div className={clsx('rounded-lg p-3 text-center', stats.error_count > 0 ? 'bg-red-900/30' : 'bg-gray-50')}>
           <p className={clsx('text-xl font-bold', stats.error_count > 0 ? 'text-red-700' : 'text-gray-400')}>{stats.error_count}</p>
           <p className={clsx('text-[10px] uppercase', stats.error_count > 0 ? 'text-red-600' : 'text-gray-400')}>Errores</p>
         </div>
-        <div className="bg-cyan-900/30 rounded-lg p-3 text-center">
+        <div className="bg-blue-50 rounded-lg p-3 text-center">
           <p className="text-xl font-bold text-cyan-700">{stats.total_executions_24h}</p>
           <p className="text-[10px] text-cyan-600 uppercase">Exec 24h</p>
         </div>
@@ -80,7 +80,7 @@ export default function AutomationsSummary() {
           <span className="text-xs font-medium text-gray-600">Progreso de implementación</span>
           <span className="text-xs font-bold text-indigo-600">{implProgress}%</span>
         </div>
-        <div className="h-2 bg-gray-700/50 rounded-full overflow-hidden">
+        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-500"
             style={{ width: `${implProgress}%` }}
@@ -106,7 +106,7 @@ export default function AutomationsSummary() {
               integraciones: '🔗 Integr.',
             }
             return (
-              <span key={cat} className="inline-flex items-center gap-1 text-[10px] bg-gray-700/50 text-gray-400 px-2 py-0.5 rounded-full">
+              <span key={cat} className="inline-flex items-center gap-1 text-[10px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">
                 {labels[cat] || cat} <span className="font-bold">{count}</span>
               </span>
             )

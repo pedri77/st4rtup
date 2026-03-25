@@ -153,7 +153,7 @@ export default function Layout() {
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center"
               style={{ background: `linear-gradient(135deg, ${T.cyan}, ${T.purple})` }}>
-              <span className="text-white font-bold text-sm">S4</span>
+              <span className="text-gray-800 font-bold text-sm">S4</span>
             </div>
             <span style={{ fontFamily: fontDisplay, color: T.fg }} className="font-semibold text-lg">St4rtup CRM</span>
           </div>

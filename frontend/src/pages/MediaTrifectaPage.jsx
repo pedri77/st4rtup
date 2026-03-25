@@ -94,7 +94,7 @@ export default function MediaTrifectaPage() {
             <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Conversiones</span><span style={{ color: T.fg, fontFamily: fontMono }}>{t.owned.conversions}</span></div>
             <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Leads organicos</span><span style={{ color: T.success, fontFamily: fontMono, fontWeight: 'bold' }}>{t.owned.leads}</span></div>
           </div>
-          <Link to="/marketing" className="text-xs hover:underline mt-3 inline-block" style={{ color: T.success }}>Gestionar →</Link>
+          <Link to="/app/marketing" className="text-xs hover:underline mt-3 inline-block" style={{ color: T.success }}>Gestionar →</Link>
         </div>
 
         {/* EARNED */}

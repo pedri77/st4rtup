@@ -98,7 +98,7 @@ export default function AlertsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Link to="/marketing" className="transition-colors" style={{ color: T.fgMuted }}>
+          <Link to="/app/marketing" className="transition-colors" style={{ color: T.fgMuted }}>
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>

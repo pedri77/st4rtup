@@ -701,7 +701,7 @@ export default function MarketingIntegrationsPage() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <Link to="/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }}>
+            <Link to="/app/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }}>
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <h1 style={{ fontSize: 24, fontWeight: 700, color: T.fg, fontFamily: fontDisplay, display: 'flex', alignItems: 'center', gap: 8 }}>

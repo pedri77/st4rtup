@@ -125,7 +125,7 @@ export default function ChatWidget() {
           transform: isOpen ? 'scale(0.9)' : 'scale(1)',
         }}
       >
-        {isOpen ? <X className="w-6 h-6" style={{ color: T.fg }} /> : <MessageSquare className="w-6 h-6 text-white" />}
+        {isOpen ? <X className="w-6 h-6" style={{ color: T.fg }} /> : <MessageSquare className="w-6 h-6 text-gray-800" />}
       </button>
 
       {/* Chat panel */}

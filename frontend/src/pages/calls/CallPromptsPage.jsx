@@ -205,7 +205,7 @@ export default function CallPromptsPage() {
           <p className="mt-1 text-sm" style={{ color: T.fgMuted }}>Gestiona los guiones y prompts para llamadas con IA</p>
         </div>
         <div className="flex items-center gap-3">
-          <Link to="/calls" className="px-4 py-2 rounded-lg text-sm font-medium"
+          <Link to="/app/calls" className="px-4 py-2 rounded-lg text-sm font-medium"
             style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}>
             Consola
           </Link>

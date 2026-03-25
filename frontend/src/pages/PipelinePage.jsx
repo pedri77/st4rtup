@@ -464,7 +464,7 @@ function OpportunityCard({ opportunity, lead, isDragging, onDragStart, onDragEnd
           onChange={async (e) => {
             try { await opportunitiesApi.update(opportunity.id, { pricing_tier: e.target.value || null }); toast.success('Tier actualizado') } catch {}
           }}
-          className="flex-1 text-[10px] bg-gray-900/50 border border-gray-700 rounded px-1.5 py-1 text-gray-400"
+          className="flex-1 text-[10px] bg-gray-50/50 border border-gray-200 rounded px-1.5 py-1 text-gray-400"
         >
           <option value="">Tier...</option>
           <option value="pilot_poc">Pilot PoC</option>
@@ -479,7 +479,7 @@ function OpportunityCard({ opportunity, lead, isDragging, onDragStart, onDragEnd
               try { await opportunitiesApi.update(opportunity.id, { competitor: e.target.value || null }); toast.success('Competidor actualizado') } catch {}
             }
           }}
-          className="flex-1 text-[10px] bg-gray-900/50 border border-gray-700 rounded px-1.5 py-1 text-gray-400"
+          className="flex-1 text-[10px] bg-gray-50/50 border border-gray-200 rounded px-1.5 py-1 text-gray-400"
         />
       </div>
 
@@ -519,9 +519,9 @@ function OpportunityCard({ opportunity, lead, isDragging, onDragStart, onDragEnd
       {/* Proposal Modal */}
       {proposal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" onClick={() => setProposal(null)}>
-          <div className="bg-gray-900 border border-gray-700 rounded-xl max-w-3xl w-full max-h-[80vh] overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-gray-50 border border-gray-200 rounded-xl max-w-3xl w-full max-h-[80vh] overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">Propuesta — {opportunity.name}</h3>
+              <h3 className="text-lg font-bold text-gray-800">Propuesta — {opportunity.name}</h3>
               <div className="flex items-center gap-2">
                 <button
                   onClick={async () => {
@@ -537,10 +537,10 @@ function OpportunityCard({ opportunity, lead, isDragging, onDragStart, onDragEnd
                 >
                   <Download className="w-3.5 h-3.5" /> PDF
                 </button>
-                <button onClick={() => setProposal(null)} className="text-gray-500 hover:text-white"><X className="w-5 h-5" /></button>
+                <button onClick={() => setProposal(null)} className="text-gray-500 hover:text-gray-800"><X className="w-5 h-5" /></button>
               </div>
             </div>
-            <pre className="text-sm text-gray-300 whitespace-pre-wrap font-sans leading-relaxed">{proposal}</pre>
+            <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">{proposal}</pre>
           </div>
         </div>
       )}

@@ -85,18 +85,18 @@ export default function DataTable({
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Table Container */}
-      <div className="bg-gray-800/50 rounded-xl shadow-sm border border-gray-700/50 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200/50 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             {/* Header */}
-            <thead className="bg-gray-700/30 border-b border-gray-700/50">
+            <thead className="bg-gray-50 border-b border-gray-200/50">
               <tr>
                 {columns.map((column) => (
                   <th
                     key={column.key}
                     className={clsx(
-                      "px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider",
-                      column.sortable !== false && sortable && "cursor-pointer hover:bg-gray-700/30 transition-colors select-none",
+                      "px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider",
+                      column.sortable !== false && sortable && "cursor-pointer hover:bg-gray-50 transition-colors select-none",
                       column.className
                     )}
                     onClick={() => column.sortable !== false && handleSort(column.key)}
@@ -118,8 +118,8 @@ export default function DataTable({
                   key={row.id || rowIndex}
                   className={clsx(
                     "transition-colors",
-                    onRowClick && "cursor-pointer hover:bg-gray-700/50",
-                    rowIndex % 2 === 0 ? "bg-transparent" : "bg-gray-700/20"
+                    onRowClick && "cursor-pointer hover:bg-gray-100",
+                    rowIndex % 2 === 0 ? "bg-transparent" : "bg-gray-50"
                   )}
                   onClick={() => onRowClick && onRowClick(row)}
                 >
@@ -127,7 +127,7 @@ export default function DataTable({
                     <td
                       key={column.key}
                       className={clsx(
-                        "px-4 py-3 text-sm text-white",
+                        "px-4 py-3 text-sm text-gray-800",
                         column.className
                       )}
                     >
@@ -145,9 +145,9 @@ export default function DataTable({
 
       {/* Pagination */}
       {paginated && totalPages > 1 && (
-        <div className="flex items-center justify-between px-4 py-3 bg-gray-800/50 rounded-lg border border-gray-700/50">
+        <div className="flex items-center justify-between px-4 py-3 bg-white rounded-lg border border-gray-200/50">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-300">
+            <span className="text-sm text-gray-700">
               Mostrando {((currentPage - 1) * pageSize) + 1} - {Math.min(currentPage * pageSize, sortedData.length)} de {sortedData.length}
             </span>
             <select
@@ -158,7 +158,7 @@ export default function DataTable({
                 setPageSize(Number(e.target.value))
                 setCurrentPage(1)
               }}
-              className="ml-2 border border-gray-600 rounded-md px-2 py-1 text-sm bg-gray-700 text-gray-200 focus:ring-2 focus:ring-brand-light focus:border-transparent"
+              className="ml-2 border border-gray-200 rounded-md px-2 py-1 text-sm bg-gray-100 text-gray-800 focus:ring-2 focus:ring-brand-light focus:border-transparent"
             >
               {[10, 20, 50, 100].map(size => (
                 <option key={size} value={size}>{size} por página</option>
@@ -170,14 +170,14 @@ export default function DataTable({
             <button
               onClick={() => setCurrentPage(1)}
               disabled={currentPage === 1}
-              className="px-3 py-1 rounded-md text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700/30"
+              className="px-3 py-1 rounded-md text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
             >
               Primera
             </button>
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700/30"
+              className="p-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -197,8 +197,8 @@ export default function DataTable({
                       className={clsx(
                         "px-3 py-1 rounded-md text-sm font-medium transition-colors",
                         currentPage === page
-                          ? "bg-brand text-white"
-                          : "hover:bg-gray-700/30 text-gray-300"
+                          ? "bg-brand text-gray-800"
+                          : "hover:bg-gray-50 text-gray-700"
                       )}
                     >
                       {page}
@@ -215,14 +215,14 @@ export default function DataTable({
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700/30"
+              className="p-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => setCurrentPage(totalPages)}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 rounded-md text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700/30"
+              className="px-3 py-1 rounded-md text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
             >
               Última
             </button>
@@ -239,9 +239,9 @@ export const ColumnRenderers = {
   // Badge renderer
   badge: (value, variant = 'default') => {
     const variants = {
-      default: 'bg-gray-700/50 text-gray-300',
-      success: 'bg-green-900/30 text-green-400',
-      warning: 'bg-yellow-900/30 text-yellow-400',
+      default: 'bg-gray-100 text-gray-700',
+      success: 'bg-green-50 text-green-400',
+      warning: 'bg-yellow-50 text-yellow-400',
       error: 'bg-red-900/30 text-red-400',
       info: 'bg-blue-900/30 text-blue-400',
     }

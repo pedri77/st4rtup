@@ -223,7 +223,7 @@ export default function LLMVisibilityPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Link to="/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }} onMouseEnter={e => e.currentTarget.style.color = T.fg} onMouseLeave={e => e.currentTarget.style.color = T.fgMuted}>
+          <Link to="/app/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }} onMouseEnter={e => e.currentTarget.style.color = T.fg} onMouseLeave={e => e.currentTarget.style.color = T.fgMuted}>
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>

@@ -30,7 +30,7 @@ export default function KpiCard({ label, value, icon: Icon, color, trend, subtex
         </div>
       </div>
       <div className="flex items-baseline justify-between">
-        <p className="text-2xl font-bold text-white">{value}</p>
+        <p className="text-2xl font-bold text-gray-800">{value}</p>
         {trend !== undefined && (
           <div className={`flex items-center gap-1 ${getTrendColor()}`}>
             {getTrendIcon()}

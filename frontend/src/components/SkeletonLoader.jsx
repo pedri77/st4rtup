@@ -5,12 +5,12 @@ import clsx from 'clsx'
  */
 
 export function SkeletonPulse({ className }) {
-  return <div className={clsx('animate-pulse bg-gray-700/50 rounded', className)} />
+  return <div className={clsx('animate-pulse bg-gray-100 rounded', className)} />
 }
 
 export function SkeletonCard() {
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 space-y-3">
+    <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
         <SkeletonPulse className="h-4 w-32" />
         <SkeletonPulse className="h-5 w-16 rounded-full" />
@@ -32,12 +32,12 @@ export function SkeletonKPIGrid({ count = 4 }) {
 
 export function SkeletonTable({ rows = 5, cols = 4 }) {
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
-      <div className="p-3 border-b border-gray-700 flex gap-4">
+    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+      <div className="p-3 border-b border-gray-200 flex gap-4">
         {Array.from({ length: cols }).map((_, i) => <SkeletonPulse key={i} className="h-3 flex-1" />)}
       </div>
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="p-3 border-b border-gray-700/50 flex gap-4">
+        <div key={i} className="p-3 border-b border-gray-200/50 flex gap-4">
           {Array.from({ length: cols }).map((_, j) => <SkeletonPulse key={j} className="h-4 flex-1" />)}
         </div>
       ))}

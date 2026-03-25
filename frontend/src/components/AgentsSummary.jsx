@@ -39,22 +39,22 @@ export default function AgentsSummary() {
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
           <Bot className="w-4 h-4 text-cyan-400" />
           Agentes IA
         </h3>
-        <Link to="/agents" className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+        <Link to="/app/agents" className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
           Ver todos <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-3">
-        <div className="bg-gray-900/50 rounded-lg p-2.5 text-center">
+        <div className="bg-gray-50/50 rounded-lg p-2.5 text-center">
           <p className="text-lg font-bold text-cyan-400">{activeCount}</p>
           <p className="text-[10px] text-gray-500 uppercase">Activos</p>
         </div>
-        <div className="bg-gray-900/50 rounded-lg p-2.5 text-center">
-          <p className="text-lg font-bold text-white">{recentRuns}</p>
+        <div className="bg-gray-50/50 rounded-lg p-2.5 text-center">
+          <p className="text-lg font-bold text-gray-800">{recentRuns}</p>
           <p className="text-[10px] text-gray-500 uppercase">Ejecuciones</p>
         </div>
       </div>
@@ -65,7 +65,7 @@ export default function AgentsSummary() {
           return (
             <div key={agent.id} className="flex items-center gap-2 text-xs">
               <Icon className="w-3.5 h-3.5 text-gray-500" />
-              <span className="text-gray-300 flex-1">{agent.name}</span>
+              <span className="text-gray-700 flex-1">{agent.name}</span>
               <CheckCircle className={`w-3 h-3 ${agent.status === 'active' ? 'text-green-400' : 'text-gray-600'}`} />
             </div>
           )

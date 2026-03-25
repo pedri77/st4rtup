@@ -64,10 +64,10 @@ const ASSET_TYPE_LABELS = {
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-xs shadow-xl">
-      <p className="text-gray-300 mb-1">{label}</p>
+    <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs shadow-xl">
+      <p className="text-gray-700 mb-1">{label}</p>
       {payload.map((p, i) => (
-        <p key={i} className="text-white font-medium">
+        <p key={i} className="text-gray-800 font-medium">
           {p.name}: {typeof p.value === 'number' ? p.value.toLocaleString() : p.value}
         </p>
       ))}
@@ -85,19 +85,19 @@ export default function AnalyticsPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <Link to="/marketing" className="text-gray-400 hover:text-white transition-colors">
+          <Link to="/app/marketing" className="text-gray-400 hover:text-gray-800 transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
             <BarChart3 className="w-6 h-6 text-rose-400" />
             Analytics
           </h1>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-              <div className="h-4 bg-gray-700/50 rounded animate-pulse w-20 mb-3" />
-              <div className="h-8 bg-gray-700/50 rounded animate-pulse w-16" />
+            <div key={i} className="bg-white border border-gray-200 rounded-xl p-5">
+              <div className="h-4 bg-gray-100 rounded animate-pulse w-20 mb-3" />
+              <div className="h-8 bg-gray-100 rounded animate-pulse w-16" />
             </div>
           ))}
         </div>
@@ -149,11 +149,11 @@ export default function AnalyticsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link to="/marketing" className="text-gray-400 hover:text-white transition-colors">
+        <Link to="/app/marketing" className="text-gray-400 hover:text-gray-800 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
             <BarChart3 className="w-6 h-6 text-rose-400" />
             Marketing Analytics
           </h1>
@@ -185,8 +185,8 @@ export default function AnalyticsPage() {
       {/* Charts row 1: Channel bar + Status pie + Objective pie */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Budget by Channel — Bar Chart */}
-        <div className="lg:col-span-2 bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="lg:col-span-2 bg-white border border-gray-200 rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <DollarSign className="w-4 h-4 text-green-400" />
             Presupuesto por Canal
           </h3>
@@ -209,8 +209,8 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Status — Pie Chart */}
-        <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <Megaphone className="w-4 h-4 text-cyan-400" />
             Por Estado
           </h3>
@@ -242,8 +242,8 @@ export default function AnalyticsPage() {
       {/* Charts row 2: Campaigns by channel count + Objective + Asset types */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Campaigns by channel — bar */}
-        <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <GitBranch className="w-4 h-4 text-purple-400" />
             Campañas por Canal
           </h3>
@@ -266,8 +266,8 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Objective pie */}
-        <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <Target className="w-4 h-4 text-green-400" />
             Por Objetivo
           </h3>
@@ -298,8 +298,8 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Asset types pie */}
-        <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <Globe className="w-4 h-4 text-teal-400" />
             Assets por Tipo
           </h3>
@@ -334,8 +334,8 @@ export default function AnalyticsPage() {
       {(personaData.length > 0 || regulatoryData.length > 0) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {personaData.length > 0 && (
-            <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-              <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
                 <Users className="w-4 h-4 text-blue-400" />
                 Campañas por Persona Target
               </h3>
@@ -352,8 +352,8 @@ export default function AnalyticsPage() {
           )}
 
           {regulatoryData.length > 0 && (
-            <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-              <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
                 <Shield className="w-4 h-4 text-orange-400" />
                 Campañas por Normativa
               </h3>
@@ -372,15 +372,15 @@ export default function AnalyticsPage() {
 
       {/* Top campaigns table */}
       {top_campaigns?.length > 0 && (
-        <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-green-400" />
             Top Campañas por Presupuesto
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-700">
+                <tr className="border-b border-gray-200">
                   <th className="text-left text-gray-400 font-medium py-2 px-3">Campaña</th>
                   <th className="text-left text-gray-400 font-medium py-2 px-3">Canal</th>
                   <th className="text-left text-gray-400 font-medium py-2 px-3">Estado</th>
@@ -391,16 +391,16 @@ export default function AnalyticsPage() {
               </thead>
               <tbody>
                 {top_campaigns.map((c, i) => (
-                  <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-700/20">
-                    <td className="py-2 px-3 text-white font-medium truncate max-w-[200px]">{c.name}</td>
+                  <tr key={i} className="border-b border-gray-200/50 hover:bg-gray-50">
+                    <td className="py-2 px-3 text-gray-800 font-medium truncate max-w-[200px]">{c.name}</td>
                     <td className="py-2 px-3">
                       <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: `${CHANNEL_COLORS[c.channel] || '#6B7280'}20`, color: CHANNEL_COLORS[c.channel] || '#9CA3AF' }}>
                         {CHANNEL_LABELS[c.channel] || c.channel}
                       </span>
                     </td>
                     <td className="py-2 px-3 text-gray-400">{STATUS_LABELS[c.status] || c.status}</td>
-                    <td className="py-2 px-3 text-right text-white">€{c.budget.toLocaleString()}</td>
-                    <td className="py-2 px-3 text-right text-gray-300">{c.leads_goal}</td>
+                    <td className="py-2 px-3 text-right text-gray-800">€{c.budget.toLocaleString()}</td>
+                    <td className="py-2 px-3 text-right text-gray-700">{c.leads_goal}</td>
                     <td className="py-2 px-3 text-right text-yellow-400">€{c.cpl}</td>
                   </tr>
                 ))}
@@ -412,15 +412,15 @@ export default function AnalyticsPage() {
 
       {/* Top assets table */}
       {assets?.top?.length > 0 && (
-        <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <Eye className="w-4 h-4 text-teal-400" />
             Top Assets por Visitas
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-700">
+                <tr className="border-b border-gray-200">
                   <th className="text-left text-gray-400 font-medium py-2 px-3">Asset</th>
                   <th className="text-left text-gray-400 font-medium py-2 px-3">Tipo</th>
                   <th className="text-right text-gray-400 font-medium py-2 px-3">Visitas</th>
@@ -432,13 +432,13 @@ export default function AnalyticsPage() {
               </thead>
               <tbody>
                 {assets.top.map((a, i) => (
-                  <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-700/20">
-                    <td className="py-2 px-3 text-white font-medium truncate max-w-[200px]">{a.name}</td>
+                  <tr key={i} className="border-b border-gray-200/50 hover:bg-gray-50">
+                    <td className="py-2 px-3 text-gray-800 font-medium truncate max-w-[200px]">{a.name}</td>
                     <td className="py-2 px-3 text-gray-400 text-xs">{ASSET_TYPE_LABELS[a.type] || a.type}</td>
-                    <td className="py-2 px-3 text-right text-white">{a.visits.toLocaleString()}</td>
+                    <td className="py-2 px-3 text-right text-gray-800">{a.visits.toLocaleString()}</td>
                     <td className="py-2 px-3 text-right text-green-400">{a.conversions.toLocaleString()}</td>
                     <td className="py-2 px-3 text-right text-green-400">{a.conv_rate}%</td>
-                    <td className="py-2 px-3 text-right text-gray-300">{a.impressions.toLocaleString()}</td>
+                    <td className="py-2 px-3 text-right text-gray-700">{a.impressions.toLocaleString()}</td>
                     <td className="py-2 px-3 text-right text-cyan-400">{a.ctr}%</td>
                   </tr>
                 ))}
@@ -451,8 +451,8 @@ export default function AnalyticsPage() {
       {/* Alerts by type + Module counts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {alertTypeData.length > 0 && (
-          <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-            <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-yellow-400" />
               Alertas por Tipo
             </h3>
@@ -467,8 +467,8 @@ export default function AnalyticsPage() {
           </div>
         )}
 
-        <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <FileText className="w-4 h-4 text-indigo-400" />
             Módulos del Hub
           </h3>
@@ -485,16 +485,16 @@ export default function AnalyticsPage() {
 
       {/* Language distribution */}
       {Object.keys(assets?.by_language || {}).length > 0 && (
-        <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
             <Globe className="w-4 h-4 text-teal-400" />
             Assets por Idioma
           </h3>
           <div className="flex flex-wrap gap-3">
             {Object.entries(assets.by_language).map(([lang, count]) => (
-              <div key={lang} className="flex items-center gap-2 bg-gray-700/30 rounded-lg px-3 py-2">
+              <div key={lang} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2">
                 <span className="text-xs font-mono text-cyan-400 uppercase">{lang}</span>
-                <span className="text-sm font-bold text-white">{count}</span>
+                <span className="text-sm font-bold text-gray-800">{count}</span>
               </div>
             ))}
           </div>
@@ -537,9 +537,9 @@ function ChannelAttributionTreemap() {
   })
 
   if (isLoading) return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-      <div className="h-4 w-48 bg-gray-700/50 rounded animate-pulse mb-4" />
-      <div className="h-[260px] bg-gray-700/30 rounded animate-pulse" />
+    <div className="bg-white border border-gray-200 rounded-xl p-5">
+      <div className="h-4 w-48 bg-gray-100 rounded animate-pulse mb-4" />
+      <div className="h-[260px] bg-gray-50 rounded animate-pulse" />
     </div>
   )
 
@@ -553,8 +553,8 @@ function ChannelAttributionTreemap() {
   }))
 
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
-      <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+    <div className="bg-white border border-gray-200 rounded-xl p-5">
+      <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
         <GitBranch className="w-4 h-4 text-purple-400" />
         Atribución por Canal
       </h3>
@@ -570,9 +570,9 @@ function ChannelAttributionTreemap() {
               if (!payload?.length) return null
               const d = payload[0]?.payload
               return (
-                <div className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-xs shadow-xl">
-                  <p className="text-white font-medium">{d?.name}</p>
-                  <p className="text-gray-300">{d?.value}%</p>
+                <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs shadow-xl">
+                  <p className="text-gray-800 font-medium">{d?.name}</p>
+                  <p className="text-gray-700">{d?.value}%</p>
                 </div>
               )
             }}
@@ -585,12 +585,12 @@ function ChannelAttributionTreemap() {
 
 function KpiCard({ icon: Icon, label, value, sub, color }) {
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
+    <div className="bg-white border border-gray-200 rounded-xl p-5">
       <div className="flex items-center gap-2 mb-2">
         <Icon className={clsx('w-4 h-4', color)} />
         <span className="text-xs text-gray-400">{label}</span>
       </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
+      <p className="text-2xl font-bold text-gray-800">{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
     </div>
   )
@@ -598,10 +598,10 @@ function KpiCard({ icon: Icon, label, value, sub, color }) {
 
 function CountCard({ icon: Icon, label, value }) {
   return (
-    <div className="flex items-center gap-3 bg-gray-900/50 rounded-lg p-3">
+    <div className="flex items-center gap-3 bg-gray-50/50 rounded-lg p-3">
       <Icon className="w-4 h-4 text-gray-400" />
       <div>
-        <p className="text-lg font-bold text-white">{value}</p>
+        <p className="text-lg font-bold text-gray-800">{value}</p>
         <p className="text-xs text-gray-500">{label}</p>
       </div>
     </div>

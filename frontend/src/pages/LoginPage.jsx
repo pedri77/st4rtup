@@ -33,15 +33,15 @@ export default function LoginPage() {
         {/* Logo and Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-orange-500 rounded-2xl mb-4 shadow-lg">
-            <ShieldCheck className="w-10 h-10 text-white" />
+            <ShieldCheck className="w-10 h-10 text-gray-800" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">St4rtup CRM</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">St4rtup CRM</h1>
           <p className="text-gray-500">CRM Comercial Interno</p>
         </div>
 
         {/* Login Card */}
         <div className="bg-white backdrop-blur-sm rounded-xl border border-gray-200 p-8 shadow-xl">
-          <h2 className="text-2xl font-semibold text-white mb-6">Iniciar Sesión</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Iniciar Sesión</h2>
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-6">

@@ -82,9 +82,9 @@ export default function CallsDashboardPage() {
           <p className="mt-1 text-sm" style={{ color: T.fgMuted }}>Metricas y rendimiento de llamadas con Retell AI</p>
         </div>
         <div className="flex items-center gap-3">
-          <Link to="/calls" style={linkStyle}>Consola</Link>
-          <Link to="/calls/queues" style={linkStyle}>Colas</Link>
-          <Link to="/calls/history" style={linkStyle}>Historial</Link>
+          <Link to="/app/calls" style={linkStyle}>Consola</Link>
+          <Link to="/app/calls/queues" style={linkStyle}>Colas</Link>
+          <Link to="/app/calls/history" style={linkStyle}>Historial</Link>
         </div>
       </div>
 

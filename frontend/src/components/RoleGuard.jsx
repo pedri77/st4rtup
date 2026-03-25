@@ -78,14 +78,14 @@ export default function RoleGuard({ allowedRoles, children, fallback }) {
  */
 function ForbiddenPage({ userRole, requiredRoles }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full text-center">
-        <div className="bg-gray-800/50 rounded-lg shadow-lg p-8 border border-gray-700/50">
+        <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200/50">
           <div className="w-20 h-20 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
             <ShieldAlert className="w-10 h-10 text-red-600" />
           </div>
 
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Acceso Denegado
           </h1>
 
@@ -93,14 +93,14 @@ function ForbiddenPage({ userRole, requiredRoles }) {
             No tienes permisos para acceder a esta página.
           </p>
 
-          <div className="bg-gray-700/30 rounded-lg p-4 mb-6">
-            <p className="text-sm text-gray-300 mb-2">
+          <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <p className="text-sm text-gray-700 mb-2">
               <span className="font-semibold">Tu rol:</span>{' '}
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                 {userRole || 'desconocido'}
               </span>
             </p>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-gray-700">
               <span className="font-semibold">Roles requeridos:</span>{' '}
               {requiredRoles.map((role, idx) => (
                 <span key={role}>
