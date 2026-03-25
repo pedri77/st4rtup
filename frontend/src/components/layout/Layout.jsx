@@ -207,6 +207,18 @@ export default function Layout() {
             </Link>
           </div>
         </nav>
+
+        {/* API Cost Widget */}
+        <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.border}` }}>
+          <div style={{ fontSize: '.65rem', color: T.fgMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>API · uso mensual</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
+            <span style={{ fontFamily: fontMono, fontWeight: 700, fontSize: '.9rem', color: T.cyan }}>$0.00</span>
+            <span style={{ fontSize: '.65rem', color: T.fgMuted }}>/ $50</span>
+          </div>
+          <div style={{ height: 4, background: T.muted, borderRadius: 2, overflow: 'hidden' }}>
+            <div style={{ width: '0%', height: '100%', borderRadius: 2, background: T.cyan }} />
+          </div>
+        </div>
       </aside>
 
       {/* Main content */}
