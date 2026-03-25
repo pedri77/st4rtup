@@ -12,11 +12,11 @@ const T = {
 const fontDisplay = "'Rajdhani', sans-serif"
 
 const quickActions = [
-  { label: 'Nuevo Lead', icon: Users, href: '/leads?new=1', color: T.cyan },
-  { label: 'Nueva Accion', icon: CheckSquare, href: '/actions?new=1', color: T.warning },
-  { label: 'Nuevo Email', icon: Mail, href: '/emails?new=1', color: T.success },
-  { label: 'Nueva Visita', icon: CalendarCheck, href: '/visits?new=1', color: T.purple },
-  { label: 'Nueva Oportunidad', icon: GitBranch, href: '/pipeline?new=1', color: T.destructive },
+  { label: 'Nuevo Lead', icon: Users, href: '/app/leads?new=1', color: T.cyan },
+  { label: 'Nueva Accion', icon: CheckSquare, href: '/app/actions?new=1', color: T.warning },
+  { label: 'Nuevo Email', icon: Mail, href: '/app/emails?new=1', color: T.success },
+  { label: 'Nueva Visita', icon: CalendarCheck, href: '/app/visits?new=1', color: T.purple },
+  { label: 'Nueva Oportunidad', icon: GitBranch, href: '/app/pipeline?new=1', color: T.destructive },
 ]
 
 export default function QuickActions() {

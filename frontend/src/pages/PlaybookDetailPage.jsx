@@ -181,7 +181,7 @@ export default function PlaybookDetailPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <Link to="/gtm/playbook" className="transition-colors" style={{ color: T.fgMuted }}
+              <Link to="/app/gtm/playbook" className="transition-colors" style={{ color: T.fgMuted }}
                 onMouseEnter={e => e.currentTarget.style.color = T.fg}
                 onMouseLeave={e => e.currentTarget.style.color = T.fgMuted}>
                 <ArrowLeft className="w-5 h-5" />

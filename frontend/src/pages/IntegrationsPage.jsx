@@ -806,7 +806,7 @@ function IntegrationCard({ integration, settings, onSave, saving, isAdmin }) {
             <h4 style={{ color: T.fg }} className="text-sm font-medium">{integration.name}</h4>
             <StatusBadge configured={hasConfig} />
             {marketingRef && (
-              <Link to="/marketing/integrations"
+              <Link to="/app/marketing/integrations"
                 className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full transition-colors"
                 style={{ color: T.purple, backgroundColor: `${T.purple}15` }}
                 onClick={e => e.stopPropagation()}>
@@ -957,7 +957,7 @@ function IntegrationsTab({ settings, onSave, saving, isAdmin }) {
             <p style={{ fontFamily: fontMono, color: T.fgMuted }} className="text-lg font-bold">{allIntegrations.length - configuredCount}</p>
             <p style={{ color: T.fgMuted }} className="text-[10px] uppercase">Pendientes</p>
           </div>
-          <Link to="/marketing/integrations"
+          <Link to="/app/marketing/integrations"
             className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors"
             style={{ backgroundColor: `${T.purple}10`, border: `1px solid ${T.purple}30`, color: T.purple }}>
             <Megaphone className="w-4 h-4" /> Marketing

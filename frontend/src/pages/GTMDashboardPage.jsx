@@ -224,15 +224,15 @@ export default function GTMDashboardPage() {
             toast.success('Board pack descargado')
           } catch { toast.error('Error generando PDF') }
         }} className="btn-secondary text-xs flex items-center gap-1"><Download className="w-3.5 h-3.5" /> Board Pack PDF</button>
-        <Link to="/gtm/pricing" className="btn-secondary text-xs">Pricing</Link>
-        <Link to="/gtm/competitors" className="btn-secondary text-xs">Competidores</Link>
-        <Link to="/gtm/playbook" className="btn-secondary text-xs">Playbook</Link>
-        <Link to="/gtm/brand" className="btn-secondary text-xs">Brand</Link>
-        <Link to="/gtm/media" className="btn-secondary text-xs">Media Trifecta</Link>
-        <Link to="/gtm/okr" className="btn-secondary text-xs">OKRs</Link>
-        <Link to="/gtm/forecast" className="btn-secondary text-xs">Forecast</Link>
-        <Link to="/gtm/poc-tracker" className="btn-secondary text-xs">PoC Tracker</Link>
-        <Link to="/gtm/investor" className="btn-secondary text-xs">Investor View</Link>
+        <Link to="/app/gtm/pricing" className="btn-secondary text-xs">Pricing</Link>
+        <Link to="/app/gtm/competitors" className="btn-secondary text-xs">Competidores</Link>
+        <Link to="/app/gtm/playbook" className="btn-secondary text-xs">Playbook</Link>
+        <Link to="/app/gtm/brand" className="btn-secondary text-xs">Brand</Link>
+        <Link to="/app/gtm/media" className="btn-secondary text-xs">Media Trifecta</Link>
+        <Link to="/app/gtm/okr" className="btn-secondary text-xs">OKRs</Link>
+        <Link to="/app/gtm/forecast" className="btn-secondary text-xs">Forecast</Link>
+        <Link to="/app/gtm/poc-tracker" className="btn-secondary text-xs">PoC Tracker</Link>
+        <Link to="/app/gtm/investor" className="btn-secondary text-xs">Investor View</Link>
       </div>
 
       {/* Star KPIs */}

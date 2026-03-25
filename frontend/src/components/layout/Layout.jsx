@@ -195,7 +195,7 @@ export default function Layout() {
           {/* User profile */}
           <div className="pt-3 mt-3" style={{ borderTop: `1px solid ${T.border}` }}>
             <Link
-              to="/profile"
+              to="/app/profile"
               className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
               style={{ fontFamily: fontDisplay, letterSpacing: '0.02em', color: T.fgMuted }}
             >
@@ -274,7 +274,7 @@ export default function Layout() {
 
             {/* Settings */}
             {hasRole('admin') && (
-              <NavLink to="/settings" className="p-2 rounded-lg transition-colors"
+              <NavLink to="/app/settings" className="p-2 rounded-lg transition-colors"
                 style={{ color: T.fgMuted }}>
                 <Settings className="w-5 h-5" />
               </NavLink>

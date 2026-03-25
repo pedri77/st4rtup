@@ -190,7 +190,7 @@ export default function SocialMediaPage() {
         const views = yt.view_count ?? yt.total_views ?? yt.views
         if (!subs && !views) return null
         return (
-          <Link to="/marketing/youtube" className="block">
+          <Link to="/app/marketing/youtube" className="block">
             <div className="rounded-xl p-3 transition-all group" style={{ border: `1px solid ${T.border}`, backgroundColor: 'hsla(0,70%,50%,0.06)' }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'hsla(0,72%,51%,0.4)' }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = T.border }}>

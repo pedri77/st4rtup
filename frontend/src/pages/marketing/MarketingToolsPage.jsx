@@ -576,9 +576,9 @@ function CompetitorTracker() {
 
       <div className="flex items-center justify-between">
         <p style={{ fontSize: 12, color: T.fgMuted }}>
-          Datos compartidos con <Link to="/gtm/competitors" style={{ color: T.cyan }}>GTM → Competitive Intelligence</Link>
+          Datos compartidos con <Link to="/app/gtm/competitors" style={{ color: T.cyan }}>GTM → Competitive Intelligence</Link>
         </p>
-        <Link to="/gtm/competitors" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', backgroundColor: T.cyan, color: '#fff', borderRadius: 8, fontSize: 12, fontWeight: 500, textDecoration: 'none' }}>
+        <Link to="/app/gtm/competitors" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', backgroundColor: T.cyan, color: '#fff', borderRadius: 8, fontSize: 12, fontWeight: 500, textDecoration: 'none' }}>
           <Plus className="w-3.5 h-3.5" /> Gestionar competidores
         </Link>
       </div>
