@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Hardcoded Supabase config (safe for frontend - anon key is public)
-const supabaseUrl = 'https://dszhaxyzrnsgjlabtvqx.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzemhheHl6cm5zZ2psYWJ0dnF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNTIwNzMsImV4cCI6MjA4NzYyODA3M30.mDb0RupHEPMtFsYZ4G--XI6CNwIZXljGPZZE1-Ruubg'
+// St4rtup Supabase project
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ufwjtzvfclnmbskemdjp.supabase.co'
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmd2p0enZmY2xubWJza2VtZGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MzgyODUsImV4cCI6MjA5MDAxNDI4NX0.GuvVWiua6mbjj6ZgH2EV_YSvpa6kzdWkglxn90b4ais'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
