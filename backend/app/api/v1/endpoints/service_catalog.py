@@ -5,7 +5,9 @@ from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.security import get_current_user, require_write_access
+from app.core.security import get_current_user
+
+require_write_access = get_current_user  # alias until roles are implemented
 from app.models.service_catalog import ServiceCatalogItem
 
 router = APIRouter()
