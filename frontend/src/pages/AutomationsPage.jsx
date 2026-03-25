@@ -13,7 +13,7 @@ import {
 
 const T = {
   bg: '#F8FAFC',
-  card: 'hsl(220,40%,8%)',
+  card: '#FFFFFF',
   muted: 'hsl(220,30%,12%)',
   border: '#F1F5F9',
   fg: '#0F172A',
