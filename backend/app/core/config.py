@@ -155,7 +155,7 @@ class Settings(BaseSettings):
     GA4_REFRESH_TOKEN: str = ""
     GA4_PROPERTY_ID: str = ""
     # YouTube
-    YOUTUBE_CHANNEL_ID: str = "UCe_cKWVMFtl1xKrdzwMYqbQ"
+    YOUTUBE_CHANNEL_ID: str = ""
 
     HUBSPOT_API_KEY: str = ""
     HUBSPOT_PORTAL_ID: str = ""
