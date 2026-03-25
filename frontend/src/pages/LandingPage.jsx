@@ -384,7 +384,7 @@ export default function LandingPage() {
             </div>
             {[
               { title: t.footer.producto, links: [{ t: t.nav.features, h: '#features' }, { t: t.nav.pricing, h: '/pricing' }, { t: 'Demo', h: '/demo' }, { t: 'ROI', h: '/roi' }] },
-              { title: t.footer.recursos, links: [{ t: 'Blog', h: '/blog' }, { t: 'Changelog', h: '/changelog' }, { t: lang === 'es' ? 'Ayuda' : 'Help', h: '/help' }, { t: 'Status', h: '/status' }] },
+              { title: t.footer.recursos, links: [{ t: 'Blog', h: '/blog' }, { t: 'Changelog', h: '/changelog' }, { t: lang === 'es' ? 'Ayuda' : 'Help', h: '/help' }, { t: 'Status', h: '/status' }, { t: lang === 'es' ? 'Afiliados' : 'Affiliates', h: '/affiliates' }] },
               { title: t.footer.legal, links: [{ t: lang === 'es' ? 'Privacidad' : 'Privacy', h: '/privacy' }, { t: lang === 'es' ? 'Términos' : 'Terms', h: '/terms' }, { t: 'Cookies', h: '/cookies' }] },
             ].map(col => (
               <div key={col.title}>
