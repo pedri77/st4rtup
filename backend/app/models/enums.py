@@ -108,7 +108,7 @@ class OfferStatus(str, enum.Enum):
 class ContactRoleType(str, enum.Enum):
     CEO = "ceo"
     CTO = "cto"
-    CEO = "ciso"
+    CISO = "ciso"
     DPO = "dpo"
     CFO = "cfo"
     CIO = "cio"
