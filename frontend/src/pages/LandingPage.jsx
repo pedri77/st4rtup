@@ -1,12 +1,64 @@
 import ExitIntentPopup from '@/components/ExitIntentPopup'
 import WebChatWidget from '@/components/WebChatWidget'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowRight, BarChart3, Mail, Phone, Globe, Zap,
   Layout, MessageSquare, Shield, Menu, X, ChevronRight,
   Check, Star, Megaphone
 } from 'lucide-react'
+
+function AnimatedCounter({ target, suffix = '' }) {
+  const [count, setCount] = useState(0)
+  const ref = useRef(null)
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        let start = 0; const step = target / 120
+        const timer = setInterval(() => {
+          start += step
+          if (start >= target) { setCount(target); clearInterval(timer) }
+          else setCount(Math.floor(start))
+        }, 16)
+        obs.disconnect()
+      }
+    }, { threshold: 0.5 })
+    if (ref.current) obs.observe(ref.current)
+    return () => obs.disconnect()
+  }, [target])
+  return <span ref={ref}>{count}{suffix}</span>
+}
+
+function TypingText({ text, speed = 50 }) {
+  const [displayed, setDisplayed] = useState('')
+  useEffect(() => {
+    let i = 0
+    const timer = setInterval(() => {
+      setDisplayed(text.slice(0, i + 1))
+      i++
+      if (i >= text.length) clearInterval(timer)
+    }, speed)
+    return () => clearInterval(timer)
+  }, [text, speed])
+  return <>{displayed}<span style={{ borderRight: '2px solid #1E6FD9', marginLeft: 2, animation: 'blink 1s infinite' }} /></>
+}
+
+const cardHoverLight = {
+  onMouseEnter: e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(30,111,217,0.08)'; e.currentTarget.style.borderColor = '#1E6FD930' },
+  onMouseLeave: e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)'; e.currentTarget.style.borderColor = '#E2E8F0' },
+}
+
+const BENTO_GRADIENTS = [
+  'linear-gradient(135deg, #1E6FD905, transparent)',
+  'linear-gradient(135deg, #F5820B05, transparent)',
+  'linear-gradient(135deg, #10B98105, transparent)',
+  'linear-gradient(135deg, #8B5CF605, transparent)',
+  'linear-gradient(135deg, #EF444405, transparent)',
+  'linear-gradient(135deg, #F59E0B05, transparent)',
+  'linear-gradient(135deg, #1E6FD905, transparent)',
+  'linear-gradient(135deg, #10B98105, transparent)',
+  'linear-gradient(135deg, #8B5CF605, transparent)',
+]
 
 const T = {
   es: {
@@ -112,7 +164,8 @@ export default function LandingPage() {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
       {/* Nav */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E2E8F0' }}>
+      <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(16px) saturate(180%)', WebkitBackdropFilter: 'blur(16px) saturate(180%)', borderBottom: '1px solid rgba(226,232,240,0.5)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
           <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
           <div style={{ display: 'flex', gap: 28, alignItems: 'center' }} className="hidden md:flex">
@@ -139,12 +192,14 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF7ED 100%)', padding: '80px 24px 100px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 60, flexWrap: 'wrap' }}>
+      <section style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF7ED 100%)', padding: '80px 24px 100px', position: 'relative', backgroundImage: 'radial-gradient(circle, #1E6FD910 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
+        <div style={{ position:'absolute', top:'-10%', right:'-5%', width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle, #1E6FD908, transparent 70%)', filter:'blur(80px)', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:'10%', left:'-10%', width:350, height:350, borderRadius:'50%', background:'radial-gradient(circle, #F5820B06, transparent 70%)', filter:'blur(80px)', pointerEvents:'none' }} />
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 60, flexWrap: 'wrap', position: 'relative' }}>
           <div style={{ flex: '1 1 500px' }}>
             <FadeIn>
               <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(36px, 5vw, 56px)', fontWeight: 800, lineHeight: 1.15, marginBottom: 20 }}>
-                {t.hero.h1a}<br />
+                <TypingText text={t.hero.h1a} speed={60} /><br />
                 <span style={{ color: '#1E6FD9' }}>{lang === 'es' ? 'Simple' : 'Simple'}.</span>{' '}
                 <span style={{ color: '#3B8DE8' }}>{lang === 'es' ? 'Potente' : 'Powerful'}.</span>{' '}
                 <span style={{ color: '#5BA3EF' }}>{lang === 'es' ? 'Para' : 'For'}</span>{' '}
@@ -199,14 +254,12 @@ export default function LandingPage() {
               <p style={{ fontSize: 16, color: '#64748B', maxWidth: 600, margin: '0 auto' }}>{t.features.sub}</p>
             </div>
           </FadeIn>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {t.features.items.map((f, i) => {
               const Icon = ICONS[i]
               return (
                 <FadeIn key={f.title} delay={i * 0.05}>
-                  <div style={{ padding: 28, borderRadius: 16, border: '1px solid #E2E8F0', backgroundColor: 'white', transition: 'all 0.3s' }}
-                    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.06)'; e.currentTarget.style.borderColor = '#1E6FD9' }}
-                    onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#E2E8F0' }}>
+                  <div style={{ padding: 28, borderRadius: 16, border: '1px solid #E2E8F0', backgroundColor: 'white', transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s', background: BENTO_GRADIENTS[i] + ', white', gridColumn: i === 0 ? 'span 2' : undefined, gridRow: i === 4 ? 'span 2' : undefined }} {...cardHoverLight}>
                     <div style={{ width: 44, height: 44, borderRadius: 10, background: 'linear-gradient(135deg, #EBF4FF, #FFF7ED)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
                       <Icon size={22} color="#1E6FD9" />
                     </div>
