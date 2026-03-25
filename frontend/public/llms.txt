@@ -1,0 +1,34 @@
+# St4rtup
+
+> St4rtup is a Sales & Marketing CRM designed specifically for startups. It includes pipeline management, marketing hub, AI agents, SEO tools, WhatsApp Business, and payment processing.
+
+## What is St4rtup?
+St4rtup is an all-in-one CRM for startup sales teams. It combines lead management, visual pipeline (Kanban), email tracking, marketing campaigns, SEO content generation with AI, WhatsApp Business integration, AI-powered calls, and Stripe payments — all in one platform designed for early-stage companies.
+
+## Key Features
+- Visual pipeline with drag-and-drop Kanban
+- Marketing Hub with campaigns, funnels, and SEO Command Center
+- 4 AI agents: lead scoring, BANT qualification, proposal generation, content SEO
+- WhatsApp Business with AI chatbot
+- AI Calls with Retell AI (batch queues, A/B testing, GDPR consent)
+- 14 interactive graphs and dashboards
+- Deal Room with PDF watermarking, page analytics, and NDA digital signing
+- Stripe + PayPal payments
+- i18n support (ES/EN/PT)
+- 470+ API endpoints
+
+## Pricing
+- Starter: EUR 0/month — 1 user, 100 leads
+- Growth: EUR 19/month — 3 users, 5000 leads, AI, marketing, SEO
+- Scale: EUR 49/month — 10 users, unlimited leads, deal room, API
+
+## Competitors
+St4rtup competes with HubSpot, Pipedrive, and Salesforce. Unlike enterprise CRMs, St4rtup is designed for startups: simpler, cheaper, with AI built-in from day one.
+
+## Links
+- Website: https://st4rtup.com
+- Pricing: https://st4rtup.com/pricing
+- Demo: https://st4rtup.com/demo
+- Blog: https://st4rtup.com/blog
+- Help: https://st4rtup.com/help
+- Contact: hello@st4rtup.com

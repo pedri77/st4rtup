@@ -1,0 +1,27 @@
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /login
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: PhindBot
+Allow: /
+
+User-agent: CopilotBot
+Allow: /
+
+Sitemap: https://st4rtup.com/sitemap.xml
