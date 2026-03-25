@@ -99,6 +99,7 @@ const FormsManagerPage = lazy(() => import('./pages/FormsManagerPage'))
 const MyDayPage = lazy(() => import('./pages/MyDayPage'))
 const WhatsAppPage = lazy(() => import('./pages/WhatsAppPage'))
 const PaymentsPage = lazy(() => import('./pages/PaymentsPage'))
+const AffiliatesPage = lazy(() => import('./pages/AffiliatesPage'))
 
 function PageLoader() {
   return (
@@ -130,6 +131,7 @@ function App() {
         <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><PrivacyPage /></Suspense>} />
         <Route path="/terms" element={<Suspense fallback={<PageLoader />}><TermsPage /></Suspense>} />
         <Route path="/cookies" element={<Suspense fallback={<PageLoader />}><CookiesPage /></Suspense>} />
+        <Route path="/affiliates" element={<Suspense fallback={<PageLoader />}><AffiliatesPage /></Suspense>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/survey/:token" element={<Suspense fallback={<PageLoader />}><SurveyPublicPage /></Suspense>} />
         <Route path="/proposal" element={<Suspense fallback={<PageLoader />}><ProposalViewPage /></Suspense>} />
