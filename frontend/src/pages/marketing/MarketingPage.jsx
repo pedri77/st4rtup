@@ -16,22 +16,22 @@ const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
 const modules = [
-  { name: 'SEO Command Center', description: 'Content Hub, auditoría, repurposer, brand monitor y dashboard SEO unificado. Genera artículos con IA.', href: '/marketing/seo-center', icon: Search, accent: T.cyan },
-  { name: 'Campañas', description: 'Gestiona campañas de marketing: LinkedIn Ads, Google Ads, SEO, Email, YouTube, Webinars y Eventos.', href: '/marketing/campaigns', icon: Megaphone, accent: T.cyan },
-  { name: 'Generador UTM', description: 'Crea y gestiona códigos UTM para trackear campañas con vista previa en tiempo real.', href: '/marketing/utm', icon: Link2, accent: T.success },
-  { name: 'Calendario', description: 'Calendario de campañas: artículos SEO, lanzamientos, newsletters, vídeos y webinars.', href: '/marketing/calendar', icon: Calendar, accent: T.warning },
-  { name: 'Alertas', description: 'Alertas de rendimiento: CPL, keywords SEO, integraciones y LLM visibility.', href: '/marketing/alerts', icon: AlertTriangle, accent: '#F59E0B' },
-  { name: 'Funnels', description: 'Constructor visual de funnels: Awareness, Consideración, Decisión y Acción.', href: '/marketing/funnels', icon: Target, accent: T.purple },
-  { name: 'Assets', description: 'Landing pages, CTAs y assets de marketing con métricas de rendimiento e idioma.', href: '/marketing/assets', icon: Globe, accent: T.cyan },
-  { name: 'Documentos', description: 'Gestor documental con versionado, Google Drive, normativa y persona target.', href: '/marketing/docs', icon: FileText, accent: 'hsl(250,60%,58%)' },
-  { name: 'Analytics', description: 'Dashboard unificado Marketing + Sales: CPL, MQL rate, CAC, pipeline y ROI.', href: '/marketing/analytics', icon: BarChart3, accent: 'hsl(340,65%,55%)' },
-  { name: 'Tools', description: 'Calculadora ROI, generador de contenido con IA y tracker de competidores.', href: '/marketing/tools', icon: Calculator, accent: T.warning },
-  { name: 'Audit Log', description: 'Registro de acciones sensibles: creación, edición, eliminación y cambios de configuración.', href: '/marketing/audit', icon: Shield, accent: T.fgMuted },
-  { name: 'SEO & Geo-SEO', description: 'Keywords, rankings, geo pages, NAP audits y rankings localizados para growth España.', href: '/marketing/seo', icon: Search, accent: T.success },
-  { name: 'LLM Visibility', description: 'Monitoriza cómo ChatGPT, Claude y Gemini mencionan tu marca vs competidores growth.', href: '/marketing/llm-visibility', icon: Bot, accent: T.purple },
-  { name: 'Social Media', description: 'Publicaciones en LinkedIn, Twitter/X, Instagram, YouTube. Programación, recurrencia y métricas.', href: '/marketing/social', icon: Share2, accent: 'hsl(210,70%,55%)' },
-  { name: 'YouTube', description: 'Analytics del canal, vídeos recientes, suscriptores, watch time y métricas de rendimiento.', href: '/marketing/youtube', icon: Youtube, accent: '#EF4444' },
-  { name: 'Integraciones', description: 'Google Drive, Search Console, GA4, LinkedIn, Semrush, Slack, Notion y LLM Visibility.', href: '/marketing/integrations', icon: Plug, accent: T.fgMuted },
+  { name: 'SEO Command Center', description: 'Content Hub, auditoría, repurposer, brand monitor y dashboard SEO unificado. Genera artículos con IA.', href: '/app/marketing/seo-center', icon: Search, accent: T.cyan },
+  { name: 'Campañas', description: 'Gestiona campañas de marketing: LinkedIn Ads, Google Ads, SEO, Email, YouTube, Webinars y Eventos.', href: '/app/marketing/campaigns', icon: Megaphone, accent: T.cyan },
+  { name: 'Generador UTM', description: 'Crea y gestiona códigos UTM para trackear campañas con vista previa en tiempo real.', href: '/app/marketing/utm', icon: Link2, accent: T.success },
+  { name: 'Calendario', description: 'Calendario de campañas: artículos SEO, lanzamientos, newsletters, vídeos y webinars.', href: '/app/marketing/calendar', icon: Calendar, accent: T.warning },
+  { name: 'Alertas', description: 'Alertas de rendimiento: CPL, keywords SEO, integraciones y LLM visibility.', href: '/app/marketing/alerts', icon: AlertTriangle, accent: '#F59E0B' },
+  { name: 'Funnels', description: 'Constructor visual de funnels: Awareness, Consideración, Decisión y Acción.', href: '/app/marketing/funnels', icon: Target, accent: T.purple },
+  { name: 'Assets', description: 'Landing pages, CTAs y assets de marketing con métricas de rendimiento e idioma.', href: '/app/marketing/assets', icon: Globe, accent: T.cyan },
+  { name: 'Documentos', description: 'Gestor documental con versionado, Google Drive, normativa y persona target.', href: '/app/marketing/docs', icon: FileText, accent: 'hsl(250,60%,58%)' },
+  { name: 'Analytics', description: 'Dashboard unificado Marketing + Sales: CPL, MQL rate, CAC, pipeline y ROI.', href: '/app/marketing/analytics', icon: BarChart3, accent: 'hsl(340,65%,55%)' },
+  { name: 'Tools', description: 'Calculadora ROI, generador de contenido con IA y tracker de competidores.', href: '/app/marketing/tools', icon: Calculator, accent: T.warning },
+  { name: 'Audit Log', description: 'Registro de acciones sensibles: creación, edición, eliminación y cambios de configuración.', href: '/app/marketing/audit', icon: Shield, accent: T.fgMuted },
+  { name: 'SEO & Geo-SEO', description: 'Keywords, rankings, geo pages, NAP audits y rankings localizados para growth España.', href: '/app/marketing/seo', icon: Search, accent: T.success },
+  { name: 'LLM Visibility', description: 'Monitoriza cómo ChatGPT, Claude y Gemini mencionan tu marca vs competidores growth.', href: '/app/marketing/llm-visibility', icon: Bot, accent: T.purple },
+  { name: 'Social Media', description: 'Publicaciones en LinkedIn, Twitter/X, Instagram, YouTube. Programación, recurrencia y métricas.', href: '/app/marketing/social', icon: Share2, accent: 'hsl(210,70%,55%)' },
+  { name: 'YouTube', description: 'Analytics del canal, vídeos recientes, suscriptores, watch time y métricas de rendimiento.', href: '/app/marketing/youtube', icon: Youtube, accent: '#EF4444' },
+  { name: 'Integraciones', description: 'Google Drive, Search Console, GA4, LinkedIn, Semrush, Slack, Notion y LLM Visibility.', href: '/app/marketing/integrations', icon: Plug, accent: T.fgMuted },
 ]
 
 export default function MarketingPage() {
