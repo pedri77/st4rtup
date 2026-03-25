@@ -182,7 +182,7 @@ export default function OffersPage() {
         </div>
       )}
 
-      {showModal && <OfferModal offer={editingOffer} onClose={() => { setShowModal(false); setEditingOffer(null) }} onSubmit={(formData) => { if (editingOffer) { updateOffer.mutate({ id: editingOffer.id, data: formData }) } else { createOffer.mutate(formData) } }} isLoading={createOffer.isPending || updateOffer.isPending} />}
+      {showModal && <OfferModal offer={editingOffer} catalog={CATALOG} onClose={() => { setShowModal(false); setEditingOffer(null) }} onSubmit={(formData) => { if (editingOffer) { updateOffer.mutate({ id: editingOffer.id, data: formData }) } else { createOffer.mutate(formData) } }} isLoading={createOffer.isPending || updateOffer.isPending} />}
       {viewingOffer && <OfferViewModal offer={viewingOffer} onClose={() => setViewingOffer(null)} onEdit={() => { setViewingOffer(null); setEditingOffer(viewingOffer); setShowModal(true) }} onSign={() => { setViewingOffer(null); setSigningOffer(viewingOffer) }} onInvoice={() => { setViewingOffer(null); setInvoicingOffer(viewingOffer) }} />}
       {signingOffer && <SignatureModal offer={signingOffer} onClose={() => setSigningOffer(null)} onSuccess={() => { queryClient.invalidateQueries({ queryKey: ['offers'] }); setSigningOffer(null) }} />}
       {invoicingOffer && <InvoiceModal offer={invoicingOffer} onClose={() => setInvoicingOffer(null)} onSuccess={() => { queryClient.invalidateQueries({ queryKey: ['offers'] }); setInvoicingOffer(null) }} />}
@@ -256,7 +256,8 @@ function OfferCard({ offer, onView, onEdit, onDelete, onStatusChange, onSign, on
 }
 
 
-function OfferModal({ offer, onClose, onSubmit, isLoading }) {
+function OfferModal({ offer, onClose, onSubmit, isLoading, catalog = [] }) {
+  const CATALOG = catalog
   const { leads } = useLeadsSelect()
   const [catalogOpen, setCatalogOpen] = useState(false)
   const [formData, setFormData] = useState({
