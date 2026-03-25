@@ -5,6 +5,16 @@ from sqlalchemy.dialects.postgresql import UUID
 from app.models.base import BaseModel
 
 
+class DealRoom(BaseModel):
+    __tablename__ = "deal_rooms"
+    opportunity_id = Column(UUID(as_uuid=True), nullable=True)
+    name = Column(String(255))
+    token = Column(UUID(as_uuid=True))
+    nda_required = Column(Boolean, default=True)
+    nda_template_id = Column(String(255))
+    nda_custom_text = Column(Text)
+
+
 class DealRoomDocument(BaseModel):
     __tablename__ = "deal_room_documents"
 

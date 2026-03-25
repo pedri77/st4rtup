@@ -53,7 +53,7 @@ from app.models.backlink import Backlink
 from app.models.publication import Publication, PublicationPlatform, PublicationStatus
 from app.models.wa_conversation import WAConversation, WAMessage
 from app.models.payment import PaymentPlan, Payment, Invoice
-from app.models.deal_room_doc import DealRoomDocument, DealRoomPageEvent
+from app.models.deal_room_doc import DealRoom, DealRoomDocument, DealRoomPageEvent
 
 __all__ = [
     "Base", "BaseModel",
