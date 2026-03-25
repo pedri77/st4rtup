@@ -14,8 +14,8 @@ import {
 const T = {
   bg: '#F8FAFC',
   card: '#FFFFFF',
-  muted: 'hsl(220,30%,12%)',
-  border: '#F1F5F9',
+  muted: '#F1F5F9',
+  border: '#E2E8F0',
   fg: '#0F172A',
   fgMuted: '#64748B',
   cyan: '#1E6FD9',

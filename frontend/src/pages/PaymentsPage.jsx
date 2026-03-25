@@ -146,9 +146,9 @@ function PagosTab() {
     onSuccess: (res) => {
       const url = res.data?.checkout_url || res.data?.url
       if (url) window.location.href = url
-      else toast.error('No se recibi\u00f3 URL de checkout')
+      else toast.error('No se recibi\ó URL de checkout')
     },
-    onError: () => toast.error('Error al crear sesi\u00f3n de Stripe'),
+    onError: () => toast.error('Error al crear sesi\ón de Stripe'),
   })
 
   const paypalMut = useMutation({
@@ -156,7 +156,7 @@ function PagosTab() {
     onSuccess: (res) => {
       const url = res.data?.approval_url || res.data?.url
       if (url) window.location.href = url
-      else toast.error('No se recibi\u00f3 URL de PayPal')
+      else toast.error('No se recibi\ó URL de PayPal')
     },
     onError: () => toast.error('Error al crear orden de PayPal'),
   })
@@ -214,14 +214,14 @@ function PagosTab() {
             />
             <InputField label="Importe (EUR)" type="number" step="0.01" min="0.50" value={form.amount} onChange={(v) => setForm({ ...form, amount: v })} placeholder="99.00" required />
             <InputField label="Email cliente" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} placeholder="cliente@empresa.com" required />
-            <InputField label="Descripci\u00f3n" value={form.description} onChange={(v) => setForm({ ...form, description: v })} placeholder="Licencia St4rtup Pro" required />
+            <InputField label="Descripci\ón" value={form.description} onChange={(v) => setForm({ ...form, description: v })} placeholder="Licencia St4rtup Pro" required />
             <SelectField
               label="Tipo"
               value={form.type}
               onChange={(v) => setForm({ ...form, type: v })}
               options={[
-                { value: 'one_time', label: 'Pago \u00fanico' },
-                { value: 'subscription', label: 'Suscripci\u00f3n' },
+                { value: 'one_time', label: 'Pago \único' },
+                { value: 'subscription', label: 'Suscripci\ón' },
               ]}
               required
             />
@@ -278,7 +278,7 @@ function PagosTab() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between px-4 py-3" style={{ borderTop: `1px solid ${T.border}`, backgroundColor: T.muted }}>
-            <span className="text-xs" style={{ color: T.fgMuted }}>P\u00e1gina {page} de {totalPages}</span>
+            <span className="text-xs" style={{ color: T.fgMuted }}>P\ágina {page} de {totalPages}</span>
             <div className="flex gap-2">
               <button onClick={() => setPage(Math.max(1, page - 1))} disabled={page <= 1}
                 className="p-1.5 rounded-lg disabled:opacity-30" style={{ color: T.fgMuted, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
@@ -335,7 +335,7 @@ function PlanesTab() {
 
   const plansList = Array.isArray(plans) ? plans : plans?.items || []
 
-  const intervalLabel = { month: 'Mensual', year: 'Anual', one_time: 'Pago \u00fanico' }
+  const intervalLabel = { month: 'Mensual', year: 'Anual', one_time: 'Pago \único' }
 
   return (
     <div className="space-y-6">
@@ -361,14 +361,14 @@ function PlanesTab() {
               options={[
                 { value: 'month', label: 'Mensual' },
                 { value: 'year', label: 'Anual' },
-                { value: 'one_time', label: 'Pago \u00fanico' },
+                { value: 'one_time', label: 'Pago \único' },
               ]}
               required
             />
             <InputField label="Features (separadas por coma)" value={form.features} onChange={(v) => setForm({ ...form, features: v })} placeholder="Leads ilimitados, Soporte 24/7" />
-            <InputField label="D\u00edas de prueba" type="number" min="0" value={form.trial_days} onChange={(v) => setForm({ ...form, trial_days: v })} />
-            <InputField label="M\u00e1x. usuarios" type="number" min="1" value={form.max_users} onChange={(v) => setForm({ ...form, max_users: v })} placeholder="Ilimitado" />
-            <InputField label="M\u00e1x. leads" type="number" min="1" value={form.max_leads} onChange={(v) => setForm({ ...form, max_leads: v })} placeholder="Ilimitado" />
+            <InputField label="D\ías de prueba" type="number" min="0" value={form.trial_days} onChange={(v) => setForm({ ...form, trial_days: v })} />
+            <InputField label="M\áx. usuarios" type="number" min="1" value={form.max_users} onChange={(v) => setForm({ ...form, max_users: v })} placeholder="Ilimitado" />
+            <InputField label="M\áx. leads" type="number" min="1" value={form.max_leads} onChange={(v) => setForm({ ...form, max_leads: v })} placeholder="Ilimitado" />
           </div>
           <div className="flex justify-end">
             <Btn type="submit" disabled={createMut.isPending}>
@@ -403,7 +403,7 @@ function PlanesTab() {
                 <span className="text-xs" style={{ color: T.fgMuted }}>/ {intervalLabel[plan.interval] || plan.interval}</span>
               </div>
               {plan.trial_days > 0 && (
-                <p className="text-xs" style={{ color: T.warning }}>{plan.trial_days} d\u00edas de prueba gratis</p>
+                <p className="text-xs" style={{ color: T.warning }}>{plan.trial_days} d\ías de prueba gratis</p>
               )}
               {plan.features && plan.features.length > 0 && (
                 <ul className="space-y-1">
@@ -484,8 +484,8 @@ function FacturasTab() {
             <InputField label="Nombre cliente" value={form.customer_name} onChange={(v) => setForm({ ...form, customer_name: v })} placeholder="Empresa S.L." required />
             <InputField label="CIF/NIF" value={form.cif_nif} onChange={(v) => setForm({ ...form, cif_nif: v })} placeholder="B12345678" required />
             <InputField label="Importe base (EUR)" type="number" step="0.01" min="0.01" value={form.amount} onChange={(v) => setForm({ ...form, amount: v })} placeholder="1000.00" required />
-            <InputField label="Descripci\u00f3n" value={form.description} onChange={(v) => setForm({ ...form, description: v })} placeholder="Licencia anual St4rtup" required />
-            <InputField label="D\u00edas de vencimiento" type="number" min="1" value={form.due_days} onChange={(v) => setForm({ ...form, due_days: v })} />
+            <InputField label="Descripci\ón" value={form.description} onChange={(v) => setForm({ ...form, description: v })} placeholder="Licencia anual St4rtup" required />
+            <InputField label="D\ías de vencimiento" type="number" min="1" value={form.due_days} onChange={(v) => setForm({ ...form, due_days: v })} />
             <InputField label="IVA (%)" type="number" step="0.01" min="0" max="100" value={form.tax_rate} onChange={(v) => setForm({ ...form, tax_rate: v })} />
           </div>
           <div className="flex justify-end">
@@ -503,7 +503,7 @@ function FacturasTab() {
           <table className="w-full text-sm" style={{ color: T.fg }}>
             <thead>
               <tr style={{ backgroundColor: T.muted }}>
-                {['N\u00famero', 'Cliente', 'Base', 'IVA', 'Total', 'Estado', 'Vencimiento', 'PDF'].map((h) => (
+                {['N\úmero', 'Cliente', 'Base', 'IVA', 'Total', 'Estado', 'Vencimiento', 'PDF'].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider" style={{ color: T.fgMuted }}>{h}</th>
                 ))}
               </tr>
@@ -566,8 +566,8 @@ export default function PaymentsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Pagos y Facturaci\u00f3n</h1>
-        <p className="text-sm mt-1" style={{ color: T.fgMuted }}>Gestiona cobros, planes de suscripci\u00f3n y facturas</p>
+        <h1 className="text-2xl font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Pagos y Facturaci\ón</h1>
+        <p className="text-sm mt-1" style={{ color: T.fgMuted }}>Gestiona cobros, planes de suscripci\ón y facturas</p>
       </div>
 
       {/* Tabs */}
