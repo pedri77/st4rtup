@@ -35,6 +35,7 @@ const T = {
   destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
 }
 const fontDisplay = "'Rajdhani', sans-serif"
+const fontMono = "'IBM Plex Mono', monospace"
 
 function getNavigationGroups(t) {
   return [
