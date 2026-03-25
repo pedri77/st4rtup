@@ -71,7 +71,7 @@ async def tracking_pixel(
     )
 
 
-def inject_tracking_pixel(html_body: str, email_id: str, base_url: str = "https://st4rtup-backend.fly.dev") -> str:
+def inject_tracking_pixel(html_body: str, email_id: str, base_url: str = "https://api.st4rtup.com") -> str:
     """Inyecta pixel de tracking en el HTML del email."""
     pixel_url = f"{base_url}/api/v1/tracking/pixel/{email_id}.gif"
     pixel_tag = f'<img src="{pixel_url}" width="1" height="1" style="display:none" alt="" />'

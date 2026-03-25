@@ -168,7 +168,7 @@ const INTEGRATION_CATEGORIES = [
           { key: 'api_key', label: 'Private App Token', type: 'password', placeholder: 'pat-eu1-...' },
           { key: 'client_secret', label: 'Client Secret', type: 'password', placeholder: '88b91b5e-...' },
           { key: 'portal_id', label: 'Portal ID (Hub ID)', type: 'text', placeholder: '12345678' },
-          { key: 'webhook_url', label: 'Webhook URL (copiar a HubSpot)', type: 'text', placeholder: 'https://st4rtup-backend.fly.dev/api/v1/webhooks/hubspot' },
+          { key: 'webhook_url', label: 'Webhook URL (copiar a HubSpot)', type: 'text', placeholder: 'https://api.st4rtup.com/api/v1/webhooks/hubspot' },
           { key: 'sync_contacts', label: 'Sincronizar contactos como leads', type: 'checkbox' },
           { key: 'sync_deals', label: 'Sincronizar deals con pipeline', type: 'checkbox' },
           { key: 'sync_forms', label: 'Importar envios de formularios', type: 'checkbox' },
@@ -601,7 +601,7 @@ function EmailProviderTab({ settings, onSave, saving, isAdmin }) {
                           <input id="integ-oauth-redirect-uri" type="text" value={oauthConfig.redirect_uri}
                             onChange={(e) => setOauthConfig(prev => ({ ...prev, redirect_uri: e.target.value }))}
                             style={inputStyle}
-                            placeholder={`${window.location.origin.replace('app.st4rtup.app', 'st4rtup-backend.fly.dev')}/api/v1/settings/oauth/google/callback`}
+                            placeholder={`${window.location.origin.replace('app.st4rtup.app', 'api.st4rtup.com')}/api/v1/settings/oauth/google/callback`}
                             disabled={!isAdmin} />
                           <p style={{ color: T.fgMuted }} className="text-xs mt-1">URL del backend + /api/v1/settings/oauth/google/callback</p>
                         </div>
@@ -1074,20 +1074,20 @@ function GeneralTab({ settings, onSave, saving, isAdmin }) {
                 className="flex-1 px-3 py-2 rounded-lg text-sm">
                 {window.location.origin.includes('localhost')
                   ? 'http://localhost:8001/api/v1'
-                  : 'https://st4rtup-backend.fly.dev/api/v1'}
+                  : 'https://api.st4rtup.com/api/v1'}
               </code>
             </div>
           </div>
           <div>
             <label style={{ color: T.fgMuted }} className="block text-xs font-medium uppercase mb-1">Documentacion API</label>
             <div className="flex gap-2">
-              <a href={`${window.location.origin.includes('localhost') ? 'http://localhost:8001' : 'https://st4rtup-backend.fly.dev'}/docs`}
+              <a href={`${window.location.origin.includes('localhost') ? 'http://localhost:8001' : 'https://api.st4rtup.com'}/docs`}
                 target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-1 text-sm" style={{ color: T.cyan }}>
                 Swagger UI <ExternalLink className="w-3 h-3" />
               </a>
               <span style={{ color: T.fgMuted }}>|</span>
-              <a href={`${window.location.origin.includes('localhost') ? 'http://localhost:8001' : 'https://st4rtup-backend.fly.dev'}/redoc`}
+              <a href={`${window.location.origin.includes('localhost') ? 'http://localhost:8001' : 'https://api.st4rtup.com'}/redoc`}
                 target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-1 text-sm" style={{ color: T.cyan }}>
                 ReDoc <ExternalLink className="w-3 h-3" />

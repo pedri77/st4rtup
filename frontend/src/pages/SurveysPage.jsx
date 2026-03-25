@@ -756,7 +756,7 @@ function SurveyFormModal({ survey, onClose, onSubmit, isLoading }) {
                 <p style={{ color: T.cyan }} className="text-xs">
                   <strong>Webhook URL:</strong>{' '}
                   <code style={{ fontFamily: fontMono, backgroundColor: T.bg, color: T.cyan }} className="px-1.5 py-0.5 rounded text-[11px]">
-                    {window.location.origin.replace('app.st4rtup.app', 'st4rtup-backend.fly.dev')}/api/v1/surveys/webhook/{formData.external_provider}
+                    {window.location.origin.replace('app.st4rtup.app', 'api.st4rtup.com')}/api/v1/surveys/webhook/{formData.external_provider}
                   </code>
                 </p>
                 <p style={{ color: T.fgMuted }} className="text-xs mt-1">

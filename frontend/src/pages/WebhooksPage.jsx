@@ -74,7 +74,7 @@ export default function WebhooksPage() {
     }))
   }
 
-  const inboundUrl = `${window.location.origin.replace('app.st4rtup.app', 'st4rtup-backend.fly.dev')}/api/v1/webhooks/generic`
+  const inboundUrl = `${window.location.origin.replace('app.st4rtup.app', 'api.st4rtup.com')}/api/v1/webhooks/generic`
 
   return (
     <div style={{ padding: '1.5rem', maxWidth: 960, margin: '0 auto' }}>

@@ -168,7 +168,7 @@ async def public_api_docs():
     return {
         "name": "St4rtup CRM API",
         "version": "1.0",
-        "base_url": "https://st4rtup-backend.fly.dev/api/v1",
+        "base_url": "https://api.st4rtup.com/api/v1",
         "auth": "Header X-API-Key or Bearer JWT",
         "rate_limit": "100 requests/minute per API key",
         "endpoints": [

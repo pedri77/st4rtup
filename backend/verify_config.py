@@ -84,7 +84,7 @@ if missing:
     for var in missing:
         print(f"   - {var}")
     print("\n💡 Configura en Fly.io con:")
-    print("   flyctl secrets set VARIABLE=valor")
+    print("   # Configure in Hetzner .env VARIABLE=valor")
 else:
     print("✅ Todas las variables críticas están configuradas")
 print("="*60)
