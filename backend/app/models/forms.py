@@ -119,10 +119,10 @@ class ROICalculation(BaseModel):
     current_penalty_risk = Column(Float, default=0)
     total_current_cost = Column(Float, default=0)
     # With St4rtup
-    riskitera_license_cost = Column(Float, default=0)
-    riskitera_implementation_cost = Column(Float, default=0)
-    riskitera_training_cost = Column(Float, default=0)
-    total_riskitera_cost = Column(Float, default=0)
+    st4rtup_license_cost = Column(Float, default=0)
+    st4rtup_implementation_cost = Column(Float, default=0)
+    st4rtup_training_cost = Column(Float, default=0)
+    total_st4rtup_cost = Column(Float, default=0)
     # Savings
     fte_savings = Column(Float, default=0)
     tools_savings = Column(Float, default=0)

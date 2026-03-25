@@ -537,7 +537,7 @@ async def _handle_churn(db, data, lead_id=None):
 async def _handle_roi(db, data, lead_id=None):
     from app.models.forms import ROICalculation
     tc = sum(float(data.get(k, 0)) for k in ["current_fte_cost", "current_tools_cost", "current_audit_cost", "current_incident_cost", "current_penalty_risk"])
-    tr = sum(float(data.get(k, 0)) for k in ["riskitera_license_cost", "riskitera_implementation_cost", "riskitera_training_cost"])
+    tr = sum(float(data.get(k, 0)) for k in ["st4rtup_license_cost", "st4rtup_implementation_cost", "st4rtup_training_cost"])
     savings = tc - tr
     roi_pct = round((savings / max(tr, 1)) * 100, 1)
     roi = ROICalculation(
@@ -548,10 +548,10 @@ async def _handle_roi(db, data, lead_id=None):
         current_incident_cost=float(data.get("current_incident_cost", 0)),
         current_penalty_risk=float(data.get("current_penalty_risk", 0)),
         total_current_cost=tc,
-        riskitera_license_cost=float(data.get("riskitera_license_cost", 0)),
-        riskitera_implementation_cost=float(data.get("riskitera_implementation_cost", 0)),
-        riskitera_training_cost=float(data.get("riskitera_training_cost", 0)),
-        total_riskitera_cost=tr, total_savings=savings, roi_pct=roi_pct,
+        st4rtup_license_cost=float(data.get("st4rtup_license_cost", 0)),
+        st4rtup_implementation_cost=float(data.get("st4rtup_implementation_cost", 0)),
+        st4rtup_training_cost=float(data.get("st4rtup_training_cost", 0)),
+        total_st4rtup_cost=tr, total_savings=savings, roi_pct=roi_pct,
         payback_months=round(tr / max(savings / 12, 1)) if savings > 0 else 0,
         three_year_value=savings * 3 - tr, notes=data.get("notes"),
     )
@@ -758,9 +758,9 @@ FORM_CONFIGS = {
                 {"key": "current_penalty_risk", "label": "Riesgo sanciones regulatorias (EUR)", "type": "number"},
             ]},
             {"title": "Inversion St4rtup", "fields": [
-                {"key": "riskitera_license_cost", "label": "Licencia anual St4rtup (EUR)", "type": "number", "default": 0},
-                {"key": "riskitera_implementation_cost", "label": "Implementacion (EUR)", "type": "number", "default": 0},
-                {"key": "riskitera_training_cost", "label": "Formacion (EUR)", "type": "number", "default": 0},
+                {"key": "st4rtup_license_cost", "label": "Licencia anual St4rtup (EUR)", "type": "number", "default": 0},
+                {"key": "st4rtup_implementation_cost", "label": "Implementacion (EUR)", "type": "number", "default": 0},
+                {"key": "st4rtup_training_cost", "label": "Formacion (EUR)", "type": "number", "default": 0},
             ]},
             {"title": "Notas", "fields": [
                 {"key": "notes", "label": "Notas adicionales", "type": "textarea"},

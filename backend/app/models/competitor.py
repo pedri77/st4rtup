@@ -22,7 +22,7 @@ class Competitor(BaseModel):
     differentiators = Column(Text)
     analysis = Column(Text)  # Análisis completo
     weakness = Column(Text)  # Debilidad frente a St4rtup
-    vs_riskitera = Column(Text)  # Posicionamiento St4rtup vs competidor
+    vs_st4rtup = Column(Text)  # Posicionamiento St4rtup vs competidor
     strengths = Column(JSON, default=list)
     weaknesses = Column(JSON, default=list)
     tags = Column(JSON, default=list)

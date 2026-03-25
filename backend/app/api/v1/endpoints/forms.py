@@ -229,9 +229,9 @@ class ROICreate(PydanticModel):
     current_audit_cost: float = 0
     current_incident_cost: float = 0
     current_penalty_risk: float = 0
-    riskitera_license_cost: float = 0
-    riskitera_implementation_cost: float = 0
-    riskitera_training_cost: float = 0
+    st4rtup_license_cost: float = 0
+    st4rtup_implementation_cost: float = 0
+    st4rtup_training_cost: float = 0
     notes: Optional[str] = None
 
 
@@ -247,16 +247,16 @@ async def list_roi(db: AsyncSession = Depends(get_db), _: dict = Depends(get_cur
 @router.post("/roi")
 async def create_roi(data: ROICreate, db: AsyncSession = Depends(get_db), _: dict = Depends(require_write_access)):
     total_current = data.current_fte_cost + data.current_tools_cost + data.current_audit_cost + data.current_incident_cost + data.current_penalty_risk
-    total_riskitera = data.riskitera_license_cost + data.riskitera_implementation_cost + data.riskitera_training_cost
-    total_savings = total_current - total_riskitera
-    roi_pct = round((total_savings / max(total_riskitera, 1)) * 100, 1)
-    payback = round(total_riskitera / max(total_savings / 12, 1)) if total_savings > 0 else 0
-    three_year = total_savings * 3 - total_riskitera
+    total_st4rtup = data.st4rtup_license_cost + data.st4rtup_implementation_cost + data.st4rtup_training_cost
+    total_savings = total_current - total_st4rtup
+    roi_pct = round((total_savings / max(total_st4rtup, 1)) * 100, 1)
+    payback = round(total_st4rtup / max(total_savings / 12, 1)) if total_savings > 0 else 0
+    three_year = total_savings * 3 - total_st4rtup
 
     roi = ROICalculation(
         **data.model_dump(),
         total_current_cost=total_current,
-        total_riskitera_cost=total_riskitera,
+        total_st4rtup_cost=total_st4rtup,
         fte_savings=data.current_fte_cost * 0.6,
         tools_savings=data.current_tools_cost * 0.8,
         audit_savings=data.current_audit_cost * 0.5,
@@ -270,7 +270,7 @@ async def create_roi(data: ROICreate, db: AsyncSession = Depends(get_db), _: dic
     await db.commit()
     return {
         "created": True, "id": str(roi.id),
-        "total_current": total_current, "total_riskitera": total_riskitera,
+        "total_current": total_current, "total_st4rtup": total_st4rtup,
         "total_savings": total_savings, "roi_pct": roi_pct,
         "payback_months": payback, "three_year_value": three_year,
     }

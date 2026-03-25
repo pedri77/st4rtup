@@ -51,7 +51,7 @@ async def list_competitors(
             "nis2_support": c.nis2_support, "dora_support": c.dora_support,
             "auto_evidence": c.auto_evidence, "ux_midmarket": c.ux_midmarket,
             "differentiators": c.differentiators, "analysis": c.analysis or "",
-            "weakness": c.weakness or "", "vs_riskitera": c.vs_riskitera or "",
+            "weakness": c.weakness or "", "vs_st4rtup": c.vs_st4rtup or "",
             "strengths": c.strengths or [], "weaknesses": c.weaknesses or [],
             "tags": c.tags or [], "is_active": c.is_active if c.is_active is not None else True,
         }
