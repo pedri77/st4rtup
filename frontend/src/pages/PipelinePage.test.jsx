@@ -9,7 +9,7 @@ vi.mock('@/services/api', () => ({
     list: vi.fn(() => Promise.resolve({
       data: {
         items: [
-          { id: 'opp-1', name: 'Implementacion growth Enterprise', lead_id: 'l1', lead_name: 'Acme Corp', stage: 'discovery', value: 50000, probability: 30, expected_close_date: '2024-06-01', products: [] },
+          { id: 'opp-1', name: 'Implementacion growth Scale', lead_id: 'l1', lead_name: 'Acme Corp', stage: 'discovery', value: 50000, probability: 30, expected_close_date: '2024-06-01', products: [] },
           { id: 'opp-2', name: 'Auditoria SaaS Best Practices', lead_id: 'l2', lead_name: 'TechSolutions', stage: 'proposal', value: 25000, probability: 60, expected_close_date: '2024-05-15', products: [] },
           { id: 'opp-3', name: 'SGSI Completo', lead_id: 'l3', lead_name: 'DataFlow', stage: 'closed_won', value: 80000, probability: 100, expected_close_date: '2024-04-01', products: [] },
         ],
@@ -81,7 +81,7 @@ describe('PipelinePage', () => {
   it('muestra nombre de oportunidades', async () => {
     renderPage()
     await waitFor(() => {
-      expect(screen.getByText('Implementacion growth Enterprise')).toBeInTheDocument()
+      expect(screen.getByText('Implementacion growth Scale')).toBeInTheDocument()
     })
     expect(screen.getByText('Auditoria SaaS Best Practices')).toBeInTheDocument()
   })

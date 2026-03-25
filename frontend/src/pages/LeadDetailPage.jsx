@@ -185,7 +185,7 @@ export default function LeadDetailPage() {
           </h2>
           {(() => {
             const s = lead.enrichment_data.agent_scoring
-            const tierColors = { A: T.success, B: T.cyan, C: '#f59e0b', D: T.destructive }
+            const planColors = { A: T.success, B: T.cyan, C: '#f59e0b', D: T.destructive }
             return (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -194,7 +194,7 @@ export default function LeadDetailPage() {
                     <p className="text-[10px] uppercase" style={{ color: T.fgMuted }}>Score ICP</p>
                   </div>
                   <div className="text-center p-3 rounded-lg" style={{ backgroundColor: `${T.muted}` }}>
-                    <p className="text-3xl font-bold" style={{ fontFamily: fontMono, color: tierColors[s.tier] || T.fg }}>Tier {s.tier}</p>
+                    <p className="text-3xl font-bold" style={{ fontFamily: fontMono, color: planColors[s.plan] || T.fg }}>Tier {s.plan}</p>
                     <p className="text-[10px] uppercase" style={{ color: T.fgMuted }}>Clasificación</p>
                   </div>
                   <div className="text-center p-3 rounded-lg" style={{ backgroundColor: `${T.muted}` }}>

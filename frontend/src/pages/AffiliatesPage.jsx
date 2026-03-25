@@ -74,7 +74,7 @@ export default function AffiliatesPage() {
 
       {/* Earning examples */}
       <section style={{ maxWidth: 700, margin: '0 auto', padding: '40px 24px' }}>
-        <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: '1.4rem', fontWeight: 700, textAlign: 'center', marginBottom: 24 }}>Comisión por tiers</h2>
+        <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: '1.4rem', fontWeight: 700, textAlign: 'center', marginBottom: 24 }}>Comisión por plans</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 40 }}>
           {TIERS.map((t, i) => (
             <div key={i} style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 14, padding: 20, textAlign: 'center', transition: 'transform .2s' }}
@@ -91,9 +91,9 @@ export default function AffiliatesPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', padding: '12px 20px', borderBottom: '1px solid #E2E8F0', fontSize: '.8rem', color: '#64748B' }}>
             <span>Referidos</span><span>Plan</span><span>Tier</span><span style={{ textAlign: 'right' }}>Tu comisión</span>
           </div>
-          {EARNINGS.map(([refs, plan, tier, commission], i) => (
+          {EARNINGS.map(([refs, plan, tierName, commission], i) => (
             <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', padding: '12px 20px', borderBottom: i < EARNINGS.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
-              <span>{refs}</span><span>{plan}</span><span style={{ fontSize: '.8rem', color: '#1E6FD9' }}>{tier}</span><span style={{ textAlign: 'right', color: '#1E6FD9', fontWeight: 600, fontFamily: 'monospace' }}>{commission}</span>
+              <span>{refs}</span><span>>{tierName}</span><span style={{ fontSize: '.8rem', color: '#1E6FD9' }}>{plan}</span><span style={{ textAlign: 'right', color: '#1E6FD9', fontWeight: 600, fontFamily: 'monospace' }}>{commission}</span>
             </div>
           ))}
         </div>

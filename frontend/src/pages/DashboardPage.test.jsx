@@ -37,7 +37,7 @@ vi.mock('@/services/api', () => ({
           { id: '1', company: 'TechCorp Solutions', status: 'qualified', score: 95 },
         ],
         deals_closing_soon: [
-          { id: 'd1', name: 'Deal Enterprise', lead: 'Acme Corp', value: 50000, close_date: '2024-03-15' },
+          { id: 'd1', name: 'Deal Scale', lead: 'Acme Corp', value: 50000, close_date: '2024-03-15' },
         ],
         recent_activity: [],
         leads_by_sector: {},

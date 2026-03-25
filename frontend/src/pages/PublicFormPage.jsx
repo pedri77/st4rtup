@@ -137,7 +137,7 @@ export default function PublicFormPage() {
 
         <p style={{ color: T.fgMuted, fontSize: 11, textAlign: 'center', marginTop: 24 }}>
           St4rtup | Plataforma growth de Ciberseguridad<br />
-          Enterprise | NIS2 | DORA | SaaS Best Practices
+          Scale | NIS2 | DORA | SaaS Best Practices
         </p>
       </div>
     </div>

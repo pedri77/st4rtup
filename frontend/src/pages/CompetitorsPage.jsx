@@ -38,8 +38,8 @@ function maturityColor(score) {
   return T.success
 }
 
-function TierBadge({ tier }) {
-  const c = TIER_CONFIG[tier] || TIER_CONFIG.medium
+function TierBadge({ plan }) {
+  const c = TIER_CONFIG[plan] || TIER_CONFIG.medium
   return <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: c.bg, color: c.color }}>{c.label}</span>
 }
 
@@ -59,7 +59,7 @@ function CompetitorCard({ comp, onSelect }) {
       onMouseLeave={e => e.currentTarget.style.borderColor = T.border}>
       <div className="flex items-start justify-between gap-2 mb-1">
         <h4 className="text-sm font-semibold leading-tight" style={{ color: T.fg }}>{comp.name}</h4>
-        <TierBadge tier={comp.tier} />
+        <TierBadge plan={comp.plan} />
       </div>
       <div className="flex gap-1 mb-2">
         <RegionBadge region={comp.region} />
@@ -107,7 +107,7 @@ function CompetitorDrawer({ comp, onClose }) {
           <div>
             <h2 className="text-lg font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>{comp.name}</h2>
             <div className="flex gap-2 mt-1">
-              <TierBadge tier={comp.tier} />
+              <TierBadge plan={comp.plan} />
               <RegionBadge region={comp.region} />
             </div>
             {comp.website && (
@@ -203,10 +203,10 @@ export default function CompetitorsPage() {
   const [view, setView] = useState('grid')
   const [search, setSearch] = useState('')
   const [regionFilter, setRegionFilter] = useState('all')
-  const [tierFilter, setTierFilter] = useState('all')
+  const [planFilter, setTierFilter] = useState('all')
   const [selected, setSelected] = useState(null)
   const [showAddForm, setShowAddForm] = useState(false)
-  const [addForm, setAddForm] = useState({ name: '', region: 'local', tier: 'medium', scope: '', website: '', maturity_score: 50, analysis: '', weakness: '', vs_riskitera: '' })
+  const [addForm, setAddForm] = useState({ name: '', region: 'local', plan: 'medium', scope: '', website: '', maturity_score: 50, analysis: '', weakness: '', vs_riskitera: '' })
 
   const { data, isLoading } = useQuery({
     queryKey: ['competitors'],
@@ -229,7 +229,7 @@ export default function CompetitorsPage() {
       queryClient.invalidateQueries({ queryKey: ['competitors'] })
       toast.success('Competidor añadido')
       setShowAddForm(false)
-      setAddForm({ name: '', region: 'local', tier: 'medium', scope: '', website: '', maturity_score: 50, analysis: '', weakness: '', vs_riskitera: '' })
+      setAddForm({ name: '', region: 'local', plan: 'medium', scope: '', website: '', maturity_score: 50, analysis: '', weakness: '', vs_riskitera: '' })
     },
     onError: () => toast.error('Error al crear'),
   })
@@ -239,7 +239,7 @@ export default function CompetitorsPage() {
   // Filter
   const filtered = allCompetitors.filter(c => {
     if (regionFilter !== 'all' && c.region !== regionFilter) return false
-    if (tierFilter !== 'all' && c.tier !== tierFilter) return false
+    if (planFilter !== 'all' && c.plan !== planFilter) return false
     if (search) {
       const q = search.toLowerCase()
       return c.name.toLowerCase().includes(q) || (c.scope || '').toLowerCase().includes(q) || (c.tags || []).some(t => t.toLowerCase().includes(q))
@@ -247,19 +247,19 @@ export default function CompetitorsPage() {
     return true
   })
 
-  // Sort by tier priority then maturity
-  const tierOrder = { critical: 0, high: 1, medium: 2, low: 3 }
-  const sorted = [...filtered].sort((a, b) => (tierOrder[a.tier] || 3) - (tierOrder[b.tier] || 3) || (b.maturity_score || 0) - (a.maturity_score || 0))
+  // Sort by plan priority then maturity
+  const planOrder = { critical: 0, high: 1, medium: 2, low: 3 }
+  const sorted = [...filtered].sort((a, b) => (planOrder[a.plan] || 3) - (planOrder[b.plan] || 3) || (b.maturity_score || 0) - (a.maturity_score || 0))
 
   // Stats
-  const criticalCount = allCompetitors.filter(c => c.tier === 'critical').length
-  const highCount = allCompetitors.filter(c => c.tier === 'high').length
-  const otherCount = allCompetitors.filter(c => c.tier === 'medium' || c.tier === 'low').length
+  const criticalCount = allCompetitors.filter(c => c.plan === 'critical').length
+  const highCount = allCompetitors.filter(c => c.plan === 'high').length
+  const otherCount = allCompetitors.filter(c => c.plan === 'medium' || c.plan === 'low').length
 
   // CSV export
   const exportCSV = () => {
     const headers = ['Nombre', 'Región', 'Amenaza', 'Scope', 'Madurez', 'Website', 'Tags']
-    const rows = sorted.map(c => [c.name, c.region, c.tier, c.scope, c.maturity_score, c.website, (c.tags || []).join(';')])
+    const rows = sorted.map(c => [c.name, c.region, c.plan, c.scope, c.maturity_score, c.website, (c.tags || []).join(';')])
     const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)
@@ -275,7 +275,7 @@ export default function CompetitorsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Breadcrumbs items={[{ label: "GTM", href: "/gtm" }, { label: "Competitive Intelligence" }]} />
+          <Breadcrumbs items={[{ label: "GTM", href: "/app/gtm" }, { label: "Competitive Intelligence" }]} />
           <h1 className="text-2xl font-bold flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
             <Swords className="w-7 h-7" style={{ color: T.cyan }} /> Competitive Intelligence
           </h1>
@@ -343,9 +343,9 @@ export default function CompetitorsPage() {
           <button key={t} onClick={() => setTierFilter(t)}
             className="px-3 py-1.5 text-sm rounded-lg transition-colors"
             style={{
-              backgroundColor: tierFilter === t ? 'hsla(185,72%,48%,0.2)' : T.card,
-              border: `1px solid ${tierFilter === t ? 'hsla(185,72%,48%,0.5)' : T.border}`,
-              color: tierFilter === t ? T.cyan : T.fgMuted,
+              backgroundColor: planFilter === t ? 'hsla(185,72%,48%,0.2)' : T.card,
+              border: `1px solid ${planFilter === t ? 'hsla(185,72%,48%,0.5)' : T.border}`,
+              color: planFilter === t ? T.cyan : T.fgMuted,
             }}>
             {t === 'all' ? 'Todos' : TIER_CONFIG[t]?.label}
           </button>
@@ -379,7 +379,7 @@ export default function CompetitorsPage() {
                   <p className="text-[10px]" style={{ color: T.fgMuted }}>{c.website}</p>
                 </td>
                 <td className="p-3 text-center"><RegionBadge region={c.region} /></td>
-                <td className="p-3 text-center"><TierBadge tier={c.tier} /></td>
+                <td className="p-3 text-center"><TierBadge plan={c.plan} /></td>
                 <td className="p-3 text-xs max-w-48 truncate" style={{ color: T.fgMuted }}>{c.scope}</td>
                 <td className="p-3">
                   <div className="flex items-center gap-2">
@@ -418,7 +418,7 @@ export default function CompetitorsPage() {
                 <select id="competitors-select-2" aria-label="Selector" value={addForm.region} onChange={e => setAddForm(f => ({ ...f, region: e.target.value }))} className="input text-sm">
                   <option value="local">🇪🇸 España</option><option value="europe">🇪🇺 Europa</option><option value="global">🌐 Global</option>
                 </select>
-                <select id="competitors-select-3" aria-label="Selector" value={addForm.tier} onChange={e => setAddForm(f => ({ ...f, tier: e.target.value }))} className="input text-sm">
+                <select id="competitors-select-3" aria-label="Selector" value={addForm.plan} onChange={e => setAddForm(f => ({ ...f, plan: e.target.value }))} className="input text-sm">
                   <option value="critical">Critica</option><option value="high">Alta</option><option value="medium">Media</option><option value="low">Baja</option>
                 </select>
               </div>

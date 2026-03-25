@@ -43,7 +43,7 @@ export default function PocTrackerPage() {
         <div className="text-center py-12">
           <Timer className="w-16 h-16 text-gray-600 mx-auto mb-4" />
           <h3 className="text-lg text-gray-700 mb-2">Sin PoCs activos</h3>
-          <p className="text-sm text-gray-500">Crea una oportunidad con tier "Pilot PoC" en el pipeline.</p>
+          <p className="text-sm text-gray-500">Crea una oportunidad con plan "Starter" en el pipeline.</p>
         </div>
       ) : (
         <div className="space-y-4">

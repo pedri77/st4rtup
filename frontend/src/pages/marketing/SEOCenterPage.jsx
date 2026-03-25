@@ -432,7 +432,7 @@ function ContentHubTab() {
         <form onSubmit={e => { e.preventDefault(); generateMut.mutate({ topic: genTopic, audience: genAudience, word_count: genWords, provider: genProvider || undefined, model: genModel || undefined }) }}
           className="rounded-xl p-5 space-y-3" style={{ backgroundColor: T.card, border: `1px solid ${T.purple}40` }}>
           <h3 className="text-sm font-semibold flex items-center gap-2" style={{ color: T.purple }}><Sparkles className="w-4 h-4" /> Generar artículo con IA (4 agentes)</h3>
-          <input value={genTopic} onChange={e => setGenTopic(e.target.value)} placeholder="Tema: ej. Guía de cumplimiento Enterprise para PYMEs" required style={inputStyle} />
+          <input value={genTopic} onChange={e => setGenTopic(e.target.value)} placeholder="Tema: ej. Guía de cumplimiento Scale para PYMEs" required style={inputStyle} />
           <div className="grid grid-cols-2 gap-3">
             <input value={genAudience} onChange={e => setGenAudience(e.target.value)} placeholder="Audiencia" style={inputStyle} />
             <input type="number" value={genWords} onChange={e => setGenWords(+e.target.value)} min={500} max={5000} style={inputStyle} />
@@ -1496,7 +1496,7 @@ function PipelineTab() {
         <h3 className="text-sm font-semibold flex items-center gap-2" style={{ color: T.fg }}>
           <Sparkles className="w-4 h-4" style={{ color: T.cyan }} /> 4 agentes IA en secuencia
         </h3>
-        <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="Tema: ej. Guía de cumplimiento Enterprise para PYMEs" style={inputStyle} />
+        <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="Tema: ej. Guía de cumplimiento Scale para PYMEs" style={inputStyle} />
         <div className="grid grid-cols-2 gap-3">
           <input value={audience} onChange={e => setAudience(e.target.value)} placeholder="Audiencia" style={inputStyle} />
           <input type="number" value={wordCount} onChange={e => setWordCount(+e.target.value)} min={500} max={5000} style={inputStyle} />

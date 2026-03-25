@@ -48,7 +48,7 @@ const CHANNEL_ACTIONS = {
       { label: 'Gestionar assets', href: '/marketing/assets', icon: BookOpen },
     ],
     kpis: ['Downloads ebook', 'Registros webinar', 'Demos solicitadas'],
-    description: 'Ebook Enterprise, webinar NIS2/DORA, demo interactiva, calculadora ROI. Cada descarga genera un lead con score inicial.',
+    description: 'Ebook Scale, webinar NIS2/DORA, demo interactiva, calculadora ROI. Cada descarga genera un lead con score inicial.',
   },
   email: {
     label: 'Email Marketing',
@@ -108,12 +108,12 @@ const CHANNEL_ACTIONS = {
     description: 'RootedCON, Cybercamp, ENISE + partners MSSP (Telefonica Tech, T-Systems, Indra). FirstPromoter gestiona comisiones automaticas.',
   },
   self_service: {
-    label: 'Self-service SMB',
+    label: 'Self-service Growth',
     actions: [
-      { label: 'Pricing SMB', href: '/gtm/pricing', icon: TrendingUp },
+      { label: 'Pricing Growth', href: '/gtm/pricing', icon: TrendingUp },
       { label: 'Trafico web', href: '/gtm', icon: Globe },
     ],
-    kpis: ['Signups/mes', 'Conversion trial→paid', 'MRR SMB'],
+    kpis: ['Signups/mes', 'Conversion trial→paid', 'MRR Growth'],
     description: 'Venta directa desde €1.200/mes sin intervencion comercial. Landing page + signup automatico.',
   },
   linkedin: {

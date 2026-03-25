@@ -85,7 +85,7 @@ const T = {
       { name: 'Starter', price: '0', desc: 'Para empezar a vender', features: ['1 usuario', '100 leads', 'Pipeline básico', 'Email integrado', '1 integración'], cta: 'Empezar gratis' },
       { name: 'Growth', price: '19', desc: 'Para crecer rápido', features: ['3 usuarios', 'Leads ilimitados', 'Hub de Marketing completo', 'IA integrada (4 agentes)', 'Todas las integraciones', '22 automatizaciones', 'Centro de SEO', 'Analíticas avanzadas'], cta: 'Prueba 14 días gratis' },
       { name: 'Scale', price: '49', desc: 'Para escalar sin límites', features: ['10 usuarios', 'Todo en Growth', 'Sala de Negociación + NDA', 'WhatsApp Business + Bot', 'API pública', 'Soporte prioritario', 'Onboarding personalizado', 'Stripe + PayPal integrado'], cta: 'Empezar prueba' },
-      { name: 'Enterprise', price: null, desc: 'Para grandes equipos', features: ['Usuarios ilimitados', 'Todo en Scale', 'SSO / SAML', 'SLA 99.9%', 'Gestor de cuenta dedicado', 'Formación personalizada', 'Facturación por transferencia', 'Integraciones a medida'], cta: 'Contactar ventas' },
+      { name: 'Scale', price: null, desc: 'Para grandes equipos', features: ['Usuarios ilimitados', 'Todo en Scale', 'SSO / SAML', 'SLA 99.9%', 'Gestor de cuenta dedicado', 'Formación personalizada', 'Facturación por transferencia', 'Integraciones a medida'], cta: 'Contactar ventas' },
     ]},
     testimonials: { tag: 'Testimonios', h2: 'Lo que dicen nuestros clientes', items: [
       { quote: 'Pasamos de una hoja de cálculo a cerrar 3 veces más acuerdos en 2 meses. El pipeline visual y las automatizaciones lo cambiaron todo.', name: 'María García', role: 'CEO, TechStartup' },
@@ -120,7 +120,7 @@ const T = {
       { name: 'Starter', price: '0', desc: 'To start selling', features: ['1 user', '100 leads', 'Basic pipeline', 'Integrated email', '1 integration'], cta: 'Get started free' },
       { name: 'Growth', price: '19', desc: 'To grow fast', features: ['3 users', 'Unlimited leads', 'Full Marketing Hub', 'Integrated AI (4 agents)', 'All integrations', '22 automations', 'SEO Command Center', 'Advanced analytics'], cta: '14-day free trial' },
       { name: 'Scale', price: '49', desc: 'To scale without limits', features: ['10 users', 'Everything in Growth', 'Deal Room + NDA', 'WhatsApp Business + Bot', 'Public API', 'Priority support', 'Custom onboarding', 'Stripe + PayPal'], cta: 'Start free trial' },
-      { name: 'Enterprise', price: null, desc: 'For large teams', features: ['Unlimited users', 'Everything in Scale', 'SSO / SAML', '99.9% SLA', 'Dedicated account manager', 'Custom training', 'Invoice billing', 'Custom integrations'], cta: 'Contact sales' },
+      { name: 'Scale', price: null, desc: 'For large teams', features: ['Unlimited users', 'Everything in Scale', 'SSO / SAML', '99.9% SLA', 'Dedicated account manager', 'Custom training', 'Invoice billing', 'Custom integrations'], cta: 'Contact sales' },
     ]},
     testimonials: { tag: 'Testimonials', h2: 'What our customers say', items: [
       { quote: 'We went from a spreadsheet to closing 3x more deals in 2 months. The visual pipeline and automations changed everything.', name: 'María García', role: 'CEO, TechStartup' },

@@ -460,16 +460,16 @@ function OpportunityCard({ opportunity, lead, isDragging, onDragStart, onDragEnd
 
       {/* Tier & Competitor selects */}
       <div className="flex gap-1.5 mt-2" onClick={e => e.stopPropagation()}>
-        <select id="pipeline-select-2" aria-label="Selector" value={opportunity.pricing_tier || ''}
+        <select id="pipeline-select-2" aria-label="Selector" value={opportunity.pricing_plan || ''}
           onChange={async (e) => {
-            try { await opportunitiesApi.update(opportunity.id, { pricing_tier: e.target.value || null }); toast.success('Tier actualizado') } catch {}
+            try { await opportunitiesApi.update(opportunity.id, { pricing_plan: e.target.value || null }); toast.success('Tier actualizado') } catch {}
           }}
           className="flex-1 text-[10px] bg-gray-50/50 border border-gray-200 rounded px-1.5 py-1 text-gray-400"
         >
           <option value="">Tier...</option>
-          <option value="pilot_poc">Pilot PoC</option>
-          <option value="enterprise">Enterprise</option>
-          <option value="smb">SMB</option>
+          <option value="pilot_poc">Starter</option>
+          <option value="enterprise">Scale</option>
+          <option value="smb">Growth</option>
         </select>
         <input id="pipeline-input-1" aria-label="Competidor..." type="text"
           defaultValue={opportunity.competitor || ''}
@@ -606,7 +606,7 @@ function CreateOpportunityModal({ onClose, onSubmit, isLoading }) {
             </div>
             <div>
               <label htmlFor="opp-name" style={lStyle}>Nombre <span style={{ color: T.destructive }}>*</span></label>
-              <input id="opp-name" type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} style={iStyle} placeholder="Ej: Implementacion growth Enterprise" required />
+              <input id="opp-name" type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} style={iStyle} placeholder="Ej: Implementacion growth Scale" required />
             </div>
             <div>
               <label htmlFor="opp-description" style={lStyle}>Descripcion</label>
@@ -647,7 +647,7 @@ function CreateOpportunityModal({ onClose, onSubmit, isLoading }) {
           <div className="flex gap-2">
             <input id="opp-products" type="text" value={productInput} onChange={(e) => setProductInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addProduct())}
-              style={{ ...iStyle, flex: 1 }} placeholder="Ej: St4rtup Enterprise" />
+              style={{ ...iStyle, flex: 1 }} placeholder="Ej: St4rtup Scale" />
             <button type="button" onClick={addProduct}
               className="px-3 py-2 rounded-lg text-sm transition-colors"
               style={{ border: `1px solid ${T.border}`, color: T.cyan }}>+</button>

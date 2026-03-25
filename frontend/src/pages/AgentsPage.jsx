@@ -22,14 +22,14 @@ const fontMono = "'IBM Plex Mono', monospace"
 const AGENT_ICONS = {
   'AGENT-LEAD-001': Brain,
   'AGENT-QUALIFY-001': Shield,
-  'AGENT-PROPOSAL-001': FileText,
+  'Agente de propuestas': FileText,
   'AGENT-CS-001': Heart,
 }
 
 const AGENT_COLORS = {
   'AGENT-LEAD-001': T.cyan,
   'AGENT-QUALIFY-001': T.warning,
-  'AGENT-PROPOSAL-001': T.success,
+  'Agente de propuestas': T.success,
   'AGENT-CS-001': T.purple,
 }
 
@@ -81,7 +81,7 @@ function AgentCard({ agent }) {
 
           {agent.id === 'AGENT-LEAD-001' && <LeadScoringPanel />}
           {agent.id === 'AGENT-QUALIFY-001' && <BANTPanel />}
-          {agent.id === 'AGENT-PROPOSAL-001' && <ProposalPanel />}
+          {agent.id === 'Agente de propuestas' && <ProposalPanel />}
           {agent.id === 'AGENT-CS-001' && <CustomerSuccessPanel />}
         </div>
       )}
@@ -101,7 +101,7 @@ function LeadScoringPanel() {
     mutationFn: (id) => agentsApi.scoreLeadICP(id).then(r => r.data),
     onSuccess: (data) => {
       if (data.error) { toast.error(data.error); return }
-      toast.success(`Score ICP: ${data.icp_score}/100 (Tier ${data.tier})`)
+      toast.success(`Score ICP: ${data.icp_score}/100 (Tier ${data.plan})`)
     },
     onError: () => toast.error('Error ejecutando agente'),
   })
@@ -125,7 +125,7 @@ function LeadScoringPanel() {
       {mutation.data && !mutation.data.error && (
         <div className="rounded-lg p-3 space-y-1 text-sm" style={{ backgroundColor: `${T.bg}80` }}>
           <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Score ICP</span><span className="font-bold" style={{ fontFamily: fontMono, color: T.fg }}>{mutation.data.icp_score}/100</span></div>
-          <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Tier</span><span style={{ color: T.fg }}>{mutation.data.tier}</span></div>
+          <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Tier</span><span style={{ color: T.fg }}>{mutation.data.plan}</span></div>
           <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Acción</span><span style={{ color: T.cyan }}>{mutation.data.recommended_action}</span></div>
           <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Frameworks</span><span style={{ color: T.fg }}>{(mutation.data.regulatory_frameworks || []).join(', ')}</span></div>
           {mutation.data.hitl_required && (

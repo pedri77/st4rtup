@@ -19,9 +19,9 @@ const fontMono = "'IBM Plex Mono', monospace"
 const TIER_ICONS = { pilot_poc: Zap, enterprise: Building, smb: Users }
 const TIER_COLORS = { pilot_poc: T.cyan, enterprise: T.purple, smb: T.success }
 
-function TierCard({ tier }) {
-  const Icon = TIER_ICONS[tier.slug] || DollarSign
-  const color = TIER_COLORS[tier.slug] || T.fgMuted
+function TierCard({ plan }) {
+  const Icon = TIER_ICONS[plan.slug] || DollarSign
+  const color = TIER_COLORS[plan.slug] || T.fgMuted
 
   return (
     <div className="rounded-xl p-5 border" style={{ backgroundColor: T.card, borderColor: T.border }}>
@@ -30,21 +30,21 @@ function TierCard({ tier }) {
           <Icon className="w-5 h-5" style={{ color }} />
         </div>
         <div>
-          <h3 className="text-base font-semibold" style={{ fontFamily: fontDisplay, color: T.fg }}>{tier.name}</h3>
-          <p className="text-xs" style={{ color: T.fgMuted }}>{tier.description}</p>
+          <h3 className="text-base font-semibold" style={{ fontFamily: fontDisplay, color: T.fg }}>{plan.name}</h3>
+          <p className="text-xs" style={{ color: T.fgMuted }}>{plan.description}</p>
         </div>
       </div>
       <div className="space-y-2 text-sm">
-        <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Precio base</span><span className="font-bold" style={{ fontFamily: fontMono, color: T.fg }}>€{tier.base_price.toLocaleString('es-ES')}</span></div>
-        <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Unidad</span><span style={{ color: T.fg }}>{tier.price_unit === 'fixed' ? 'Fijo' : tier.price_unit === 'month' ? '/mes' : '/año'}</span></div>
-        {tier.duration_days && <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Duración</span><span style={{ fontFamily: fontMono, color: T.fg }}>{tier.duration_days} días</span></div>}
-        {tier.min_price && <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Rango</span><span style={{ fontFamily: fontMono, color: T.fg }}>€{tier.min_price.toLocaleString('es-ES')} – €{tier.max_price?.toLocaleString('es-ES')}</span></div>}
-        <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Coste infra/mes</span><span style={{ fontFamily: fontMono, color: T.fg }}>€{tier.infra_cost_monthly.toLocaleString('es-ES')}</span></div>
+        <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Precio base</span><span className="font-bold" style={{ fontFamily: fontMono, color: T.fg }}>€{plan.base_price.toLocaleString('es-ES')}</span></div>
+        <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Unidad</span><span style={{ color: T.fg }}>{plan.price_unit === 'fixed' ? 'Fijo' : plan.price_unit === 'month' ? '/mes' : '/año'}</span></div>
+        {plan.duration_days && <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Duración</span><span style={{ fontFamily: fontMono, color: T.fg }}>{plan.duration_days} días</span></div>}
+        {plan.min_price && <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Rango</span><span style={{ fontFamily: fontMono, color: T.fg }}>€{plan.min_price.toLocaleString('es-ES')} – €{plan.max_price?.toLocaleString('es-ES')}</span></div>}
+        <div className="flex justify-between"><span style={{ color: T.fgMuted }}>Coste infra/mes</span><span style={{ fontFamily: fontMono, color: T.fg }}>€{plan.infra_cost_monthly.toLocaleString('es-ES')}</span></div>
       </div>
       <div className="mt-3 pt-3 border-t" style={{ borderColor: `${T.border}80` }}>
         <p className="text-xs mb-1" style={{ color: T.fgMuted }}>Módulos incluidos:</p>
         <div className="flex flex-wrap gap-1">
-          {(tier.modules_included || []).map(m => (
+          {(plan.modules_included || []).map(m => (
             <span key={m} className="text-[10px] px-1.5 py-0.5 rounded" style={{ backgroundColor: `${T.cyan}18`, color: T.cyan }}>{m}</span>
           ))}
         </div>
@@ -54,14 +54,14 @@ function TierCard({ tier }) {
 }
 
 function PriceCalculator() {
-  const [tier, setTier] = useState('pilot_poc')
+  const [plan, setTier] = useState('pilot_poc')
   const [modules, setModules] = useState('')
   const [months, setMonths] = useState(12)
   const [discount, setDiscount] = useState(0)
   const [result, setResult] = useState(null)
 
   const calcMutation = useMutation({
-    mutationFn: () => pricingApi.calculate({ tier_slug: tier, modules, duration_months: months, discount_pct: discount }).then(r => r.data),
+    mutationFn: () => pricingApi.calculate({ plan_slug: plan, modules, duration_months: months, discount_pct: discount }).then(r => r.data),
     onSuccess: (data) => setResult(data),
   })
 
@@ -73,10 +73,10 @@ function PriceCalculator() {
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div>
           <label className="text-xs mb-1 block" style={{ color: T.fgMuted }} htmlFor="pricing-field-1">Tier</label>
-          <select id="pricing-field-1" value={tier} onChange={e => setTier(e.target.value)} className="input text-sm">
-            <option value="pilot_poc">Pilot PoC</option>
-            <option value="enterprise">Enterprise</option>
-            <option value="smb">SMB</option>
+          <select id="pricing-field-1" value={plan} onChange={e => setTier(e.target.value)} className="input text-sm">
+            <option value="pilot_poc">Starter</option>
+            <option value="enterprise">Scale</option>
+            <option value="smb">Growth</option>
           </select>
         </div>
         <div>
@@ -116,7 +116,7 @@ function PriceCalculator() {
 export default function PricingPage() {
   const queryClient = useQueryClient()
   const { data, isLoading } = useQuery({
-    queryKey: ['pricing-tiers'],
+    queryKey: ['pricing-plans'],
     queryFn: () => pricingApi.listTiers().then(r => r.data),
   })
   const { data: statsData } = useQuery({
@@ -126,7 +126,7 @@ export default function PricingPage() {
 
   const seedMutation = useMutation({
     mutationFn: () => pricingApi.seed(),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['pricing-tiers'] }); toast.success('Tiers cargados') },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['pricing-plans'] }); toast.success('Tiers cargados') },
   })
 
   const [showAdd, setShowAdd] = useState(false)
@@ -134,11 +134,11 @@ export default function PricingPage() {
 
   const createMutation = useMutation({
     mutationFn: (d) => pricingApi.createTier({ ...d, modules_included: d.modules_included ? d.modules_included.split(',').map(m => m.trim()) : [] }),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['pricing-tiers'] }); toast.success('Tier creado'); setShowAdd(false) },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['pricing-plans'] }); toast.success('Tier creado'); setShowAdd(false) },
     onError: () => toast.error('Error al crear'),
   })
 
-  const tiers = data?.tiers || []
+  const plans = data?.plans || []
   const stats = statsData || {}
 
   return (
@@ -146,14 +146,14 @@ export default function PricingPage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Breadcrumbs items={[{ label: "GTM", href: "/gtm" }, { label: "Pricing Engine" }]} />
+          <Breadcrumbs items={[{ label: "GTM", href: "/app/gtm" }, { label: "Pricing Engine" }]} />
           <h1 className="text-2xl font-bold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>
             <DollarSign className="w-7 h-7" style={{ color: T.cyan }} /> Pricing Engine
           </h1>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => setShowAdd(true)} className="btn-primary text-sm flex items-center gap-1"><Plus className="w-3.5 h-3.5" /> Nuevo Tier</button>
-          {tiers.length === 0 && <button onClick={() => seedMutation.mutate()} className="btn-secondary text-sm">Cargar defaults</button>}
+          {plans.length === 0 && <button onClick={() => seedMutation.mutate()} className="btn-secondary text-sm">Cargar defaults</button>}
         </div>
       </div>
 
@@ -164,16 +164,16 @@ export default function PricingPage() {
           <p className="text-[10px] uppercase tracking-widest" style={{ fontFamily: fontMono, color: T.fgMuted }}>Revenue total</p>
         </div>
         <div className="rounded-xl p-3 text-center border" style={{ backgroundColor: T.card, borderColor: T.border }}>
-          <p className="text-xl font-bold" style={{ fontFamily: fontMono, color: T.fg }}>{stats.total_deals_with_tier || 0}</p>
-          <p className="text-[10px] uppercase tracking-widest" style={{ fontFamily: fontMono, color: T.fgMuted }}>Deals con tier</p>
+          <p className="text-xl font-bold" style={{ fontFamily: fontMono, color: T.fg }}>{stats.total_deals_with_plan || 0}</p>
+          <p className="text-[10px] uppercase tracking-widest" style={{ fontFamily: fontMono, color: T.fgMuted }}>Deals con plan</p>
         </div>
         <div className="rounded-xl p-3 text-center border" style={{ backgroundColor: T.card, borderColor: T.border }}>
           <p className="text-xl font-bold" style={{ fontFamily: fontMono, color: T.success }}>{stats.total_won || 0}</p>
           <p className="text-[10px] uppercase tracking-widest" style={{ fontFamily: fontMono, color: T.fgMuted }}>Cerrados</p>
         </div>
         <div className="rounded-xl p-3 text-center border" style={{ backgroundColor: T.card, borderColor: T.border }}>
-          <p className="text-xl font-bold" style={{ fontFamily: fontMono, color: T.warning }}>{stats.deals_without_tier || 0}</p>
-          <p className="text-[10px] uppercase tracking-widest" style={{ fontFamily: fontMono, color: T.fgMuted }}>Sin tier asignado</p>
+          <p className="text-xl font-bold" style={{ fontFamily: fontMono, color: T.warning }}>{stats.deals_without_plan || 0}</p>
+          <p className="text-[10px] uppercase tracking-widest" style={{ fontFamily: fontMono, color: T.fgMuted }}>Sin plan asignado</p>
         </div>
       </div>
 
@@ -181,30 +181,30 @@ export default function PricingPage() {
       <details className="rounded-xl border" style={{ backgroundColor: `${T.card}50`, borderColor: `${T.border}80` }}>
         <summary className="p-4 text-sm cursor-pointer" style={{ color: T.fgMuted }}>¿Cómo funciona el Pricing Engine?</summary>
         <div className="px-4 pb-4 text-xs space-y-2" style={{ color: T.fgMuted }}>
-          <p>Cada oportunidad del pipeline puede tener un <strong style={{ color: T.fg }}>tier de pricing</strong> asignado (Pilot PoC, Enterprise, SMB).</p>
-          <p>Al seleccionar tier + módulos + descuento, el sistema calcula automáticamente el <strong style={{ color: T.fg }}>precio final y margen bruto</strong>.</p>
-          <p>Estos datos alimentan las propuestas de <strong style={{ color: T.cyan }}>AGENT-PROPOSAL-001</strong> y el <strong style={{ color: T.cyan }}>GTM Dashboard</strong>.</p>
+          <p>Cada oportunidad del pipeline puede tener un <strong style={{ color: T.fg }}>plan de pricing</strong> asignado (Starter, Scale, Growth).</p>
+          <p>Al seleccionar plan + módulos + descuento, el sistema calcula automáticamente el <strong style={{ color: T.fg }}>precio final y margen</strong>.</p>
+          <p>Estos datos alimentan las propuestas de <strong style={{ color: T.cyan }}>Agente de propuestas</strong> y el <strong style={{ color: T.cyan }}>GTM Dashboard</strong>.</p>
         </div>
       </details>
 
       {isLoading ? <Loader2 className="w-6 h-6 animate-spin mx-auto" style={{ color: T.cyan }} /> : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {tiers.map(t => <TierCard key={t.id} tier={t} />)}
+            {plans.map(t => <TierCard key={t.id} plan={t} />)}
           </div>
 
-          {/* Revenue by tier */}
-          {stats.by_tier?.length > 0 && (
+          {/* Revenue by plan */}
+          {stats.by_plan?.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold mb-3" style={{ fontFamily: fontDisplay, color: T.fg }}>Impacto por tier</h3>
+              <h3 className="text-sm font-semibold mb-3" style={{ fontFamily: fontDisplay, color: T.fg }}>Impacto por plan</h3>
               <div className="rounded-xl overflow-hidden border" style={{ backgroundColor: T.card, borderColor: T.border }}>
                 <table className="w-full text-sm">
                   <thead><tr className="border-b text-xs" style={{ borderColor: T.border, color: T.fgMuted }}>
                     <th className="text-left p-3" style={{ fontFamily: fontMono }}>Tier</th><th className="text-right p-3" style={{ fontFamily: fontMono }}>Deals</th><th className="text-right p-3" style={{ fontFamily: fontMono }}>Won</th><th className="text-right p-3" style={{ fontFamily: fontMono }}>Win Rate</th><th className="text-right p-3" style={{ fontFamily: fontMono }}>Revenue</th><th className="text-right p-3" style={{ fontFamily: fontMono }}>Margen</th>
                   </tr></thead>
-                  <tbody>{stats.by_tier.map((t, i) => (
+                  <tbody>{stats.by_plan.map((t, i) => (
                     <tr key={i} className="border-b" style={{ borderColor: `${T.border}80` }}>
-                      <td className="p-3 font-medium" style={{ color: T.cyan }}>{t.tier}</td>
+                      <td className="p-3 font-medium" style={{ color: T.cyan }}>{t.plan}</td>
                       <td className="p-3 text-right" style={{ fontFamily: fontMono, color: T.fg }}>{t.deals}</td>
                       <td className="p-3 text-right" style={{ fontFamily: fontMono, color: T.success }}>{t.won}</td>
                       <td className="p-3 text-right" style={{ fontFamily: fontMono, color: T.fg }}>{t.win_rate}%</td>
@@ -230,7 +230,7 @@ export default function PricingPage() {
               <button onClick={() => setShowAdd(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button>
             </div>
             <div className="space-y-3">
-              <input type="text" value={addForm.name} onChange={e => setAddForm(f => ({ ...f, name: e.target.value }))} placeholder="Nombre (ej: Enterprise Plus)" className="input text-sm" />
+              <input type="text" value={addForm.name} onChange={e => setAddForm(f => ({ ...f, name: e.target.value }))} placeholder="Nombre (ej: Scale Plus)" className="input text-sm" />
               <input type="text" value={addForm.slug} onChange={e => setAddForm(f => ({ ...f, slug: e.target.value }))} placeholder="Slug (ej: enterprise_plus)" className="input text-sm" />
               <div className="grid grid-cols-2 gap-2">
                 <div>

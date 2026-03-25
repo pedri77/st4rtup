@@ -106,7 +106,7 @@ export default function ABMAccountPage() {
           </h3>
           <div className="flex items-center gap-4">
             <span className="text-3xl font-bold" style={{ color: T.cyan, fontFamily: fontMono }}>{scoring.icp_score}/100</span>
-            <span className="text-lg font-bold" style={{ color: scoring.tier === 'A' ? T.success : scoring.tier === 'B' ? T.cyan : T.warning }}>{`Tier ${scoring.tier}`}</span>
+            <span className="text-lg font-bold" style={{ color: scoring.plan === 'A' ? T.success : scoring.plan === 'B' ? T.cyan : T.warning }}>{`Tier ${scoring.plan}`}</span>
             <span className="text-sm" style={{ color: T.fgMuted }}>{scoring.action === 'qualify' ? '\u2705 Cualificar' : scoring.action === 'nurture' ? '\uD83D\uDD04 Nurturing' : '\u274C Descartar'}</span>
             {scoring.frameworks?.length > 0 && (
               <div className="flex gap-1">{scoring.frameworks.map(f => <span key={f} className="text-[9px] px-1.5 py-0.5 rounded" style={{ backgroundColor: 'rgba(0,188,212,0.1)', color: T.cyan }}>{f}</span>)}</div>
@@ -150,7 +150,7 @@ export default function ABMAccountPage() {
                 </div>
                 <div className="flex items-center gap-3 mt-1 text-xs" style={{ color: T.fgMuted }}>
                   <span style={{ fontFamily: fontMono }}>\€{(o.value || 0).toLocaleString('es-ES')}</span>
-                  {o.pricing_tier && <span className="px-1.5 py-0.5 rounded" style={{ backgroundColor: T.muted }}>{o.pricing_tier}</span>}
+                  {o.pricing_plan && <span className="px-1.5 py-0.5 rounded" style={{ backgroundColor: T.muted }}>{o.pricing_plan}</span>}
                   {o.competitor && <span>vs {o.competitor}</span>}
                   <span style={{ fontFamily: fontMono }}>{o.probability}%</span>
                 </div>

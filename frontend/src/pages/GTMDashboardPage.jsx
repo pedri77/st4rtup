@@ -139,7 +139,7 @@ export default function GTMDashboardPage() {
     onSuccess: (r) => {
       const d = r.data
       queryClient.invalidateQueries()
-      toast.success(`Datos cargados: ${d.total} items (${d.seeded.competitors} competidores, ${d.seeded.pricing_tiers} tiers, ${d.seeded.sales_tactics} tacticas, ${d.seeded.ad_campaigns} campanas)`)
+      toast.success(`Datos cargados: ${d.total} items (${d.seeded.competitors} competidores, ${d.seeded.pricing_plans} plans, ${d.seeded.sales_tactics} tacticas, ${d.seeded.ad_campaigns} campanas)`)
     },
     onError: () => toast.error('Error cargando datos'),
   })

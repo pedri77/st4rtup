@@ -15,7 +15,7 @@ const T = {
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
-const FRAMEWORKS = ['Enterprise', 'SaaS Best Practices', 'EU AI Act', 'SOC 2', 'GDPR']
+const FRAMEWORKS = ['Scale', 'SaaS Best Practices', 'EU AI Act', 'SOC 2', 'GDPR']
 
 export default function BrandPage() {
   const queryClient = useQueryClient()
@@ -74,8 +74,8 @@ export default function BrandPage() {
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: T.fgMuted }} htmlFor="brand-field-3">Segmento objetivo</label>
             <select id="brand-field-3" value={form.segment || 'enterprise'} onChange={e => setForm(p => ({ ...p, segment: e.target.value }))} className="input">
-              <option value="enterprise">Enterprise</option>
-              <option value="smb">SMB</option>
+              <option value="enterprise">Scale</option>
+              <option value="smb">Growth</option>
               <option value="both">Ambos</option>
             </select>
           </div>

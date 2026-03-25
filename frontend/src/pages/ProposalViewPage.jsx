@@ -66,7 +66,7 @@ export default function ProposalViewPage() {
       <div className="text-center">
         <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4" style={{ color: T.cyan }} />
         <h2 style={{ fontSize: 20, fontWeight: 700, color: T.fg, fontFamily: fontDisplay }}>Generando propuesta...</h2>
-        <p style={{ fontSize: 14, color: T.fgMuted, marginTop: 8 }}>AGENT-PROPOSAL-001 está personalizando el documento</p>
+        <p style={{ fontSize: 14, color: T.fgMuted, marginTop: 8 }}>Agente de propuestas está personalizando el documento</p>
       </div>
     </div>
   )

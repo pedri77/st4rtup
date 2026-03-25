@@ -148,7 +148,7 @@ export default function ContentPipelinePage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
           <div style={{ gridColumn: 'span 2' }}>
             <label style={{ display: 'block', fontSize: '0.75rem', color: T.fgMuted, marginBottom: '0.25rem', fontFamily: fontMono }} htmlFor="contentpipeline-field-1">Tema del articulo</label>
-            <input id="contentpipeline-field-1" value={topic} onChange={e => setTopic(e.target.value)} placeholder="Ej: Como implementar Enterprise en 90 dias" style={inputStyle} />
+            <input id="contentpipeline-field-1" value={topic} onChange={e => setTopic(e.target.value)} placeholder="Ej: Como implementar Scale en 90 dias" style={inputStyle} />
           </div>
           <div>
             <label style={{ display: 'block', fontSize: '0.75rem', color: T.fgMuted, marginBottom: '0.25rem', fontFamily: fontMono }} htmlFor="contentpipeline-field-2">Audiencia</label>

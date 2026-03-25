@@ -108,7 +108,7 @@ export default function PlaybookPage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Breadcrumbs items={[{ label: "GTM", href: "/gtm" }, { label: "Sales Playbook" }]} />
+          <Breadcrumbs items={[{ label: "GTM", href: "/app/gtm" }, { label: "Sales Playbook" }]} />
           <h1 className="text-2xl font-bold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>
             <BookOpen className="w-7 h-7" style={{ color: T.cyan }} /> Sales Playbook
           </h1>

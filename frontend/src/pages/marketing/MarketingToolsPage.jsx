@@ -288,7 +288,7 @@ ${vars.context ? `Notas: ${vars.context}` : ''}`,
     icon: Send,
     prompt: (vars) => `Redacta un email de primer contacto (discovery) en español para un prospecto que NO nos conoce.
 Empresa: ${vars.company || '[empresa]'}. Sector: ${vars.sector || 'regulado'}. Cargo: ${vars.title || 'CEO/CTO'}.
-Producto: St4rtup (plataforma growth tecnología: Enterprise, NIS2, DORA).
+Producto: St4rtup (plataforma growth tecnología: Scale, NIS2, DORA).
 Dolor: ${vars.pain || 'necesidad de cumplimiento normativo'}.
 Tono: profesional, directo, sin rodeos. Máximo 150 palabras. CTA: agendar demo de 15 min.`,
     fields: [
@@ -304,7 +304,7 @@ Tono: profesional, directo, sin rodeos. Máximo 150 palabras. CTA: agendar demo 
     icon: Send,
     prompt: (vars) => `Redacta un email de seguimiento DESPUÉS de una demo en español.
 Empresa: ${vars.company || '[empresa]'}. Contacto: ${vars.contact || '[nombre]'}.
-Puntos tratados: ${vars.points || 'cumplimiento Enterprise, gestión de clientes, SOC'}.
+Puntos tratados: ${vars.points || 'cumplimiento Scale, gestión de clientes, SOC'}.
 Próximos pasos propuestos: ${vars.next || 'PoC 90 días €19.500'}.
 Incluye resumen de valor demostrado + CTA para avanzar. Máximo 200 palabras.`,
     fields: [
@@ -320,13 +320,13 @@ Incluye resumen de valor demostrado + CTA para avanzar. Máximo 200 palabras.`,
     icon: FileText,
     prompt: (vars) => `Redacta un email en español para acompañar el envío de una propuesta comercial.
 Empresa: ${vars.company || '[empresa]'}. Valor: ${vars.value || '€19.500 PoC'}.
-Módulos incluidos: ${vars.modules || 'growth Core + Enterprise'}.
+Módulos incluidos: ${vars.modules || 'growth Core + Scale'}.
 Deadline del cliente: ${vars.deadline || 'sin deadline específico'}.
 Tono: ejecutivo, confiado. Incluye urgencia sutil. CTA: revisar y confirmar esta semana. Máximo 150 palabras.`,
     fields: [
       { key: 'company', label: 'Empresa', placeholder: '' },
       { key: 'value', label: 'Valor propuesta', placeholder: '€19.500, €57.000...' },
-      { key: 'modules', label: 'Módulos incluidos', placeholder: 'growth Core, Enterprise, NIS2, SOC...' },
+      { key: 'modules', label: 'Módulos incluidos', placeholder: 'growth Core, Scale, NIS2, SOC...' },
       { key: 'deadline', label: 'Deadline del cliente', placeholder: 'Auditoría en junio, NIS2 octubre...' },
     ],
   },
@@ -537,7 +537,7 @@ function CompetitorTracker() {
   const [filter, setFilter] = useState('all')
   const competitors = data?.competitors || []
 
-  const tierMap = { critical: 'high', high: 'high', medium: 'medium', low: 'low' }
+  const planMap = { critical: 'high', high: 'high', medium: 'medium', low: 'low' }
   const threatColors = {
     high: { bg: 'rgba(239,68,68,0.1)', text: T.destructive, border: `${T.destructive}50`, label: 'Alto' },
     medium: { bg: 'rgba(234,179,8,0.1)', text: T.warning, border: `${T.warning}50`, label: 'Medio' },
@@ -545,7 +545,7 @@ function CompetitorTracker() {
   }
   const regionLabels = { local: '🇪🇸', europe: '🇪🇺', global: '🌐' }
 
-  const mapped = competitors.map(c => ({ ...c, threat: tierMap[c.tier] || 'medium' }))
+  const mapped = competitors.map(c => ({ ...c, threat: planMap[c.plan] || 'medium' }))
   const filtered = filter === 'all' ? mapped : mapped.filter(c => c.threat === filter)
   const byThreat = { high: mapped.filter(c => c.threat === 'high').length, medium: mapped.filter(c => c.threat === 'medium').length, low: mapped.filter(c => c.threat === 'low').length }
 
