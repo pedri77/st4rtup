@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 
+const TIERS = [
+  { name: 'Bronce', refs: '1-10', pct: '20%', color: '#CD7F32' },
+  { name: 'Plata', refs: '11-25', pct: '23%', color: '#94A3B8' },
+  { name: 'Oro', refs: '26-50', pct: '25%', color: '#F59E0B' },
+  { name: 'Diamante', refs: '51+', pct: '30%', color: '#1E6FD9' },
+]
+
 const EARNINGS = [
-  ['10', 'Growth (€19)', '€38/mes'],
-  ['20', 'Growth (€19)', '€76/mes'],
-  ['10', 'Scale (€49)', '€98/mes'],
-  ['50', 'Mix', '€400+/mes'],
+  ['10', 'Growth (€19)', 'Bronce 20%', '€38/mes'],
+  ['25', 'Growth (€19)', 'Plata 23%', '€109/mes'],
+  ['50', 'Scale (€49)', 'Oro 25%', '€613/mes'],
+  ['51+', 'Mix', 'Diamante 30%', '€800+/mes'],
 ]
 
 const AUDIENCE = [
@@ -16,7 +23,7 @@ const AUDIENCE = [
 ]
 
 const FAQS = [
-  ['¿Cuánto puedo ganar?', 'Sin límite. 20% recurrente mientras tu referido sea cliente activo.'],
+  ['¿Cuánto puedo ganar?', 'Sin límite. Empiezas en 20% (Bronce) y subes hasta 30% (Diamante) con más de 51 referidos activos.'],
   ['¿Cómo recibo el pago?', 'Transferencia SEPA o PayPal. Pagos mensuales el día 1.'],
   ['¿Cuánto dura la cookie?', '90 días desde el primer clic en tu enlace.'],
   ['¿Necesito ser cliente?', 'No, pero ayuda para hablar con conocimiento real del producto.'],
@@ -42,10 +49,10 @@ export default function AffiliatesPage() {
 
       {/* Hero */}
       <section style={{ maxWidth: 800, margin: '0 auto', padding: '80px 24px 40px', textAlign: 'center' }}>
-        <div style={{ display: 'inline-block', padding: '4px 16px', borderRadius: 20, background: '#1E6FD910', border: '1px solid #1E6FD930', color: '#1E6FD9', fontSize: '.8rem', fontWeight: 600, marginBottom: 16 }}>20% COMISIÓN RECURRENTE</div>
+        <div style={{ display: 'inline-block', padding: '4px 16px', borderRadius: 20, background: '#1E6FD910', border: '1px solid #1E6FD930', color: '#1E6FD9', fontSize: '.8rem', fontWeight: 600, marginBottom: 16 }}>20-30% COMISIÓN RECURRENTE</div>
         <h1 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: 16 }}>Programa de afiliados</h1>
         <p style={{ fontSize: '1.05rem', color: '#64748B', lineHeight: 1.7, marginBottom: 32 }}>
-          Gana un <strong style={{ color: '#1E6FD9' }}>20% recurrente</strong> por cada startup que refieras a St4rtup. Sin límite. Mientras sea cliente, tú ganas.
+          Gana desde un <strong style={{ color: '#1E6FD9' }}>20% hasta un 30% recurrente</strong> por cada startup que refieras a St4rtup. Cuantos más referidos, mayor tu comisión.
         </p>
         <Link to="/contact" style={{ display: 'inline-block', background: '#1E6FD9', color: 'white', padding: '14px 36px', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: '1rem', boxShadow: '0 4px 14px rgba(30,111,217,0.3)' }}>Unirme al programa →</Link>
       </section>
@@ -67,14 +74,26 @@ export default function AffiliatesPage() {
 
       {/* Earning examples */}
       <section style={{ maxWidth: 700, margin: '0 auto', padding: '40px 24px' }}>
+        <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: '1.4rem', fontWeight: 700, textAlign: 'center', marginBottom: 24 }}>Comisión por tiers</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 40 }}>
+          {TIERS.map((t, i) => (
+            <div key={i} style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 14, padding: 20, textAlign: 'center', transition: 'transform .2s' }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 800, color: t.color, fontFamily: 'monospace', marginBottom: 4 }}>{t.pct}</div>
+              <div style={{ fontWeight: 600, fontSize: '.95rem', marginBottom: 4 }}>{t.name}</div>
+              <div style={{ fontSize: '.78rem', color: '#64748B' }}>{t.refs} referidos</div>
+            </div>
+          ))}
+        </div>
         <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: '1.4rem', fontWeight: 700, textAlign: 'center', marginBottom: 24 }}>Ejemplos de ganancias</h2>
         <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 14, overflow: 'hidden' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '12px 20px', borderBottom: '1px solid #E2E8F0', fontSize: '.8rem', color: '#64748B' }}>
-            <span>Referidos</span><span>Plan</span><span style={{ textAlign: 'right' }}>Tu comisión</span>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', padding: '12px 20px', borderBottom: '1px solid #E2E8F0', fontSize: '.8rem', color: '#64748B' }}>
+            <span>Referidos</span><span>Plan</span><span>Tier</span><span style={{ textAlign: 'right' }}>Tu comisión</span>
           </div>
-          {EARNINGS.map(([refs, plan, commission], i) => (
-            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '12px 20px', borderBottom: i < EARNINGS.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
-              <span>{refs}</span><span>{plan}</span><span style={{ textAlign: 'right', color: '#1E6FD9', fontWeight: 600, fontFamily: 'monospace' }}>{commission}</span>
+          {EARNINGS.map(([refs, plan, tier, commission], i) => (
+            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', padding: '12px 20px', borderBottom: i < EARNINGS.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
+              <span>{refs}</span><span>{plan}</span><span style={{ fontSize: '.8rem', color: '#1E6FD9' }}>{tier}</span><span style={{ textAlign: 'right', color: '#1E6FD9', fontWeight: 600, fontFamily: 'monospace' }}>{commission}</span>
             </div>
           ))}
         </div>
