@@ -21,9 +21,11 @@ async def youtube_status(current_user: dict = Depends(get_current_user)):
 @router.get("/channel")
 async def channel_info(current_user: dict = Depends(get_current_user)):
     """Información del canal: nombre, suscriptores, vídeos, views."""
+    if not youtube_service.is_configured():
+        return {"configured": False, "name": "", "subscribers": 0, "videos": 0, "views": 0}
     result = await youtube_service.get_channel_info()
     if result.get("error"):
-        raise HTTPException(status_code=502, detail=result["error"])
+        return {"configured": False, "error": result["error"], "name": "", "subscribers": 0, "videos": 0, "views": 0}
     return result
 
 
