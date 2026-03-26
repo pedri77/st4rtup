@@ -1,102 +1,78 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { X, CheckCircle, ArrowRight, Rocket, Database, Bot, Target, Users } from 'lucide-react'
-import clsx from 'clsx'
+import { X, Check, ArrowRight } from 'lucide-react'
 
-const STEPS = [
-  {
-    id: 'seeds', icon: Database, title: 'Cargar datos GTM',
-    description: 'Carga competidores, pricing, tácticas y campañas de ejemplo.',
-    action: { label: 'Ir a GTM', href: '/gtm' },
-  },
-  {
-    id: 'lead', icon: Users, title: 'Crear tu primer lead',
-    description: 'Añade un lead manualmente o importa desde Apollo.',
-    action: { label: 'Ir a Leads', href: '/leads' },
-  },
-  {
-    id: 'scoring', icon: Bot, title: 'Ejecutar scoring ICP',
-    description: 'Usa AGENT-LEAD-001 para evaluar un lead automáticamente.',
-    action: { label: 'Ir a Agentes', href: '/agents' },
-  },
-  {
-    id: 'pipeline', icon: Target, title: 'Crear una oportunidad',
-    description: 'Mueve un lead al pipeline con tier de pricing y competidor.',
-    action: { label: 'Ir a Pipeline', href: '/pipeline' },
-  },
-  {
-    id: 'okr', icon: Rocket, title: 'Configurar OKRs',
-    description: 'Define objetivos Q2 y vincúlalos a KPIs.',
-    action: { label: 'Ir a OKRs', href: '/gtm/okr' },
-  },
+const TASKS = [
+  { id: 'lead', label: 'Crea tu primer lead', href: '/app/leads', check: () => false },
+  { id: 'pipeline', label: 'Crea una oportunidad', href: '/app/pipeline', check: () => false },
+  { id: 'email', label: 'Conecta tu email', href: '/app/integrations', check: () => false },
+  { id: 'action', label: 'Crea una acción', href: '/app/actions', check: () => false },
+  { id: 'automation', label: 'Revisa automatizaciones', href: '/app/automations', check: () => false },
 ]
 
 export default function OnboardingWizard() {
-  const [dismissed, setDismissed] = useState(() => localStorage.getItem('riskitera_onboarding_dismissed') === 'true')
   const [completed, setCompleted] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('riskitera_onboarding_steps') || '[]') }
-    catch { return [] }
+    try { return JSON.parse(localStorage.getItem('st4rtup_checklist') || '[]') } catch { return [] }
   })
+  const [hidden, setHidden] = useState(() => localStorage.getItem('st4rtup_checklist_hidden') === 'true')
 
-  if (dismissed) return null
+  useEffect(() => {
+    localStorage.setItem('st4rtup_checklist', JSON.stringify(completed))
+    if (completed.length >= TASKS.length) {
+      setTimeout(() => {
+        setHidden(true)
+        localStorage.setItem('st4rtup_checklist_hidden', 'true')
+      }, 2000)
+    }
+  }, [completed])
 
-  const toggleStep = (stepId) => {
-    const updated = completed.includes(stepId) ? completed.filter(s => s !== stepId) : [...completed, stepId]
-    setCompleted(updated)
-    localStorage.setItem('riskitera_onboarding_steps', JSON.stringify(updated))
+  if (hidden) return null
+
+  const toggle = (id) => {
+    setCompleted(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
   }
 
-  const dismiss = () => {
-    setDismissed(true)
-    localStorage.setItem('riskitera_onboarding_dismissed', 'true')
-  }
-
-  const progress = Math.round(completed.length / STEPS.length * 100)
+  const done = completed.length
+  const total = TASKS.length
+  const pct = Math.round(done / total * 100)
 
   return (
-    <div className="bg-white border border-cyan-500/20 rounded-xl p-5 mb-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Rocket className="w-5 h-5 text-cyan-400" />
-          <h3 className="text-sm font-semibold text-gray-800">Primeros pasos — St4rtup CRM</h3>
-          <span className="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded-full">{progress}%</span>
+    <div style={{ backgroundColor: 'white', border: '1px solid #E2E8F0', borderRadius: 12, padding: '14px 18px', marginBottom: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 14 }}>🚀</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#0F172A' }}>Primeros pasos</span>
+          <span style={{ fontSize: 11, color: '#1E6FD9', backgroundColor: '#EBF4FF', padding: '2px 8px', borderRadius: 10, fontWeight: 600 }}>{done}/{total}</span>
         </div>
-        <button onClick={dismiss} className="text-gray-500 hover:text-gray-700"><X className="w-4 h-4" /></button>
+        <button onClick={() => { setHidden(true); localStorage.setItem('st4rtup_checklist_hidden', 'true') }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
+          <X size={14} color="#94A3B8" />
+        </button>
       </div>
 
-      <div className="w-full bg-gray-100 rounded-full h-1.5 mb-4">
-        <div className="bg-cyan-500 h-1.5 rounded-full transition-all" style={{ width: `${progress}%` }} />
+      <div style={{ height: 3, backgroundColor: '#F1F5F9', borderRadius: 2, marginBottom: 10, overflow: 'hidden' }}>
+        <div style={{ width: `${pct}%`, height: '100%', backgroundColor: pct === 100 ? '#10B981' : '#1E6FD9', borderRadius: 2, transition: 'width 0.3s' }} />
       </div>
 
-      <div className="space-y-2">
-        {STEPS.map((step) => {
-          const done = completed.includes(step.id)
-          const Icon = step.icon
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        {TASKS.map(t => {
+          const isDone = completed.includes(t.id)
           return (
-            <div key={step.id} className={clsx('flex items-center gap-3 rounded-lg p-3 transition-colors', done ? 'bg-green-500/5' : 'bg-gray-50/30')}>
-              <button onClick={() => toggleStep(step.id)} className="flex-shrink-0">
-                <CheckCircle className={clsx('w-5 h-5', done ? 'text-green-400' : 'text-gray-700')} />
-              </button>
-              <Icon className={clsx('w-4 h-4 flex-shrink-0', done ? 'text-gray-600' : 'text-cyan-400')} />
-              <div className="flex-1 min-w-0">
-                <p className={clsx('text-sm', done ? 'text-gray-600 line-through' : 'text-gray-700')}>{step.title}</p>
-                <p className="text-[10px] text-gray-600">{step.description}</p>
+            <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 8, backgroundColor: isDone ? '#10B98110' : '#F8FAFC', border: `1px solid ${isDone ? '#10B98130' : '#E2E8F0'}`, cursor: 'pointer' }}
+              onClick={() => toggle(t.id)}>
+              <div style={{ width: 16, height: 16, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: isDone ? '#10B981' : 'white', border: isDone ? 'none' : '1.5px solid #CBD5E1' }}>
+                {isDone && <Check size={10} color="white" />}
               </div>
-              {!done && (
-                <Link to={step.action.href} className="text-[10px] text-cyan-400 hover:underline flex items-center gap-0.5 flex-shrink-0">
-                  {step.action.label} <ArrowRight className="w-3 h-3" />
-                </Link>
-              )}
+              <span style={{ fontSize: 12, color: isDone ? '#10B981' : '#475569', textDecoration: isDone ? 'line-through' : 'none' }}>{t.label}</span>
+              {!isDone && <Link to={t.href} onClick={e => e.stopPropagation()} style={{ color: '#1E6FD9', display: 'flex' }}><ArrowRight size={12} /></Link>}
             </div>
           )
         })}
       </div>
 
-      {progress === 100 && (
-        <div className="mt-3 text-center">
-          <p className="text-sm text-green-400 mb-2">🎉 ¡Configuración completada!</p>
-          <button onClick={dismiss} className="btn-secondary text-xs">Ocultar guía</button>
-        </div>
+      {pct === 100 && (
+        <p style={{ fontSize: 12, color: '#10B981', textAlign: 'center', marginTop: 8, fontWeight: 600 }}>
+          ✅ ¡Todo listo! Este panel desaparecerá en breve.
+        </p>
       )}
     </div>
   )
