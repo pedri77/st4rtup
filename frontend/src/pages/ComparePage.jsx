@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import WebChatWidget from "@/components/WebChatWidget"
 import { Check, X as XIcon, ArrowRight } from 'lucide-react'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
@@ -138,6 +139,8 @@ export default function ComparePage() {
           <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', backgroundColor: 'white', color: '#1E6FD9', borderRadius: 10, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis <ArrowRight size={16} /></Link>
         </div>
       </div>
+    <WebChatWidget />
     </div>
   )
 }
+

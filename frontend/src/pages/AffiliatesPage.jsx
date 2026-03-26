@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import WebChatWidget from "@/components/WebChatWidget"
 import { useState } from 'react'
 
 const TIERS = [
@@ -148,6 +149,8 @@ export default function AffiliatesPage() {
           </div>
         </div>
       </footer>
+    <WebChatWidget />
     </div>
   )
 }
+

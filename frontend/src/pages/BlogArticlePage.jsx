@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import WebChatWidget from "@/components/WebChatWidget"
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Clock, Calendar, User, Share2 } from 'lucide-react'
 
@@ -155,6 +156,8 @@ export default function BlogArticlePage() {
           </div>
         )}
       </article>
+    <WebChatWidget />
     </div>
   )
 }
+

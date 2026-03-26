@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
@@ -61,6 +62,8 @@ export default function ChangelogPage() {
           ))}
         </div>
       </div>
+    <WebChatWidget />
     </div>
   )
 }
+

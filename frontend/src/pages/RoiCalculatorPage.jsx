@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 import { ArrowRight, TrendingUp, Clock, DollarSign } from 'lucide-react'
 
@@ -110,6 +111,8 @@ export default function RoiCalculatorPage() {
           </Link>
         </div>
       </div>
+    <WebChatWidget />
     </div>
   )
 }
+

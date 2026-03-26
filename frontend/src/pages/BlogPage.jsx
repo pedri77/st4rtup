@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 import { ArrowRight, Search } from 'lucide-react'
 
@@ -129,6 +130,8 @@ export default function BlogPage() {
           </div>
         </div>
       </div>
+    <WebChatWidget />
     </div>
   )
 }
+

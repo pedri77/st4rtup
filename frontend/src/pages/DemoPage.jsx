@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 import { BarChart3, Users, Megaphone, Sparkles, ArrowRight } from 'lucide-react'
 
@@ -143,6 +144,8 @@ export default function DemoPage() {
           </div>
         </div>
       </div>
+    <WebChatWidget />
     </div>
   )
 }
+

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 import { Search, ChevronDown, ChevronUp, Rocket, BarChart3, Megaphone, Sparkles, Plug, CreditCard, Mail } from 'lucide-react'
 
@@ -122,6 +123,8 @@ export default function HelpCenterPage() {
           </a>
         </div>
       </div>
+    <WebChatWidget />
     </div>
   )
 }
+

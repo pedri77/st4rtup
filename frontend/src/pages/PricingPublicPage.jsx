@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 import { Check, Minus, ChevronDown, ChevronUp, ArrowRight } from 'lucide-react'
 
@@ -250,6 +251,8 @@ export default function PricingPublicPage() {
       </section>
 
       <Footer />
+    <WebChatWidget />
     </div>
   )
 }
+

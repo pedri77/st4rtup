@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import WebChatWidget from "@/components/WebChatWidget"
 import { CheckCircle, AlertTriangle } from 'lucide-react'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
@@ -100,6 +101,8 @@ export default function StatusPage() {
           </div>
         </div>
       </div>
+    <WebChatWidget />
     </div>
   )
 }
+
