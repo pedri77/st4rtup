@@ -207,7 +207,7 @@ export default function ChatPage() {
                 </div>
                 <h2 className="text-xl font-semibold mb-2" style={{ fontFamily: fontDisplay, color: T.fg }}>Asistente de Ventas IA</h2>
                 <p className="text-sm mb-6" style={{ color: T.fgMuted }}>
-                  Pregunta sobre leads, leads, pipeline, estrategias de venta, marketing o cualquier duda sobre tu negocio.
+                  Pregunta sobre pipeline, clientes, campañas de marketing, estrategias de crecimiento o cualquier duda sobre tu negocio.
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                   {[

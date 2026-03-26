@@ -192,7 +192,7 @@ export default function ChatWidget() {
                 </div>
                 <p style={{ color: T.fg }} className="text-sm font-medium mb-1">Asistente de Ventas</p>
                 <p style={{ color: T.fgMuted }} className="text-xs mb-4">
-                  Pregunta sobre leads, leads, pipeline, marketing o estrategias de venta.
+                  Pregunta sobre pipeline, clientes, campañas de marketing o estrategias de crecimiento.
                 </p>
                 <div className="space-y-1.5 w-full">
                   {['Redacta un email de seguimiento para Growth', 'Argumentos de venta para B2B en banca', 'Compara SaaS Best Practices vs SaaS'].map((suggestion, i) => (
