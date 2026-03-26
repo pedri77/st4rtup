@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Users, CalendarCheck, Mail, GitBranch,
   CheckSquare, BarChart3, MessageSquare, Settings, Zap, Search, Bell, FileText, Shield, Menu, X,
   Plug, Sparkles, Contact, Calendar, Megaphone, Phone, Bot, DollarSign, Target, Heart, Columns3, BrainCircuit,
-  CalendarDays, CreditCard
+  CalendarDays, CreditCard, BookOpen, ShoppingBag
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import GlobalSearch from '@/components/GlobalSearch'
@@ -89,6 +89,8 @@ function getNavigationGroups(t) {
         { name: t('nav.mcp_gateway'), href: '/app/integrations?tab=airtable', icon: BrainCircuit },
         { name: t('nav.whatsapp'), href: '/app/whatsapp', icon: MessageSquare },
         { name: t('nav.payments'), href: '/app/payments', icon: CreditCard },
+        { name: 'Docs', href: '/app/docs', icon: BookOpen },
+        { name: 'Marketplace', href: '/app/marketplace', icon: ShoppingBag },
         { name: t('nav.chat'), href: '/app/chat', icon: Sparkles },
         { name: t('nav.users'), href: '/app/admin/users', icon: Shield, adminOnly: true },
       ],

@@ -67,6 +67,8 @@ const CallPromptsPage = lazy(() => import('./pages/calls/CallPromptsPage'))
 const CallsDashboardPage = lazy(() => import('./pages/calls/CallsDashboardPage'))
 const CallHistoryPage = lazy(() => import('./pages/calls/CallHistoryPage'))
 const CallQueuesPage = lazy(() => import('./pages/calls/CallQueuesPage'))
+const DocsPage = lazy(() => import('./pages/DocsPage'))
+const MarketplacePage = lazy(() => import('./pages/MarketplacePage'))
 const AgentsPage = lazy(() => import('./pages/AgentsPage'))
 const CostControlPage = lazy(() => import('./pages/CostControlPage'))
 const DealRoomPage = lazy(() => import('./pages/DealRoomPage'))
@@ -249,6 +251,8 @@ function App() {
           <Route path="formularios" element={<Suspense fallback={<PageLoader />}><FormsManagerPage /></Suspense>} />
           <Route path="whatsapp" element={<Suspense fallback={<PageLoader />}><WhatsAppPage /></Suspense>} />
           <Route path="payments" element={<Suspense fallback={<PageLoader />}><PaymentsPage /></Suspense>} />
+          <Route path="docs" element={<Suspense fallback={<PageLoader />}><DocsPage /></Suspense>} />
+          <Route path="marketplace" element={<Suspense fallback={<PageLoader />}><MarketplacePage /></Suspense>} />
           <Route path="content-pipeline" element={<Suspense fallback={<PageLoader />}><Navigate to="/marketing/seo-center" replace /></Suspense>} />
         </Route>
       </Routes>
