@@ -19,7 +19,7 @@ const PLANS = [
     name: 'Growth', desc: 'Para crecer rápido', popular: true,
     monthly: 19, annual: 16,
     users: '3', leads: '5.000',
-    cta: 'Prueba 14 días gratis', ctaStyle: 'filled',
+    cta: 'Prueba 7 días gratis', ctaStyle: 'filled',
   },
   {
     name: 'Scale', desc: 'Para escalar sin límites', popular: false,

@@ -31,7 +31,7 @@ export default function TermsPage() {
         <li><strong>Facturación:</strong> mensual o anual según el plan elegido, con cargo automático.</li>
         <li><strong>IVA:</strong> 21% para empresas españolas. Exención intracomunitaria con NIF-IVA válido.</li>
         <li><strong>Impago:</strong> si el pago falla, dispondrás de 7 días para resolverlo. Tras 3 intentos fallidos, el servicio se suspenderá temporalmente (sin pérdida de datos durante 30 días).</li>
-        <li><strong>Reembolsos:</strong> planes anuales tienen 14 días de desistimiento desde la contratación. Planes mensuales no tienen reembolso del periodo en curso.</li>
+        <li><strong>Reembolsos:</strong> planes anuales tienen 7 días de desistimiento desde la contratación. Planes mensuales no tienen reembolso del periodo en curso.</li>
       </ul>
 
       <S>6. Propiedad intelectual</S>

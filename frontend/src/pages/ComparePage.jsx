@@ -29,7 +29,7 @@ const DATA = {
       { n: 'Marketing Hub completo', us: true, them: false }, { n: '4 Agentes IA', us: true, them: false },
       { n: 'SEO Command Center (9 tabs)', us: true, them: false }, { n: 'Content Pipeline IA', us: true, them: false },
       { n: 'WhatsApp Business', us: true, them: false }, { n: '14 gráficos visuales', us: true, them: '3 básicos' },
-      { n: 'Automatizaciones', us: '22 incluidas', them: '5 en Pro' }, { n: 'Plan gratuito', us: 'Sí, siempre', them: 'Solo 14 días trial' },
+      { n: 'Automatizaciones', us: '22 incluidas', them: '5 en Pro' }, { n: 'Plan gratuito', us: 'Sí, siempre', them: 'Solo 7 días trial' },
     ],
   },
   salesforce: {

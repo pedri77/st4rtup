@@ -16,7 +16,7 @@ async def start_trial(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
-    """Start 14-day Growth trial for new user."""
+    """Start 7-day Growth trial for new user."""
     existing = await db.execute(select(Subscription).where(
         Subscription.user_id == current_user["user_id"],
         Subscription.status.in_(["active", "trialing"])
@@ -28,13 +28,13 @@ async def start_trial(
         user_id=current_user["user_id"],
         plan="growth",
         status="trialing",
-        trial_ends_at=datetime.now(timezone.utc) + timedelta(days=14),
+        trial_ends_at=datetime.now(timezone.utc) + timedelta(days=7),
         current_period_start=datetime.now(timezone.utc),
-        current_period_end=datetime.now(timezone.utc) + timedelta(days=14),
+        current_period_end=datetime.now(timezone.utc) + timedelta(days=7),
     )
     db.add(trial)
     await db.commit()
-    return {"plan": "growth", "trial_days": 14, "expires": trial.trial_ends_at.isoformat()}
+    return {"plan": "growth", "trial_days": 7, "expires": trial.trial_ends_at.isoformat()}
 
 
 @router.get("/subscription")

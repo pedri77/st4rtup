@@ -118,7 +118,7 @@ export default function OnboardingPage() {
             </div>
             <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>¡Tu CRM está listo!</h2>
             <p style={{ color: '#64748B', marginBottom: 8, fontSize: 15 }}>Hola {name || 'there'}, {company ? `${company} está configurado` : 'todo está configurado'}.</p>
-            <p style={{ color: '#94A3B8', marginBottom: 28, fontSize: 13 }}>Tienes 14 días gratis del plan Growth. Todas las funcionalidades desbloqueadas.</p>
+            <p style={{ color: '#94A3B8', marginBottom: 28, fontSize: 13 }}>Tienes 7 días gratis del plan Growth. Todas las funcionalidades desbloqueadas.</p>
             <button onClick={finish} style={{ ...btn, backgroundColor: '#1E6FD9', color: 'white', width: '100%', justifyContent: 'center' }}>Ir al dashboard <ArrowRight size={16} /></button>
           </div>
         )}

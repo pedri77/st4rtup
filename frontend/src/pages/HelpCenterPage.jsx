@@ -9,7 +9,7 @@ const CATEGORIES = [
     { q: '¿Cómo creo mi cuenta?', a: 'Ve a st4rtup.com y haz clic en "Empezar gratis". Solo necesitas un email. No se requiere tarjeta de crédito.' },
     { q: '¿Cómo funciona el onboarding?', a: 'Tras registrarte, un wizard de 5 pasos te guía: nombre, importar leads, conectar email, elegir pipeline y empezar. Tarda menos de 5 minutos.' },
     { q: '¿Puedo importar mis leads desde otro CRM?', a: 'Sí. Soportamos CSV con formato HubSpot, Salesforce y genérico. Ve a Leads → Importar CSV y arrastra tu archivo.' },
-    { q: '¿Hay un período de prueba?', a: 'Sí, 14 días gratis del plan Growth con todas las funcionalidades. Después puedes quedarte en Starter (gratis) o elegir un plan de pago.' },
+    { q: '¿Hay un período de prueba?', a: 'Sí, 7 días gratis del plan Growth con todas las funcionalidades. Después puedes quedarte en Starter (gratis) o elegir un plan de pago.' },
   ]},
   { id: 'sales', name: 'Pipeline y ventas', icon: BarChart3, color: '#10B981', faqs: [
     { q: '¿Cómo creo mi primer lead?', a: 'Ve a Leads → "Nuevo Lead". Rellena empresa, contacto y email. El scoring automático se aplica al instante.' },
