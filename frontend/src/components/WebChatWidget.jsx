@@ -10,7 +10,7 @@ const T = {
 export default function WebChatWidget() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hola, soy el asistente de St4rtup. En que puedo ayudarte con ventas, marketing o crecimiento de tu startup?' }
+    { role: 'assistant', content: '¡Hola! Soy el asistente de St4rtup. ¿En qué puedo ayudarte?' }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -46,11 +46,12 @@ export default function WebChatWidget() {
       <button onClick={() => setOpen(true)} style={{
         position: 'fixed', bottom: 24, right: 24, zIndex: 50,
         width: 56, height: 56, borderRadius: '50%',
-        background: `linear-gradient(135deg, ${T.cyan}, #F5820B)`,
-        border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+        background: 'white',
+        border: '2px solid #E2E8F0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+        overflow: 'hidden', padding: 0,
       }}>
-        <MessageCircle size={24} color="white" />
+        <img src="/chat-avatar.png" alt="Chat" style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
       </button>
     )
   }
@@ -65,9 +66,12 @@ export default function WebChatWidget() {
     }}>
       {/* Header */}
       <div style={{ padding: '12px 16px', backgroundColor: T.card, borderBottom: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <p style={{ fontSize: 14, fontWeight: 700, color: T.fg, margin: 0 }}>St4rtup</p>
-          <p style={{ fontSize: 11, color: T.fgMuted, margin: 0 }}>Asistente growth</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <img src="/chat-avatar.png" alt="St4rtup" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
+          <div>
+            <p style={{ fontSize: 14, fontWeight: 700, color: T.fg, margin: 0 }}>St4rtup</p>
+            <p style={{ fontSize: 11, color: T.fgMuted, margin: 0 }}>Asistente</p>
+          </div>
         </div>
         <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
           <X size={18} color={T.fgMuted} />
