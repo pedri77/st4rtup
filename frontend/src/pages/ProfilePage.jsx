@@ -7,6 +7,7 @@ import { User, Mail, Shield, Calendar, Save, LogOut, Bell, Globe, Moon, Sun } fr
 import toast from 'react-hot-toast'
 import { USE_MOCK_DATA } from '@/mocks/mockData'
 import { useUserPreferencesStore } from '@/store/useUserPreferencesStore'
+import { supabase } from '@/lib/supabase'
 
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
@@ -18,6 +19,107 @@ const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
 const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' }
+
+function TwoFactorSection() {
+  const [mfaState, setMfaState] = useState('idle') // idle | enrolling | verifying | active
+  const [qrUri, setQrUri] = useState('')
+  const [factorId, setFactorId] = useState('')
+  const [verifyCode, setVerifyCode] = useState('')
+  const [error, setError] = useState('')
+
+  // Check if MFA is already enrolled
+  useEffect(() => {
+    async function checkMFA() {
+      const { data } = await supabase.auth.mfa.listFactors()
+      if (data?.totp?.length > 0 && data.totp[0].status === 'verified') {
+        setMfaState('active')
+        setFactorId(data.totp[0].id)
+      }
+    }
+    checkMFA()
+  }, [])
+
+  async function enrollMFA() {
+    setError('')
+    setMfaState('enrolling')
+    const { data, error: err } = await supabase.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'St4rtup App' })
+    if (err) { setError(err.message); setMfaState('idle'); return }
+    setQrUri(data.totp.uri)
+    setFactorId(data.id)
+    setMfaState('verifying')
+  }
+
+  async function verifyMFA() {
+    setError('')
+    const { data: challenge } = await supabase.auth.mfa.challenge({ factorId })
+    if (!challenge) { setError('Error creando challenge'); return }
+    const { error: err } = await supabase.auth.mfa.verify({ factorId, challengeId: challenge.id, code: verifyCode })
+    if (err) { setError('Código incorrecto. Inténtalo de nuevo.'); return }
+    setMfaState('active')
+    toast.success('2FA activado correctamente')
+  }
+
+  async function unenrollMFA() {
+    if (!confirm('¿Desactivar 2FA? Tu cuenta será menos segura.')) return
+    await supabase.auth.mfa.unenroll({ factorId })
+    setMfaState('idle')
+    setQrUri('')
+    setFactorId('')
+    toast.success('2FA desactivado')
+  }
+
+  const T = { card: '#FFFFFF', border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B', cyan: '#1E6FD9', success: '#10B981', muted: '#F1F5F9' }
+  const fontDisplay = "'Rajdhani', sans-serif"
+
+  return (
+    <div className="rounded-lg p-6 mt-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-lg font-semibold" style={{ fontFamily: fontDisplay, color: T.fg }}>Autenticación de dos factores (2FA)</h3>
+        {mfaState === 'active' && <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 10, backgroundColor: '#10B98115', color: T.success, fontWeight: 600 }}>✓ Activo</span>}
+      </div>
+      <p style={{ fontSize: 13, color: T.fgMuted, marginBottom: 16 }}>Protege tu cuenta con un código de verificación desde Google Authenticator o Authy.</p>
+
+      {error && <p style={{ fontSize: 12, color: '#EF4444', marginBottom: 12, padding: '8px 12px', backgroundColor: '#FEF2F2', borderRadius: 8 }}>{error}</p>}
+
+      {mfaState === 'idle' && (
+        <button onClick={enrollMFA} style={{ padding: '10px 20px', borderRadius: 10, backgroundColor: T.cyan, color: 'white', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+          Activar 2FA
+        </button>
+      )}
+
+      {mfaState === 'enrolling' && <p style={{ color: T.fgMuted, fontSize: 13 }}>Configurando...</p>}
+
+      {mfaState === 'verifying' && (
+        <div>
+          <p style={{ fontSize: 13, color: T.fg, fontWeight: 600, marginBottom: 12 }}>1. Escanea este código QR con tu app de autenticación:</p>
+          <div style={{ padding: 16, backgroundColor: 'white', borderRadius: 12, border: `1px solid ${T.border}`, display: 'inline-block', marginBottom: 16 }}>
+            <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUri)}`} alt="QR Code" style={{ width: 200, height: 200 }} />
+          </div>
+          <p style={{ fontSize: 13, color: T.fg, fontWeight: 600, marginBottom: 8 }}>2. Introduce el código de 6 dígitos:</p>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <input type="text" value={verifyCode} onChange={e => setVerifyCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              placeholder="000000" maxLength={6}
+              style={{ width: 140, padding: '10px 16px', borderRadius: 10, border: `1px solid ${T.border}`, fontSize: 20, fontFamily: 'monospace', textAlign: 'center', letterSpacing: 8, outline: 'none' }}
+              onKeyDown={e => e.key === 'Enter' && verifyCode.length === 6 && verifyMFA()} />
+            <button onClick={verifyMFA} disabled={verifyCode.length !== 6}
+              style={{ padding: '10px 20px', borderRadius: 10, backgroundColor: verifyCode.length === 6 ? T.cyan : T.muted, color: verifyCode.length === 6 ? 'white' : T.fgMuted, border: 'none', fontSize: 13, fontWeight: 600, cursor: verifyCode.length === 6 ? 'pointer' : 'default' }}>
+              Verificar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {mfaState === 'active' && (
+        <div>
+          <p style={{ fontSize: 13, color: T.success, marginBottom: 12 }}>Tu cuenta está protegida con 2FA.</p>
+          <button onClick={unenrollMFA} style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.muted, color: '#EF4444', border: `1px solid ${T.border}`, fontSize: 12, cursor: 'pointer' }}>
+            Desactivar 2FA
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function ProfilePage() {
   const { user, signOut } = useAuth()
@@ -232,13 +334,7 @@ export default function ProfilePage() {
       </div>
 
       {/* 2FA */}
-      <div className="rounded-lg p-6 mt-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
-        <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: fontDisplay, color: T.fg }}>Autenticación de dos factores (2FA)</h3>
-        <p style={{ fontSize: 13, color: T.fgMuted, marginBottom: 16 }}>Añade una capa extra de seguridad a tu cuenta.</p>
-        <button style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.muted, color: T.fgMuted, border: `1px solid ${T.border}`, fontSize: 13, cursor: 'pointer' }}>
-          Activar 2FA (próximamente)
-        </button>
-      </div>
+      <TwoFactorSection />
 
       {/* Stats */}
       <div className="rounded-lg p-6 mt-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
