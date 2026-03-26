@@ -538,6 +538,12 @@ PLAN_PRICES = {
     "growth_annual": {"price_id_env": "STRIPE_PRICE_GROWTH_ANNUAL", "amount": 190, "interval": "year"},
     "scale_monthly": {"price_id_env": "STRIPE_PRICE_SCALE_MONTHLY", "amount": 49, "interval": "month"},
     "scale_annual": {"price_id_env": "STRIPE_PRICE_SCALE_ANNUAL", "amount": 490, "interval": "year"},
+    # Add-ons
+    "extra_users": {"price_id": "price_1TFAkwE4TtFzXFZ4kJRpMexq", "amount": 9, "interval": "month"},
+    "ai_advanced": {"price_id": "price_1TFAkxE4TtFzXFZ47KyGxlK9", "amount": 15, "interval": "month"},
+    "deal_room_addon": {"price_id": "price_1TFAktE4TtFzXFZ4LkcMvzt3", "amount": 12, "interval": "month"},
+    "whatsapp_addon": {"price_id": "price_1TFAkuE4TtFzXFZ4gdGUC1sQ", "amount": 9, "interval": "month"},
+    "api_access": {"price_id": "price_1TFAkvE4TtFzXFZ49d403iAZ", "amount": 15, "interval": "month"},
 }
 
 @router.post("/public/checkout")
@@ -553,7 +559,7 @@ async def public_checkout(
         raise HTTPException(400, "Stripe no configurado")
 
     plan_info = PLAN_PRICES[plan]
-    price_id = getattr(settings, plan_info["price_id_env"], "")
+    price_id = plan_info.get("price_id") or getattr(settings, plan_info.get("price_id_env", ""), "")
 
     if not price_id:
         # Fallback: create ad-hoc checkout without price_id

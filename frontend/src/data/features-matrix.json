@@ -86,10 +86,10 @@
     }
   ],
   "addons": [
-    { "id": "extra_users", "name": "+5 Usuarios", "price_monthly": 9, "desc": "Pack de 5 usuarios adicionales" },
-    { "id": "ai_advanced", "name": "IA Avanzada", "price_monthly": 15, "desc": "A/B testing, scoring premium, content pipeline ilimitado" },
-    { "id": "deal_room_addon", "name": "Deal Room", "price_monthly": 12, "desc": "Sala de negociación + NDA digital" },
-    { "id": "whatsapp_addon", "name": "WhatsApp Business", "price_monthly": 9, "desc": "Mensajes + chatbot IA" },
-    { "id": "api_access", "name": "API Pública", "price_monthly": 15, "desc": "Endpoints + API keys + webhooks avanzados" }
+    { "id": "extra_users", "name": "+5 Usuarios", "price_monthly": 9, "stripe_price_id": "price_1TFAkwE4TtFzXFZ4kJRpMexq", "desc": "Pack de 5 usuarios adicionales" },
+    { "id": "ai_advanced", "name": "IA Avanzada", "price_monthly": 15, "stripe_price_id": "price_1TFAkxE4TtFzXFZ47KyGxlK9", "desc": "A/B testing, scoring premium, content pipeline ilimitado" },
+    { "id": "deal_room_addon", "name": "Deal Room", "price_monthly": 12, "stripe_price_id": "price_1TFAktE4TtFzXFZ4LkcMvzt3", "desc": "Sala de negociación + NDA digital" },
+    { "id": "whatsapp_addon", "name": "WhatsApp Business", "price_monthly": 9, "stripe_price_id": "price_1TFAkuE4TtFzXFZ4gdGUC1sQ", "desc": "Mensajes + chatbot IA por WhatsApp" },
+    { "id": "api_access", "name": "API Pública", "price_monthly": 15, "stripe_price_id": "price_1TFAkvE4TtFzXFZ49d403iAZ", "desc": "Endpoints + API keys + webhooks avanzados" }
   ]
 }
