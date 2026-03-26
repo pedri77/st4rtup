@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ShoppingBag, Check, Lock, Zap } from 'lucide-react'
 import featuresMatrix from '@/data/features-matrix.json'
 import { useOrganization } from '@/hooks/useOrganization'
@@ -97,7 +98,8 @@ export default function MarketplacePage() {
         {addons.map(a => (
           <div key={a.id} className="rounded-xl p-5" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
             <h3 className="font-semibold mb-1" style={{ color: T.fg }}>{a.name}</h3>
-            <p className="text-xs mb-3" style={{ color: T.fgMuted }}>{a.desc}</p>
+            <p className="text-xs mb-2" style={{ color: T.fgMuted }}>{a.desc}</p>
+            <Link to="/app/docs" style={{ fontSize: 11, color: T.cyan, textDecoration: 'none', marginBottom: 8, display: 'inline-block' }}>📖 Ver documentación</Link>
             <div className="flex items-center justify-between">
               <span className="font-bold" style={{ color: T.cyan }}>€{a.price_monthly}/mes</span>
               <button onClick={async () => {
