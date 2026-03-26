@@ -15,6 +15,7 @@ from app.api.v1.endpoints import (
     whatsapp,
     payments,
     organizations,
+    admin,
 )
 api_router = APIRouter()
 
@@ -66,6 +67,9 @@ api_router.include_router(cost_control.router, prefix="/costs", tags=["Cost Cont
 
 # Organizations (Multi-tenancy)
 api_router.include_router(organizations.router, prefix="/org", tags=["Organizations"])
+
+# Admin Dashboard
+api_router.include_router(admin.router, prefix="/admin", tags=["Admin Dashboard"])
 
 # GTM
 api_router.include_router(brand.router, prefix="/brand", tags=["Brand & Positioning"])
