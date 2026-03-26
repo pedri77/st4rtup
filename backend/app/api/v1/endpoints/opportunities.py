@@ -22,7 +22,7 @@ async def list_opportunities(
     lead_id: Optional[UUID] = None,
     stage: Optional[str] = None,
     page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
+    page_size: int = Query(20, ge=1, le=500),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
