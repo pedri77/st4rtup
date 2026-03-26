@@ -32,6 +32,7 @@ class Notification(Base):
     Notificaciones del sistema para alertar a los usuarios sobre eventos importantes.
     """
     __tablename__ = "notifications"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), nullable=False, index=True)  # FK a users (por implementar)

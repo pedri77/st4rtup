@@ -30,6 +30,7 @@ class ArticleType(str, enum.Enum):
 class Article(BaseModel):
     """Artículo del Content Hub — SEO Command Center."""
     __tablename__ = "articles"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     title = Column(String(500), nullable=False)
     slug = Column(String(500), unique=True, index=True)

@@ -18,6 +18,7 @@ from app.models.enums import (
 class Automation(BaseModel):
     """Definición y configuración de automatizaciones n8n."""
     __tablename__ = "automations"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     code = Column(String(10), unique=True, nullable=False, index=True)
     name = Column(String(255), nullable=False)

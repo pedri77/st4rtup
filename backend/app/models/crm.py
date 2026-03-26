@@ -16,6 +16,7 @@ from app.models.enums import (
 class Visit(BaseModel):
     """Registro de visitas comerciales."""
     __tablename__ = "visits"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False)
     visit_date = Column(DateTime(timezone=True), nullable=False)
@@ -50,6 +51,7 @@ class Visit(BaseModel):
 class Email(BaseModel):
     """Gestión de emails comerciales."""
     __tablename__ = "emails"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False)
     subject = Column(String(500), nullable=False)
@@ -87,6 +89,7 @@ class Email(BaseModel):
 class AccountPlan(BaseModel):
     """Plan de cuenta por cliente."""
     __tablename__ = "account_plans"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False, unique=True)
     objective = Column(Text)
@@ -112,6 +115,7 @@ class AccountPlan(BaseModel):
 class Action(BaseModel):
     """Acciones de seguimiento comercial."""
     __tablename__ = "actions"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False)
     title = Column(String(500), nullable=False)
@@ -130,6 +134,7 @@ class Action(BaseModel):
 class MonthlyReview(BaseModel):
     """Seguimiento mensual del proyecto por cliente."""
     __tablename__ = "monthly_reviews"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False)
     review_month = Column(Integer, nullable=False)

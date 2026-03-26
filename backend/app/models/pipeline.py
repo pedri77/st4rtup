@@ -14,6 +14,7 @@ from app.models.enums import OpportunityStage, OfferStatus
 class Opportunity(BaseModel):
     """Pipeline de oportunidades comerciales."""
     __tablename__ = "opportunities"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False)
     name = Column(String(500), nullable=False)
@@ -65,6 +66,7 @@ class Opportunity(BaseModel):
 class Offer(BaseModel):
     """Ofertas/propuestas comerciales."""
     __tablename__ = "offers"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False, index=True)
     opportunity_id = Column(UUID(as_uuid=True), ForeignKey("opportunities.id", ondelete="SET NULL"), nullable=True)

@@ -10,6 +10,7 @@ from app.models.enums import LeadStatus, LeadSource
 class Lead(BaseModel):
     """Cliente potencial / Prospecto."""
     __tablename__ = "leads"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     # Company info
     company_name = Column(String(255), nullable=False, index=True)

@@ -14,6 +14,7 @@ from app.models.enums import SurveyStatus
 class Survey(BaseModel):
     """Encuestas de satisfacción."""
     __tablename__ = "surveys"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False)
     title = Column(String(500), nullable=False)
@@ -40,6 +41,7 @@ class Survey(BaseModel):
 class EmailTemplate(BaseModel):
     """Plantillas de email reutilizables."""
     __tablename__ = "email_templates"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     name = Column(String(255), nullable=False)
     description = Column(Text)

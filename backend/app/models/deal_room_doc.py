@@ -7,6 +7,7 @@ from app.models.base import BaseModel
 
 class DealRoom(BaseModel):
     __tablename__ = "deal_rooms"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
     opportunity_id = Column(UUID(as_uuid=True), nullable=True)
     name = Column(String(255))
     token = Column(UUID(as_uuid=True))

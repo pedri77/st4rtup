@@ -14,6 +14,7 @@ from app.models.base import BaseModel
 class SEOKeyword(BaseModel):
     """Keyword monitorizada para SEO organic."""
     __tablename__ = "seo_keywords"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     keyword = Column(String(255), nullable=False, index=True)
     language = Column(String(10), default="es")  # es, en, pt

@@ -11,6 +11,7 @@ from app.models.enums import ContactRoleType, ContactInfluenceLevel, ContactRela
 class Contact(BaseModel):
     """Contacto/stakeholder de una empresa (lead)."""
     __tablename__ = "contacts"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False, index=True)
 

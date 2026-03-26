@@ -15,6 +15,7 @@ from app.models.base import BaseModel
 class CallQueue(BaseModel):
     """Cola de llamadas para batch calling."""
     __tablename__ = "call_queues"
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     name = Column(String(255), nullable=False)
     status = Column(String(30), nullable=False, default="pending", index=True)
