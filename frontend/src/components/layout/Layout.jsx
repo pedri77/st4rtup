@@ -92,7 +92,7 @@ function getNavigationGroups(t) {
         { name: 'Docs', href: '/app/docs', icon: BookOpen },
         { name: 'Marketplace', href: '/app/marketplace', icon: ShoppingBag },
         { name: t('nav.chat'), href: '/app/chat', icon: Sparkles },
-        { name: 'Admin', href: '/app/admin', icon: Shield, adminOnly: true },
+        { name: 'Admin', href: '/app/admin', icon: Shield },
       ],
     },
   ]
