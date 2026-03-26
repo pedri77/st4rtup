@@ -283,6 +283,11 @@ class Settings(BaseSettings):
     STRIPE_SECRET_KEY: str = ""
     STRIPE_WEBHOOK_SECRET: str = ""
     STRIPE_PUBLISHABLE_KEY: str = ""
+    STRIPE_PRICE_GROWTH_MONTHLY: str = ""
+    STRIPE_PRICE_GROWTH_ANNUAL: str = ""
+    STRIPE_PRICE_SCALE_MONTHLY: str = ""
+    STRIPE_PRICE_SCALE_ANNUAL: str = ""
+    TRIAL_DAYS: int = 7
     PAYPAL_CLIENT_ID: str = ""
     PAYPAL_CLIENT_SECRET: str = ""
     PAYPAL_MODE: str = "sandbox"  # sandbox | live
