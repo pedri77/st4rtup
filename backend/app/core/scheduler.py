@@ -367,6 +367,26 @@ async def run_in02_telegram_hub():
         logger.error(f"IN-02 error: {e}")
 
 
+async def run_platform_metrics_snapshot():
+    """Platform metrics daily snapshot — 02:00"""
+    try:
+        async with AsyncSessionLocal() as db:
+            from app.models.organization import Organization
+            from app.models import Lead, Opportunity
+            total_users = (await db.execute(select(func.count()).select_from(User))).scalar() or 0
+            total_orgs = (await db.execute(select(func.count(Organization.id)))).scalar() or 0
+            total_leads = (await db.execute(select(func.count(Lead.id)))).scalar() or 0
+            import json
+            from pathlib import Path
+            metrics_dir = Path("/opt/st4rtup/metrics")
+            metrics_dir.mkdir(exist_ok=True)
+            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            (metrics_dir / f"{today}.json").write_text(json.dumps({"date": today, "users": total_users, "orgs": total_orgs, "leads": total_leads}))
+            logger.info(f"Platform metrics: users={total_users} orgs={total_orgs} leads={total_leads}")
+    except Exception as e:
+        logger.error(f"Metrics snapshot error: {e}")
+
+
 # ═══════════════════════════════════════════════════════════════
 # SCHEDULER SETUP
 # ═══════════════════════════════════════════════════════════════
@@ -426,6 +446,8 @@ def init_scheduler():
         # Integrations
         (run_in01_scraping_import,CronTrigger(hour=6, minute=0), 'in01_scraping','IN-01: Scraping import'),
         (run_in02_telegram_hub,  CronTrigger(minute='*/5'),      'in02_telegram','IN-02: Telegram hub'),
+        # Platform
+        (run_platform_metrics_snapshot, CronTrigger(hour=2, minute=0), 'platform_metrics', 'Platform metrics daily snapshot'),
     ]
 
     for func, trigger, job_id, name in JOBS:

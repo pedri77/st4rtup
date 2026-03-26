@@ -202,3 +202,82 @@ async def admin_feature_usage(
         return {"features": features, "period_days": days}
     except Exception:
         return {"features": [], "period_days": days}
+
+
+@router.get("/health")
+async def admin_health(current_user: dict = Depends(require_admin)):
+    """Platform health status."""
+    health = {"cpu_percent": 0, "memory": {}, "disk": {}, "services": {}}
+    try:
+        import psutil
+        health["cpu_percent"] = psutil.cpu_percent(interval=0.1)
+        mem = psutil.virtual_memory()
+        health["memory"] = {"total_gb": round(mem.total / 1e9, 1), "used_gb": round(mem.used / 1e9, 1), "percent": mem.percent}
+        disk = psutil.disk_usage('/')
+        health["disk"] = {"total_gb": round(disk.total / 1e9, 1), "used_gb": round(disk.used / 1e9, 1), "percent": round(disk.percent, 1)}
+    except ImportError:
+        health["memory"] = {"percent": 0, "note": "psutil not installed"}
+        health["disk"] = {"percent": 0}
+    health["services"] = {"backend": "healthy", "database": "checking..."}
+    try:
+        from app.core.database import AsyncSessionLocal
+        from sqlalchemy import text
+        async with AsyncSessionLocal() as db:
+            await db.execute(text("SELECT 1"))
+        health["services"]["database"] = "healthy"
+    except Exception:
+        health["services"]["database"] = "error"
+    return health
+
+
+@router.get("/emails")
+async def admin_emails(
+    days: int = 30,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Email metrics."""
+    since = datetime.now(timezone.utc) - timedelta(days=days)
+    total_sent = (await db.execute(select(func.count(Email.id)).where(Email.created_at >= since))).scalar() or 0
+    daily = await db.execute(
+        select(func.date(Email.created_at), func.count(Email.id))
+        .where(Email.created_at >= since)
+        .group_by(func.date(Email.created_at))
+        .order_by(func.date(Email.created_at))
+    )
+    by_day = [{"date": str(r[0]), "count": r[1]} for r in daily.all()]
+    return {"total_sent": total_sent, "period_days": days, "by_day": by_day}
+
+
+@router.get("/engagement")
+async def admin_engagement(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Platform engagement metrics."""
+    now = datetime.now(timezone.utc)
+    from app.models import ActionStatus
+    leads_7d = (await db.execute(select(func.count(Lead.id)).where(Lead.created_at >= now - timedelta(days=7)))).scalar() or 0
+    opps_7d = (await db.execute(select(func.count(Opportunity.id)).where(Opportunity.created_at >= now - timedelta(days=7)))).scalar() or 0
+    actions_7d = (await db.execute(select(func.count(Action.id)).where(Action.status == ActionStatus.COMPLETED, Action.updated_at >= now - timedelta(days=7)))).scalar() or 0
+    visits_7d = (await db.execute(select(func.count(Visit.id)).where(Visit.created_at >= now - timedelta(days=7)))).scalar() or 0
+    return {"leads_7d": leads_7d, "opportunities_7d": opps_7d, "actions_completed_7d": actions_7d, "visits_7d": visits_7d}
+
+
+@router.get("/alerts")
+async def admin_alerts(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Active platform alerts."""
+    now = datetime.now(timezone.utc)
+    alerts = []
+    expiring = await db.execute(select(Organization).where(
+        Organization.trial_ends_at.isnot(None), Organization.trial_ends_at <= now + timedelta(hours=24), Organization.trial_ends_at > now
+    ))
+    for org in expiring.scalars().all():
+        alerts.append({"type": "trial_expiring", "severity": "warning", "message": f"Trial de '{org.name}' expira en 24h", "org_id": str(org.id)})
+    failed = (await db.execute(select(func.count(Payment.id)).where(Payment.status == "failed"))).scalar() or 0
+    if failed > 0:
+        alerts.append({"type": "payment_failed", "severity": "high", "message": f"{failed} pagos fallidos pendientes"})
+    return {"alerts": alerts, "total": len(alerts)}
