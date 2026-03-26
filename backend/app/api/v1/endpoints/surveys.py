@@ -77,7 +77,8 @@ async def create_survey(
 
     survey = Survey(**data.model_dump())
     survey.response_token = _generate_token()
-    db.add(survey)
+    survey.org_id = org_id
+        db.add(survey)
     await db.commit()
     await db.refresh(survey)
     return SurveyResponse.model_validate(survey)

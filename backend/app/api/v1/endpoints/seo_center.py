@@ -11,6 +11,7 @@ from sqlalchemy import select, func, desc, and_
 
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 from app.core.permissions import require_write_access
 from app.models.article import Article, ArticleStatus, ArticleType
 from app.models.seo import SEOKeyword, SEORanking
@@ -90,8 +91,10 @@ async def list_articles(
     search: Optional[str] = Query(None, max_length=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     query = select(Article)
+    query = query.where(Article.org_id == org_id)
     if status:
         query = query.where(Article.status == status)
     if article_type:

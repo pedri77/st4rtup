@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 
 require_write_access = get_current_user  # alias until roles are implemented
 from app.models.service_catalog import ServiceCatalogItem
@@ -19,6 +20,7 @@ async def list_services(
     category: str = Query(None),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     query = select(ServiceCatalogItem).order_by(ServiceCatalogItem.sort_order)
     if active is not None:

@@ -86,6 +86,7 @@ async def create_offer(
     data: OfferCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Crear una nueva oferta."""
     # Verify lead exists
@@ -100,7 +101,8 @@ async def create_offer(
         reference=reference,
         created_by=UUID(current_user["user_id"]),
     )
-    db.add(offer)
+    offer.org_id = org_id
+        db.add(offer)
     await db.commit()
     await db.refresh(offer)
 
@@ -133,6 +135,7 @@ async def update_offer(
     data: OfferUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Actualizar una oferta existente."""
     result = await db.execute(select(Offer).where(Offer.id == offer_id))
@@ -170,6 +173,7 @@ async def delete_offer(
     offer_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Eliminar una oferta."""
     result = await db.execute(select(Offer).where(Offer.id == offer_id))
@@ -187,6 +191,7 @@ async def sign_offer(
     data: dict,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Enviar oferta para firma electrónica (DocuSign o YouSign)."""
     provider = data.get("provider", "")

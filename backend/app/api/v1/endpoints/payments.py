@@ -13,6 +13,7 @@ from sqlalchemy import select, func, desc
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 from app.core.permissions import require_write_access
 from app.models.payment import PaymentPlan, Payment, Invoice
 from app.schemas.base import PaginatedResponse
@@ -50,9 +51,11 @@ async def list_payments(
     search: Optional[str] = Query(None, max_length=200),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Lista pagos con filtros y paginacion."""
     query = select(Payment)
+    query = query.where(Payment.org_id == org_id)
 
     if status:
         query = query.where(Payment.status == status)

@@ -60,9 +60,11 @@ async def create_visit(
     data: VisitCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     visit = Visit(**data.model_dump())
-    db.add(visit)
+    visit.org_id = org_id
+        db.add(visit)
     await db.commit()
     await db.refresh(visit)
 
@@ -106,6 +108,7 @@ async def update_visit(
     data: VisitUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(Visit).where(Visit.id == visit_id))
     visit = result.scalar_one_or_none()
@@ -125,6 +128,7 @@ async def delete_visit(
     visit_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(Visit).where(Visit.id == visit_id))
     visit = result.scalar_one_or_none()

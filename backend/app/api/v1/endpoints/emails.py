@@ -61,9 +61,11 @@ async def create_email(
     data: EmailCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     email = Email(**data.model_dump())
-    db.add(email)
+    email.org_id = org_id
+        db.add(email)
     await db.commit()
     await db.refresh(email)
     return EmailResponse.model_validate(email)
@@ -75,6 +77,7 @@ async def schedule_email(
     scheduled_at: str = Query(..., description="ISO datetime: 2026-04-01T10:00:00"),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Programa el envío de un email para una fecha/hora específica."""
     from datetime import datetime
@@ -101,6 +104,7 @@ async def send_email(
     email_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Send a draft email via configured email provider (Zoho or Resend)."""
     from datetime import datetime, timezone

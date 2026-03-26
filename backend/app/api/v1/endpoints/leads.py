@@ -166,10 +166,12 @@ async def create_lead(
     data: LeadCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Create a new lead."""
     lead = Lead(**data.model_dump())
-    db.add(lead)
+    lead.org_id = org_id
+        db.add(lead)
     await db.commit()
     await db.refresh(lead)
 
@@ -236,6 +238,7 @@ async def update_lead(
     data: LeadUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Update a lead."""
     query = select(Lead).where(Lead.id == lead_id)
@@ -294,6 +297,7 @@ async def enrich_lead(
     lead_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Enriquece un lead usando Apollo.io (org + persona)."""
     # Verificar acceso al lead
@@ -312,6 +316,7 @@ async def auto_tag_lead(
     lead_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Auto-clasifica un lead por sector/normativa usando IA."""
     lead = await db.get(Lead, lead_id)
@@ -356,6 +361,7 @@ async def import_from_linkedin(
     linkedin_url: str = Query(...),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Crea lead desde URL de perfil LinkedIn."""
     import re
@@ -377,6 +383,7 @@ async def bulk_action_leads(
     value: str = Query("", description="Valor para assign_status"),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Ejecuta acción en batch sobre múltiples leads."""
     ids = [UUID(lid.strip()) for lid in lead_ids.split(",") if lid.strip()]
@@ -427,6 +434,7 @@ async def import_leads_csv(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Importa leads desde CSV. Soporta formatos St4rtup, HubSpot y Salesforce."""
     import csv
@@ -526,6 +534,7 @@ async def import_leads_csv(
 async def deduplicate_leads(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Detecta leads duplicados por email o empresa."""
     from sqlalchemy import func as sqlfunc
@@ -561,6 +570,7 @@ async def search_prospects(
     countries: Optional[str] = Query(None, description="Países ISO: ES,DE,FR"),
     limit: int = Query(25, ge=1, le=100),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Busca prospectos en Apollo.io por ICP (cargos, sector, tamaño, país)."""
     from app.services.apollo_service import search_prospects as do_search
@@ -770,6 +780,7 @@ async def delete_lead(
     lead_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Delete a lead."""
     query = select(Lead).where(Lead.id == lead_id)

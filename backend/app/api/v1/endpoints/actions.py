@@ -57,9 +57,11 @@ async def create_action(
     data: ActionCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     action = Action(**data.model_dump())
-    db.add(action)
+    action.org_id = org_id
+        db.add(action)
     await db.commit()
     await db.refresh(action)
 
@@ -96,6 +98,7 @@ async def update_action(
     data: ActionUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(Action).where(Action.id == action_id))
     action = result.scalar_one_or_none()
@@ -113,6 +116,7 @@ async def delete_action(
     action_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(Action).where(Action.id == action_id))
     action = result.scalar_one_or_none()

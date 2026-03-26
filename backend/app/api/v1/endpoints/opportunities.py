@@ -56,9 +56,11 @@ async def create_opportunity(
     data: OpportunityCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     opportunity = Opportunity(**data.model_dump())
-    db.add(opportunity)
+    opportunity.org_id = org_id
+        db.add(opportunity)
     await db.commit()
     await db.refresh(opportunity)
 
@@ -96,6 +98,7 @@ async def delete_opportunity(
     opportunity_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id))
     opp = result.scalar_one_or_none()
@@ -111,6 +114,7 @@ async def update_opportunity(
     data: OpportunityUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Update an opportunity."""
     result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id))

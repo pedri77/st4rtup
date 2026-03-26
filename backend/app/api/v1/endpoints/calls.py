@@ -9,6 +9,7 @@ from sqlalchemy import select, func, desc
 
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 from app.core.permissions import require_write_access
 from app.models.call import CallPrompt, CallPromptVersion, CallRecord, CallQueue, CallQueueItem
 from app.schemas.call import (
@@ -35,9 +36,11 @@ async def list_prompts(
     search: Optional[str] = Query(None, max_length=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Lista prompts de llamadas con filtros y paginación."""
     query = select(CallPrompt)
+    query = query.where(CallPrompt.org_id == org_id)
 
     if objetivo:
         query = query.where(CallPrompt.objetivo == objetivo)
@@ -347,6 +350,7 @@ async def list_calls(
 ):
     """Lista registros de llamadas con filtros y paginación."""
     query = select(CallRecord)
+    query = query.where(CallRecord.org_id == org_id)
 
     if lead_id:
         query = query.where(CallRecord.lead_id == lead_id)
