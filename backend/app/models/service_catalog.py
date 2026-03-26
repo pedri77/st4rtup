@@ -1,5 +1,6 @@
 """Service catalog for configurable product/service offerings."""
 from sqlalchemy import Column, String, Text, Float, Boolean, Integer
+from sqlalchemy.dialects.postgresql import UUID
 from app.models.base import BaseModel
 
 
