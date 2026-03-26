@@ -1,0 +1,95 @@
+{
+  "plans": {
+    "starter": { "name": "Starter", "price_monthly": 0, "price_annual": 0, "max_users": 1, "max_leads": 100 },
+    "growth": { "name": "Growth", "price_monthly": 19, "price_annual": 190, "max_users": 3, "max_leads": 5000 },
+    "scale": { "name": "Scale", "price_monthly": 49, "price_annual": 490, "max_users": 10, "max_leads": 999999 }
+  },
+  "categories": [
+    {
+      "name": "CRM Core",
+      "features": [
+        { "id": "leads", "name": "Leads + Scoring", "desc": "CRUD, import CSV, scoring automático", "starter": true, "growth": true, "scale": true },
+        { "id": "pipeline", "name": "Pipeline Kanban", "desc": "Drag & drop, etapas personalizables", "starter": true, "growth": true, "scale": true },
+        { "id": "offers", "name": "Ofertas y Propuestas", "desc": "Crear, enviar, firmar", "starter": true, "growth": true, "scale": true },
+        { "id": "visits", "name": "Visitas Comerciales", "desc": "Registro, briefings, follow-up", "starter": true, "growth": true, "scale": true },
+        { "id": "emails", "name": "Emails Integrados", "desc": "Envío, tracking open/click", "starter": "5/día", "growth": true, "scale": true },
+        { "id": "actions", "name": "Acciones y Tareas", "desc": "Kanban, vencimientos, escalado", "starter": true, "growth": true, "scale": true },
+        { "id": "contacts", "name": "Contactos", "desc": "Power map, roles, influencia", "starter": true, "growth": true, "scale": true },
+        { "id": "calendar", "name": "Calendario", "desc": "Visitas, acciones, deals, marketing", "starter": true, "growth": true, "scale": true },
+        { "id": "surveys", "name": "Encuestas NPS/CSAT", "desc": "Formularios públicos, análisis", "starter": false, "growth": true, "scale": true },
+        { "id": "reviews", "name": "Seguimiento Mensual", "desc": "Reviews por lead con health score", "starter": false, "growth": true, "scale": true }
+      ]
+    },
+    {
+      "name": "Marketing Hub",
+      "features": [
+        { "id": "campaigns", "name": "Campañas Multicanal", "desc": "LinkedIn Ads, Google Ads, Email, YouTube", "starter": false, "growth": true, "scale": true },
+        { "id": "seo_center", "name": "SEO Command Center", "desc": "9 tabs: Content, Keywords, Backlinks, Brand", "starter": false, "growth": true, "scale": true },
+        { "id": "funnels", "name": "Funnels Visuales", "desc": "Constructor drag & drop", "starter": false, "growth": true, "scale": true },
+        { "id": "assets", "name": "Assets de Marketing", "desc": "Landing pages, CTAs", "starter": false, "growth": true, "scale": true },
+        { "id": "utm", "name": "Generador UTM", "desc": "Crear y trackear códigos", "starter": false, "growth": true, "scale": true },
+        { "id": "marketing_calendar", "name": "Calendario Editorial", "desc": "Planificación contenido", "starter": false, "growth": true, "scale": true },
+        { "id": "analytics", "name": "Marketing Analytics", "desc": "CPL, MQL, CAC, ROI", "starter": false, "growth": true, "scale": true },
+        { "id": "social", "name": "Social Media", "desc": "LinkedIn, Twitter, YouTube, Instagram", "starter": false, "growth": true, "scale": true }
+      ]
+    },
+    {
+      "name": "Inteligencia Artificial",
+      "features": [
+        { "id": "agent_scoring", "name": "Scoring ICP", "desc": "Clasificación automática de leads", "starter": false, "growth": true, "scale": true },
+        { "id": "agent_qualify", "name": "Cualificación BANT", "desc": "Cualificación de transcripciones", "starter": false, "growth": true, "scale": true },
+        { "id": "agent_proposal", "name": "Propuestas IA", "desc": "Generación automática de propuestas", "starter": false, "growth": true, "scale": true },
+        { "id": "agent_cs", "name": "Customer Success IA", "desc": "NPS, churn, upsell analysis", "starter": false, "growth": true, "scale": true },
+        { "id": "content_pipeline", "name": "Content Pipeline SEO", "desc": "4 agentes: keyword, draft, SEO, meta", "starter": false, "growth": true, "scale": true },
+        { "id": "auto_tagging", "name": "Auto-tagging Leads", "desc": "Clasificar sector con IA", "starter": false, "growth": true, "scale": true },
+        { "id": "ai_summary", "name": "Resumen Diario IA", "desc": "Briefing ejecutivo al abrir el CRM", "starter": false, "growth": true, "scale": true },
+        { "id": "chat_ai", "name": "Chat IA", "desc": "Asistente de ventas conversacional", "starter": false, "growth": true, "scale": true }
+      ]
+    },
+    {
+      "name": "Llamadas IA",
+      "features": [
+        { "id": "calls_console", "name": "Consola de Llamadas", "desc": "Llamadas con Retell AI", "starter": false, "growth": true, "scale": true },
+        { "id": "calls_prompts", "name": "Prompts de Llamadas", "desc": "Gestión de scripts", "starter": false, "growth": true, "scale": true },
+        { "id": "calls_queue", "name": "Colas y Batch", "desc": "Llamadas en lote", "starter": false, "growth": "50/mes", "scale": true },
+        { "id": "calls_ab", "name": "A/B Testing Prompts", "desc": "Comparar eficacia", "starter": false, "growth": false, "scale": true },
+        { "id": "calls_rgpd", "name": "RGPD Consent", "desc": "Consentimiento y supresión", "starter": false, "growth": true, "scale": true }
+      ]
+    },
+    {
+      "name": "Integraciones",
+      "features": [
+        { "id": "gmail", "name": "Gmail OAuth", "desc": "Email sync", "starter": true, "growth": true, "scale": true },
+        { "id": "google_calendar", "name": "Google Calendar", "desc": "Sync visitas", "starter": false, "growth": true, "scale": true },
+        { "id": "google_drive", "name": "Google Drive", "desc": "Documentos", "starter": false, "growth": true, "scale": true },
+        { "id": "stripe_int", "name": "Stripe (cobros)", "desc": "Cobrar a tus clientes", "starter": false, "growth": true, "scale": true },
+        { "id": "whatsapp", "name": "WhatsApp Business", "desc": "Mensajes + chatbot IA", "starter": false, "growth": false, "scale": true },
+        { "id": "youtube", "name": "YouTube Analytics", "desc": "Canal, vídeos, métricas", "starter": false, "growth": true, "scale": true },
+        { "id": "airtable", "name": "Airtable Sync", "desc": "Sync leads y pipeline", "starter": false, "growth": true, "scale": true },
+        { "id": "slack", "name": "Slack", "desc": "Alertas y digest diario", "starter": false, "growth": true, "scale": true },
+        { "id": "webhooks", "name": "Webhooks", "desc": "Eventos a servicios externos", "starter": false, "growth": true, "scale": true }
+      ]
+    },
+    {
+      "name": "Avanzado",
+      "features": [
+        { "id": "deal_room", "name": "Deal Room", "desc": "Sala de negociación + watermark + analytics", "starter": false, "growth": false, "scale": true },
+        { "id": "nda_digital", "name": "NDA Digital", "desc": "Firma Signaturit/Yousign/DocuSign", "starter": false, "growth": false, "scale": true },
+        { "id": "public_api", "name": "API Pública", "desc": "Endpoints + API keys", "starter": false, "growth": false, "scale": true },
+        { "id": "widgets", "name": "Widgets Embebibles", "desc": "KPIs para Notion, web", "starter": false, "growth": false, "scale": true },
+        { "id": "graphs", "name": "14 Grafos", "desc": "Sankey, radar, funnel, heatmaps", "starter": "3 básicos", "growth": true, "scale": true },
+        { "id": "automations", "name": "28 Automatizaciones", "desc": "Email drip, escalado, scoring", "starter": "5 básicas", "growth": true, "scale": true },
+        { "id": "export_pdf", "name": "Export PDF", "desc": "Informes con logo y gráficos", "starter": false, "growth": true, "scale": true },
+        { "id": "dashboard_config", "name": "Dashboard Configurable", "desc": "Widgets personalizables", "starter": false, "growth": true, "scale": true },
+        { "id": "i18n", "name": "Multi-idioma", "desc": "ES, EN, PT", "starter": true, "growth": true, "scale": true }
+      ]
+    }
+  ],
+  "addons": [
+    { "id": "extra_users", "name": "+5 Usuarios", "price_monthly": 9, "desc": "Pack de 5 usuarios adicionales" },
+    { "id": "ai_advanced", "name": "IA Avanzada", "price_monthly": 15, "desc": "A/B testing, scoring premium, content pipeline ilimitado" },
+    { "id": "deal_room_addon", "name": "Deal Room", "price_monthly": 12, "desc": "Sala de negociación + NDA digital" },
+    { "id": "whatsapp_addon", "name": "WhatsApp Business", "price_monthly": 9, "desc": "Mensajes + chatbot IA" },
+    { "id": "api_access", "name": "API Pública", "price_monthly": 15, "desc": "Endpoints + API keys + webhooks avanzados" }
+  ]
+}

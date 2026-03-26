@@ -30,60 +30,14 @@ const PLANS = [
   },
 ]
 
-const FEATURES = [
-  { category: 'CRM Core', items: [
-    { name: 'Leads + Scoring IA', starter: true, growth: true, scale: true },
-    { name: 'Pipeline Kanban + Forecast', starter: true, growth: true, scale: true },
-    { name: 'Visitas + Google Calendar Sync', starter: true, growth: true, scale: true },
-    { name: 'Emails (Gmail OAuth + tracking)', starter: true, growth: true, scale: true },
-    { name: 'Acciones + Kanban', starter: true, growth: true, scale: true },
-    { name: 'Contactos + Stakeholder Map', starter: false, growth: true, scale: true },
-    { name: 'Encuestas NPS/CSAT', starter: false, growth: true, scale: true },
-    { name: 'Reviews mensuales', starter: false, growth: true, scale: true },
-  ]},
-  { category: 'Marketing Hub', items: [
-    { name: 'Campañas multicanal', starter: false, growth: true, scale: true },
-    { name: 'SEO Command Center (9 tabs)', starter: false, growth: true, scale: true },
-    { name: 'Content Pipeline IA (4 agentes)', starter: false, growth: true, scale: true },
-    { name: 'Funnels visuales', starter: false, growth: true, scale: true },
-    { name: 'Assets + UTM Generator', starter: false, growth: true, scale: true },
-    { name: 'YouTube Analytics', starter: false, growth: true, scale: true },
-    { name: 'LLM Visibility Monitor', starter: false, growth: false, scale: true },
-  ]},
-  { category: 'Inteligencia Artificial', items: [
-    { name: '4 Agentes IA (Scoring, BANT, Propuestas, CS)', starter: false, growth: true, scale: true },
-    { name: 'AI Summary diario', starter: false, growth: true, scale: true },
-    { name: 'Sugerencias proactivas', starter: false, growth: true, scale: true },
-    { name: 'Auto-tagging leads', starter: false, growth: true, scale: true },
-    { name: 'Smart Forms IA', starter: false, growth: true, scale: true },
-    { name: 'Selector de proveedor IA', starter: false, growth: true, scale: true },
-  ]},
-  { category: 'Llamadas IA', items: [
-    { name: 'Consola + Prompts', starter: false, growth: true, scale: true },
-    { name: 'Queue / Batch calling', starter: false, growth: false, scale: true },
-    { name: 'A/B Testing prompts', starter: false, growth: false, scale: true },
-    { name: 'RGPD Consent Flow', starter: false, growth: true, scale: true },
-  ]},
-  { category: 'Integraciones', items: [
-    { name: 'Gmail + Google Drive', starter: true, growth: true, scale: true },
-    { name: 'Stripe + PayPal', starter: false, growth: true, scale: true },
-    { name: 'WhatsApp Business + Bot IA', starter: false, growth: false, scale: true },
-    { name: 'YouTube', starter: false, growth: true, scale: true },
-    { name: 'Airtable + MCP Gateway', starter: false, growth: false, scale: true },
-    { name: 'Slack + Teams + Telegram', starter: false, growth: true, scale: true },
-    { name: 'Webhooks + n8n', starter: false, growth: true, scale: true },
-  ]},
-  { category: 'Avanzado', items: [
-    { name: 'Deal Room + PDF Watermark', starter: false, growth: false, scale: true },
-    { name: 'NDA Digital (Signaturit/Yousign/DocuSign)', starter: false, growth: false, scale: true },
-    { name: 'API Pública', starter: false, growth: false, scale: true },
-    { name: 'Widgets embebibles', starter: false, growth: false, scale: true },
-    { name: 'i18n (ES/EN/PT)', starter: true, growth: true, scale: true },
-    { name: '22 Automatizaciones', starter: false, growth: true, scale: true },
-    { name: '14 Grafos visuales', starter: false, growth: true, scale: true },
-    { name: 'Soporte prioritario', starter: false, growth: false, scale: true },
-  ]},
-]
+import featuresMatrix from '@/data/features-matrix.json'
+
+const FEATURES = featuresMatrix.categories.map(cat => ({
+  category: cat.name,
+  items: cat.features.map(f => ({ name: f.name, desc: f.desc, starter: f.starter, growth: f.growth, scale: f.scale })),
+}))
+
+// Features loaded from features-matrix.json
 
 const FAQS = [
   { q: '¿Puedo empezar gratis?', a: 'Sí. El plan Starter es gratuito para siempre, con hasta 3 usuarios y 100 leads. No necesitas tarjeta de crédito.' },
@@ -227,7 +181,7 @@ export default function PricingPublicPage() {
                   <div key={item.name} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px 80px', padding: '10px 24px', borderBottom: '1px solid #F1F5F9' }}>
                     <span style={{ fontSize: 13, color: '#475569' }}>{item.name}</span>
                     {[item.starter, item.growth, item.scale].map((v, i) => (
-                      <span key={i} style={{ textAlign: 'center' }}>{v ? <Check size={16} color="#10B981" /> : <Minus size={14} color="#CBD5E1" />}</span>
+                      <span key={i} style={{ textAlign: 'center', fontSize: 11, color: typeof v === 'string' ? '#1E6FD9' : undefined, fontWeight: typeof v === 'string' ? 600 : undefined }}>{v === true ? <Check size={16} color="#10B981" /> : v === false ? <Minus size={14} color="#CBD5E1" /> : v}</span>
                     ))}
                   </div>
                 ))}
