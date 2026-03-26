@@ -10,6 +10,7 @@ from sqlalchemy import select, func
 
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 from app.core.rate_limit import limiter, RATE_WEBHOOK
 from app.core.webhook_verify import verify_webhook_signature
 from app.models import Survey, Lead
@@ -33,9 +34,11 @@ async def list_surveys(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Listar encuestas con filtros opcionales."""
     query = select(Survey).order_by(Survey.created_at.desc())
+    query = query.where(Survey.org_id == org_id)
     if lead_id:
         query = query.where(Survey.lead_id == lead_id)
     if status:

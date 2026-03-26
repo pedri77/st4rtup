@@ -6,6 +6,7 @@ from sqlalchemy import select, func, desc, cast, String
 
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 from app.core.permissions import require_write_access
 from app.models import Lead, LeadStatus
 from app.models.models import Contact, ContactRoleType, ContactInfluenceLevel, ContactRelationship
@@ -78,9 +79,11 @@ async def list_leads(
     sort_order: str = "desc",
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """List leads with filtering, search and pagination."""
     query = select(Lead)
+    query = query.where(Lead.org_id == org_id)
     query = _apply_row_level_filter(query, current_user)
 
     if status:
@@ -149,6 +152,7 @@ async def get_lead(
 ):
     """Get lead details."""
     query = select(Lead).where(Lead.id == lead_id)
+    query = query.where(Lead.org_id == org_id)
     query = _apply_row_level_filter(query, current_user)
     result = await db.execute(query)
     lead = result.scalar_one_or_none()
@@ -235,6 +239,7 @@ async def update_lead(
 ):
     """Update a lead."""
     query = select(Lead).where(Lead.id == lead_id)
+    query = query.where(Lead.org_id == org_id)
     query = _apply_row_level_filter(query, current_user)
     result = await db.execute(query)
     lead = result.scalar_one_or_none()
@@ -293,6 +298,7 @@ async def enrich_lead(
     """Enriquece un lead usando Apollo.io (org + persona)."""
     # Verificar acceso al lead
     query = select(Lead).where(Lead.id == lead_id)
+    query = query.where(Lead.org_id == org_id)
     query = _apply_row_level_filter(query, current_user)
     result = await db.execute(query)
     if not result.scalar_one_or_none():
@@ -767,6 +773,7 @@ async def delete_lead(
 ):
     """Delete a lead."""
     query = select(Lead).where(Lead.id == lead_id)
+    query = query.where(Lead.org_id == org_id)
     query = _apply_row_level_filter(query, current_user)
     result = await db.execute(query)
     lead = result.scalar_one_or_none()

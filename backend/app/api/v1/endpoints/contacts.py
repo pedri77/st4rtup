@@ -12,6 +12,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 from app.core.permissions import apply_lead_row_filter
 from app.models.models import (
     Contact, Lead, User,
@@ -47,6 +48,7 @@ async def list_contacts(
 ):
     """Listar contactos con filtros opcionales."""
     query = select(Contact).options(selectinload(Contact.lead))
+    query = query.where(Contact.org_id == org_id)
     query = apply_lead_row_filter(query, current_user, Contact.lead_id)
     count_query = select(func.count(Contact.id))
     count_query = apply_lead_row_filter(count_query, current_user, Contact.lead_id)

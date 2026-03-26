@@ -6,6 +6,7 @@ from sqlalchemy import select, func
 
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 from app.core.permissions import require_write_access, apply_lead_row_filter
 from app.core.rate_limit import limiter, RATE_EMAIL
 from app.models import Email, Lead
@@ -25,6 +26,7 @@ async def list_emails(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Listar emails con nombre del lead incluido."""
     query = select(Email, Lead.company_name).join(Lead, Email.lead_id == Lead.id, isouter=True).order_by(Email.created_at.desc())

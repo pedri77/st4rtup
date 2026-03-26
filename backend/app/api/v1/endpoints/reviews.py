@@ -6,6 +6,7 @@ from sqlalchemy import select, func
 
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 from app.models import MonthlyReview, Lead
 from app.schemas import MonthlyReviewCreate, MonthlyReviewResponse, PaginatedResponse
 
@@ -20,6 +21,7 @@ async def list_reviews(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Listar todos los reviews mensuales con filtros opcionales."""
     query = select(MonthlyReview, Lead.company_name).join(

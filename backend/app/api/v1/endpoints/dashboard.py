@@ -5,6 +5,7 @@ from sqlalchemy import select, func, case, and_
 
 from app.core.database import get_db
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 from app.core.config import settings
 from app.models import Lead, LeadStatus, Action, ActionStatus, Opportunity, OpportunityStage, Email, Visit, User
 from app.models.models import Offer, OfferStatus
@@ -29,6 +30,7 @@ DEFAULT_WIDGETS = [
 async def get_dashboard_config(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Obtiene la configuración de widgets del dashboard del usuario."""
     user = await db.get(User, current_user["user_id"])
