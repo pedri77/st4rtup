@@ -65,7 +65,7 @@ async def create_email(
 ):
     email = Email(**data.model_dump())
     email.org_id = org_id
-        db.add(email)
+    db.add(email)
     await db.commit()
     await db.refresh(email)
     return EmailResponse.model_validate(email)

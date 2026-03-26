@@ -60,7 +60,7 @@ async def create_opportunity(
 ):
     opportunity = Opportunity(**data.model_dump())
     opportunity.org_id = org_id
-        db.add(opportunity)
+    db.add(opportunity)
     await db.commit()
     await db.refresh(opportunity)
 

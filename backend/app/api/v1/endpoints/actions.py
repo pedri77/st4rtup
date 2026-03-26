@@ -61,7 +61,7 @@ async def create_action(
 ):
     action = Action(**data.model_dump())
     action.org_id = org_id
-        db.add(action)
+    db.add(action)
     await db.commit()
     await db.refresh(action)
 

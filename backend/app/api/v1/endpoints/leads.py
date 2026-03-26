@@ -171,7 +171,7 @@ async def create_lead(
     """Create a new lead."""
     lead = Lead(**data.model_dump())
     lead.org_id = org_id
-        db.add(lead)
+    db.add(lead)
     await db.commit()
     await db.refresh(lead)
 

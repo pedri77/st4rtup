@@ -102,7 +102,7 @@ async def create_offer(
         created_by=UUID(current_user["user_id"]),
     )
     offer.org_id = org_id
-        db.add(offer)
+    db.add(offer)
     await db.commit()
     await db.refresh(offer)
 

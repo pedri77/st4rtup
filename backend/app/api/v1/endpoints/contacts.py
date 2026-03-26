@@ -195,7 +195,7 @@ async def create_contact(
 
     contact = Contact(**data.model_dump())
     contact.org_id = org_id
-        db.add(contact)
+    db.add(contact)
     await db.commit()
     await db.refresh(contact)
     # Re-fetch with lead to populate lead_name

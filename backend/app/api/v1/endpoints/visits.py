@@ -64,7 +64,7 @@ async def create_visit(
 ):
     visit = Visit(**data.model_dump())
     visit.org_id = org_id
-        db.add(visit)
+    db.add(visit)
     await db.commit()
     await db.refresh(visit)
 
