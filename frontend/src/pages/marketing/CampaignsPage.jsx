@@ -690,7 +690,7 @@ export default function CampaignsPage() {
                     value={form.regulatory_focus}
                     onChange={(e) => setForm(f => ({ ...f, regulatory_focus: e.target.value }))}
                     style={inputStyle}
-                    placeholder="Ej: ENS, NIS2, DORA"
+                    placeholder="Ej: SaaS, Growth, B2B"
                   />
                 </div>
               </div>

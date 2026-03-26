@@ -207,13 +207,13 @@ export default function ChatPage() {
                 </div>
                 <h2 className="text-xl font-semibold mb-2" style={{ fontFamily: fontDisplay, color: T.fg }}>Asistente de Ventas IA</h2>
                 <p className="text-sm mb-6" style={{ color: T.fgMuted }}>
-                  Pregunta sobre leads, normativas (ENS, NIS2, DORA), estrategias de venta, o cualquier cosa relacionada con ventas B2B.
+                  Pregunta sobre leads, leads, pipeline, estrategias de venta, marketing o cualquier duda sobre tu negocio.
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    'Redacta un email de seguimiento para un lead interesado en NIS2',
-                    'Compara SaaS Best Practices vs ENS para una empresa mediana',
-                    'Dame argumentos de venta para DORA en banca',
+                    'Redacta un email de seguimiento para un lead interesado en Growth',
+                    'Compara SaaS Best Practices vs SaaS para una empresa mediana',
+                    'Dame argumentos de venta para B2B en banca',
                     'Crea un plan de cuenta para una empresa del IBEX 35',
                   ].map((suggestion, i) => (
                     <button key={i} onClick={() => setInputMessage(suggestion)}

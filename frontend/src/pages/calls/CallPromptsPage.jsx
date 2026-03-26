@@ -82,7 +82,7 @@ function PromptForm({ initial, onSubmit, onCancel, loading }) {
           <input id="prompt-regulatory" name="regulatory_focus" type="text"
             value={(form.regulatory_focus || []).join(', ')}
             onChange={e => handleArrayChange('regulatory_focus', e.target.value)}
-            placeholder="ENS, NIS2, DORA" style={inputStyle} />
+            placeholder="SaaS, Ecommerce, Fintech" style={inputStyle} />
         </div>
       </div>
 

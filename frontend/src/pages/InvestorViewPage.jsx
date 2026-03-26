@@ -113,7 +113,7 @@ export default function InvestorViewPage() {
             </div>
             <h1 className="text-3xl font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>St4rtup CRM</h1>
             <p className="mt-1" style={{ color: T.fgMuted }}>Investor Metrics Dashboard</p>
-            <p className="text-xs mt-2" style={{ color: T.fgMuted }}>Plataforma SaaS growth de tecnología &middot; Scale &middot; NIS2 &middot; DORA</p>
+            <p className="text-xs mt-2" style={{ color: T.fgMuted }}>Plataforma SaaS growth de tecnología &middot; Scale &middot; Growth &middot; B2B</p>
           </div>
 
           {/* Hero metrics */}

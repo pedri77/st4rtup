@@ -29,7 +29,7 @@ const CHANNEL_ACTIONS = {
       { label: 'Analytics trafico', href: '/marketing/analytics', icon: BarChart3 },
     ],
     kpis: ['Articulos/mes', 'Videos/mes', 'Trafico organico'],
-    description: 'Publicar 48 articulos/año en blog + videos YouTube sobre ENS, NIS2, DORA. Pipeline n8n automatiza la distribucion social via Metricool.',
+    description: 'Publicar 48 articulos/año en blog + videos YouTube sobre SaaS, Growth, B2B. Pipeline n8n automatiza la distribucion social via Metricool.',
   },
   seo: {
     label: 'SEO',
@@ -39,7 +39,7 @@ const CHANNEL_ACTIONS = {
       { label: 'Trafico por pais', href: '/marketing/analytics', icon: Globe },
     ],
     kpis: ['Keywords top 3', 'CTR medio', 'Trafico organico/mes'],
-    description: '44 keywords objetivo para ENS/NIS2/DORA. Meta: top 3 España. GSC y GA4 conectados para tracking automatico.',
+    description: '44 keywords objetivo para SaaS/Growth/B2B. Meta: top 3 España. GSC y GA4 conectados para tracking automatico.',
   },
   landing: {
     label: 'Lead Magnets',
@@ -48,7 +48,7 @@ const CHANNEL_ACTIONS = {
       { label: 'Gestionar assets', href: '/marketing/assets', icon: BookOpen },
     ],
     kpis: ['Downloads ebook', 'Registros webinar', 'Demos solicitadas'],
-    description: 'Ebook Scale, webinar NIS2/DORA, demo interactiva, calculadora ROI. Cada descarga genera un lead con score inicial.',
+    description: 'Ebook Scale, webinar Growth/B2B, demo interactiva, calculadora ROI. Cada descarga genera un lead con score inicial.',
   },
   email: {
     label: 'Email Marketing',
@@ -86,7 +86,7 @@ const CHANNEL_ACTIONS = {
       { label: 'Battle cards', href: '/gtm/competitors', icon: BookOpen },
     ],
     kpis: ['Reuniones/mes', 'PoC activos', 'Conversion rate'],
-    description: 'Incluye elevator pitch (CEO/CTO/CFO/CEO en 30s/2min/10min), ventas por solucion (PoC 90d €19.500) y cierre por urgencia regulatoria (deadlines NIS2/DORA/ENS).',
+    description: 'Incluye elevator pitch (CEO/CTO/CFO/CEO en 30s/2min/10min), ventas por solucion (PoC 90d €19.500) y cierre por urgencia regulatoria (deadlines Growth/B2B/SaaS).',
   },
   cs: {
     label: 'Customer Success',

@@ -10,7 +10,7 @@ const T = {
 export default function WebChatWidget() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hola, soy el asistente de St4rtup. En que puedo ayudarte con cumplimiento normativo o ventas B2B?' }
+    { role: 'assistant', content: 'Hola, soy el asistente de St4rtup. En que puedo ayudarte con ventas, marketing o crecimiento de tu startup?' }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)

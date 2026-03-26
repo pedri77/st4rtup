@@ -22,7 +22,7 @@ vi.mock('@/services/api', () => ({
     list: vi.fn(() => Promise.resolve({
       data: {
         items: [
-          { id: 'p1', nombre: 'Prospeccion ENS', objetivo: 'prospecting', version: 1 },
+          { id: 'p1', nombre: 'Prospeccion SaaS', objetivo: 'prospecting', version: 1 },
         ],
         total: 1,
         pages: 1,

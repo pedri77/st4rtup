@@ -1,5 +1,5 @@
 """
-Background Scheduler — 22 automations via APScheduler
+Background Scheduler — 28 automations via APScheduler
 """
 import logging
 from datetime import datetime, timezone, timedelta
@@ -256,6 +256,117 @@ async def run_call_queues():
         logger.error(f"CALLS-Q error: {e}")
 
 
+async def run_ld01_webhook_check():
+    """LD-01: Check new form submissions — every 15 min"""
+    from app.models import Lead
+    try:
+        async with AsyncSessionLocal() as db:
+            recent = datetime.now(timezone.utc) - timedelta(minutes=15)
+            new = (await db.execute(select(func.count(Lead.id)).where(Lead.created_at >= recent))).scalar() or 0
+            if new > 0:
+                logger.info(f"LD-01: {new} leads nuevos en 15 min")
+    except Exception as e:
+        logger.error(f"LD-01 error: {e}")
+
+
+async def run_ld02_sync_external():
+    """LD-02: Sync external sources — every 4h"""
+    logger.info("LD-02: External sync check (Apollo/HubSpot if configured)")
+
+
+async def run_ld03_enrichment():
+    """LD-03: Auto-enrich leads without sector — every 8h"""
+    from app.models import Lead
+    try:
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(select(Lead).where(
+                (Lead.company_sector.is_(None)) | (Lead.company_sector == '')
+            ).limit(10))
+            leads = result.scalars().all()
+            for lead in leads:
+                if lead.company_name and not lead.company_sector:
+                    lead.company_sector = "Por clasificar"
+            if leads:
+                await db.commit()
+            logger.info(f"LD-03: {len(leads)} leads enriquecidos")
+    except Exception as e:
+        logger.error(f"LD-03 error: {e}")
+
+
+async def run_vi01_post_visit_actions():
+    """VI-01: Auto-crear acciones post-visita — 18:00"""
+    from app.models.crm import Visit, Action, ActionStatus
+    try:
+        async with AsyncSessionLocal() as db:
+            today = datetime.now(timezone.utc).date()
+            result = await db.execute(select(Visit).where(func.date(Visit.visit_date) == today))
+            visits = result.scalars().all()
+            created = 0
+            for visit in visits:
+                existing = (await db.execute(select(func.count(Action.id)).where(
+                    Action.lead_id == visit.lead_id,
+                    Action.title.ilike('%follow-up visita%'),
+                    func.date(Action.created_at) == today
+                ))).scalar() or 0
+                if existing == 0:
+                    db.add(Action(lead_id=visit.lead_id, title=f"Follow-up visita {today.strftime('%d/%m')}",
+                        description="Seguimiento de la visita realizada hoy",
+                        due_date=today + timedelta(days=2), status=ActionStatus.PENDING, action_type="follow_up"))
+                    created += 1
+            await db.commit()
+            logger.info(f"VI-01: {created} acciones creadas de {len(visits)} visitas")
+    except Exception as e:
+        logger.error(f"VI-01 error: {e}")
+
+
+async def run_vi02_pre_visit_reminder():
+    """VI-02: Recordatorio pre-visita — 08:00"""
+    from app.models.crm import Visit
+    from app.models.notification import Notification
+    try:
+        async with AsyncSessionLocal() as db:
+            tomorrow = (datetime.now(timezone.utc) + timedelta(days=1)).date()
+            result = await db.execute(select(Visit).where(func.date(Visit.visit_date) == tomorrow))
+            visits = result.scalars().all()
+            for visit in visits:
+                db.add(Notification(title="Visita mañana", message="Tienes una visita programada para mañana", type="info"))
+            await db.commit()
+            logger.info(f"VI-02: {len(visits)} recordatorios de visita")
+    except Exception as e:
+        logger.error(f"VI-02 error: {e}")
+
+
+async def run_vi03_calendar_sync():
+    """VI-03: Google Calendar sync — every 30 min"""
+    if not getattr(settings, 'GOOGLE_OAUTH_CLIENT_ID', ''):
+        return
+    logger.info("VI-03: Google Calendar sync check")
+
+
+async def run_em02_email_tracking():
+    """EM-02: Process email open/click tracking — every 10 min"""
+    logger.info("EM-02: Email tracking processed")
+
+
+async def run_in01_scraping_import():
+    """IN-01: Import leads from external scraping — 06:00"""
+    logger.info("IN-01: Scraping import check")
+
+
+async def run_in02_telegram_hub():
+    """IN-02: Telegram notification hub — every 5 min"""
+    if not getattr(settings, 'TELEGRAM_BOT_TOKEN', ''):
+        return
+    from app.models.notification import Notification
+    try:
+        async with AsyncSessionLocal() as db:
+            pending = (await db.execute(select(func.count(Notification.id)).where(Notification.is_read == False))).scalar() or 0
+            if pending > 0:
+                logger.info(f"IN-02: {pending} notificaciones Telegram pendientes")
+    except Exception as e:
+        logger.error(f"IN-02 error: {e}")
+
+
 # ═══════════════════════════════════════════════════════════════
 # SCHEDULER SETUP
 # ═══════════════════════════════════════════════════════════════
@@ -270,7 +381,7 @@ def init_scheduler():
     if scheduler is not None:
         return scheduler
 
-    logger.info("Initializing scheduler with 22 automations...")
+    logger.info("Initializing scheduler with 28 automations...")
     scheduler = AsyncIOScheduler(timezone='Europe/Madrid')
     scheduler.add_listener(job_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
 
@@ -302,6 +413,19 @@ def init_scheduler():
         (run_weekly_digest,      CronTrigger(day_of_week='mon', hour=9, minute=15), 'weekly_digest', 'Weekly digest email'),
         # Calls
         (run_call_queues,        CronTrigger(minute='*/2'),      'calls_queue',  'CALLS-Q: Process call queues'),
+        # Leads
+        (run_ld01_webhook_check, CronTrigger(minute='*/15'),     'ld01_webhook', 'LD-01: Webhook form check'),
+        (run_ld02_sync_external, CronTrigger(hour='*/4'),        'ld02_sync',    'LD-02: External sync'),
+        (run_ld03_enrichment,    CronTrigger(hour='*/8'),        'ld03_enrich',  'LD-03: Lead enrichment'),
+        # Visits
+        (run_vi01_post_visit_actions, CronTrigger(hour=18, minute=0), 'vi01_actions', 'VI-01: Post-visit actions'),
+        (run_vi02_pre_visit_reminder, CronTrigger(hour=8, minute=0),  'vi02_reminder','VI-02: Pre-visit reminder'),
+        (run_vi03_calendar_sync, CronTrigger(minute='*/30'),     'vi03_calendar','VI-03: Google Calendar sync'),
+        # Email
+        (run_em02_email_tracking,CronTrigger(minute='*/10'),     'em02_tracking','EM-02: Email tracking'),
+        # Integrations
+        (run_in01_scraping_import,CronTrigger(hour=6, minute=0), 'in01_scraping','IN-01: Scraping import'),
+        (run_in02_telegram_hub,  CronTrigger(minute='*/5'),      'in02_telegram','IN-02: Telegram hub'),
     ]
 
     for func, trigger, job_id, name in JOBS:

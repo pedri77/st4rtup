@@ -192,10 +192,10 @@ export default function ChatWidget() {
                 </div>
                 <p style={{ color: T.fg }} className="text-sm font-medium mb-1">Asistente de Ventas</p>
                 <p style={{ color: T.fgMuted }} className="text-xs mb-4">
-                  Pregunta sobre leads, normativas, estrategias de venta o ventas B2B.
+                  Pregunta sobre leads, leads, pipeline, marketing o estrategias de venta.
                 </p>
                 <div className="space-y-1.5 w-full">
-                  {['Redacta un email de seguimiento para NIS2', 'Argumentos de venta para DORA en banca', 'Compara SaaS Best Practices vs ENS'].map((suggestion, i) => (
+                  {['Redacta un email de seguimiento para Growth', 'Argumentos de venta para B2B en banca', 'Compara SaaS Best Practices vs SaaS'].map((suggestion, i) => (
                     <button key={i} onClick={() => setInputMessage(suggestion)}
                       className="w-full text-left px-3 py-2 rounded-lg text-[11px] transition-colors"
                       style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}>

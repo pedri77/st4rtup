@@ -468,7 +468,7 @@ export default function MarketingCalendarPage() {
                   value={form.title}
                   onChange={(e) => setForm(f => ({ ...f, title: e.target.value }))}
                   style={inputStyle}
-                  placeholder="Ej: Artículo NIS2 para blog"
+                  placeholder="Ej: Artículo Growth para blog"
                 />
               </div>
 

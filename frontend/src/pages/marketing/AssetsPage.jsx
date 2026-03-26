@@ -468,7 +468,7 @@ export default function AssetsPage() {
               <div>
                 <label style={labelStyle} htmlFor="assets-field-1">Nombre *</label>
                 <input id="assets-field-1" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required
-                  style={inputStyle} placeholder="Ej: Landing NIS2 España" />
+                  style={inputStyle} placeholder="Ej: Landing Growth España" />
               </div>
 
               <div className="grid grid-cols-2 gap-4">

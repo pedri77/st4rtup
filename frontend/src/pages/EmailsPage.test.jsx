@@ -11,7 +11,7 @@ vi.mock('@/services/api', () => ({
         items: [
           { id: '1', subject: 'Propuesta comercial St4rtup', to_email: 'juan@acme.com', lead_name: 'Acme Corp', lead_id: 'l1', status: 'sent', is_follow_up: false, sent_at: '2026-03-15T09:00:00Z', created_at: '2026-03-14' },
           { id: '2', subject: 'Seguimiento demo', to_email: 'maria@tech.com', lead_name: 'TechSolutions SL', lead_id: 'l2', status: 'opened', is_follow_up: true, follow_up_sequence: 2, sent_at: '2026-03-18T11:00:00Z', opened_at: '2026-03-18T14:00:00Z', created_at: '2026-03-17' },
-          { id: '3', subject: 'Info adicional ENS', to_email: 'carlos@dataflow.com', lead_name: 'DataFlow SA', lead_id: 'l3', status: 'draft', is_follow_up: false, created_at: '2026-03-20' },
+          { id: '3', subject: 'Info adicional SaaS', to_email: 'carlos@dataflow.com', lead_name: 'DataFlow SA', lead_id: 'l3', status: 'draft', is_follow_up: false, created_at: '2026-03-20' },
         ],
       },
     })),
@@ -63,7 +63,7 @@ describe('EmailsPage', () => {
       expect(screen.getByText('Propuesta comercial St4rtup')).toBeInTheDocument()
     })
     expect(screen.getByText('Seguimiento demo')).toBeInTheDocument()
-    expect(screen.getByText('Info adicional ENS')).toBeInTheDocument()
+    expect(screen.getByText('Info adicional SaaS')).toBeInTheDocument()
   })
 
   it('muestra estado vacio cuando no hay emails', async () => {

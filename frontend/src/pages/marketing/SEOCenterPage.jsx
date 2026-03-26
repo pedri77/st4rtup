@@ -1083,7 +1083,7 @@ function KeywordStudioTab() {
         <p className="text-xs mb-4" style={{ color: T.fgMuted }}>Ejecuta el Agente de Keywords: clustering semántico, PAA, entidades, análisis SERP</p>
 
         <div className="space-y-3">
-          <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="Tema: ej. cumplimiento ENS para empresas sanitarias" style={inputStyle} />
+          <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="Tema: ej. cumplimiento SaaS para empresas sanitarias" style={inputStyle} />
 
           <div className="grid grid-cols-3 gap-3">
             <select value={provider} onChange={e => { setProvider(e.target.value); setModel('') }} style={inputStyle}>

@@ -309,7 +309,7 @@ const INTEGRATION_GROUPS = [
         color: 'hsl(210,70%,65%)',
         bgColor: 'rgba(59,130,246,0.1)',
         configKey: 'brevo_config',
-        description: 'Nurturing de leads fríos con emails mensuales ENS/NIS2. Re-activation automática si 2+ opens en 7 días.',
+        description: 'Nurturing de leads fríos con emails mensuales SaaS/Growth. Re-activation automática si 2+ opens en 7 días.',
         fields: [
           { key: 'api_key', label: 'API Key', type: 'password', placeholder: '' },
           { key: 'nurturing_list_id', label: 'Nurturing List ID', type: 'text', placeholder: '' },

@@ -222,7 +222,7 @@ export default function SocialMediaPage() {
         </h3>
         <div className="flex gap-2 mb-3">
           <input type="text" value={genTopic} onChange={e => setGenTopic(e.target.value)}
-            placeholder="Tema (ej: deadline NIS2, SOC integrado, PoC 90 dias...)" className="input text-sm flex-1" />
+            placeholder="Tema (ej: deadline Growth, SOC integrado, PoC 90 dias...)" className="input text-sm flex-1" />
         </div>
         <div className="flex gap-2">
           {PLATFORMS.slice(0, 3).map(p => {
@@ -309,7 +309,7 @@ export default function SocialMediaPage() {
           {showRecForm && (
             <div className="rounded-xl p-4 space-y-3" style={{ backgroundColor: 'hsla(220,25%,10%,0.5)', border: `1px solid ${T.border}` }}>
               <div className="grid grid-cols-2 gap-3">
-                <input value={recForm.name} onChange={e => setRecForm(f => ({ ...f, name: e.target.value }))} placeholder="Nombre (ej: Tips ENS semanal)" className="input text-sm" />
+                <input value={recForm.name} onChange={e => setRecForm(f => ({ ...f, name: e.target.value }))} placeholder="Nombre (ej: Tips SaaS semanal)" className="input text-sm" />
                 <select id="socialmedia-select-1" aria-label="Selector" value={recForm.platform} onChange={e => setRecForm(f => ({ ...f, platform: e.target.value }))} className="input text-sm">
                   {PLATFORMS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
                 </select>
@@ -444,7 +444,7 @@ export default function SocialMediaPage() {
               <textarea id="socialmedia-textarea-6" aria-label="Texto" value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
                 placeholder="Contenido del post..." rows={6} className="input text-sm" />
               <input type="text" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))}
-                placeholder="Tags separados por coma (tecnología, growth, ENS...)" className="input text-sm" />
+                placeholder="Tags separados por coma (tecnología, growth, SaaS...)" className="input text-sm" />
               <div className="flex gap-2">
                 <button onClick={() => createMutation.mutate(form)} disabled={!form.content || createMutation.isPending}
                   className="btn-primary flex-1 text-sm">{createMutation.isPending ? 'Creando...' : 'Guardar como Draft'}</button>

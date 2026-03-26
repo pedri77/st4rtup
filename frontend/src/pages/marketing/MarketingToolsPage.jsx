@@ -205,7 +205,7 @@ ${vars.context ? `Contexto adicional: ${vars.context}` : ''}`,
     fields: [
       { key: 'company', label: 'Empresa', placeholder: 'Nombre de la empresa' },
       { key: 'sector', label: 'Sector', placeholder: 'Banca, Salud, Tecnología...' },
-      { key: 'regulation', label: 'Normativa de interés', placeholder: 'NIS2, DORA, ENS, SaaS Best Practices...' },
+      { key: 'regulation', label: 'Normativa de interés', placeholder: 'Growth, B2B, SaaS, SaaS Best Practices...' },
       { key: 'context', label: 'Contexto adicional', placeholder: 'Tras reunión, tras webinar, cold...', multiline: true },
     ],
   },
@@ -219,7 +219,7 @@ Público: ${vars.audience || 'CEOs, DPOs y responsables de compliance en España
 Incluye emojis relevantes, hashtags y CTA. Tono: experto pero accesible. Máximo 300 palabras.
 ${vars.context ? `Notas: ${vars.context}` : ''}`,
     fields: [
-      { key: 'topic', label: 'Tema', placeholder: 'NIS2 deadline, DORA compliance, AI Act...' },
+      { key: 'topic', label: 'Tema', placeholder: 'Growth deadline, B2B compliance, AI Act...' },
       { key: 'goal', label: 'Objetivo', placeholder: 'Awareness, leads, engagement...' },
       { key: 'audience', label: 'Audiencia', placeholder: 'CEOs, CTOs, compliance managers...' },
       { key: 'context', label: 'Notas adicionales', placeholder: '', multiline: true },
@@ -236,8 +236,8 @@ Incluye: título H1 optimizado, meta description (155 chars), H2s y H3s con keyw
 Longitud estimada del artículo: ${vars.length || '2000'} palabras.
 ${vars.context ? `Enfoque: ${vars.context}` : ''}`,
     fields: [
-      { key: 'keyword', label: 'Keyword principal', placeholder: 'compliance NIS2 España' },
-      { key: 'secondary', label: 'Keywords secundarias', placeholder: 'normativa NIS2, directiva NIS2...' },
+      { key: 'keyword', label: 'Keyword principal', placeholder: 'compliance Growth España' },
+      { key: 'secondary', label: 'Keywords secundarias', placeholder: 'normativa Growth, directiva Growth...' },
       { key: 'audience', label: 'Target', placeholder: 'Empresas medianas, sector financiero...' },
       { key: 'length', label: 'Palabras estimadas', placeholder: '2000' },
       { key: 'context', label: 'Enfoque/notas', placeholder: '', multiline: true },
@@ -255,7 +255,7 @@ Incluye:
 4. Objeciones comunes y respuestas
 5. Preguntas trampa para el competidor
 6. Killer features de St4rtup
-Mercado: España/Europa. Normativas: ENS, NIS2, DORA, SaaS Best Practices.
+Mercado: España/Europa. Normativas: SaaS, Growth, B2B, SaaS Best Practices.
 ${vars.context ? `Info adicional: ${vars.context}` : ''}`,
     fields: [
       { key: 'competitor', label: 'Competidor', placeholder: 'Nombre del competidor' },
@@ -270,7 +270,7 @@ ${vars.context ? `Info adicional: ${vars.context}` : ''}`,
 Producto: St4rtup (plataforma SaaS growth tecnología).
 Objetivo: ${vars.goal || 'generación de leads'}.
 Audiencia: ${vars.audience || 'CEOs y responsables de compliance en España'}.
-USP: ${vars.usp || 'Cumplimiento normativo simplificado (ENS, NIS2, DORA, SaaS Best Practices)'}.
+USP: ${vars.usp || 'Cumplimiento normativo simplificado (SaaS, Growth, B2B, SaaS Best Practices)'}.
 Incluye headline, description y CTA para cada variante.
 ${vars.context ? `Notas: ${vars.context}` : ''}`,
     fields: [
@@ -288,14 +288,14 @@ ${vars.context ? `Notas: ${vars.context}` : ''}`,
     icon: Send,
     prompt: (vars) => `Redacta un email de primer contacto (discovery) en español para un prospecto que NO nos conoce.
 Empresa: ${vars.company || '[empresa]'}. Sector: ${vars.sector || 'regulado'}. Cargo: ${vars.title || 'CEO/CTO'}.
-Producto: St4rtup (plataforma growth tecnología: Scale, NIS2, DORA).
+Producto: St4rtup (plataforma growth tecnología: Scale, Growth, B2B).
 Dolor: ${vars.pain || 'necesidad de cumplimiento normativo'}.
 Tono: profesional, directo, sin rodeos. Máximo 150 palabras. CTA: agendar demo de 15 min.`,
     fields: [
       { key: 'company', label: 'Empresa', placeholder: 'Nombre' },
       { key: 'sector', label: 'Sector', placeholder: 'Banca, Salud, Energía...' },
       { key: 'title', label: 'Cargo del contacto', placeholder: 'CEO, CTO, DPO...' },
-      { key: 'pain', label: 'Dolor / necesidad', placeholder: 'Auditoría ENS pendiente, deadline NIS2...' },
+      { key: 'pain', label: 'Dolor / necesidad', placeholder: 'Auditoría SaaS pendiente, deadline Growth...' },
     ],
   },
   {
@@ -310,7 +310,7 @@ Incluye resumen de valor demostrado + CTA para avanzar. Máximo 200 palabras.`,
     fields: [
       { key: 'company', label: 'Empresa', placeholder: '' },
       { key: 'contact', label: 'Contacto', placeholder: 'Nombre del contacto' },
-      { key: 'points', label: 'Puntos clave de la demo', placeholder: 'ENS, riesgos, SOC, detección...', multiline: true },
+      { key: 'points', label: 'Puntos clave de la demo', placeholder: 'SaaS, riesgos, SOC, detección...', multiline: true },
       { key: 'next', label: 'Próximos pasos', placeholder: 'PoC 90 días, pricing, contrato...' },
     ],
   },
@@ -326,8 +326,8 @@ Tono: ejecutivo, confiado. Incluye urgencia sutil. CTA: revisar y confirmar esta
     fields: [
       { key: 'company', label: 'Empresa', placeholder: '' },
       { key: 'value', label: 'Valor propuesta', placeholder: '€19.500, €57.000...' },
-      { key: 'modules', label: 'Módulos incluidos', placeholder: 'growth Core, Scale, NIS2, SOC...' },
-      { key: 'deadline', label: 'Deadline del cliente', placeholder: 'Auditoría en junio, NIS2 octubre...' },
+      { key: 'modules', label: 'Módulos incluidos', placeholder: 'growth Core, Scale, Growth, SOC...' },
+      { key: 'deadline', label: 'Deadline del cliente', placeholder: 'Auditoría en junio, Growth octubre...' },
     ],
   },
   {
@@ -336,12 +336,12 @@ Tono: ejecutivo, confiado. Incluye urgencia sutil. CTA: revisar y confirmar esta
     icon: Send,
     prompt: (vars) => `Redacta un email de reactivación en español para un lead que se ha enfriado (sin respuesta 30+ días).
 Empresa: ${vars.company || '[empresa]'}. Último contacto: ${vars.last || 'hace 1 mes'}.
-Aporta valor nuevo: ${vars.value_add || 'nuevo informe sobre deadline NIS2, caso de éxito sector similar'}.
+Aporta valor nuevo: ${vars.value_add || 'nuevo informe sobre deadline Growth, caso de éxito sector similar'}.
 Tono: útil, no insistente. No pedir disculpas. Máximo 120 palabras. CTA suave: ¿sigue siendo relevante?`,
     fields: [
       { key: 'company', label: 'Empresa', placeholder: '' },
       { key: 'last', label: 'Último contacto', placeholder: 'Hace 1 mes, tras webinar...' },
-      { key: 'value_add', label: 'Valor nuevo a aportar', placeholder: 'Informe NIS2, caso éxito, webinar...' },
+      { key: 'value_add', label: 'Valor nuevo a aportar', placeholder: 'Informe Growth, caso éxito, webinar...' },
     ],
   },
 ]

@@ -11,10 +11,10 @@ vi.mock('@/services/api', () => ({
         items: [
           {
             id: 'p1',
-            nombre: 'Prospeccion ENS',
+            nombre: 'Prospeccion SaaS',
             objetivo: 'prospecting',
             persona_target: ['CEO', 'DPO'],
-            regulatory_focus: ['NIS2'],
+            regulatory_focus: ['Growth'],
             idioma: 'es',
             voz_id: '',
             system_prompt: 'Eres un agente de ventas...',
@@ -28,10 +28,10 @@ vi.mock('@/services/api', () => ({
           },
           {
             id: 'p2',
-            nombre: 'Seguimiento DORA',
+            nombre: 'Seguimiento B2B',
             objetivo: 'followup_demo',
             persona_target: ['CTO'],
-            regulatory_focus: ['DORA'],
+            regulatory_focus: ['B2B'],
             idioma: 'es',
             voz_id: '',
             system_prompt: 'Eres un agente de seguimiento...',
@@ -75,9 +75,9 @@ describe('CallPromptsPage', () => {
   it('muestra lista de prompts tras carga', async () => {
     renderPage()
     await waitFor(() => {
-      expect(screen.getByText('Prospeccion ENS')).toBeInTheDocument()
+      expect(screen.getByText('Prospeccion SaaS')).toBeInTheDocument()
     })
-    expect(screen.getByText('Seguimiento DORA')).toBeInTheDocument()
+    expect(screen.getByText('Seguimiento B2B')).toBeInTheDocument()
   })
 
   it('muestra botones de accion', () => {

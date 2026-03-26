@@ -155,8 +155,8 @@ function CompetitorDrawer({ comp, onClose }) {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="flex justify-between rounded p-2" style={{ backgroundColor: T.card }}><span style={{ color: T.fgMuted }}>NIS2</span><span style={{ color: T.fg, fontFamily: fontMono }}>{comp.nis2_support}</span></div>
-                <div className="flex justify-between rounded p-2" style={{ backgroundColor: T.card }}><span style={{ color: T.fgMuted }}>DORA</span><span style={{ color: T.fg, fontFamily: fontMono }}>{comp.dora_support}</span></div>
+                <div className="flex justify-between rounded p-2" style={{ backgroundColor: T.card }}><span style={{ color: T.fgMuted }}>Growth</span><span style={{ color: T.fg, fontFamily: fontMono }}>{comp.nis2_support}</span></div>
+                <div className="flex justify-between rounded p-2" style={{ backgroundColor: T.card }}><span style={{ color: T.fgMuted }}>B2B</span><span style={{ color: T.fg, fontFamily: fontMono }}>{comp.dora_support}</span></div>
                 <div className="flex justify-between rounded p-2" style={{ backgroundColor: T.card }}><span style={{ color: T.fgMuted }}>Evidencia</span><span style={{ color: T.fg, fontFamily: fontMono }}>{comp.auto_evidence}</span></div>
                 <div className="flex justify-between rounded p-2" style={{ backgroundColor: T.card }}><span style={{ color: T.fgMuted }}>UX</span><span style={{ color: T.fg, fontFamily: fontMono }}>{comp.ux_midmarket}</span></div>
               </div>
@@ -366,7 +366,7 @@ export default function CompetitorsPage() {
           <table className="w-full text-sm">
             <thead><tr className="text-xs" style={{ borderBottom: `1px solid ${T.border}`, color: T.fgMuted }}>
               <th className="text-left p-3">Competidor</th><th className="p-3">Región</th><th className="p-3">Amenaza</th>
-              <th className="text-left p-3">Scope</th><th className="p-3">Madurez</th><th className="p-3">NIS2</th><th className="p-3">DORA</th>
+              <th className="text-left p-3">Scope</th><th className="p-3">Madurez</th><th className="p-3">Growth</th><th className="p-3">B2B</th>
             </tr></thead>
             <tbody>{sorted.map(c => (
               <tr key={c.id} className="cursor-pointer transition-colors"
@@ -422,7 +422,7 @@ export default function CompetitorsPage() {
                   <option value="critical">Critica</option><option value="high">Alta</option><option value="medium">Media</option><option value="low">Baja</option>
                 </select>
               </div>
-              <input type="text" value={addForm.scope} onChange={e => setAddForm(f => ({ ...f, scope: e.target.value }))} placeholder="Alcance (ej: growth ENS / NIS2 / SaaS Best Practices)" className="input text-sm" />
+              <input type="text" value={addForm.scope} onChange={e => setAddForm(f => ({ ...f, scope: e.target.value }))} placeholder="Alcance (ej: growth SaaS / Growth / SaaS Best Practices)" className="input text-sm" />
               <input type="text" value={addForm.website} onChange={e => setAddForm(f => ({ ...f, website: e.target.value }))} placeholder="Website" className="input text-sm" />
               <div>
                 <label className="text-xs mb-1 block" style={{ color: T.fgMuted }} htmlFor="competitors-field-1">Madurez plataforma: <span style={{ fontFamily: fontMono }}>{addForm.maturity_score}%</span></label>

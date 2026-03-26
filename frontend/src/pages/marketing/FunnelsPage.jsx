@@ -516,7 +516,7 @@ export default function FunnelsPage() {
                   value={form.name}
                   onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
                   style={inputStyle}
-                  placeholder="Ej: Funnel NIS2 - CEO España"
+                  placeholder="Ej: Funnel Growth - CEO España"
                 />
               </div>
 
