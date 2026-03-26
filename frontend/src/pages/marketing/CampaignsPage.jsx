@@ -27,7 +27,7 @@ const STATUS_CONFIG = {
   draft: { label: 'Borrador', bg: T.muted, color: T.fgMuted },
   active: { label: 'Activa', bg: 'hsla(142,71%,45%,0.15)', color: T.success },
   paused: { label: 'Pausada', bg: 'hsla(38,92%,50%,0.15)', color: T.warning },
-  finished: { label: 'Finalizada', bg: 'hsla(220,60%,50%,0.15)', color: 'hsl(220,60%,60%)' },
+  finished: { label: 'Finalizada', bg: 'rgba(30,111,217,0.1)', color: '#1E6FD9' },
 }
 
 const CHANNEL_CONFIG = {

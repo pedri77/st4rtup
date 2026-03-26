@@ -299,7 +299,7 @@ function OfferModal({ offer, onClose, onSubmit, isLoading, catalog = [] }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="rounded-lg w-full max-w-4xl my-8" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <div className="flex items-center justify-between p-6" style={{ borderBottom: `1px solid ${T.border}` }}>
           <h2 className="text-xl font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>{offer ? `Editar ${offer.reference}` : 'Nueva Oferta'}</h2>
@@ -318,7 +318,7 @@ function OfferModal({ offer, onClose, onSubmit, isLoading, catalog = [] }) {
             </div>
             <div>
               <label htmlFor="offer-title" className="block text-xs font-medium mb-2" style={{ color: T.fgMuted }}>Titulo *</label>
-              <input id="offer-title" type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} style={inputStyle} placeholder="Propuesta Plataforma growth..." />
+              <input id="offer-title" type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} style={inputStyle} placeholder="Nombre de la propuesta..." />
             </div>
           </div>
 
@@ -436,7 +436,7 @@ function OfferViewModal({ offer, onClose, onEdit, onSign, onInvoice }) {
   const StatusIcon = config.icon
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="rounded-lg w-full max-w-3xl my-8" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <div className="flex items-center justify-between p-6" style={{ borderBottom: `1px solid ${T.border}` }}>
           <div>
@@ -535,7 +535,7 @@ function SignatureModal({ offer, onClose, onSuccess }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="rounded-lg w-full max-w-lg" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <div className="flex items-center justify-between p-6" style={{ borderBottom: `1px solid ${T.border}` }}>
           <div>
@@ -598,7 +598,7 @@ function InvoiceModal({ offer, onClose, onSuccess }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="rounded-lg w-full max-w-md" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <div className="flex items-center justify-between p-6" style={{ borderBottom: `1px solid ${T.border}` }}>
           <h2 className="text-lg font-bold flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}><Receipt className="w-5 h-5" style={{ color: T.cyan }} />Crear factura</h2>

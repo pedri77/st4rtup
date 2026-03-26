@@ -340,7 +340,7 @@ function AutomationDetail({ automation, onClose, onToggle }) {
   const canExecute = automation.code === 'AC-01' && automation.impl_status === 'deployed'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }} onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
       <div className="rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="px-6 py-4" style={{ backgroundColor: `${catMeta.color}10`, borderBottom: `1px solid ${T.border}` }}>

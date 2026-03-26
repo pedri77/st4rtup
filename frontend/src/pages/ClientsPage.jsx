@@ -591,7 +591,7 @@ function ContactFormModal({ contact, leads, onClose, onSubmit, isLoading }) {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }} onClick={onClose}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
       <div className="rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between p-6" style={{ borderBottom: `1px solid ${T.border}` }}>
           <h2 className="text-lg font-semibold" style={{ color: T.fg, fontFamily: fontDisplay }}>
@@ -732,7 +732,7 @@ function ContactDetailModal({ contact, leads, onClose, onEdit }) {
   const relColor = RELATIONSHIP_COLORS[contact.relationship_status] || RELATIONSHIP_COLORS.unknown
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }} onClick={onClose}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
       <div className="rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between p-6" style={{ borderBottom: `1px solid ${T.border}` }}>
           <h2 className="text-lg font-semibold" style={{ color: T.fg, fontFamily: fontDisplay }}>Detalle del Contacto</h2>

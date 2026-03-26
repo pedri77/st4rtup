@@ -363,7 +363,7 @@ function CreateVisitModal({ onClose, onSubmit, isLoading }) {
   const removeFromList = (listName, index) => { setFormData({ ...formData, [listName]: formData[listName].filter((_, i) => i !== index) }) }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 overflow-y-auto" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 overflow-y-auto" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="rounded-lg max-w-3xl w-full my-8" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: `1px solid ${T.border}` }}>
           <h2 className="text-xl font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Nueva Visita</h2>

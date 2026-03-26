@@ -697,7 +697,7 @@ function SurveyFormModal({ survey, onClose, onSubmit, isLoading }) {
   const set = (key, value) => setFormData(prev => ({ ...prev, [key]: value }))
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} className="rounded-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-1">
           <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-xl font-bold">{isEdit ? 'Editar Encuesta' : 'Nueva Encuesta'}</h2>
@@ -814,7 +814,7 @@ function RespondModal({ survey, onClose, onSubmit, isLoading }) {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} className="rounded-xl max-w-md w-full p-6">
         <div className="flex items-center justify-between mb-1">
           <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-xl font-bold">Registrar Respuesta</h2>
@@ -904,7 +904,7 @@ function DetailModal({ survey, onClose }) {
   const score = survey.nps_score ?? survey.overall_score ?? survey.score
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} className="rounded-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-1">
           <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-xl font-bold">Detalle de Encuesta</h2>

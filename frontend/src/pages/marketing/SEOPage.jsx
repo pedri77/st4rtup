@@ -634,7 +634,7 @@ function GeoRankingsTab() {
                   <td style={{ padding: '8px' }}><PositionBadge position={r.position} /></td>
                   <td style={{ padding: '8px' }}>
                     {r.local_pack_position ? (
-                      <span style={{ padding: '2px 8px', backgroundColor: 'hsla(220,60%,50%,0.15)', color: 'hsl(220,60%,60%)', borderRadius: 4, fontSize: 12, fontFamily: fontMono }}>#{r.local_pack_position}</span>
+                      <span style={{ padding: '2px 8px', backgroundColor: 'rgba(30,111,217,0.1)', color: '#1E6FD9', borderRadius: 4, fontSize: 12, fontFamily: fontMono }}>#{r.local_pack_position}</span>
                     ) : <span style={{ color: T.fgMuted }}>-</span>}
                   </td>
                   <td style={{ padding: '8px', color: T.fgMuted }} className="truncate max-w-[200px]">{r.url_found || '-'}</td>

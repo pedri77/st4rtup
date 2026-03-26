@@ -356,7 +356,7 @@ function CreateReviewModal({ onClose, onSubmit, isLoading }) {
   const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="rounded-xl w-full max-w-2xl my-8" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <div className="flex items-center justify-between p-6" style={{ borderBottom: `1px solid ${T.border}` }}>
           <div>

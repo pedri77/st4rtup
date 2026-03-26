@@ -27,7 +27,7 @@ const fontMono = "'IBM Plex Mono', monospace"
 const STATUS_CONFIG = {
   draft: { label: 'Borrador', bg: T.muted, color: T.fgMuted },
   active: { label: 'Activo', bg: 'hsla(142,71%,45%,0.15)', color: T.success },
-  archived: { label: 'Archivado', bg: 'hsla(220,60%,50%,0.15)', color: 'hsl(220,60%,60%)' },
+  archived: { label: 'Archivado', bg: 'rgba(30,111,217,0.1)', color: '#1E6FD9' },
 }
 
 const DEFAULT_STAGES = [

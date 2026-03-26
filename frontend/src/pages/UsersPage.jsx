@@ -202,7 +202,7 @@ function InviteUserModal({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="rounded-lg max-w-md w-full p-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <h2 className="text-xl font-bold mb-1" style={{ fontFamily: fontDisplay, color: T.fg }}>Invitar Nuevo Usuario</h2>
         <div className="h-0.5 mb-4" style={{ backgroundColor: T.cyan }} />
@@ -274,7 +274,7 @@ function EditUserModal({ user, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'hsla(220,60%,2%,0.8)' }}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="rounded-lg max-w-md w-full p-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <h2 className="text-xl font-bold mb-1" style={{ fontFamily: fontDisplay, color: T.fg }}>Editar Usuario</h2>
         <div className="h-0.5 mb-4" style={{ backgroundColor: T.cyan }} />
