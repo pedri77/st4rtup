@@ -187,6 +187,19 @@ export default function PricingPublicPage() {
                   else alert('Error al crear el pago. Inténtalo de nuevo.')
                 } catch { alert('Error de conexión') }
               }} style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: p.ctaStyle === 'filled' ? '#1E6FD9' : '#F8FAFC', color: p.ctaStyle === 'filled' ? 'white' : '#1A1A2E', border: p.ctaStyle === 'filled' ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>{p.cta}</button>
+              {p.monthly > 0 && <button onClick={async () => {
+                const plan = p.name.toLowerCase() + (annual ? '_annual' : '_monthly')
+                try {
+                  const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
+                  const res = await fetch(`${apiUrl}/payments/public/paypal-order?plan=${plan}`, { method: 'POST' })
+                  const data = await res.json()
+                  if (data.approval_url) window.location.href = data.approval_url
+                  else alert('Error al crear el pago con PayPal')
+                } catch { alert('Error de conexión') }
+              }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%', textAlign: 'center', padding: '10px 24px', borderRadius: 10, backgroundColor: '#FFC439', color: '#003087', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', marginTop: 8 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797H9.603a.77.77 0 0 0-.76.648l-.762 4.834-.235 1.49a.41.41 0 0 1-.405.347H7.076z"/></svg>
+                PayPal
+              </button>}
             </div>
           ))}
         </div>

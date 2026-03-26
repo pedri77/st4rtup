@@ -332,7 +332,20 @@ export default function LandingPage() {
                         if (data.checkout_url) window.location.href = data.checkout_url
                         else alert('Error al crear el pago')
                       } catch { alert('Error de conexión') }
-                    }} style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: pop ? '#1E6FD9' : '#F8FAFC', color: pop ? 'white' : '#1A1A2E', border: pop ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, cursor: 'pointer', marginBottom: 24 }}>{p.cta}</button>
+                    }} style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: pop ? '#1E6FD9' : '#F8FAFC', color: pop ? 'white' : '#1A1A2E', border: pop ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, cursor: 'pointer', marginBottom: 8 }}>{p.cta}</button>
+                    {p.price !== '0' && <button onClick={async () => {
+                      const plan = p.name.toLowerCase() + '_monthly'
+                      try {
+                        const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
+                        const res = await fetch(`${apiUrl}/payments/public/paypal-order?plan=${plan}`, { method: 'POST' })
+                        const data = await res.json()
+                        if (data.approval_url) window.location.href = data.approval_url
+                        else alert('Error PayPal')
+                      } catch { alert('Error de conexión') }
+                    }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%', padding: '10px 24px', borderRadius: 10, backgroundColor: '#FFC439', color: '#003087', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', marginBottom: 24 }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797H9.603a.77.77 0 0 0-.76.648l-.762 4.834-.235 1.49a.41.41 0 0 1-.405.347H7.076z"/></svg>
+                      PayPal
+                    </button>}
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
                       {p.features.map(f => <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#475569' }}><Check size={16} color="#10B981" /> {f}</li>)}
                     </ul>
