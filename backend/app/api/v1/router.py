@@ -14,6 +14,7 @@ from app.api.v1.endpoints import (
     airtable, mcp_gateway, seo_center, youtube,
     whatsapp,
     payments,
+    organizations,
 )
 api_router = APIRouter()
 
@@ -62,6 +63,9 @@ api_router.include_router(contracts.router, prefix="/contracts", tags=["Contract
 
 # Cost Control (MOD-COST-001)
 api_router.include_router(cost_control.router, prefix="/costs", tags=["Cost Control"])
+
+# Organizations (Multi-tenancy)
+api_router.include_router(organizations.router, prefix="/org", tags=["Organizations"])
 
 # GTM
 api_router.include_router(brand.router, prefix="/brand", tags=["Brand & Positioning"])

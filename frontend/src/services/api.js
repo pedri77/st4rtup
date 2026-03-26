@@ -747,4 +747,11 @@ export const paymentsApi = {
   config: () => api.get('/payments/config'),
 }
 
+export const orgApi = {
+  me: () => api.get('/org/me'),
+  update: (params) => api.put('/org/me', null, { params }),
+  members: () => api.get('/org/members'),
+  plan: () => api.get('/org/plan'),
+}
+
 export default api
