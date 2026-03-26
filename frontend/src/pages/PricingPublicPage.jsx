@@ -175,7 +175,17 @@ export default function PricingPublicPage() {
               </div>
               {annual && p.monthly > 0 && <p style={{ fontSize: 12, color: '#10B981', marginBottom: 16 }}>Ahorras €{(p.monthly - p.annual) * 12}/año</p>}
               <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.users} usuarios · {p.leads} leads</p>
-              <Link to="/login" style={{ display: 'block', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: p.ctaStyle === 'filled' ? '#1E6FD9' : '#F8FAFC', color: p.ctaStyle === 'filled' ? 'white' : '#1A1A2E', border: p.ctaStyle === 'filled' ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>{p.cta}</Link>
+              <button onClick={async () => {
+                if (p.monthly === 0) { window.location.href = '/login'; return }
+                const plan = p.name.toLowerCase() + (annual ? '_annual' : '_monthly')
+                try {
+                  const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
+                  const res = await fetch(`${apiUrl}/payments/public/checkout?plan=${plan}`, { method: 'POST' })
+                  const data = await res.json()
+                  if (data.checkout_url) window.location.href = data.checkout_url
+                  else alert('Error al crear el pago. Inténtalo de nuevo.')
+                } catch { alert('Error de conexión') }
+              }} style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: p.ctaStyle === 'filled' ? '#1E6FD9' : '#F8FAFC', color: p.ctaStyle === 'filled' ? 'white' : '#1A1A2E', border: p.ctaStyle === 'filled' ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>{p.cta}</button>
             </div>
           ))}
         </div>

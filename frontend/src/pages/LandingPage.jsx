@@ -322,7 +322,17 @@ export default function LandingPage() {
                         <span style={{ fontSize: 28, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'", color: '#1E6FD9' }}>{t.pricing.contact}</span>
                       )}
                     </div>
-                    <Link to="/login" style={{ display: 'block', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: pop ? '#1E6FD9' : '#F8FAFC', color: pop ? 'white' : '#1A1A2E', border: pop ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, textDecoration: 'none', marginBottom: 24 }}>{p.cta}</Link>
+                    <button onClick={async () => {
+                      if (p.price === '0') { window.location.href = '/login'; return }
+                      const plan = p.name.toLowerCase() + '_monthly'
+                      try {
+                        const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
+                        const res = await fetch(`${apiUrl}/payments/public/checkout?plan=${plan}`, { method: 'POST' })
+                        const data = await res.json()
+                        if (data.checkout_url) window.location.href = data.checkout_url
+                        else alert('Error al crear el pago')
+                      } catch { alert('Error de conexión') }
+                    }} style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: pop ? '#1E6FD9' : '#F8FAFC', color: pop ? 'white' : '#1A1A2E', border: pop ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, cursor: 'pointer', marginBottom: 24 }}>{p.cta}</button>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
                       {p.features.map(f => <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#475569' }}><Check size={16} color="#10B981" /> {f}</li>)}
                     </ul>

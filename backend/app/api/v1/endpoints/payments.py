@@ -531,6 +531,98 @@ async def stripe_webhook(
     return {"received": True}
 
 
+# ─── PUBLIC CHECKOUT (no auth — for landing/pricing page) ────
+
+PLAN_PRICES = {
+    "growth_monthly": {"price_id_env": "STRIPE_PRICE_GROWTH_MONTHLY", "amount": 19, "interval": "month"},
+    "growth_annual": {"price_id_env": "STRIPE_PRICE_GROWTH_ANNUAL", "amount": 190, "interval": "year"},
+    "scale_monthly": {"price_id_env": "STRIPE_PRICE_SCALE_MONTHLY", "amount": 49, "interval": "month"},
+    "scale_annual": {"price_id_env": "STRIPE_PRICE_SCALE_ANNUAL", "amount": 490, "interval": "year"},
+}
+
+@router.post("/public/checkout")
+async def public_checkout(
+    plan: str = Query(..., description="Plan: growth_monthly, growth_annual, scale_monthly, scale_annual"),
+    email: str = Query("", description="Email del cliente (opcional, Stripe lo pedirá)"),
+):
+    """Crea sesión de Stripe Checkout SIN login — para la landing/pricing page."""
+    if plan not in PLAN_PRICES:
+        raise HTTPException(400, f"Plan inválido. Opciones: {', '.join(PLAN_PRICES.keys())}")
+
+    if not payment_service.stripe_configured():
+        raise HTTPException(400, "Stripe no configurado")
+
+    plan_info = PLAN_PRICES[plan]
+    price_id = getattr(settings, plan_info["price_id_env"], "")
+
+    if not price_id:
+        # Fallback: create ad-hoc checkout without price_id
+        session = await payment_service.stripe_create_checkout(
+            amount_cents=plan_info["amount"] * 100,
+            customer_email=email,
+            description=f"St4rtup {plan.replace('_', ' ').title()}",
+            success_url="https://st4rtup.com/login?payment=success&plan=" + plan,
+            cancel_url="https://st4rtup.com/pricing?cancelled=1",
+            metadata={"plan": plan},
+        )
+    else:
+        # Use Stripe subscription checkout with price_id
+        import httpx
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            data = {
+                "mode": "subscription",
+                "line_items[0][price]": price_id,
+                "line_items[0][quantity]": "1",
+                "success_url": "https://st4rtup.com/login?payment=success&plan=" + plan,
+                "cancel_url": "https://st4rtup.com/pricing?cancelled=1",
+                "metadata[plan]": plan,
+                "subscription_data[trial_period_days]": str(settings.TRIAL_DAYS),
+            }
+            if email:
+                data["customer_email"] = email
+
+            resp = await client.post(
+                "https://api.stripe.com/v1/checkout/sessions",
+                headers={"Authorization": f"Bearer {settings.STRIPE_SECRET_KEY}"},
+                data=data,
+            )
+            session = resp.json()
+
+    checkout_url = session.get("url", "")
+    if not checkout_url:
+        raise HTTPException(500, "Error creando sesión de checkout")
+
+    return {"checkout_url": checkout_url, "session_id": session.get("id", ""), "plan": plan}
+
+
+@router.post("/public/paypal-order")
+async def public_paypal_order(
+    plan: str = Query(..., description="Plan: growth_monthly, growth_annual, scale_monthly, scale_annual"),
+):
+    """Crea orden PayPal SIN login."""
+    if plan not in PLAN_PRICES:
+        raise HTTPException(400, f"Plan inválido")
+
+    if not payment_service.paypal_configured():
+        raise HTTPException(400, "PayPal no configurado")
+
+    plan_info = PLAN_PRICES[plan]
+    result = await payment_service.paypal_create_order(
+        amount=float(plan_info["amount"]),
+        currency="EUR",
+        description=f"St4rtup {plan.replace('_', ' ').title()}",
+        return_url=f"https://st4rtup.com/login?payment=success&plan={plan}",
+        cancel_url="https://st4rtup.com/pricing?cancelled=1",
+    )
+
+    approval_url = ""
+    for link in result.get("links", []):
+        if link.get("rel") == "approve":
+            approval_url = link["href"]
+
+    return {"approval_url": approval_url, "order_id": result.get("id", ""), "plan": plan}
+
+
 # ─── CONFIG (PUBLIC) ─────────────────────────────────────────
 
 @router.get("/config")
