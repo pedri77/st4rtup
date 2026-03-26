@@ -257,6 +257,8 @@ export default function Layout() {
           </div>
 
           <div className="flex items-center gap-2 md:gap-4 ml-2 md:ml-6">
+            {/* Docs help */}
+            <Link to="/app/docs" title="Documentación" style={{ width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${T.border}`, color: T.fgMuted, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>?</Link>
             {/* Notifications */}
             <div className="relative">
               <button onClick={() => setNotificationsOpen(true)}

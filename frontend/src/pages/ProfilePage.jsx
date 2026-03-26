@@ -231,6 +231,15 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      {/* 2FA */}
+      <div className="rounded-lg p-6 mt-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+        <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: fontDisplay, color: T.fg }}>Autenticación de dos factores (2FA)</h3>
+        <p style={{ fontSize: 13, color: T.fgMuted, marginBottom: 16 }}>Añade una capa extra de seguridad a tu cuenta.</p>
+        <button style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.muted, color: T.fgMuted, border: `1px solid ${T.border}`, fontSize: 13, cursor: 'pointer' }}>
+          Activar 2FA (próximamente)
+        </button>
+      </div>
+
       {/* Stats */}
       <div className="rounded-lg p-6 mt-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: fontDisplay, color: T.fg }}>Estadisticas de Actividad</h3>

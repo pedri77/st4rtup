@@ -46,6 +46,26 @@ export default function OnboardingPage() {
 
   function next() { setStep(s => Math.min(s + 1, STEPS.length - 1)) }
   function skip() { next() }
+
+  async function seedSampleData() {
+    try {
+      const { supabase } = await import('@/lib/supabase')
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { next(); return }
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
+      const samples = [
+        { company_name: 'TechStartup SL', contact_name: 'Ana García', email: 'ana@techstartup.es', company_sector: sector || 'SaaS', score: 75 },
+        { company_name: 'GrowthLab', contact_name: 'Carlos López', email: 'carlos@growthlab.io', company_sector: sector || 'SaaS', score: 62 },
+        { company_name: 'DataFlow', contact_name: 'María Ruiz', email: 'maria@dataflow.com', company_sector: sector || 'SaaS', score: 88 },
+        { company_name: 'ScaleUp Ventures', contact_name: 'Pedro Martín', email: 'pedro@scaleup.vc', company_sector: 'Fintech', score: 55 },
+        { company_name: 'LaunchPad Digital', contact_name: 'Laura Sánchez', email: 'laura@launchpad.es', company_sector: 'Marketing', score: 70 },
+      ]
+      for (const lead of samples) {
+        await fetch(`${apiUrl}/leads`, { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(lead) }).catch(() => {})
+      }
+    } catch {}
+    next()
+  }
   function finish() {
     localStorage.setItem('st4rtup_onboarding_done', 'true')
     localStorage.setItem('st4rtup_onboarding_data', JSON.stringify({ name, company, sector, teamSize, pipeline: selectedPipeline, target: monthlyTarget }))
@@ -133,7 +153,7 @@ export default function OnboardingPage() {
               <p style={{ color: '#94A3B8', fontSize: 14, marginTop: 8 }}>Arrastra tu CSV aquí o haz clic</p>
               <p style={{ color: '#CBD5E1', fontSize: 12 }}>Soportamos HubSpot, Salesforce y formato genérico</p>
             </div>
-            <button onClick={next} style={primaryBtn}>Usar datos de ejemplo</button>
+            <button onClick={seedSampleData} style={primaryBtn}>Usar datos de ejemplo</button>
             <button onClick={skip} style={skipBtn}>Omitir este paso</button>
           </>
         )}
