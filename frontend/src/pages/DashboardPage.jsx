@@ -46,20 +46,31 @@ const chartTooltipStyle = {
   fontFamily: fontMono,
 }
 
+const KPI_GRADIENTS = [
+  'linear-gradient(135deg, #EBF4FF, #F0F0FF)',
+  'linear-gradient(135deg, #ECFDF5, #F0FFF4)',
+  'linear-gradient(135deg, #FFF7ED, #FFFBEB)',
+  'linear-gradient(135deg, #F5F3FF, #FDF4FF)',
+  'linear-gradient(135deg, #FEF2F2, #FFF1F2)',
+  'linear-gradient(135deg, #ECFEFF, #F0F9FF)',
+]
+let _kpiIdx = 0
+
 function Readout({ label, value, trend, subtext, color }) {
-  const trendColor = !trend || trend === 0
-    ? T.fgMuted
-    : trend > 0 ? T.success : T.destructive
-  const trendArrow = !trend || trend === 0 ? '' : trend > 0 ? '+' : ''
+  const trendColor = !trend || trend === 0 ? T.fgMuted : trend > 0 ? T.success : T.destructive
+  const trendArrow = !trend || trend === 0 ? '' : trend > 0 ? '↑' : '↓'
+  const gradient = KPI_GRADIENTS[_kpiIdx++ % KPI_GRADIENTS.length]
 
   return (
-    <div className="px-4 py-3" style={{ backgroundColor: T.card }}>
+    <div style={{ background: gradient, borderRadius: 16, padding: '18px 20px', border: '1px solid rgba(0,0,0,0.04)', transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'default' }}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.06)' }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}>
       <p className="text-xs uppercase tracking-[0.15em]" style={{ fontFamily: fontDisplay, color: T.fgMuted }}>{label}</p>
-      <p className="text-2xl font-bold mt-1 tabular-nums" style={{ fontFamily: fontMono, color: color || T.fg }}>{value}</p>
-      <div className="flex items-center gap-3 mt-0.5">
+      <p className="text-3xl font-bold mt-1 tabular-nums" style={{ fontFamily: fontMono, color: color || T.fg }}>{value}</p>
+      <div className="flex items-center gap-3 mt-1">
         {trend !== undefined && trend !== 0 && (
-          <span className="text-xs" style={{ fontFamily: fontMono, color: trendColor }}>
-            {trendArrow}{trend}%
+          <span className="text-xs font-semibold" style={{ fontFamily: fontMono, color: trendColor }}>
+            {trendArrow} {Math.abs(trend)}%
           </span>
         )}
         {subtext && <span className="text-xs" style={{ color: T.fgMuted }}>{subtext}</span>}
