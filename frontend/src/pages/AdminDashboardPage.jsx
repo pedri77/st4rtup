@@ -415,6 +415,9 @@ export default function AdminDashboardPage() {
                 }} style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.success, color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                   Guardar
                 </button>
+                <button onClick={() => { setShowAffForm(false); setAffForm({ provider: '', display_name: '', affiliate_url: '', category: 'integration', commission_percent: 0, commission_type: 'one_time', notes: '' }) }} style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.muted, color: T.fgMuted, border: `1px solid ${T.border}`, fontSize: 12, cursor: 'pointer', marginLeft: 8 }}>
+                  Cancelar
+                </button>
               </div>
             )}
 
