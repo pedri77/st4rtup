@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.v1.endpoints import (
+    auth,
     billing, analytics_internal, service_catalog,
     users, leads, visits, emails, actions, opportunities, offers, accounts,
     reviews, surveys, dashboard, automations, automation_tasks, notifications,
@@ -19,6 +20,9 @@ from app.api.v1.endpoints import (
     affiliates,
 )
 api_router = APIRouter()
+
+# Auth (registration)
+api_router.include_router(auth.router, prefix="/auth", tags=["Auth"])
 
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 api_router.include_router(reports.router, prefix="/reports", tags=["Reportes"])

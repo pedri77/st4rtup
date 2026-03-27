@@ -88,8 +88,8 @@ const T = {
       { name: 'Scale', price: null, desc: 'Para grandes equipos', features: ['Usuarios ilimitados', 'Todo en Scale', 'SSO / SAML', 'SLA 99.9%', 'Gestor de cuenta dedicado', 'Formación personalizada', 'Facturación por transferencia', 'Integraciones a medida'], cta: 'Contactar ventas' },
     ]},
     testimonials: { tag: 'Testimonios', h2: 'Lo que dicen nuestros clientes', items: [
-      { quote: 'Pasamos de una hoja de cálculo a cerrar 3 veces más acuerdos en 2 meses. El pipeline visual y las automatizaciones lo cambiaron todo.', name: 'María García', role: 'CEO, TechStartup' },
-      { quote: 'El Centro de SEO nos posicionó en el top 3 de Google en 6 semanas. Los 4 agentes IA generan contenido profesional.', name: 'Carlos Ruiz', role: 'Director de Marketing, GrowthLab' },
+      { quote: 'Pasamos de una hoja de cálculo a cerrar 3 veces más acuerdos en 2 meses. El pipeline visual y las automatizaciones lo cambiaron todo.', name: 'María García', role: 'CEO, TechStartup', avatar: '/images/avatar-maria-garcia.webp' },
+      { quote: 'El Centro de SEO nos posicionó en el top 3 de Google en 6 semanas. Los 4 agentes IA generan contenido profesional.', name: 'Carlos Ruiz', role: 'Director de Marketing, GrowthLab', avatar: '/images/avatar-carlos-ruiz.webp' },
       { quote: 'Las llamadas IA cualifican leads mientras dormimos. La cualificación BANT automática ahorra 15h/semana a nuestro equipo.', name: 'Ana López', role: 'Directora Comercial, ScaleUp' },
     ]},
     cta: { h2: 'Empieza a vender más. Hoy.', sub: 'Sin tarjeta de crédito. Listo en 5 minutos. Cancela cuando quieras.', btn: 'Empezar gratis' },
@@ -123,8 +123,8 @@ const T = {
       { name: 'Scale', price: null, desc: 'For large teams', features: ['Unlimited users', 'Everything in Scale', 'SSO / SAML', '99.9% SLA', 'Dedicated account manager', 'Custom training', 'Invoice billing', 'Custom integrations'], cta: 'Contact sales' },
     ]},
     testimonials: { tag: 'Testimonials', h2: 'What our customers say', items: [
-      { quote: 'We went from a spreadsheet to closing 3x more deals in 2 months. The visual pipeline and automations changed everything.', name: 'María García', role: 'CEO, TechStartup' },
-      { quote: 'The SEO Command Center got us to Google top 3 in 6 weeks. The 4 AI agents generate professional content.', name: 'Carlos Ruiz', role: 'CMO, GrowthLab' },
+      { quote: 'We went from a spreadsheet to closing 3x more deals in 2 months. The visual pipeline and automations changed everything.', name: 'María García', role: 'CEO, TechStartup', avatar: '/images/avatar-maria-garcia.webp' },
+      { quote: 'The SEO Command Center got us to Google top 3 in 6 weeks. The 4 AI agents generate professional content.', name: 'Carlos Ruiz', role: 'CMO, GrowthLab', avatar: '/images/avatar-carlos-ruiz.webp' },
       { quote: 'AI calls qualify leads while we sleep. Automatic BANT qualification saves our team 15h/week.', name: 'Ana López', role: 'Head of Sales, ScaleUp' },
     ]},
     cta: { h2: 'Start selling more. Today.', sub: 'No credit card. Setup in 5 minutes. Cancel anytime.', btn: 'Get started free' },
@@ -175,7 +175,7 @@ export default function LandingPage() {
             <Link to="/help" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{lang === 'es' ? 'Ayuda' : 'Help'}</Link>
             <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} style={{ padding: '4px 10px', border: '1px solid #E2E8F0', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer', backgroundColor: 'white', color: '#64748B' }}>{lang === 'es' ? 'EN' : 'ES'}</button>
             <Link to="/login" style={{ fontSize: 14, color: '#1E6FD9', textDecoration: 'none', fontWeight: 600 }}>{t.nav.login}</Link>
-            <Link to="/login" style={{ padding: '10px 22px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>{t.nav.cta}</Link>
+            <Link to="/register" style={{ padding: '10px 22px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>{t.nav.cta}</Link>
           </div>
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -186,7 +186,7 @@ export default function LandingPage() {
             <a href="#features" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>{t.nav.features}</a>
             <a href="#pricing" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>{t.nav.pricing}</a>
             <button onClick={() => { setLang(lang === 'es' ? 'en' : 'es'); setMenuOpen(false) }} style={{ padding: '6px 12px', border: '1px solid #E2E8F0', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer', backgroundColor: 'white', color: '#64748B', width: 'fit-content' }}>{lang === 'es' ? 'English' : 'Español'}</button>
-            <Link to="/login" style={{ padding: '10px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none', textAlign: 'center' }}>{t.nav.cta}</Link>
+            <Link to="/register" style={{ padding: '10px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none', textAlign: 'center' }}>{t.nav.cta}</Link>
           </div>
         )}
       </nav>
@@ -209,7 +209,7 @@ export default function LandingPage() {
             <FadeIn delay={0.1}><p style={{ fontSize: 18, color: '#64748B', lineHeight: 1.7, marginBottom: 32, maxWidth: 500 }}>{t.hero.sub}</p></FadeIn>
             <FadeIn delay={0.2}>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(30,111,217,0.4)' }}>{t.hero.cta1} <ArrowRight size={18} /></Link>
+                <Link to="/register" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(30,111,217,0.4)' }}>{t.hero.cta1} <ArrowRight size={18} /></Link>
                 <Link to="/demo" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", border: "2px solid #E2E8F0", color: "#1A1A2E", borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: "none" }}>{t.hero.cta2}</Link>
               </div>
             </FadeIn>
@@ -323,7 +323,7 @@ export default function LandingPage() {
                       )}
                     </div>
                     <button onClick={async () => {
-                      if (p.price === '0') { window.location.href = '/login'; return }
+                      if (p.price === '0') { window.location.href = '/register'; return }
                       const plan = p.name.toLowerCase() + '_monthly'
                       try {
                         const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
@@ -373,7 +373,11 @@ export default function LandingPage() {
                   <div style={{ display: 'flex', gap: 2, marginBottom: 16 }}>{[1,2,3,4,5].map(j => <Star key={j} size={16} fill="#F59E0B" color="#F59E0B" />)}</div>
                   <p style={{ fontSize: 15, color: '#2D2D44', lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>"{item.quote}"</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14 }}>{item.name[0]}</div>
+                    {item.avatar ? (
+                      <img src={item.avatar} alt={item.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: '2px solid #E2E8F0' }} />
+                    ) : (
+                      <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>{item.name[0]}</div>
+                    )}
                     <div>
                       <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>{item.name}</p>
                       <p style={{ fontSize: 12, color: '#64748B', margin: 0 }}>{item.role}</p>
@@ -393,7 +397,7 @@ export default function LandingPage() {
           <div style={{ position: 'absolute', bottom: -60, left: -60, width: 300, height: 300, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.05)' }} />
           <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: 'white', marginBottom: 16, position: 'relative' }}>{t.cta.h2}</h2>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.8)', marginBottom: 32, position: 'relative' }}>{t.cta.sub}</p>
-          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: 'white', color: '#1E6FD9', borderRadius: 12, fontSize: 16, fontWeight: 700, textDecoration: 'none', position: 'relative', boxShadow: '0 4px 14px rgba(0,0,0,0.15)' }}>{t.cta.btn} <ChevronRight size={18} /></Link>
+          <Link to="/register" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: 'white', color: '#1E6FD9', borderRadius: 12, fontSize: 16, fontWeight: 700, textDecoration: 'none', position: 'relative', boxShadow: '0 4px 14px rgba(0,0,0,0.15)' }}>{t.cta.btn} <ChevronRight size={18} /></Link>
         </div>
       </section>
 

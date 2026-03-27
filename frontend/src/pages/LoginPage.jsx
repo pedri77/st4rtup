@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { LogIn, ShieldCheck } from 'lucide-react'
 
@@ -105,7 +105,10 @@ export default function LoginPage() {
 
           <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
-              Los usuarios se gestionan desde la consola de Supabase
+              ¿No tienes cuenta?{' '}
+              <Link to="/register" className="text-blue-600 font-semibold hover:underline">
+                Crear cuenta gratis
+              </Link>
             </p>
           </div>
         </div>

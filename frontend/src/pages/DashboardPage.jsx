@@ -142,14 +142,28 @@ function WaterfallAndRadarSection() {
         ) : waterfallChartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={waterfallChartData} barCategoryGap="20%">
+              <defs>
+                <linearGradient id="gradIncrease" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={T.success} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={T.success} stopOpacity={0.4} />
+                </linearGradient>
+                <linearGradient id="gradDecrease" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={T.destructive} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={T.destructive} stopOpacity={0.4} />
+                </linearGradient>
+                <linearGradient id="gradTotal" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={T.cyan} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={T.cyan} stopOpacity={0.4} />
+                </linearGradient>
+              </defs>
               <CartesianGrid stroke={T.border} strokeDasharray="none" vertical={false} />
               <XAxis dataKey="name" tick={{ fontSize: 10, fill: T.fgMuted, fontFamily: fontMono }} stroke={T.border} tickLine={false} axisLine={{ stroke: T.border }} />
               <YAxis tick={{ fontSize: 10, fill: T.fgMuted, fontFamily: fontMono }} stroke={T.border} tickLine={false} axisLine={false} />
               <Tooltip contentStyle={chartTooltipStyle} cursor={{ fill: T.muted }}
                 formatter={(value) => [`${typeof value === 'number' ? value.toLocaleString('es-ES') : value}`, 'Valor']} />
-              <Bar dataKey="value" radius={[4, 4, 0, 0]} opacity={0.85}>
+              <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                 {waterfallChartData.map((entry, idx) => (
-                  <Cell key={idx} fill={entry.type === 'increase' ? T.success : entry.type === 'decrease' ? T.destructive : T.cyan} />
+                  <Cell key={idx} fill={entry.type === 'increase' ? 'url(#gradIncrease)' : entry.type === 'decrease' ? 'url(#gradDecrease)' : 'url(#gradTotal)'} />
                 ))}
               </Bar>
             </BarChart>
@@ -348,22 +362,24 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Primary Readouts */}
-      {isVisible('kpis') && <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px rounded-lg overflow-hidden" style={{ backgroundColor: T.border }}>
-        <Readout label="Revenue Mes" value={`€${((stats?.revenue_won_this_month || 0) / 1000).toFixed(0)}K`} color={T.warning} subtext="cerrados este mes" />
+      {/* Bento KPI Grid */}
+      {isVisible('kpis') && <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div className="col-span-2">
+          <Readout label="Revenue Mes" value={`€${((stats?.revenue_won_this_month || 0) / 1000).toFixed(0)}K`} color={T.warning} subtext="cerrados este mes" />
+        </div>
         <Readout label="Revenue Trim." value={`€${((stats?.revenue_won_this_quarter || 0) / 1000).toFixed(0)}K`} subtext="Q actual" />
         <Readout label="Ofertas" value={stats?.offers_this_month || 0} subtext={`${stats?.offers_accepted_this_month || 0} aceptadas`} />
         <Readout label="Conversion" value={`${stats?.conversion_rate || 0}%`} trend={stats?.conversion_trend} color={T.success} />
         <Readout label="Leads" value={stats?.total_leads || 0} trend={stats?.leads_trend} subtext="total base" />
-        <Readout label="Pipeline" value={`€${((stats?.pipeline_value || 0) / 1000).toFixed(0)}K`} trend={stats?.pipeline_trend} color={T.cyan} />
-      </div>}
-
-      {/* Secondary Readout */}
-      <div className="grid grid-cols-3 gap-px rounded-lg overflow-hidden" style={{ backgroundColor: T.border }}>
-        <Readout label="Pipeline Ponderado" value={`€${((stats?.weighted_pipeline || 0) / 1000).toFixed(0)}K`} subtext="prob. ponderada" />
+        <div className="col-span-2">
+          <Readout label="Pipeline Activo" value={`€${((stats?.pipeline_value || 0) / 1000).toFixed(0)}K`} trend={stats?.pipeline_trend} color={T.cyan} />
+        </div>
+        <div className="col-span-2">
+          <Readout label="Pipeline Ponderado" value={`€${((stats?.weighted_pipeline || 0) / 1000).toFixed(0)}K`} subtext="prob. ponderada" />
+        </div>
         <Readout label="Visitas Prox. 7d" value={stats?.upcoming_visits?.length || 0} />
         <Readout label="Deals por Cerrar" value={stats?.deals_closing_soon?.length || 0} color={T.warning} subtext="proximos 14 dias" />
-      </div>
+      </div>}
 
       {/* Charts */}
       {isVisible('charts') && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -371,12 +387,18 @@ export default function DashboardPage() {
           {pipelineChartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={280}>
               <BarChart data={pipelineChartData} barCategoryGap="20%">
+                <defs>
+                  <linearGradient id="gradPipeline" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={T.cyan} stopOpacity={0.9} />
+                    <stop offset="100%" stopColor={T.cyan} stopOpacity={0.4} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid stroke={T.border} strokeDasharray="none" vertical={false} />
                 <XAxis dataKey="stage" tick={{ fontSize: 10, fill: T.fgMuted, fontFamily: fontMono }} stroke={T.border} tickLine={false} axisLine={{ stroke: T.border }} />
                 <YAxis tick={{ fontSize: 10, fill: T.fgMuted, fontFamily: fontMono }} stroke={T.border} tickLine={false} axisLine={false}
                   label={{ value: '€K', angle: 0, position: 'insideTopLeft', fontSize: 10, fill: T.fgMuted, fontFamily: fontMono, offset: -5 }} />
                 <Tooltip contentStyle={chartTooltipStyle} cursor={{ fill: T.muted }} formatter={(value) => [`€${value.toFixed(1)}K`, 'Valor']} />
-                <Bar dataKey="value" fill={T.cyan} radius={[4, 4, 0, 0]} opacity={0.8} />
+                <Bar dataKey="value" fill="url(#gradPipeline)" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -388,13 +410,27 @@ export default function DashboardPage() {
           {activityChartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={280}>
               <AreaChart data={activityChartData}>
+                <defs>
+                  <linearGradient id="gradEmails" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={T.cyan} stopOpacity={0.35} />
+                    <stop offset="100%" stopColor={T.cyan} stopOpacity={0.02} />
+                  </linearGradient>
+                  <linearGradient id="gradVisitas" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={T.warning} stopOpacity={0.3} />
+                    <stop offset="100%" stopColor={T.warning} stopOpacity={0.02} />
+                  </linearGradient>
+                  <linearGradient id="gradAcciones" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={T.purple} stopOpacity={0.25} />
+                    <stop offset="100%" stopColor={T.purple} stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid stroke={T.border} strokeDasharray="none" vertical={false} />
                 <XAxis dataKey="date" tick={{ fontSize: 10, fill: T.fgMuted, fontFamily: fontMono }} stroke={T.border} tickLine={false} axisLine={{ stroke: T.border }} />
                 <YAxis tick={{ fontSize: 10, fill: T.fgMuted, fontFamily: fontMono }} stroke={T.border} tickLine={false} axisLine={false} />
                 <Tooltip contentStyle={chartTooltipStyle} cursor={{ stroke: T.border }} />
-                <Area type="monotone" dataKey="Emails" stackId="1" stroke={T.cyan} fill={T.cyan} fillOpacity={0.15} strokeWidth={1.5} />
-                <Area type="monotone" dataKey="Visitas" stackId="1" stroke={T.warning} fill={T.warning} fillOpacity={0.12} strokeWidth={1.5} />
-                <Area type="monotone" dataKey="Acciones" stackId="1" stroke={T.purple} fill={T.purple} fillOpacity={0.1} strokeWidth={1} />
+                <Area type="monotone" dataKey="Emails" stackId="1" stroke={T.cyan} fill="url(#gradEmails)" strokeWidth={2} />
+                <Area type="monotone" dataKey="Visitas" stackId="1" stroke={T.warning} fill="url(#gradVisitas)" strokeWidth={2} />
+                <Area type="monotone" dataKey="Acciones" stackId="1" stroke={T.purple} fill="url(#gradAcciones)" strokeWidth={1.5} />
               </AreaChart>
             </ResponsiveContainer>
           ) : (
@@ -471,21 +507,36 @@ export default function DashboardPage() {
         <Panel title="Top leads — score">
           {stats?.top_leads_by_score && stats.top_leads_by_score.length > 0 ? (
             <div className="space-y-0">
-              {stats.top_leads_by_score.map((lead, idx) => (
-                <div key={lead.id} className="flex items-center gap-3 py-2" style={{ borderBottom: `1px solid ${T.border}40` }}>
-                  <span className="text-xs w-4 text-right" style={{ fontFamily: fontMono, color: T.fgMuted }}>{idx + 1}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate" style={{ color: T.fg }}>{lead.company}</p>
-                    <p className="text-xs uppercase tracking-wide" style={{ color: T.fgMuted }}>{lead.status.replace('_', ' ')}</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-16 h-1.5 rounded overflow-hidden" style={{ backgroundColor: T.muted }}>
-                      <div className="h-full" style={{ width: `${Math.min(lead.score, 100)}%`, backgroundColor: `${T.cyan}80` }} />
+              {stats.top_leads_by_score.map((lead, idx) => {
+                const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : null
+                const scoreColor = lead.score >= 80 ? T.success : lead.score >= 50 ? T.warning : T.fgMuted
+                return (
+                  <div key={lead.id}
+                    className="flex items-center gap-3 py-2.5 px-2 -mx-2 rounded-lg transition-all cursor-default group"
+                    style={{ borderBottom: `1px solid ${T.border}20` }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = `${T.cyan}06`; e.currentTarget.style.borderBottomColor = `${T.cyan}15` }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderBottomColor = `${T.border}20` }}
+                  >
+                    <span className="text-sm w-6 text-center shrink-0" style={{ fontFamily: fontMono, color: T.fgMuted }}>
+                      {medal || (idx + 1)}
+                    </span>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold"
+                      style={{ background: `linear-gradient(135deg, ${T.cyan}20, ${T.purple}15)`, color: T.cyan }}>
+                      {lead.company?.[0] || '?'}
                     </div>
-                    <span className="text-sm font-bold tabular-nums w-8 text-right" style={{ fontFamily: fontMono, color: T.fg }}>{lead.score}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate" style={{ color: T.fg }}>{lead.company}</p>
+                      <p className="text-xs uppercase tracking-wide" style={{ color: T.fgMuted }}>{lead.status.replace('_', ' ')}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 h-2 rounded-full overflow-hidden" style={{ backgroundColor: T.muted }}>
+                        <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(lead.score, 100)}%`, background: `linear-gradient(90deg, ${scoreColor}60, ${scoreColor})` }} />
+                      </div>
+                      <span className="text-sm font-bold tabular-nums w-8 text-right" style={{ fontFamily: fontMono, color: scoreColor }}>{lead.score}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           ) : (
             <div className="text-center py-8 text-sm" style={{ fontFamily: fontMono, color: T.fgMuted }}>SIN LEADS</div>
@@ -497,21 +548,27 @@ export default function DashboardPage() {
             <div className="space-y-0">
               {stats.recent_activity.map((activity, idx) => {
                 const typeConfig = {
-                  email: { char: 'E', color: T.cyan },
-                  visit: { char: 'V', color: T.warning },
-                  action: { char: 'A', color: T.purple },
-                }[activity.type] || { char: '-', color: T.fgMuted }
+                  email: { char: 'E', color: T.cyan, label: 'Email' },
+                  visit: { char: 'V', color: T.warning, label: 'Visita' },
+                  action: { char: 'A', color: T.purple, label: 'Accion' },
+                }[activity.type] || { char: '-', color: T.fgMuted, label: '' }
 
                 return (
-                  <div key={idx} className="flex items-start gap-2.5 py-2" style={{ borderBottom: `1px solid ${T.border}40` }}>
-                    <span className="text-xs font-bold w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5"
-                      style={{ fontFamily: fontMono, color: typeConfig.color, backgroundColor: `${typeConfig.color}15` }}>
+                  <div key={idx}
+                    className="flex items-start gap-3 py-2.5 px-2 -mx-2 rounded-lg transition-all"
+                    style={{ borderBottom: `1px solid ${T.border}20` }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = `${typeConfig.color}06` }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}
+                  >
+                    <span className="text-xs font-bold w-6 h-6 rounded-md flex items-center justify-center shrink-0 mt-0.5"
+                      style={{ fontFamily: fontMono, color: typeConfig.color, backgroundColor: `${typeConfig.color}12`, border: `1px solid ${typeConfig.color}20` }}>
                       {typeConfig.char}
                     </span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm truncate" style={{ color: T.fg }}>{activity.description}</p>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className="text-xs font-medium" style={{ color: T.fgMuted }}>{activity.lead}</span>
+                        <span className="w-1 h-1 rounded-full" style={{ backgroundColor: T.border }} />
                         <span className="text-xs" style={{ fontFamily: fontMono, color: T.fgMuted }}>
                           {activity.timestamp && new Date(activity.timestamp).toLocaleDateString('es-ES', {
                             month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -553,10 +610,15 @@ export default function DashboardPage() {
 
         {stats?.leads_by_status && Object.keys(stats.leads_by_status).length > 0 && (
           <Panel title="Leads por estado">
-            <div className="grid grid-cols-2 gap-px rounded overflow-hidden" style={{ backgroundColor: T.border }}>
+            <div className="grid grid-cols-2 gap-2">
               {Object.entries(stats.leads_by_status).map(([status, count]) => (
-                <div key={status} className="px-3 py-2.5 text-center" style={{ backgroundColor: T.card }}>
-                  <p className="text-lg font-bold tabular-nums" style={{ fontFamily: fontMono, color: T.fg }}>{count}</p>
+                <div key={status}
+                  className="px-3 py-3 rounded-lg text-center transition-all cursor-default"
+                  style={{ backgroundColor: T.muted }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = `${T.cyan}08`; e.currentTarget.style.transform = 'scale(1.02)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = T.muted; e.currentTarget.style.transform = 'scale(1)' }}
+                >
+                  <p className="text-xl font-bold tabular-nums" style={{ fontFamily: fontMono, color: T.fg }}>{count}</p>
                   <p className="text-xs uppercase tracking-[0.15em] mt-0.5" style={{ fontFamily: fontDisplay, color: T.fgMuted }}>{status.replace('_', ' ')}</p>
                 </div>
               ))}

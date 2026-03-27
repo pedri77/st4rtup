@@ -43,6 +43,60 @@ export const AuthProvider = ({ children }) => {
     return data
   }
 
+  const signUp = async (email, password, metadata = {}) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: metadata.full_name || '',
+          company_name: metadata.company_name || '',
+        },
+      },
+    })
+    if (error) throw error
+
+    // Call backend to provision org + user record
+    if (data.user) {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || '/api/v1'
+        const token = data.session?.access_token
+        if (token) {
+          await fetch(`${apiUrl}/auth/register`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              full_name: metadata.full_name,
+              company_name: metadata.company_name,
+            }),
+          })
+        }
+      } catch (e) {
+        console.warn('Backend registration call failed:', e)
+      }
+    }
+
+    return data
+  }
+
+  const signInWithGoogle = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/app`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    })
+    if (error) throw error
+    return data
+  }
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
@@ -53,6 +107,8 @@ export const AuthProvider = ({ children }) => {
     session,
     loading,
     signIn,
+    signUp,
+    signInWithGoogle,
     signOut,
   }
 
