@@ -10,9 +10,10 @@ const fontDisplay = "'Rajdhani', sans-serif"
 const PLAN_RANK = { starter: 0, growth: 1, scale: 2, enterprise: 3 }
 
 export default function MarketplacePage() {
-  const { plan } = useOrganization()
+  const { org, plan } = useOrganization()
   const userRank = PLAN_RANK[plan] || 0
   const [filter, setFilter] = useState('all')
+  const activeAddons = org?.settings?.addons || []
 
   const categories = featuresMatrix.categories
   const addons = featuresMatrix.addons || []
@@ -95,27 +96,34 @@ export default function MarketplacePage() {
         <Zap className="w-5 h-5" style={{ color: T.warning }} /> Add-ons disponibles
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {addons.map(a => (
-          <div key={a.id} className="rounded-xl p-5" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
-            <h3 className="font-semibold mb-1" style={{ color: T.fg }}>{a.name}</h3>
+        {addons.map(a => {
+          const isActive = activeAddons.includes(a.id)
+          return (
+          <div key={a.id} className="rounded-xl p-5" style={{ backgroundColor: T.card, border: `1px solid ${isActive ? T.success : T.border}` }}>
+            <div className="flex items-start justify-between mb-1">
+              <h3 className="font-semibold" style={{ color: T.fg }}>{a.name}</h3>
+              {isActive && <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, backgroundColor: '#10B98115', color: T.success, fontWeight: 600 }}>✓ Activo</span>}
+            </div>
             <p className="text-xs mb-2" style={{ color: T.fgMuted }}>{a.desc}</p>
             <Link to="/app/docs" style={{ fontSize: 11, color: T.cyan, textDecoration: 'none', marginBottom: 8, display: 'inline-block' }}>📖 Ver documentación</Link>
             <div className="flex items-center justify-between">
-              <span className="font-bold" style={{ color: T.cyan }}>€{a.price_monthly}/mes</span>
-              <button onClick={async () => {
+              <span className="font-bold" style={{ color: isActive ? T.success : T.cyan }}>{isActive ? 'Incluido' : `€${a.price_monthly}/mes`}</span>
+              {!isActive && <button onClick={async () => {
                 try {
                   const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
-                  const res = await fetch(`${apiUrl}/payments/public/checkout?plan=${a.id}`, { method: 'POST' })
+                  const orgId = org?.org_id || ''
+                  const res = await fetch(`${apiUrl}/payments/public/checkout?plan=${a.id}&email=&org_id=${orgId}`, { method: 'POST' })
                   const data = await res.json()
                   if (data.checkout_url) window.location.href = data.checkout_url
                   else alert('Contacta con soporte para activar este add-on')
                 } catch { alert('Error de conexión') }
               }} className="px-3 py-1.5 rounded-lg text-xs font-semibold" style={{ backgroundColor: T.cyan, color: 'white', border: 'none', cursor: 'pointer' }}>
                 Comprar
-              </button>
+              </button>}
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

@@ -528,6 +528,66 @@ async def stripe_webhook(
             payment.status = "cancelled"
             await db.commit()
 
+    elif event_type == "checkout.session.completed":
+        metadata = data_obj.get("metadata", {})
+        plan = metadata.get("plan", "")
+        org_id = metadata.get("org_id", "")
+        customer_email = data_obj.get("customer_email", "")
+        subscription_id = data_obj.get("subscription", "")
+
+        logger.info(f"Checkout completed: plan={plan}, org_id={org_id}, email={customer_email}")
+
+        # Handle plan upgrades (growth/scale)
+        if plan in ("growth_monthly", "growth_annual", "scale_monthly", "scale_annual"):
+            plan_name = plan.split("_")[0]  # growth or scale
+            max_users = 3 if plan_name == "growth" else 10
+            max_leads = 5000 if plan_name == "growth" else 999999
+
+            if org_id:
+                from app.models.organization import Organization
+                org = await db.get(Organization, org_id)
+                if org:
+                    org.plan = plan_name
+                    org.max_users = max_users
+                    org.max_leads = max_leads
+                    org.stripe_subscription_id = subscription_id
+                    await db.commit()
+                    logger.info(f"Org {org_id} upgraded to {plan_name}")
+            elif customer_email:
+                # Find org by email if no org_id in metadata
+                from app.models.user import User
+                from app.models.organization import Organization, OrgMember
+                user = (await db.execute(select(User).where(User.email == customer_email))).scalar_one_or_none()
+                if user:
+                    member = (await db.execute(select(OrgMember).where(OrgMember.user_id == user.id).limit(1))).scalar_one_or_none()
+                    if member:
+                        org = await db.get(Organization, str(member.org_id))
+                        if org:
+                            org.plan = plan_name
+                            org.max_users = max_users
+                            org.max_leads = max_leads
+                            org.stripe_subscription_id = subscription_id
+                            await db.commit()
+                            logger.info(f"Org {org.id} upgraded to {plan_name} (via email lookup)")
+
+        # Handle add-on purchases
+        elif plan in ("extra_users", "ai_advanced", "deal_room_addon", "whatsapp_addon", "api_access"):
+            if org_id:
+                from app.models.organization import Organization
+                org = await db.get(Organization, org_id)
+                if org:
+                    settings_dict = dict(org.settings or {})
+                    addons = settings_dict.get("addons", [])
+                    if plan not in addons:
+                        addons.append(plan)
+                    settings_dict["addons"] = addons
+                    # Apply addon effects
+                    if plan == "extra_users":
+                        org.max_users = (org.max_users or 1) + 5
+                    org.settings = settings_dict
+                    await db.commit()
+                    logger.info(f"Addon {plan} activated for org {org_id}")
+
     return {"received": True}
 
 
@@ -548,8 +608,9 @@ PLAN_PRICES = {
 
 @router.post("/public/checkout")
 async def public_checkout(
-    plan: str = Query(..., description="Plan: growth_monthly, growth_annual, scale_monthly, scale_annual"),
-    email: str = Query("", description="Email del cliente (opcional, Stripe lo pedirá)"),
+    plan: str = Query(..., description="Plan or add-on ID"),
+    email: str = Query("", description="Email del cliente"),
+    org_id: str = Query("", description="Organization ID (for add-on activation)"),
 ):
     """Crea sesión de Stripe Checkout SIN login — para la landing/pricing page."""
     if plan not in PLAN_PRICES:
@@ -569,20 +630,23 @@ async def public_checkout(
             description=f"St4rtup {plan.replace('_', ' ').title()}",
             success_url="https://st4rtup.com/login?payment=success&plan=" + plan,
             cancel_url="https://st4rtup.com/pricing?cancelled=1",
-            metadata={"plan": plan},
+            metadata={"plan": plan, "org_id": org_id},
         )
     else:
         # Use Stripe subscription checkout with price_id
         import httpx
+        is_addon = plan in ("extra_users", "ai_advanced", "deal_room_addon", "whatsapp_addon", "api_access")
+        success_url = f"https://st4rtup.com/app/marketplace?activated={plan}" if is_addon else f"https://st4rtup.com/login?payment=success&plan={plan}"
         async with httpx.AsyncClient(timeout=15.0) as client:
             data = {
                 "mode": "subscription",
                 "line_items[0][price]": price_id,
                 "line_items[0][quantity]": "1",
-                "success_url": "https://st4rtup.com/login?payment=success&plan=" + plan,
+                "success_url": success_url,
                 "cancel_url": "https://st4rtup.com/pricing?cancelled=1",
                 "metadata[plan]": plan,
-                "subscription_data[trial_period_days]": str(settings.TRIAL_DAYS),
+                "metadata[org_id]": org_id,
+                "subscription_data[trial_period_days]": "0" if is_addon else str(settings.TRIAL_DAYS),
             }
             if email:
                 data["customer_email"] = email
