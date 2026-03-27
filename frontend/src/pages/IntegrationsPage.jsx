@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { settingsApi, airtableApi, mcpApi } from '@/services/api'
+import api, { settingsApi, airtableApi, mcpApi } from '@/services/api'
 import { useHasRole } from '@/components/RoleGuard'
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
@@ -312,6 +312,15 @@ export default function IntegrationsPage() {
     queryFn: () => settingsApi.get().then(r => r.data),
     retry: 1,
   })
+
+  // Affiliate links
+  const { data: affLinks } = useQuery({
+    queryKey: ['affiliate-links'],
+    queryFn: () => api.get('/affiliates?category=integration').then(r => r.data?.items || []).catch(() => []),
+    staleTime: 300000,
+  })
+  const getAffLink = (provider) => (affLinks || []).find(l => l.provider?.toLowerCase() === provider?.toLowerCase())
+  const trackAffClick = async (linkId) => { try { await api.post(`/affiliates/${linkId}/click`) } catch {} }
 
   const { data: envStatus } = useQuery({
     queryKey: ['env-status'],
@@ -816,13 +825,25 @@ function IntegrationCard({ integration, settings, onSave, saving, isAdmin }) {
           </div>
           <p style={{ color: T.fgMuted }} className="text-xs mt-0.5 truncate">{integration.description}</p>
         </div>
-        {integration.url && (
-          <a href={integration.url} target="_blank" rel="noopener noreferrer"
-            onClick={e => e.stopPropagation()}
-            className="flex-shrink-0 transition-colors" style={{ color: T.fgMuted }}>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        )}
+        {(() => {
+          const aff = getAffLink(integration.id)
+          if (aff) return (
+            <a href={aff.affiliate_url} target="_blank" rel="noopener noreferrer"
+              onClick={e => { e.stopPropagation(); trackAffClick(aff.id) }}
+              className="flex-shrink-0 text-xs font-semibold px-2 py-1 rounded-lg transition-colors"
+              style={{ backgroundColor: `${T.cyan}10`, color: T.cyan, textDecoration: 'none' }}>
+              Registrarse ↗
+            </a>
+          )
+          if (integration.url) return (
+            <a href={integration.url} target="_blank" rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              className="flex-shrink-0 transition-colors" style={{ color: T.fgMuted }}>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          )
+          return null
+        })()}
       </button>
 
       {expanded && (

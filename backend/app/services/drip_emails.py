@@ -116,3 +116,115 @@ async def send_weekly_digest():
                 await send_email(to=user.email, subject=subject, body=body)
             except Exception as e:
                 logger.error("Weekly digest failed for %s: %s", user.email, e)
+
+
+# ─── TRANSACTIONAL NOTIFICATIONS ─────────────────────────────
+
+async def send_welcome_email(email: str, name: str):
+    """Send immediately after registration."""
+    subject = "¡Bienvenido a St4rtup! Tu CRM está listo"
+    body = f"""Hola {name or 'there'},
+
+¡Bienvenido a St4rtup! Tu CRM está listo para usar.
+
+Tu prueba gratuita de 7 días del plan Growth ya está activa.
+
+3 cosas que puedes hacer ahora:
+
+1. Completa el onboarding → {APP_URL}/app/onboarding
+2. Crea tu primer lead → {APP_URL}/app/leads
+3. Explora el dashboard → {APP_URL}/app/dashboard
+
+¿Necesitas ayuda? Responde a este email o usa el chat en la app.
+
+— El equipo de St4rtup
+"""
+    try:
+        from app.services.email_service import send_email
+        await send_email(to=email, subject=subject, body=body)
+        logger.info("Welcome email sent to %s", email)
+    except Exception as e:
+        logger.error("Welcome email failed: %s", e)
+
+
+async def send_trial_expiring_email(email: str, name: str, days_left: int):
+    """Send when trial is about to expire."""
+    subject = f"Tu prueba de St4rtup termina en {days_left} día{'s' if days_left > 1 else ''}"
+    body = f"""Hola {name or 'there'},
+
+Tu prueba gratuita del plan Growth termina en {days_left} día{'s' if days_left > 1 else ''}.
+
+Para mantener acceso a Marketing Hub, IA, SEO y automatizaciones, elige un plan:
+
+{APP_URL}/pricing
+
+Si necesitas más tiempo, responde a este email.
+
+— El equipo de St4rtup
+"""
+    try:
+        from app.services.email_service import send_email
+        await send_email(to=email, subject=subject, body=body)
+        logger.info("Trial expiring email sent to %s (%d days left)", email, days_left)
+    except Exception as e:
+        logger.error("Trial expiring email failed: %s", e)
+
+
+async def send_payment_failed_email(email: str, name: str):
+    """Send when a payment fails."""
+    subject = "Problema con tu pago — St4rtup"
+    body = f"""Hola {name or 'there'},
+
+No hemos podido procesar tu último pago en St4rtup.
+
+Por favor, actualiza tu método de pago para mantener tu suscripción activa:
+
+{APP_URL}/app/billing
+
+Si crees que es un error, responde a este email.
+
+— El equipo de St4rtup
+"""
+    try:
+        from app.services.email_service import send_email
+        await send_email(to=email, subject=subject, body=body)
+        logger.info("Payment failed email sent to %s", email)
+    except Exception as e:
+        logger.error("Payment failed email failed: %s", e)
+
+
+async def send_plan_upgraded_email(email: str, name: str, plan: str):
+    """Send when user upgrades plan."""
+    subject = f"Plan {plan.title()} activado — St4rtup"
+    body = f"""Hola {name or 'there'},
+
+¡Tu plan {plan.title()} ya está activo! 🎉
+
+Ahora tienes acceso a todas las funcionalidades incluidas en tu plan.
+
+Explora lo nuevo → {APP_URL}/app/marketplace
+
+— El equipo de St4rtup
+"""
+    try:
+        from app.services.email_service import send_email
+        await send_email(to=email, subject=subject, body=body)
+        logger.info("Plan upgraded email sent to %s (%s)", email, plan)
+    except Exception as e:
+        logger.error("Plan upgraded email failed: %s", e)
+
+
+async def notify_admin_new_signup(user_email: str, user_name: str):
+    """Notify admin when a new user signs up."""
+    try:
+        from app.core.config import settings
+        from app.services.email_service import send_email
+        admin_email = (settings.ADMIN_EMAILS or "").split(",")[0].strip()
+        if admin_email:
+            await send_email(
+                to=admin_email,
+                subject=f"Nuevo registro en St4rtup: {user_email}",
+                body=f"Nuevo usuario registrado:\n\nNombre: {user_name or '(sin nombre)'}\nEmail: {user_email}\n\nVer en admin: {APP_URL}/app/admin?tab=orgs",
+            )
+    except Exception as e:
+        logger.error("Admin notification failed: %s", e)

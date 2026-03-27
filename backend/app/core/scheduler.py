@@ -367,6 +367,30 @@ async def run_in02_telegram_hub():
         logger.error(f"IN-02 error: {e}")
 
 
+async def run_trial_expiry_check():
+    """Check for trials expiring in 1-2 days and send emails — 10:00"""
+    try:
+        async with AsyncSessionLocal() as db:
+            from app.models.organization import Organization, OrgMember
+            from app.models.user import User
+            now = datetime.now(timezone.utc)
+            for days_left in [2, 1]:
+                target = now + timedelta(days=days_left)
+                orgs = await db.execute(select(Organization).where(
+                    Organization.trial_ends_at.isnot(None),
+                    func.date(Organization.trial_ends_at) == target.date(),
+                ))
+                for org in orgs.scalars().all():
+                    members = await db.execute(select(OrgMember, User).join(User, User.id == OrgMember.user_id).where(OrgMember.org_id == org.id))
+                    for member, user in members.all():
+                        if user.email:
+                            from app.services.drip_emails import send_trial_expiring_email
+                            await send_trial_expiring_email(user.email, user.full_name, days_left)
+            logger.info("Trial expiry check completed")
+    except Exception as e:
+        logger.error(f"Trial expiry check error: {e}")
+
+
 async def run_platform_metrics_snapshot():
     """Platform metrics daily snapshot — 02:00"""
     try:
@@ -448,6 +472,7 @@ def init_scheduler():
         (run_in02_telegram_hub,  CronTrigger(minute='*/5'),      'in02_telegram','IN-02: Telegram hub'),
         # Platform
         (run_platform_metrics_snapshot, CronTrigger(hour=2, minute=0), 'platform_metrics', 'Platform metrics daily snapshot'),
+        (run_trial_expiry_check, CronTrigger(hour=10, minute=0), 'trial_expiry', 'Trial expiry email check'),
     ]
 
     for func, trigger, job_id, name in JOBS:
