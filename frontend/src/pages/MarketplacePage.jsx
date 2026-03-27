@@ -85,7 +85,10 @@ export default function MarketplacePage() {
                 )}
               </div>
               <p className="text-xs" style={{ color: T.fgMuted }}>{f.desc}</p>
-              <p className="text-xs mt-2" style={{ color: T.fgMuted, opacity: 0.7 }}>{f.category}</p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-xs" style={{ color: T.fgMuted, opacity: 0.7 }}>{f.category}</p>
+                <Link to="/app/docs" style={{ fontSize: 10, color: T.cyan, textDecoration: 'none' }}>📖 Docs</Link>
+              </div>
             </div>
           )
         })}
