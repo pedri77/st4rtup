@@ -321,6 +321,51 @@ async def impersonate_org(
     }
 
 
+@router.post("/impersonate/{org_id}/login")
+async def impersonate_login(
+    org_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Generate a temporary impersonation URL for an org's admin user.
+
+    Uses the existing session to create an admin-scoped redirect token.
+    The frontend opens the app as that org's admin.
+    """
+    # Find the admin member of this org
+    result = await db.execute(
+        select(OrgMember, User)
+        .join(User, User.id == OrgMember.user_id)
+        .where(OrgMember.org_id == org_id, OrgMember.role == "admin")
+        .limit(1)
+    )
+    row = result.first()
+    if not row:
+        raise HTTPException(404, "No admin user found for this org")
+
+    member, user = row
+    from app.core.security import create_access_token
+    # Create short-lived token (15 min) with impersonation flag
+    token = create_access_token(
+        data={
+            "sub": str(user.id),
+            "email": user.email,
+            "impersonated_by": current_user["email"],
+            "org_id": org_id,
+        },
+        expires_delta=timedelta(minutes=15),
+    )
+    logger.info(f"Admin {current_user['email']} impersonating org={org_id} user={user.email}")
+
+    return {
+        "token": token,
+        "user_email": user.email,
+        "user_name": user.full_name,
+        "org_name": (await db.get(Organization, org_id)).name,
+        "expires_in": 900,
+    }
+
+
 @router.post("/org/{org_id}/update-plan")
 async def admin_update_plan(
     org_id: str,

@@ -286,7 +286,20 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
                 )}
-                <button onClick={() => setImpersonateId(null)} style={{ marginTop: 16, width: '100%', padding: '8px', borderRadius: 8, backgroundColor: T.muted, border: 'none', fontSize: 12, color: T.fgMuted, cursor: 'pointer' }}>Cerrar</button>
+                <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+                  <button onClick={async () => {
+                    try {
+                      const res = await api.post(`/admin/impersonate/${impersonateId}/login`)
+                      const { token } = res.data
+                      window.open(`${window.location.origin}/app?impersonate_token=${token}`, '_blank')
+                    } catch (err) {
+                      alert('Error: ' + (err.response?.data?.detail || err.message))
+                    }
+                  }} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'linear-gradient(135deg, #F5820B, #F59E0B)', border: 'none', fontSize: 12, fontWeight: 700, color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                    <LogIn size={14} /> Entrar como usuario
+                  </button>
+                  <button onClick={() => setImpersonateId(null)} style={{ flex: 1, padding: '10px', borderRadius: 8, backgroundColor: T.muted, border: 'none', fontSize: 12, color: T.fgMuted, cursor: 'pointer' }}>Cerrar</button>
+                </div>
               </div>
             </div>
           )}

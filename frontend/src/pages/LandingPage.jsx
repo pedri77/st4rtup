@@ -1,4 +1,5 @@
 import SEO from '@/components/SEO'
+import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 import ExitIntentPopup from '@/components/ExitIntentPopup'
 import WebChatWidget from '@/components/WebChatWidget'
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -65,6 +66,21 @@ const BENTO_GRADIENTS = [
   'linear-gradient(135deg, #10B98105, transparent)',
   'linear-gradient(135deg, #8B5CF605, transparent)',
 ]
+
+// A/B test variants for hero subtitle
+const AB_VARIANTS = {
+  es: [
+    'Pipeline, marketing, emails, llamadas IA, SEO y automatizaciones. Todo en un solo lugar. Listo en 5 minutos.',
+    'El CRM que tu equipo de ventas necesita. IA integrada, 22 automatizaciones y setup en 5 minutos.',
+    'Cierra más deals con IA como copiloto. Pipeline visual + 14 gráficos en tiempo real.',
+  ],
+  en: [
+    'Pipeline, marketing, emails, AI calls, SEO and automations. All in one place. Ready in 5 minutes.',
+    'The CRM your sales team needs. Built-in AI, 22 automations and 5-minute setup.',
+    'Close more deals with AI as your copilot. Visual pipeline + 14 real-time charts.',
+  ],
+}
+const AB_IDX = Math.floor(Math.random() * AB_VARIANTS.es.length)
 
 const T = {
   es: {
@@ -167,6 +183,11 @@ export default function LandingPage() {
   const [testimonialIdx, setTestimonialIdx] = useState(0)
   const t = T[lang]
 
+  // Track A/B variant
+  useEffect(() => {
+    window.umami?.track('hero_ab_view', { variant: AB_IDX })
+  }, [])
+
   // Auto-scroll testimonials on mobile
   useEffect(() => {
     const timer = setInterval(() => {
@@ -176,7 +197,7 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+    <div className="public-page" style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
       <SEO path="/" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
@@ -191,6 +212,7 @@ export default function LandingPage() {
             <Link to="/blog" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>Blog</Link>
             <Link to="/help" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{lang === 'es' ? 'Ayuda' : 'Help'}</Link>
             <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} style={{ padding: '4px 10px', border: '1px solid #E2E8F0', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer', backgroundColor: 'white', color: '#64748B' }}>{lang === 'es' ? 'EN' : 'ES'}</button>
+            <ThemeTogglePublic />
             <Link to="/login" style={{ fontSize: 14, color: '#1E6FD9', textDecoration: 'none', fontWeight: 600 }}>{t.nav.login}</Link>
             <Link to="/register" style={{ padding: '10px 22px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>{t.nav.cta}</Link>
           </div>
@@ -223,7 +245,7 @@ export default function LandingPage() {
                 <span style={{ color: '#F5820B' }}>startups.</span>
               </h1>
             </FadeIn>
-            <FadeIn delay={0.1}><p style={{ fontSize: 18, color: '#64748B', lineHeight: 1.7, marginBottom: 32, maxWidth: 500 }}>{t.hero.sub}</p></FadeIn>
+            <FadeIn delay={0.1}><p style={{ fontSize: 18, color: '#64748B', lineHeight: 1.7, marginBottom: 32, maxWidth: 500 }}>{AB_VARIANTS[lang]?.[AB_IDX] || t.hero.sub}</p></FadeIn>
             <FadeIn delay={0.2}>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <Link to="/register" onClick={() => window.umami?.track('hero_cta_click', { variant: 'register' })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(30,111,217,0.4)' }}>{t.hero.cta1} <ArrowRight size={18} /></Link>

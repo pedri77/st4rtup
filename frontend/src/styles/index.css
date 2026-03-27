@@ -120,3 +120,30 @@
     transform: scale(1);
   }
 }
+
+/* Public pages dark mode (toggle via data-theme attribute) */
+html[data-theme="dark"] .public-page {
+  background: #0F172A !important;
+  color: #E2E8F0 !important;
+}
+html[data-theme="dark"] .public-page nav {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  border-color: #1E293B !important;
+}
+html[data-theme="dark"] .public-page section {
+  background: #0F172A !important;
+}
+html[data-theme="dark"] .public-page .card-light,
+html[data-theme="dark"] .public-page [style*="backgroundColor: white"],
+html[data-theme="dark"] .public-page [style*="backgroundColor: '#FFFFFF'"] {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+}
+html[data-theme="dark"] .public-page h1,
+html[data-theme="dark"] .public-page h2,
+html[data-theme="dark"] .public-page h3 {
+  color: #F1F5F9 !important;
+}
+html[data-theme="dark"] .public-page footer {
+  background-color: #020617 !important;
+}
