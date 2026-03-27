@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { LogIn, ShieldCheck } from 'lucide-react'
+import { LogIn, Rocket } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -33,7 +33,7 @@ export default function LoginPage() {
         {/* Logo and Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-orange-500 rounded-2xl mb-4 shadow-lg">
-            <ShieldCheck className="w-10 h-10 text-gray-800" />
+            <Rocket className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">St4rtup CRM</h1>
           <p className="text-gray-500">CRM Comercial Interno</p>
