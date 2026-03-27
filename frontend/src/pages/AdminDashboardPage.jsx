@@ -19,6 +19,7 @@ const ADMIN_TABS = [
   { id: 'engagement', label: 'Engagement', icon: Activity },
   { id: 'alerts', label: 'Alertas', icon: AlertTriangle },
   { id: 'affiliates', label: 'Afiliados', icon: DollarSign },
+  { id: 'costs', label: 'Costes', icon: TrendingUp },
 ]
 
 export default function AdminDashboardPage() {
@@ -41,6 +42,9 @@ export default function AdminDashboardPage() {
   const { data: affLinks, refetch: refetchAff } = useQuery({ queryKey: ['admin', 'affiliates-all'], queryFn: () => api.get('/affiliates/admin/all').then(r => r.data), staleTime: 60000, enabled: activeTab === 'affiliates' })
   const [affForm, setAffForm] = useState({ provider: '', display_name: '', affiliate_url: '', category: 'integration', commission_percent: 0, commission_type: 'one_time', notes: '' })
   const [showAffForm, setShowAffForm] = useState(false)
+  const { data: costs, refetch: refetchCosts } = useQuery({ queryKey: ['admin', 'costs'], queryFn: () => api.get('/admin/costs').then(r => r.data), staleTime: 60000, enabled: activeTab === 'costs' })
+  const [costForm, setCostForm] = useState({ name: '', provider: '', category: 'infrastructure', amount_eur: 0, billing_cycle: 'monthly', is_variable: false, notes: '' })
+  const [showCostForm, setShowCostForm] = useState(false)
   const { data: impersonated } = useQuery({ queryKey: ['admin', 'impersonate', impersonateId], queryFn: () => api.post(`/admin/impersonate/${impersonateId}`).then(r => r.data), enabled: !!impersonateId })
 
   const planData = kpis?.plans ? Object.entries(kpis.plans).map(([name, value]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), value, fill: PLAN_COLORS[name] })).filter(d => d.value > 0) : []
@@ -339,6 +343,100 @@ export default function AdminDashboardPage() {
               <p style={{ fontSize: 12, color: T.fgMuted, marginTop: 4 }}>Todo funciona correctamente</p>
             </div>
           )}
+        </>)}
+
+        {/* COSTS TAB */}
+        {activeTab === 'costs' && (<>
+          <h1 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
+            <TrendingUp size={20} color={T.destructive} /> Costes de la Plataforma
+          </h1>
+
+          {/* KPIs */}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+              <p style={{ fontSize: 10, color: T.fgMuted, textTransform: 'uppercase', fontFamily: fontMono }}>Coste mensual</p>
+              <p style={{ fontSize: 24, fontWeight: 700, color: T.destructive, fontFamily: fontMono }}>€{costs?.estimated_monthly_eur || 0}</p>
+            </div>
+            <div className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+              <p style={{ fontSize: 10, color: T.fgMuted, textTransform: 'uppercase', fontFamily: fontMono }}>Coste anual estimado</p>
+              <p style={{ fontSize: 24, fontWeight: 700, color: T.warning, fontFamily: fontMono }}>€{((costs?.estimated_monthly_eur || 0) * 12).toFixed(0)}</p>
+            </div>
+            <div className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+              <p style={{ fontSize: 10, color: T.fgMuted, textTransform: 'uppercase', fontFamily: fontMono }}>MRR - Costes</p>
+              <p style={{ fontSize: 24, fontWeight: 700, color: (kpis?.mrr || 0) - (costs?.estimated_monthly_eur || 0) >= 0 ? T.success : T.destructive, fontFamily: fontMono }}>€{((kpis?.mrr || 0) - (costs?.estimated_monthly_eur || 0)).toFixed(2)}</p>
+            </div>
+          </div>
+
+          {/* Costs table */}
+          <div className="rounded-xl p-5" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 style={{ fontSize: 13, fontWeight: 600, color: T.fg, fontFamily: fontDisplay }}>Gastos ({costs?.total || 0})</h3>
+              <button onClick={() => setShowCostForm(!showCostForm)} style={{ padding: '6px 14px', borderRadius: 8, backgroundColor: T.cyan, color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                + Nuevo gasto
+              </button>
+            </div>
+
+            {showCostForm && (
+              <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: T.muted, border: `1px solid ${T.border}` }}>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
+                  <input placeholder="Nombre (ej: Hetzner VPS)" value={costForm.name} onChange={e => setCostForm(f => ({ ...f, name: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, outline: 'none' }} />
+                  <input placeholder="Proveedor (ej: Hetzner)" value={costForm.provider} onChange={e => setCostForm(f => ({ ...f, provider: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, outline: 'none' }} />
+                  <input type="number" step="0.01" placeholder="Importe €" value={costForm.amount_eur} onChange={e => setCostForm(f => ({ ...f, amount_eur: parseFloat(e.target.value) || 0 }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, outline: 'none' }} />
+                  <select value={costForm.category} onChange={e => setCostForm(f => ({ ...f, category: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12 }}>
+                    <option value="infrastructure">Infraestructura</option>
+                    <option value="saas">SaaS / API</option>
+                    <option value="domain">Dominio</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="other">Otro</option>
+                  </select>
+                  <select value={costForm.billing_cycle} onChange={e => setCostForm(f => ({ ...f, billing_cycle: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12 }}>
+                    <option value="monthly">Mensual</option>
+                    <option value="annual">Anual</option>
+                    <option value="one_time">Pago único</option>
+                    <option value="variable">Variable</option>
+                  </select>
+                  <input placeholder="Notas" value={costForm.notes} onChange={e => setCostForm(f => ({ ...f, notes: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, outline: 'none' }} />
+                </div>
+                <button onClick={async () => {
+                  if (!costForm.name || !costForm.provider) return
+                  await api.post('/admin/costs/create', null, { params: costForm })
+                  setShowCostForm(false)
+                  setCostForm({ name: '', provider: '', category: 'infrastructure', amount_eur: 0, billing_cycle: 'monthly', is_variable: false, notes: '' })
+                  refetchCosts()
+                }} style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.success, color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                  Guardar
+                </button>
+                <button onClick={() => setShowCostForm(false)} style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.muted, color: T.fgMuted, border: `1px solid ${T.border}`, fontSize: 12, cursor: 'pointer', marginLeft: 8 }}>
+                  Cancelar
+                </button>
+              </div>
+            )}
+
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <thead><tr style={{ borderBottom: `2px solid ${T.border}` }}>
+                {['Nombre', 'Proveedor', 'Categoría', 'Importe', 'Ciclo', 'Notas', ''].map(h => (
+                  <th key={h} style={{ padding: '8px 10px', textAlign: 'left', color: T.fgMuted, fontWeight: 500, fontFamily: fontMono, fontSize: 10, textTransform: 'uppercase' }}>{h}</th>
+                ))}
+              </tr></thead>
+              <tbody>
+                {(costs?.items || []).map(c => (
+                  <tr key={c.id} style={{ borderBottom: `1px solid ${T.muted}` }}>
+                    <td style={{ padding: '8px 10px', fontWeight: 500, color: T.fg }}>{c.name}</td>
+                    <td style={{ padding: '8px 10px', color: T.fgMuted }}>{c.provider}</td>
+                    <td style={{ padding: '8px 10px' }}>
+                      <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, backgroundColor: T.muted, color: T.fgMuted }}>{c.category}</span>
+                    </td>
+                    <td style={{ padding: '8px 10px', fontFamily: fontMono, fontWeight: 700, color: T.destructive }}>€{(c.amount_eur || 0).toFixed(2)}</td>
+                    <td style={{ padding: '8px 10px', fontSize: 11, color: T.fgMuted }}>{c.billing_cycle}</td>
+                    <td style={{ padding: '8px 10px', fontSize: 11, color: T.fgMuted }}>{c.notes || '-'}</td>
+                    <td style={{ padding: '8px 10px' }}>
+                      <button onClick={async () => { await api.delete(`/admin/costs/${c.id}`); refetchCosts() }} style={{ fontSize: 10, color: T.destructive, background: 'none', border: 'none', cursor: 'pointer' }}>Eliminar</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>)}
 
         {/* AFFILIATES TAB */}

@@ -339,3 +339,69 @@ async def admin_update_plan(
     org.max_leads = limits[1]
     await db.commit()
     return {"updated": True, "plan": plan}
+
+
+# ─── PLATFORM COSTS ──────────────────────────────────────────
+
+from sqlalchemy import text as sql_text
+
+@router.get("/costs")
+async def admin_costs(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """List all platform costs."""
+    result = await db.execute(sql_text("SELECT * FROM platform_costs ORDER BY category, name"))
+    cols = result.keys()
+    items = [dict(zip(cols, row)) for row in result.fetchall()]
+    # Fix UUID/datetime serialization
+    for item in items:
+        for k, v in item.items():
+            if hasattr(v, 'isoformat'):
+                item[k] = v.isoformat()
+            elif hasattr(v, 'hex'):
+                item[k] = str(v)
+
+    total_monthly = sum(i.get('amount_eur', 0) for i in items if i.get('billing_cycle') == 'monthly' and i.get('is_active'))
+    total_annual = sum(i.get('amount_eur', 0) for i in items if i.get('billing_cycle') == 'annual' and i.get('is_active'))
+
+    return {
+        "items": items,
+        "total": len(items),
+        "total_monthly_eur": round(total_monthly, 2),
+        "total_annual_eur": round(total_annual, 2),
+        "estimated_monthly_eur": round(total_monthly + total_annual / 12, 2),
+    }
+
+
+@router.post("/costs/create")
+async def admin_create_cost(
+    name: str = Query(...),
+    provider: str = Query(...),
+    category: str = Query("infrastructure"),
+    amount_eur: float = Query(...),
+    billing_cycle: str = Query("monthly"),
+    is_variable: bool = Query(False),
+    notes: str = Query(""),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Create platform cost entry."""
+    await db.execute(sql_text(
+        "INSERT INTO platform_costs (name, provider, category, amount_eur, billing_cycle, is_variable, notes) "
+        "VALUES (:name, :provider, :category, :amount_eur, :billing_cycle, :is_variable, :notes)"
+    ), {"name": name, "provider": provider, "category": category, "amount_eur": amount_eur, "billing_cycle": billing_cycle, "is_variable": is_variable, "notes": notes})
+    await db.commit()
+    return {"created": True}
+
+
+@router.delete("/costs/{cost_id}")
+async def admin_delete_cost(
+    cost_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Delete platform cost."""
+    await db.execute(sql_text("DELETE FROM platform_costs WHERE id = :id"), {"id": cost_id})
+    await db.commit()
+    return {"deleted": True}
