@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Users, CalendarCheck, Mail, GitBranch,
   CheckSquare, BarChart3, MessageSquare, Settings, Zap, Search, Bell, FileText, Shield, Menu, X,
   Plug, Sparkles, Contact, Calendar, Megaphone, Phone, Bot, DollarSign, Target, Heart, Columns3, BrainCircuit,
-  CalendarDays, CreditCard, BookOpen, ShoppingBag
+  CalendarDays, CreditCard, BookOpen, ShoppingBag, ChevronLeft, ChevronRight, LogOut
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import GlobalSearch from '@/components/GlobalSearch'
@@ -101,10 +101,13 @@ function getNavigationGroups(t) {
 export default function Layout() {
   const { searchOpen, setSearchOpen, notificationsOpen, setNotificationsOpen } = useUIStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem('st4rtup_sidebar_collapsed') === 'true')
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
   useDynamicFavicon()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const { hasRole } = useHasRole()
   const location = useLocation()
+  const toggleSidebar = () => { const n = !collapsed; setCollapsed(n); localStorage.setItem('st4rtup_sidebar_collapsed', String(n)) }
   const { t } = useTranslation()
 
   useNotificationStream()
@@ -147,8 +150,8 @@ export default function Layout() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 flex flex-col transform transition-transform duration-200 ease-in-out lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ backgroundColor: T.card, borderRight: `1px solid ${T.border}` }}
+        className={`fixed inset-y-0 left-0 z-40 flex flex-col transform transition-all duration-200 ease-in-out lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        style={{ width: collapsed ? 64 : 256, backgroundColor: T.card, borderRight: `1px solid ${T.border}` }}
       >
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-6" style={{ borderBottom: `1px solid ${T.border}` }}>
@@ -186,8 +189,8 @@ export default function Layout() {
                       borderLeft: isActive ? `3px solid ${T.cyan}` : '3px solid transparent',
                     })}
                   >
-                    <item.icon className="w-4 h-4" />
-                    {item.name}
+                    <item.icon className="w-4 h-4 flex-shrink-0" />
+                    {!collapsed && item.name}
                   </NavLink>
                 ))}
               </div>
@@ -212,7 +215,7 @@ export default function Layout() {
         </nav>
 
         {/* API Cost Widget */}
-        <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.border}` }}>
+        {!collapsed && <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.border}` }}>
           <div style={{ fontSize: '.65rem', color: T.fgMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>API · uso mensual</div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
             <span style={{ fontFamily: fontMono, fontWeight: 700, fontSize: '.9rem', color: T.cyan }}>$0.00</span>
@@ -221,7 +224,11 @@ export default function Layout() {
           <div style={{ height: 4, background: T.muted, borderRadius: 2, overflow: 'hidden' }}>
             <div style={{ width: '0%', height: '100%', borderRadius: 2, background: T.cyan }} />
           </div>
-        </div>
+        </div>}
+        {/* Collapse toggle */}
+        <button onClick={toggleSidebar} style={{ width: '100%', padding: 12, border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'center', color: T.fgMuted, backgroundColor: 'transparent', borderTop: `1px solid ${T.border}` }} title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}>
+          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+        </button>
       </aside>
 
       {/* Main content */}
@@ -275,6 +282,40 @@ export default function Layout() {
 
             {/* Theme toggle */}
             <ThemeToggle />
+
+            {/* User avatar + dropdown */}
+            <div style={{ position: 'relative' }}>
+              <button onClick={() => setUserMenuOpen(!userMenuOpen)} style={{
+                width: 32, height: 32, borderRadius: '50%', backgroundColor: T.cyan,
+                color: 'white', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {user?.email?.charAt(0)?.toUpperCase() || 'U'}
+              </button>
+              {userMenuOpen && (
+                <div style={{
+                  position: 'absolute', top: 40, right: 0, width: 200,
+                  backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 12,
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.1)', zIndex: 50, padding: 8,
+                }}>
+                  <p style={{ padding: '8px 12px', fontSize: 11, color: T.fgMuted, borderBottom: `1px solid ${T.border}`, margin: 0 }}>{user?.email}</p>
+                  {[
+                    { to: '/app/profile', label: 'Perfil' },
+                    { to: '/app/billing', label: 'Facturación' },
+                    { to: '/app/docs', label: 'Documentación' },
+                  ].map(item => (
+                    <NavLink key={item.to} to={item.to} onClick={() => setUserMenuOpen(false)}
+                      style={{ display: 'block', padding: '8px 12px', fontSize: 13, color: T.fg, textDecoration: 'none', borderRadius: 6 }}>
+                      {item.label}
+                    </NavLink>
+                  ))}
+                  <button onClick={() => { setUserMenuOpen(false); logout() }}
+                    style={{ display: 'flex', alignItems: 'center', gap: 6, width: '100%', padding: '8px 12px', fontSize: 13, color: T.destructive, background: 'none', border: 'none', cursor: 'pointer', borderRadius: 6, borderTop: `1px solid ${T.border}`, marginTop: 4 }}>
+                    <LogOut size={14} /> Cerrar sesión
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Settings */}
             {hasRole('admin') && (
