@@ -754,4 +754,14 @@ export const orgApi = {
   plan: () => api.get('/org/plan'),
 }
 
+export const affiliatesApi = {
+  list: (params) => api.get('/affiliates', { params }),
+  click: (id) => api.post(`/affiliates/${id}/click`),
+  adminAll: () => api.get('/affiliates/admin/all'),
+  adminCreate: (params) => api.post('/affiliates/admin/create', null, { params }),
+  adminUpdate: (id, params) => api.put(`/affiliates/admin/${id}`, null, { params }),
+  adminDelete: (id) => api.delete(`/affiliates/admin/${id}`),
+  adminDashboard: (params) => api.get('/affiliates/admin/dashboard', { params }),
+}
+
 export default api

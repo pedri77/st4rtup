@@ -18,6 +18,7 @@ const ADMIN_TABS = [
   { id: 'emails', label: 'Emails', icon: Mail },
   { id: 'engagement', label: 'Engagement', icon: Activity },
   { id: 'alerts', label: 'Alertas', icon: AlertTriangle },
+  { id: 'affiliates', label: 'Afiliados', icon: DollarSign },
 ]
 
 export default function AdminDashboardPage() {
@@ -36,6 +37,10 @@ export default function AdminDashboardPage() {
   const { data: emails } = useQuery({ queryKey: ['admin', 'emails'], queryFn: () => api.get('/admin/emails').then(r => r.data), staleTime: 60000, enabled: activeTab === 'emails' })
   const { data: engagement } = useQuery({ queryKey: ['admin', 'engagement'], queryFn: () => api.get('/admin/engagement').then(r => r.data), staleTime: 60000, enabled: activeTab === 'engagement' })
   const { data: alerts } = useQuery({ queryKey: ['admin', 'alerts'], queryFn: () => api.get('/admin/alerts').then(r => r.data), staleTime: 30000, enabled: activeTab === 'alerts' })
+  const { data: affDash } = useQuery({ queryKey: ['admin', 'affiliates-dash'], queryFn: () => api.get('/affiliates/admin/dashboard').then(r => r.data), staleTime: 60000, enabled: activeTab === 'affiliates' })
+  const { data: affLinks, refetch: refetchAff } = useQuery({ queryKey: ['admin', 'affiliates-all'], queryFn: () => api.get('/affiliates/admin/all').then(r => r.data), staleTime: 60000, enabled: activeTab === 'affiliates' })
+  const [affForm, setAffForm] = useState({ provider: '', display_name: '', affiliate_url: '', category: 'integration', commission_percent: 0, commission_type: 'one_time', notes: '' })
+  const [showAffForm, setShowAffForm] = useState(false)
   const { data: impersonated } = useQuery({ queryKey: ['admin', 'impersonate', impersonateId], queryFn: () => api.post(`/admin/impersonate/${impersonateId}`).then(r => r.data), enabled: !!impersonateId })
 
   const planData = kpis?.plans ? Object.entries(kpis.plans).map(([name, value]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), value, fill: PLAN_COLORS[name] })).filter(d => d.value > 0) : []
@@ -334,6 +339,117 @@ export default function AdminDashboardPage() {
               <p style={{ fontSize: 12, color: T.fgMuted, marginTop: 4 }}>Todo funciona correctamente</p>
             </div>
           )}
+        </>)}
+
+        {/* AFFILIATES TAB */}
+        {activeTab === 'affiliates' && (<>
+          <h1 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
+            <DollarSign size={20} color={T.success} /> Programa de Afiliados
+          </h1>
+
+          {/* KPIs */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            {[
+              { label: 'Clicks totales', value: affDash?.total_clicks || 0, color: T.cyan },
+              { label: 'Conversiones', value: affDash?.total_conversions || 0, color: T.success },
+              { label: 'Revenue', value: `€${(affDash?.total_revenue || 0).toFixed(2)}`, color: T.warning },
+              { label: 'Tasa conversión', value: `${affDash?.conversion_rate || 0}%`, color: T.purple },
+            ].map(k => (
+              <div key={k.label} className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+                <p style={{ fontSize: 10, color: T.fgMuted, textTransform: 'uppercase', fontFamily: fontMono }}>{k.label}</p>
+                <p style={{ fontSize: 22, fontWeight: 700, color: k.color, fontFamily: fontMono }}>{k.value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Clicks chart */}
+          {(affDash?.clicks_by_day || []).length > 0 && (
+            <div className="rounded-xl p-5 mb-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+              <h3 style={{ fontSize: 13, fontWeight: 600, color: T.fg, marginBottom: 12, fontFamily: fontDisplay }}>Clicks por día</h3>
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={affDash.clicks_by_day}>
+                  <CartesianGrid strokeDasharray="3 3" stroke={T.border} />
+                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: T.fgMuted }} />
+                  <YAxis tick={{ fontSize: 10, fill: T.fgMuted }} />
+                  <Tooltip contentStyle={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 11 }} />
+                  <Bar dataKey="clicks" fill={T.cyan} radius={[3, 3, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+
+          {/* Provider stats table */}
+          <div className="rounded-xl p-5 mb-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 style={{ fontSize: 13, fontWeight: 600, color: T.fg, fontFamily: fontDisplay }}>Enlaces por proveedor ({affLinks?.total || 0})</h3>
+              <button onClick={() => setShowAffForm(!showAffForm)} style={{ padding: '6px 14px', borderRadius: 8, backgroundColor: T.cyan, color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                + Nuevo enlace
+              </button>
+            </div>
+
+            {/* Create form */}
+            {showAffForm && (
+              <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: T.muted, border: `1px solid ${T.border}` }}>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
+                  <input placeholder="Proveedor (ej: stripe)" value={affForm.provider} onChange={e => setAffForm(f => ({ ...f, provider: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, outline: 'none' }} />
+                  <input placeholder="Nombre visible" value={affForm.display_name} onChange={e => setAffForm(f => ({ ...f, display_name: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, outline: 'none' }} />
+                  <input placeholder="URL afiliado" value={affForm.affiliate_url} onChange={e => setAffForm(f => ({ ...f, affiliate_url: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, outline: 'none' }} />
+                  <input type="number" placeholder="Comisión %" value={affForm.commission_percent} onChange={e => setAffForm(f => ({ ...f, commission_percent: parseFloat(e.target.value) || 0 }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, outline: 'none' }} />
+                  <select value={affForm.commission_type} onChange={e => setAffForm(f => ({ ...f, commission_type: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12 }}>
+                    <option value="one_time">One-time</option>
+                    <option value="recurring">Recurrente</option>
+                  </select>
+                  <select value={affForm.category} onChange={e => setAffForm(f => ({ ...f, category: e.target.value }))} style={{ padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12 }}>
+                    <option value="integration">Integración</option>
+                    <option value="tool">Herramienta</option>
+                    <option value="service">Servicio</option>
+                  </select>
+                </div>
+                <input placeholder="Notas" value={affForm.notes} onChange={e => setAffForm(f => ({ ...f, notes: e.target.value }))} style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, outline: 'none', marginBottom: 8 }} />
+                <button onClick={async () => {
+                  if (!affForm.provider || !affForm.affiliate_url) return
+                  await api.post('/affiliates/admin/create', null, { params: affForm })
+                  setShowAffForm(false)
+                  setAffForm({ provider: '', display_name: '', affiliate_url: '', category: 'integration', commission_percent: 0, commission_type: 'one_time', notes: '' })
+                  refetchAff()
+                }} style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.success, color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                  Guardar
+                </button>
+              </div>
+            )}
+
+            {/* Links table */}
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <thead><tr style={{ borderBottom: `2px solid ${T.border}` }}>
+                {['Proveedor', 'Comisión', 'Clicks', 'Conv.', 'Revenue', 'Estado', ''].map(h => (
+                  <th key={h} style={{ padding: '8px 10px', textAlign: 'left', color: T.fgMuted, fontWeight: 500, fontFamily: fontMono, fontSize: 10, textTransform: 'uppercase' }}>{h}</th>
+                ))}
+              </tr></thead>
+              <tbody>
+                {(affLinks?.items || []).map(l => (
+                  <tr key={l.id} style={{ borderBottom: `1px solid ${T.muted}` }}>
+                    <td style={{ padding: '8px 10px' }}>
+                      <p style={{ fontWeight: 600, color: T.fg }}>{l.display_name}</p>
+                      <p style={{ fontSize: 10, color: T.fgMuted }}>{l.provider}</p>
+                    </td>
+                    <td style={{ padding: '8px 10px', fontFamily: fontMono, color: T.fg }}>{l.commission_percent}% <span style={{ fontSize: 9, color: T.fgMuted }}>{l.commission_type}</span></td>
+                    <td style={{ padding: '8px 10px', fontFamily: fontMono, color: T.cyan, fontWeight: 600 }}>{l.clicks}</td>
+                    <td style={{ padding: '8px 10px', fontFamily: fontMono, color: T.success }}>{l.conversions}</td>
+                    <td style={{ padding: '8px 10px', fontFamily: fontMono, color: T.warning, fontWeight: 600 }}>€{(l.revenue_eur || 0).toFixed(2)}</td>
+                    <td style={{ padding: '8px 10px' }}>
+                      <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, backgroundColor: l.is_active ? '#10B98115' : '#EF444415', color: l.is_active ? T.success : T.destructive }}>{l.is_active ? 'Activo' : 'Inactivo'}</span>
+                    </td>
+                    <td style={{ padding: '8px 10px' }}>
+                      <button onClick={async () => {
+                        await api.delete(`/affiliates/admin/${l.id}`)
+                        refetchAff()
+                      }} style={{ fontSize: 10, color: T.destructive, background: 'none', border: 'none', cursor: 'pointer' }}>Eliminar</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>)}
 
       </div>

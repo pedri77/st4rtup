@@ -16,6 +16,7 @@ from app.api.v1.endpoints import (
     payments,
     organizations,
     admin,
+    affiliates,
 )
 api_router = APIRouter()
 
@@ -70,6 +71,9 @@ api_router.include_router(organizations.router, prefix="/org", tags=["Organizati
 
 # Admin Dashboard
 api_router.include_router(admin.router, prefix="/admin", tags=["Admin Dashboard"])
+
+# Affiliates
+api_router.include_router(affiliates.router, prefix="/affiliates", tags=["Affiliates"])
 
 # GTM
 api_router.include_router(brand.router, prefix="/brand", tags=["Brand & Positioning"])
