@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { dashboardApi } from '@/services/api'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import {
   GitBranch, CalendarCheck, Calendar,
-  FileText, Plus, Send, Receipt, Activity
+  FileText, Plus, Send, Receipt, Activity, GripVertical
 } from 'lucide-react'
 import {
   BarChart, Bar, AreaChart, Area,
@@ -201,8 +202,84 @@ function WaterfallAndRadarSection() {
   )
 }
 
+function DraggableSection({ id, draggedWidget, setDraggedWidget, dragOverWidget, setDragOverWidget, onReorder, children }) {
+  const handleDragStart = (e) => {
+    setDraggedWidget(id)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', id)
+    requestAnimationFrame(() => {
+      e.currentTarget.style.opacity = '0.4'
+    })
+  }
+
+  const handleDragEnd = (e) => {
+    e.currentTarget.style.opacity = '1'
+    setDraggedWidget(null)
+    setDragOverWidget(null)
+  }
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    if (draggedWidget && draggedWidget !== id) {
+      setDragOverWidget(id)
+    }
+  }
+
+  const handleDragLeave = () => {
+    setDragOverWidget(prev => prev === id ? null : prev)
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    const fromId = e.dataTransfer.getData('text/plain')
+    if (fromId && fromId !== id) {
+      onReorder(fromId, id)
+    }
+    setDraggedWidget(null)
+    setDragOverWidget(null)
+  }
+
+  const isOver = dragOverWidget === id && draggedWidget !== id
+
+  return (
+    <div
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className="group/drag relative"
+      style={{
+        transition: 'border-color 0.2s, box-shadow 0.2s',
+        borderRadius: 8,
+        border: isOver ? `2px dashed ${T.cyan}` : '2px solid transparent',
+        boxShadow: isOver ? `0 0 0 3px ${T.cyan}15` : 'none',
+      }}
+    >
+      <div
+        className="absolute top-2 left-2 z-10 opacity-0 group-hover/drag:opacity-100 transition-opacity cursor-grab active:cursor-grabbing"
+        style={{
+          backgroundColor: T.card,
+          border: `1px solid ${T.border}`,
+          borderRadius: 6,
+          padding: '4px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+        }}
+        title="Arrastrar para reordenar"
+      >
+        <GripVertical className="w-4 h-4" style={{ color: T.fgMuted }} />
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function DashboardPage() {
-  const { widgets, isVisible, getSize, toggle, setSize, reset, moveUp, moveDown } = useDashboardWidgets()
+  const { widgets, isVisible, getSize, toggle, setSize, reset, moveUp, moveDown, reorder } = useDashboardWidgets()
+  const [draggedWidget, setDraggedWidget] = useState(null)
+  const [dragOverWidget, setDragOverWidget] = useState(null)
 
   const MOCK_STATS = {
     total_leads: 0, leads_by_status: {}, total_opportunities: 0,
@@ -363,26 +440,29 @@ export default function DashboardPage() {
       </div>
 
       {/* Bento KPI Grid */}
-      {isVisible('kpis') && <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-        <div className="col-span-2">
-          <Readout label="Revenue Mes" value={`€${((stats?.revenue_won_this_month || 0) / 1000).toFixed(0)}K`} color={T.warning} subtext="cerrados este mes" />
+      {isVisible('kpis') && <DraggableSection id="kpis" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="col-span-2">
+            <Readout label="Revenue Mes" value={`€${((stats?.revenue_won_this_month || 0) / 1000).toFixed(0)}K`} color={T.warning} subtext="cerrados este mes" />
+          </div>
+          <Readout label="Revenue Trim." value={`€${((stats?.revenue_won_this_quarter || 0) / 1000).toFixed(0)}K`} subtext="Q actual" />
+          <Readout label="Ofertas" value={stats?.offers_this_month || 0} subtext={`${stats?.offers_accepted_this_month || 0} aceptadas`} />
+          <Readout label="Conversion" value={`${stats?.conversion_rate || 0}%`} trend={stats?.conversion_trend} color={T.success} />
+          <Readout label="Leads" value={stats?.total_leads || 0} trend={stats?.leads_trend} subtext="total base" />
+          <div className="col-span-2">
+            <Readout label="Pipeline Activo" value={`€${((stats?.pipeline_value || 0) / 1000).toFixed(0)}K`} trend={stats?.pipeline_trend} color={T.cyan} />
+          </div>
+          <div className="col-span-2">
+            <Readout label="Pipeline Ponderado" value={`€${((stats?.weighted_pipeline || 0) / 1000).toFixed(0)}K`} subtext="prob. ponderada" />
+          </div>
+          <Readout label="Visitas Prox. 7d" value={stats?.upcoming_visits?.length || 0} />
+          <Readout label="Deals por Cerrar" value={stats?.deals_closing_soon?.length || 0} color={T.warning} subtext="proximos 14 dias" />
         </div>
-        <Readout label="Revenue Trim." value={`€${((stats?.revenue_won_this_quarter || 0) / 1000).toFixed(0)}K`} subtext="Q actual" />
-        <Readout label="Ofertas" value={stats?.offers_this_month || 0} subtext={`${stats?.offers_accepted_this_month || 0} aceptadas`} />
-        <Readout label="Conversion" value={`${stats?.conversion_rate || 0}%`} trend={stats?.conversion_trend} color={T.success} />
-        <Readout label="Leads" value={stats?.total_leads || 0} trend={stats?.leads_trend} subtext="total base" />
-        <div className="col-span-2">
-          <Readout label="Pipeline Activo" value={`€${((stats?.pipeline_value || 0) / 1000).toFixed(0)}K`} trend={stats?.pipeline_trend} color={T.cyan} />
-        </div>
-        <div className="col-span-2">
-          <Readout label="Pipeline Ponderado" value={`€${((stats?.weighted_pipeline || 0) / 1000).toFixed(0)}K`} subtext="prob. ponderada" />
-        </div>
-        <Readout label="Visitas Prox. 7d" value={stats?.upcoming_visits?.length || 0} />
-        <Readout label="Deals por Cerrar" value={stats?.deals_closing_soon?.length || 0} color={T.warning} subtext="proximos 14 dias" />
-      </div>}
+      </DraggableSection>}
 
       {/* Charts */}
-      {isVisible('charts') && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {isVisible('charts') && <DraggableSection id="charts" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Panel title="Pipeline por etapa">
           {pipelineChartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={280}>
@@ -442,16 +522,22 @@ export default function DashboardPage() {
             <span className="flex items-center gap-1.5 text-xs" style={{ color: T.fgMuted }}><span className="w-3 h-0.5 inline-block" style={{ backgroundColor: T.purple }} /> Acciones</span>
           </div>
         </Panel>
-      </div>}
+      </div>
+      </DraggableSection>}
 
       {/* Revenue Waterfall & Team Activity Radar */}
-      {isVisible('charts') && <WaterfallAndRadarSection />}
+      {isVisible('charts') && <DraggableSection id="charts" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+        <WaterfallAndRadarSection />
+      </DraggableSection>}
 
       {/* Activity Heatmap (GitHub-style) */}
-      {isVisible('activity') && <ActivityHeatmap months={6} />}
+      {isVisible('activity') && <DraggableSection id="activity" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+        <ActivityHeatmap months={6} />
+      </DraggableSection>}
 
       {/* Conversion Funnel + Deals */}
-      {isVisible('pipeline') && <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      {isVisible('pipeline') && <DraggableSection id="pipeline" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Panel title="Embudo de conversion" className="lg:col-span-2">
           {stats?.conversion_funnel && stats.conversion_funnel.length > 0 ? (
             <div className="space-y-2">
@@ -500,10 +586,12 @@ export default function DashboardPage() {
             <div className="text-center py-8 text-sm" style={{ fontFamily: fontMono, color: T.fgMuted }}>SIN DEALS PROX.</div>
           )}
         </Panel>
-      </div>}
+      </div>
+      </DraggableSection>}
 
       {/* Top Leads + Activity Feed */}
-      {isVisible('activity') && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {isVisible('activity') && <DraggableSection id="activity" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Panel title="Top leads — score">
           {stats?.top_leads_by_score && stats.top_leads_by_score.length > 0 ? (
             <div className="space-y-0">
@@ -584,7 +672,8 @@ export default function DashboardPage() {
             <div className="text-center py-8 text-sm" style={{ fontFamily: fontMono, color: T.fgMuted }}>SIN ACTIVIDAD</div>
           )}
         </Panel>
-      </div>}
+      </div>
+      </DraggableSection>}
 
       {/* Distribution Panels */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -658,11 +747,15 @@ export default function DashboardPage() {
       </div>
 
       {/* Marketing, Automations & Agents */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {isVisible('marketing') && <div className={getSize('marketing') === 'lg' ? 'lg:col-span-2' : getSize('marketing') === 'sm' ? '' : ''}><MarketingSummary /></div>}
-        {isVisible('automations') && <div className={getSize('automations') === 'lg' ? 'lg:col-span-2' : getSize('automations') === 'sm' ? '' : ''}><AutomationsSummary /></div>}
-        {isVisible('agents') && <div className={getSize('agents') === 'lg' ? 'lg:col-span-2' : getSize('agents') === 'sm' ? '' : ''}><AgentsSummary /></div>}
-      </div>
+      {isVisible('marketing') && <DraggableSection id="marketing" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+        <div className={getSize('marketing') === 'lg' ? 'lg:col-span-2' : getSize('marketing') === 'sm' ? '' : ''}><MarketingSummary /></div>
+      </DraggableSection>}
+      {isVisible('automations') && <DraggableSection id="automations" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+        <div className={getSize('automations') === 'lg' ? 'lg:col-span-2' : getSize('automations') === 'sm' ? '' : ''}><AutomationsSummary /></div>
+      </DraggableSection>}
+      {isVisible('agents') && <DraggableSection id="agents" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+        <div className={getSize('agents') === 'lg' ? 'lg:col-span-2' : getSize('agents') === 'sm' ? '' : ''}><AgentsSummary /></div>
+      </DraggableSection>}
     </div>
   )
 }

@@ -106,7 +106,21 @@ export function useDashboardWidgets() {
     })
   }
 
-  return { widgets, isVisible, getSize, toggle, setSize, reset, moveUp, moveDown, synced }
+  const reorder = (fromId, toId) => {
+    setWidgets(prev => {
+      const fromIdx = prev.findIndex(w => w.id === fromId)
+      const toIdx = prev.findIndex(w => w.id === toId)
+      if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return prev
+      const next = [...prev]
+      const [moved] = next.splice(fromIdx, 1)
+      next.splice(toIdx, 0, moved)
+      const updated = next.map((w, i) => ({ ...w, position: i }))
+      persistToBackend(updated)
+      return updated
+    })
+  }
+
+  return { widgets, isVisible, getSize, toggle, setSize, reset, moveUp, moveDown, reorder, synced }
 }
 
 export default function DashboardCustomizer({ widgets, onToggle, onReset, onMoveUp, onMoveDown, onSetSize }) {
