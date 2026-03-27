@@ -1,7 +1,7 @@
 """Admin Dashboard endpoints — platform metrics (role=admin only)."""
 import logging
 from datetime import datetime, timezone, timedelta
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -281,3 +281,61 @@ async def admin_alerts(
     if failed > 0:
         alerts.append({"type": "payment_failed", "severity": "high", "message": f"{failed} pagos fallidos pendientes"})
     return {"alerts": alerts, "total": len(alerts)}
+
+
+@router.post("/impersonate/{org_id}")
+async def impersonate_org(
+    org_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Impersonate an organization — returns org details for admin debugging."""
+    org = await db.get(Organization, org_id)
+    if not org:
+        raise HTTPException(404, "Organization not found")
+
+    # Get members
+    members_q = await db.execute(
+        select(OrgMember, User)
+        .join(User, User.id == OrgMember.user_id)
+        .where(OrgMember.org_id == org_id)
+    )
+    members = [{"email": u.email, "name": u.full_name, "role": m.role} for m, u in members_q.all()]
+
+    # Get stats
+    leads = (await db.execute(select(func.count(Lead.id)).where(Lead.org_id == org_id))).scalar() or 0
+    opps = (await db.execute(select(func.count(Opportunity.id)).where(Opportunity.org_id == org_id))).scalar() or 0
+
+    return {
+        "org": {
+            "id": str(org.id), "name": org.name, "slug": org.slug,
+            "plan": org.plan, "sector": org.sector,
+            "max_users": org.max_users, "max_leads": org.max_leads,
+            "settings": org.settings or {},
+            "stripe_subscription_id": org.stripe_subscription_id,
+            "is_active": org.is_active,
+            "created_at": org.created_at.isoformat() if org.created_at else None,
+        },
+        "members": members,
+        "stats": {"leads": leads, "opportunities": opps},
+    }
+
+
+@router.post("/org/{org_id}/update-plan")
+async def admin_update_plan(
+    org_id: str,
+    plan: str = Query(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Admin: force update org plan."""
+    org = await db.get(Organization, org_id)
+    if not org:
+        raise HTTPException(404)
+    PLAN_LIMITS = {"starter": (1, 100), "growth": (3, 5000), "scale": (10, 999999), "enterprise": (999, 999999)}
+    limits = PLAN_LIMITS.get(plan, (1, 100))
+    org.plan = plan
+    org.max_users = limits[0]
+    org.max_leads = limits[1]
+    await db.commit()
+    return {"updated": True, "plan": plan}
