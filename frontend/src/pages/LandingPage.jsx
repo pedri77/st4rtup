@@ -309,10 +309,19 @@ export default function LandingPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20, alignItems: 'start' }}>
             {t.pricing.plans.map((p, i) => {
               const pop = i === 1
+              const btnStyles = [
+                { bg: 'white', color: '#1E6FD9', border: '2px solid #1E6FD9', shadow: 'none' },
+                { bg: 'linear-gradient(135deg, #1E6FD9, #3B8DE8)', color: 'white', border: 'none', shadow: '0 4px 14px rgba(30,111,217,0.4)' },
+                { bg: 'linear-gradient(135deg, #F5820B, #F59E0B)', color: 'white', border: 'none', shadow: '0 4px 14px rgba(245,130,11,0.35)' },
+                { bg: 'linear-gradient(135deg, #0F172A, #334155)', color: 'white', border: 'none', shadow: '0 4px 14px rgba(15,23,42,0.3)' },
+              ][i] || { bg: '#F8FAFC', color: '#1A1A2E', border: '1px solid #E2E8F0', shadow: 'none' }
               return (
-                <FadeIn key={p.name} delay={i * 0.1}>
-                  <div style={{ padding: 28, borderRadius: 16, backgroundColor: 'white', border: pop ? '2px solid #1E6FD9' : '1px solid #E2E8F0', boxShadow: pop ? '0 10px 40px rgba(30,111,217,0.15)' : 'none', position: 'relative', transform: pop ? 'scale(1.02)' : 'none' }}>
-                    {pop && <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', padding: '4px 16px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{t.pricing.popular}</span>}
+                <FadeIn key={`${p.name}-${i}`} delay={i * 0.1}>
+                  <div style={{ padding: 28, borderRadius: 16, backgroundColor: 'white', border: pop ? '2px solid #1E6FD9' : '1px solid #E2E8F0', boxShadow: pop ? '0 10px 40px rgba(30,111,217,0.15)' : '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', transform: pop ? 'scale(1.02)' : 'none', transition: 'transform 0.2s, box-shadow 0.2s' }}
+                    onMouseEnter={e => { if (!pop) { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.08)' } }}
+                    onMouseLeave={e => { if (!pop) { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)' } }}
+                  >
+                    {pop && <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', padding: '4px 16px', background: 'linear-gradient(135deg, #1E6FD9, #3B8DE8)', color: 'white', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{t.pricing.popular}</span>}
                     <h3 style={{ fontSize: 20, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'" }}>{p.name}</h3>
                     <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.desc}</p>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 24 }}>
@@ -332,7 +341,10 @@ export default function LandingPage() {
                         if (data.checkout_url) window.location.href = data.checkout_url
                         else alert('Error al crear el pago')
                       } catch { alert('Error de conexión') }
-                    }} style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px 24px', borderRadius: 10, backgroundColor: pop ? '#1E6FD9' : '#F8FAFC', color: pop ? 'white' : '#1A1A2E', border: pop ? 'none' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 14, cursor: 'pointer', marginBottom: 8 }}>{p.cta}</button>
+                    }} style={{ display: 'block', width: '100%', textAlign: 'center', padding: '13px 24px', borderRadius: 10, background: btnStyles.bg, color: btnStyles.color, border: btnStyles.border, boxShadow: btnStyles.shadow, fontWeight: 700, fontSize: 15, cursor: 'pointer', marginBottom: 8, transition: 'opacity 0.2s, transform 0.15s' }}
+                      onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'scale(1.01)' }}
+                      onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'scale(1)' }}
+                    >{p.cta}</button>
                     {p.price !== '0' && <button onClick={async () => {
                       const plan = p.name.toLowerCase() + '_monthly'
                       try {
