@@ -167,6 +167,14 @@ export default function LandingPage() {
   const [testimonialIdx, setTestimonialIdx] = useState(0)
   const t = T[lang]
 
+  // Auto-scroll testimonials on mobile
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTestimonialIdx(prev => (prev + 1) % 3)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
       <SEO path="/" />
