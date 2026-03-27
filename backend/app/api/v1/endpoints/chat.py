@@ -432,18 +432,45 @@ async def public_chat(request: Request):
     if not message:
         return {"response": ""}
 
+    PRODUCT_CONTEXT = """
+SOBRE ST4RTUP:
+St4rtup es un CRM de ventas y marketing diseñado para startups. Incluye:
+- Pipeline visual Kanban con drag & drop
+- Marketing Hub: campañas, SEO Command Center (9 tabs), funnels, assets
+- 4 Agentes IA: scoring ICP, cualificación BANT, propuestas, customer success
+- Llamadas IA con Retell AI (batch, A/B testing, RGPD)
+- 28 automatizaciones preconfiguradas
+- 14 gráficos y dashboards en tiempo real
+- WhatsApp Business con chatbot IA
+- Deal Room con firma digital NDA
+- Integraciones: Gmail, Google Drive, Stripe, PayPal, YouTube, Airtable, Slack
+- Multi-idioma: ES, EN, PT
+
+PRECIOS:
+- Starter: €0/mes (1 usuario, 100 leads)
+- Growth: €19/mes (3 usuarios, 5.000 leads, IA, marketing, SEO)
+- Scale: €49/mes (10 usuarios, ilimitado, deal room, API)
+- Prueba gratis: 7 días del plan Growth
+
+WEB: https://st4rtup.com
+DEMO: https://st4rtup.com/demo
+PRICING: https://st4rtup.com/pricing
+DOCS: https://st4rtup.com/app/docs
+"""
+
     try:
         result = await ai_chat_service.chat(
             provider=settings.AI_DEFAULT_PROVIDER,
             messages=[{"role": "user", "content": message}],
             system_prompt=(
-                "Eres el asistente comercial de St4rtup CRM, plataforma de ventas y marketing "
-                "para startups. Ayudas con estrategias de venta B2B, captación de leads y growth. "
-                "Eres amable, profesional y conciso (max 150 palabras). Si detectas interes "
-                "comercial, sugiere agendar una demo en https://st4rtup.app/demo."
+                "Eres el asistente de St4rtup CRM. Responde preguntas sobre el producto, "
+                "funcionalidades, precios y ventas B2B para startups. "
+                "Sé amable, profesional y conciso (max 150 palabras). "
+                "Si detectas interés comercial, sugiere la prueba gratuita de 7 días. "
+                "Usa este contexto del producto:\n" + PRODUCT_CONTEXT
             ),
         )
         return {"response": result.get("content", "Lo siento, no pude procesar tu mensaje.")}
     except Exception as e:
         logger.warning("Public chat error: %s", e)
-        return {"response": "Disculpa, estoy teniendo problemas tecnicos. Escribenos a hello@st4rtup.app"}
+        return {"response": "Disculpa, estoy teniendo problemas técnicos. Escríbenos a hello@st4rtup.com"}
