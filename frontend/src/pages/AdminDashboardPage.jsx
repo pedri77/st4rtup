@@ -149,12 +149,22 @@ export default function AdminDashboardPage() {
               {chart?.data?.length > 0 ? (
                 <ResponsiveContainer width="100%" height={200}>
                   <BarChart data={chart.data}>
+                    <defs>
+                      <linearGradient id="gradCyanRevenue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={T.cyan} stopOpacity={0.9} />
+                        <stop offset="100%" stopColor={T.cyan} stopOpacity={0.4} />
+                      </linearGradient>
+                      <linearGradient id="gradSuccessRevenue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={T.success} stopOpacity={0.9} />
+                        <stop offset="100%" stopColor={T.success} stopOpacity={0.4} />
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke={T.border} />
                     <XAxis dataKey="month" tick={{ fontSize: 10, fill: T.fgMuted }} />
                     <YAxis tick={{ fontSize: 10, fill: T.fgMuted }} />
                     <Tooltip contentStyle={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 11 }} />
-                    <Bar dataKey="revenue" fill={T.cyan} radius={[3, 3, 0, 0]} name="Revenue €" />
-                    <Bar dataKey="signups" fill={T.success} radius={[3, 3, 0, 0]} name="Signups" />
+                    <Bar dataKey="revenue" fill="url(#gradCyanRevenue)" radius={[6, 6, 0, 0]} name="Revenue €" />
+                    <Bar dataKey="signups" fill="url(#gradSuccessRevenue)" radius={[6, 6, 0, 0]} name="Signups" />
                   </BarChart>
                 </ResponsiveContainer>
               ) : <p style={{ color: T.fgMuted, fontSize: 12, textAlign: 'center', padding: 30 }}>Sin datos</p>}
@@ -346,11 +356,17 @@ export default function AdminDashboardPage() {
             {(emails?.by_day || []).length > 0 ? (
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={emails.by_day}>
+                  <defs>
+                    <linearGradient id="gradCyanEmails" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={T.cyan} stopOpacity={0.9} />
+                      <stop offset="100%" stopColor={T.cyan} stopOpacity={0.4} />
+                    </linearGradient>
+                  </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke={T.border} />
                   <XAxis dataKey="date" tick={{ fontSize: 10, fill: T.fgMuted }} />
                   <YAxis tick={{ fontSize: 10, fill: T.fgMuted }} />
                   <Tooltip contentStyle={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 11 }} />
-                  <Bar dataKey="count" fill={T.cyan} radius={[3, 3, 0, 0]} name="Emails" />
+                  <Bar dataKey="count" fill="url(#gradCyanEmails)" radius={[6, 6, 0, 0]} name="Emails" />
                 </BarChart>
               </ResponsiveContainer>
             ) : <p style={{ color: T.fgMuted, fontSize: 12, textAlign: 'center', padding: 40 }}>Sin datos de emails</p>}
@@ -643,11 +659,17 @@ export default function AdminDashboardPage() {
               <h3 style={{ fontSize: 13, fontWeight: 600, color: T.fg, marginBottom: 12, fontFamily: fontDisplay }}>Clicks por día</h3>
               <ResponsiveContainer width="100%" height={180}>
                 <BarChart data={affDash.clicks_by_day}>
+                  <defs>
+                    <linearGradient id="gradCyanClicks" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={T.cyan} stopOpacity={0.9} />
+                      <stop offset="100%" stopColor={T.cyan} stopOpacity={0.4} />
+                    </linearGradient>
+                  </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke={T.border} />
                   <XAxis dataKey="date" tick={{ fontSize: 10, fill: T.fgMuted }} />
                   <YAxis tick={{ fontSize: 10, fill: T.fgMuted }} />
                   <Tooltip contentStyle={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 11 }} />
-                  <Bar dataKey="clicks" fill={T.cyan} radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="clicks" fill="url(#gradCyanClicks)" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

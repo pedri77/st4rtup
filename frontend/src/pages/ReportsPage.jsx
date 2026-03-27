@@ -254,11 +254,17 @@ function SalesReport({ data }) {
           <h3 className="text-base font-bold mb-4" style={{ fontFamily: fontDisplay, color: T.fg }}>Pipeline por Etapa</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={pipeline.by_stage}>
+              <defs>
+                <linearGradient id="gradCyanPipeline" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={T.cyan} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={T.cyan} stopOpacity={0.4} />
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke={T.border} />
               <XAxis dataKey="stage" tick={{ fill: T.fgMuted, fontSize: 12 }} stroke={T.border} />
               <YAxis tick={{ fill: T.fgMuted }} stroke={T.border} />
               <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v) => `${v.toLocaleString()} EUR`} />
-              <Bar dataKey="value" fill={T.cyan} name="Valor (EUR)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="url(#gradCyanPipeline)" name="Valor (EUR)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -411,14 +417,28 @@ function ActivityReport({ data }) {
           <h3 className="text-base font-bold mb-4" style={{ fontFamily: fontDisplay, color: T.fg }}>Actividad Diaria</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData}>
+              <defs>
+                <linearGradient id="gradCyanActivity" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={T.cyan} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={T.cyan} stopOpacity={0.4} />
+                </linearGradient>
+                <linearGradient id="gradWarningActivity" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={T.warning} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={T.warning} stopOpacity={0.4} />
+                </linearGradient>
+                <linearGradient id="gradPurpleActivity" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={T.purple} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={T.purple} stopOpacity={0.4} />
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke={T.border} />
               <XAxis dataKey="date" tick={{ fill: T.fgMuted, fontSize: 11 }} stroke={T.border} />
               <YAxis tick={{ fill: T.fgMuted }} stroke={T.border} />
               <Tooltip contentStyle={TOOLTIP_STYLE} />
               <Legend wrapperStyle={{ color: T.fgMuted }} />
-              <Bar dataKey="emails" fill={T.cyan} name="Emails" />
-              <Bar dataKey="visitas" fill={T.warning} name="Visitas" />
-              <Bar dataKey="acciones" fill={T.purple} name="Acciones Completadas" />
+              <Bar dataKey="emails" fill="url(#gradCyanActivity)" name="Emails" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="visitas" fill="url(#gradWarningActivity)" name="Visitas" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="acciones" fill="url(#gradPurpleActivity)" name="Acciones Completadas" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

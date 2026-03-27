@@ -231,6 +231,18 @@ function CostBurnRateChart({ data }) {
       <div className="rounded-xl p-5" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <ResponsiveContainer width="100%" height={280}>
           <AreaChart data={daily} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+            <defs>
+              {toolNames.map((tool, i) => {
+                const color = BURN_TOOL_COLORS[tool] || `hsl(${(i * 60) % 360}, 60%, 50%)`
+                const gradId = `gradBurn-${tool.replace(/\s+/g, '-')}`
+                return (
+                  <linearGradient key={gradId} id={gradId} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={color} stopOpacity={0.9} />
+                    <stop offset="100%" stopColor={color} stopOpacity={0.4} />
+                  </linearGradient>
+                )
+              })}
+            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke={`${T.border}80`} />
             <XAxis
               dataKey="date" tick={{ fill: T.fgMuted, fontSize: 10 }}
@@ -258,6 +270,7 @@ function CostBurnRateChart({ data }) {
             />
             {toolNames.map((tool, i) => {
               const color = BURN_TOOL_COLORS[tool] || `hsl(${(i * 60) % 360}, 60%, 50%)`
+              const gradId = `gradBurn-${tool.replace(/\s+/g, '-')}`
               return (
                 <Area
                   key={tool}
@@ -266,8 +279,8 @@ function CostBurnRateChart({ data }) {
                   name={tool}
                   stackId="1"
                   stroke={color}
-                  fill={color}
-                  fillOpacity={0.6}
+                  fill={`url(#${gradId})`}
+                  fillOpacity={1}
                 />
               )
             })}

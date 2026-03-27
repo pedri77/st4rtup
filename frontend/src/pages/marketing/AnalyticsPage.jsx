@@ -193,13 +193,22 @@ export default function AnalyticsPage() {
           {channelData.length > 0 ? (
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={channelData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+                <defs>
+                  {Object.entries(CHANNEL_COLORS).map(([key, color]) => (
+                    <linearGradient key={key} id={`gradChannel_${key}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={color} stopOpacity={0.9} />
+                      <stop offset="100%" stopColor={color} stopOpacity={0.4} />
+                    </linearGradient>
+                  ))}
+                </defs>
                 <XAxis dataKey="name" tick={{ fill: '#9CA3AF', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: '#9CA3AF', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={v => `€${v >= 1000 ? `${(v/1000).toFixed(0)}k` : v}`} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="budget" name="Budget (€)" radius={[4, 4, 0, 0]}>
-                  {channelData.map((entry, i) => (
-                    <Cell key={i} fill={entry.fill} />
-                  ))}
+                <Bar dataKey="budget" name="Budget (€)" radius={[6, 6, 0, 0]}>
+                  {channelData.map((entry, i) => {
+                    const chKey = Object.keys(CHANNEL_COLORS).find(k => CHANNEL_COLORS[k] === entry.fill) || ''
+                    return <Cell key={i} fill={chKey ? `url(#gradChannel_${chKey})` : entry.fill} />
+                  })}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -250,13 +259,22 @@ export default function AnalyticsPage() {
           {channelData.length > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={channelData} layout="vertical" margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
+                <defs>
+                  {Object.entries(CHANNEL_COLORS).map(([key, color]) => (
+                    <linearGradient key={key} id={`gradChannelH_${key}`} x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor={color} stopOpacity={0.4} />
+                      <stop offset="100%" stopColor={color} stopOpacity={0.9} />
+                    </linearGradient>
+                  ))}
+                </defs>
                 <XAxis type="number" tick={{ fill: '#9CA3AF', fontSize: 10 }} axisLine={false} tickLine={false} />
                 <YAxis type="category" dataKey="name" tick={{ fill: '#9CA3AF', fontSize: 10 }} axisLine={false} tickLine={false} width={90} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="campañas" name="Campañas" radius={[0, 4, 4, 0]}>
-                  {channelData.map((entry, i) => (
-                    <Cell key={i} fill={entry.fill} />
-                  ))}
+                <Bar dataKey="campañas" name="Campañas" radius={[0, 6, 6, 0]}>
+                  {channelData.map((entry, i) => {
+                    const chKey = Object.keys(CHANNEL_COLORS).find(k => CHANNEL_COLORS[k] === entry.fill) || ''
+                    return <Cell key={i} fill={chKey ? `url(#gradChannelH_${chKey})` : entry.fill} />
+                  })}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -359,10 +377,16 @@ export default function AnalyticsPage() {
               </h3>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={regulatoryData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+                  <defs>
+                    <linearGradient id="gradRegulatory" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#F97316" stopOpacity={0.9} />
+                      <stop offset="100%" stopColor="#F97316" stopOpacity={0.4} />
+                    </linearGradient>
+                  </defs>
                   <XAxis dataKey="name" tick={{ fill: '#9CA3AF', fontSize: 11 }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fill: '#9CA3AF', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Bar dataKey="campañas" name="Campañas" fill="#F97316" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="campañas" name="Campañas" fill="url(#gradRegulatory)" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -458,10 +482,16 @@ export default function AnalyticsPage() {
             </h3>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={alertTypeData} layout="vertical" margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="gradAlerts" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#FBBF24" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#FBBF24" stopOpacity={0.9} />
+                  </linearGradient>
+                </defs>
                 <XAxis type="number" tick={{ fill: '#9CA3AF', fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} />
                 <YAxis type="category" dataKey="name" tick={{ fill: '#9CA3AF', fontSize: 10 }} axisLine={false} tickLine={false} width={100} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="value" name="Alertas" fill="#FBBF24" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="value" name="Alertas" fill="url(#gradAlerts)" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

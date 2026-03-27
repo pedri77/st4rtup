@@ -471,12 +471,34 @@ function AnalyticsDashboard({ analytics, loading }) {
           {csatBarData.some(d => d.value > 0) ? (
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={csatBarData}>
+                <defs>
+                  <linearGradient id="gradCsat1" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#EF4444" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="#EF4444" stopOpacity={0.4} />
+                  </linearGradient>
+                  <linearGradient id="gradCsat2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F97316" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="#F97316" stopOpacity={0.4} />
+                  </linearGradient>
+                  <linearGradient id="gradCsat3" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#EAB308" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="#EAB308" stopOpacity={0.4} />
+                  </linearGradient>
+                  <linearGradient id="gradCsat4" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#22C55E" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="#22C55E" stopOpacity={0.4} />
+                  </linearGradient>
+                  <linearGradient id="gradCsat5" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10B981" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="#10B981" stopOpacity={0.4} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke={T.border} />
                 <XAxis dataKey="name" stroke={T.fgMuted} tick={{ fontSize: 12 }} />
                 <YAxis stroke={T.fgMuted} tick={{ fontSize: 12 }} allowDecimals={false} />
                 <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: T.fg }} formatter={(value) => [`${value} respuestas`, '']} />
-                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                  {csatBarData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+                <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                  {csatBarData.map((entry, i) => <Cell key={i} fill={`url(#gradCsat${i + 1})`} />)}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>

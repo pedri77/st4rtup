@@ -109,12 +109,23 @@ export default function CallsDashboardPage() {
           {barData.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={barData}>
+                <defs>
+                  {Object.entries(RESULTADO_COLORS).map(([key, color]) => (
+                    <linearGradient key={`gradRes-${key}`} id={`gradRes-${key}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={color} stopOpacity={0.9} />
+                      <stop offset="100%" stopColor={color} stopOpacity={0.4} />
+                    </linearGradient>
+                  ))}
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke={T.border} />
                 <XAxis dataKey="name" tick={{ fontSize: 11, fill: T.fgMuted }} angle={-20} textAnchor="end" height={60} />
                 <YAxis allowDecimals={false} tick={{ fill: T.fgMuted }} />
                 <Tooltip contentStyle={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: '8px', color: T.fg }} />
-                <Bar dataKey="cantidad" radius={[4, 4, 0, 0]}>
-                  {barData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+                <Bar dataKey="cantidad" radius={[6, 6, 0, 0]}>
+                  {barData.map((entry, i) => {
+                    const gradKey = Object.entries(RESULTADO_LABELS).find(([, label]) => label === entry.name)?.[0]
+                    return <Cell key={i} fill={gradKey ? `url(#gradRes-${gradKey})` : entry.fill} />
+                  })}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>

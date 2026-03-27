@@ -537,11 +537,21 @@ export default function LLMVisibilityPage() {
                 <h3 style={{ fontSize: 14, fontWeight: 600, color: T.fg, marginBottom: 16, fontFamily: fontDisplay }}>Menciones por Provider</h3>
                 <ResponsiveContainer width="100%" height={220}>
                   <BarChart data={providerData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+                    <defs>
+                      <linearGradient id="gradTotal" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={T.fgMuted} stopOpacity={0.9} />
+                        <stop offset="100%" stopColor={T.fgMuted} stopOpacity={0.4} />
+                      </linearGradient>
+                      <linearGradient id="gradMentions" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={T.purple} stopOpacity={0.9} />
+                        <stop offset="100%" stopColor={T.purple} stopOpacity={0.4} />
+                      </linearGradient>
+                    </defs>
                     <XAxis dataKey="name" tick={{ fill: T.fgMuted, fontSize: 12 }} axisLine={false} tickLine={false} />
                     <YAxis tick={{ fill: T.fgMuted, fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Bar dataKey="total" name="Total" fill={T.fgMuted} radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="mentions" name="Menciones" fill={T.purple} radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="total" name="Total" fill="url(#gradTotal)" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="mentions" name="Menciones" fill="url(#gradMentions)" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

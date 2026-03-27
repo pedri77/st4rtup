@@ -336,14 +336,22 @@ function PipelineFlowChart() {
       <div className="p-4">
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={chartData} layout="vertical" barCategoryGap="20%">
+            <defs>
+              {FLOW_COLORS.map((color, i) => (
+                <linearGradient key={`gradFlow-${i}`} id={`gradFlow-${i}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={color} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={color} stopOpacity={0.4} />
+                </linearGradient>
+              ))}
+            </defs>
             <CartesianGrid stroke={T.border} strokeDasharray="none" horizontal={false} />
             <XAxis type="number" tick={{ fontSize: 10, fill: T.fgMuted, fontFamily: fontMono }} stroke={T.border} tickLine={false} axisLine={{ stroke: T.border }} />
             <YAxis type="category" dataKey="stage" tick={{ fontSize: 10, fill: T.fgMuted, fontFamily: fontMono }} stroke={T.border} tickLine={false} axisLine={false} width={100} />
             <Tooltip contentStyle={chartTooltipStyle} cursor={{ fill: `${T.muted}` }}
               formatter={(value, name) => [value, name === 'count' ? 'Deals' : 'Valor']} />
-            <Bar dataKey="count" radius={[0, 4, 4, 0]} opacity={0.85}>
+            <Bar dataKey="count" radius={[0, 6, 6, 0]}>
               {chartData.map((_, i) => (
-                <Cell key={i} fill={FLOW_COLORS[i % FLOW_COLORS.length]} />
+                <Cell key={i} fill={`url(#gradFlow-${i % FLOW_COLORS.length})`} />
               ))}
             </Bar>
           </BarChart>
