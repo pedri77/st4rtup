@@ -362,7 +362,8 @@ export default function LandingPage() {
                     </div>
                     <button onClick={async () => {
                       if (p.price === '0') { window.location.href = '/register'; return }
-                      const plan = p.name.toLowerCase() + '_monthly'
+                      if (p.price === null) { window.location.href = '/contact-sales'; return }
+                      const plan = p.name.toLowerCase() + (annual ? '_yearly' : '_monthly')
                       try {
                         const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
                         if(window.umami)window.umami.track('checkout_click',{plan});const res = await fetch(`${apiUrl}/payments/public/checkout?plan=${plan}`, { method: 'POST' })
@@ -374,8 +375,8 @@ export default function LandingPage() {
                       onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'scale(1.01)' }}
                       onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'scale(1)' }}
                     >{p.cta}</button>
-                    {p.price !== '0' && <button onClick={async () => {
-                      const plan = p.name.toLowerCase() + '_monthly'
+                    {p.price !== '0' && p.price !== null && <button onClick={async () => {
+                      const plan = p.name.toLowerCase() + (annual ? '_yearly' : '_monthly')
                       try {
                         const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
                         if(window.umami)window.umami.track('paypal_click',{plan});const res = await fetch(`${apiUrl}/payments/public/paypal-order?plan=${plan}`, { method: 'POST' })

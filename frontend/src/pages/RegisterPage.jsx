@@ -97,7 +97,7 @@ export default function RegisterPage() {
         {/* Logo and Title */}
         <div className="text-center mb-8">
           <Link to="/">
-            <img src="/logo.png" alt="St4rtup" className="h-16 mx-auto mb-4" />
+            <img src="/logo.png" alt="St4rtup" className="h-24 mx-auto mb-4" />
           </Link>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Crea tu cuenta</h1>
           <p className="text-gray-500">Empieza gratis. Sin tarjeta de crédito.</p>

@@ -12,6 +12,7 @@ import RoleGuard from './components/RoleGuard'
 import Layout from './components/layout/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+const ContactSalesPage = lazy(() => import('./pages/ContactSalesPage'))
 import LandingPage from './pages/LandingPage'
 import PricingPublicPage from './pages/PricingPublicPage'
 const PrivacyPage = lazy(() => import('./pages/legal/PrivacyPage'))
@@ -150,6 +151,7 @@ function App() {
         <Route path="/affiliates" element={<Suspense fallback={<PageLoader />}><AffiliatesPage /></Suspense>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/contact-sales" element={<Suspense fallback={<PageLoader />}><ContactSalesPage /></Suspense>} />
         <Route path="/survey/:token" element={<Suspense fallback={<PageLoader />}><SurveyPublicPage /></Suspense>} />
         <Route path="/proposal" element={<Suspense fallback={<PageLoader />}><ProposalViewPage /></Suspense>} />
         <Route path="/form/:formId" element={<Suspense fallback={<PageLoader />}><PublicFormPage /></Suspense>} />
