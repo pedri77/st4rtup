@@ -90,7 +90,7 @@ const T = {
     testimonials: { tag: 'Testimonios', h2: 'Lo que dicen nuestros clientes', items: [
       { quote: 'Pasamos de una hoja de cálculo a cerrar 3 veces más acuerdos en 2 meses. El pipeline visual y las automatizaciones lo cambiaron todo.', name: 'María García', role: 'CEO, TechStartup', avatar: '/images/avatar-maria-garcia.webp' },
       { quote: 'El Centro de SEO nos posicionó en el top 3 de Google en 6 semanas. Los 4 agentes IA generan contenido profesional.', name: 'Carlos Ruiz', role: 'Director de Marketing, GrowthLab', avatar: '/images/avatar-carlos-ruiz.webp' },
-      { quote: 'Las llamadas IA cualifican leads mientras dormimos. La cualificación BANT automática ahorra 15h/semana a nuestro equipo.', name: 'Ana López', role: 'Directora Comercial, ScaleUp' },
+      { quote: 'Las llamadas IA cualifican leads mientras dormimos. La cualificación BANT automática ahorra 15h/semana a nuestro equipo.', name: 'Ana López', role: 'Directora Comercial, ScaleUp', avatar: '/images/avatar-ana-lopez.webp' },
     ]},
     cta: { h2: 'Empieza a vender más. Hoy.', sub: 'Sin tarjeta de crédito. Listo en 5 minutos. Cancela cuando quieras.', btn: 'Empezar gratis' },
     footer: { desc: 'CRM de ventas y marketing para startups. Simple, potente, con IA.', producto: 'Producto', recursos: 'Recursos', legal: 'Legal', copy: '© 2026 St4rtup. Todos los derechos reservados.' },
@@ -125,7 +125,7 @@ const T = {
     testimonials: { tag: 'Testimonials', h2: 'What our customers say', items: [
       { quote: 'We went from a spreadsheet to closing 3x more deals in 2 months. The visual pipeline and automations changed everything.', name: 'María García', role: 'CEO, TechStartup', avatar: '/images/avatar-maria-garcia.webp' },
       { quote: 'The SEO Command Center got us to Google top 3 in 6 weeks. The 4 AI agents generate professional content.', name: 'Carlos Ruiz', role: 'CMO, GrowthLab', avatar: '/images/avatar-carlos-ruiz.webp' },
-      { quote: 'AI calls qualify leads while we sleep. Automatic BANT qualification saves our team 15h/week.', name: 'Ana López', role: 'Head of Sales, ScaleUp' },
+      { quote: 'AI calls qualify leads while we sleep. Automatic BANT qualification saves our team 15h/week.', name: 'Ana López', role: 'Head of Sales, ScaleUp', avatar: '/images/avatar-ana-lopez.webp' },
     ]},
     cta: { h2: 'Start selling more. Today.', sub: 'No credit card. Setup in 5 minutes. Cancel anytime.', btn: 'Get started free' },
     footer: { desc: 'Sales & marketing CRM for startups. Simple, powerful, AI-driven.', producto: 'Product', recursos: 'Resources', legal: 'Legal', copy: '© 2026 St4rtup. All rights reserved.' },
