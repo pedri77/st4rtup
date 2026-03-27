@@ -32,16 +32,21 @@ function AnimatedCounter({ target, suffix = '' }) {
 
 function TypingText({ text, speed = 50 }) {
   const [displayed, setDisplayed] = useState('')
+  const [done, setDone] = useState(false)
   useEffect(() => {
     let i = 0
+    setDone(false)
     const timer = setInterval(() => {
       setDisplayed(text.slice(0, i + 1))
       i++
-      if (i >= text.length) clearInterval(timer)
+      if (i >= text.length) { clearInterval(timer); setTimeout(() => setDone(true), 400) }
     }, speed)
     return () => clearInterval(timer)
   }, [text, speed])
-  return <>{displayed}<span style={{ borderRight: '2px solid #1E6FD9', marginLeft: 2, animation: 'blink 1s infinite' }} /></>
+  return <>{displayed}{done
+    ? <span style={{ marginLeft: 6, display: 'inline-block', animation: 'rocketBounce 2s ease-in-out infinite' }}>🚀</span>
+    : <span style={{ borderRight: '2px solid #1E6FD9', marginLeft: 2, animation: 'blink 1s infinite' }} />
+  }</>
 }
 
 const cardHoverLight = {
@@ -168,7 +173,7 @@ export default function LandingPage() {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
       {/* Nav */}
-      <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
+      <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} } @keyframes rocketBounce { 0%,100%{transform:translateY(0) rotate(-10deg)} 50%{transform:translateY(-4px) rotate(0deg)} }`}</style>
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(16px) saturate(180%)', WebkitBackdropFilter: 'blur(16px) saturate(180%)', borderBottom: '1px solid rgba(226,232,240,0.5)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
           <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
