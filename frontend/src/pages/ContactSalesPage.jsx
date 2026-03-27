@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom'
 import { Send, CheckCircle, ArrowLeft, Building2, Users, Mail, Phone } from 'lucide-react'
 import SEO from '@/components/SEO'
 
+const inputStyle = {
+  width: '100%', padding: '10px 14px', borderRadius: 10,
+  border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC',
+  color: '#0F172A', fontSize: 14, outline: 'none',
+  transition: 'border-color 0.2s, box-shadow 0.2s',
+}
+const inputFocus = (e) => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }
+const inputBlur = (e) => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }
+
 export default function ContactSalesPage() {
   const [form, setForm] = useState({ name: '', email: '', company: '', phone: '', teamSize: '', message: '' })
   const [loading, setLoading] = useState(false)
@@ -23,7 +32,6 @@ export default function ContactSalesPage() {
       if (!res.ok) throw new Error('Error al enviar')
       setSent(true)
     } catch (err) {
-      // Fallback: mailto
       const subject = encodeURIComponent(`Contacto Enterprise — ${form.company}`)
       const body = encodeURIComponent(`Nombre: ${form.name}\nEmpresa: ${form.company}\nEquipo: ${form.teamSize} personas\nTeléfono: ${form.phone}\n\n${form.message}`)
       window.location.href = `mailto:hello@st4rtup.com?subject=${subject}&body=${body}`
@@ -36,45 +44,46 @@ export default function ContactSalesPage() {
   const update = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }))
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)', fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
       <SEO title="Contactar ventas" description="Habla con nuestro equipo para un plan Enterprise personalizado." path="/contact-sales" />
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
       {/* Nav */}
-      <nav style={{ padding: '16px 24px', borderBottom: '1px solid #E2E8F0' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <nav style={{ padding: '16px 24px', borderBottom: '1px solid #E2E8F0', backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)' }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link to="/"><img src="/logo.png" alt="St4rtup" style={{ height: 50 }} /></Link>
-          <Link to="/" className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1">
-            <ArrowLeft className="w-4 h-4" /> Volver
+          <Link to="/" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+            <ArrowLeft size={16} /> Volver
           </Link>
         </div>
       </nav>
 
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '60px 24px' }}>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 48, alignItems: 'start' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto', padding: '60px 24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 48, alignItems: 'start' }}>
 
           {/* Left — Info */}
           <div>
-            <h1 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 36, fontWeight: 800, marginBottom: 16, lineHeight: 1.2 }}>
+            <h1 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 'clamp(28px, 4vw, 38px)', fontWeight: 800, marginBottom: 16, lineHeight: 1.2 }}>
               Hablemos de tu <span style={{ color: '#1E6FD9' }}>plan Enterprise</span>
             </h1>
-            <p style={{ fontSize: 16, color: '#64748B', lineHeight: 1.7, marginBottom: 32 }}>
+            <p style={{ fontSize: 16, color: '#64748B', lineHeight: 1.7, marginBottom: 36 }}>
               Para equipos grandes que necesitan SSO, SLA 99.9%, gestor dedicado y facturación a medida. Cuéntanos sobre tu equipo y te preparamos una propuesta.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               {[
                 { icon: Users, title: 'Usuarios ilimitados', desc: 'Sin límites en tu equipo' },
                 { icon: Building2, title: 'SSO / SAML', desc: 'Integración con tu identity provider' },
                 { icon: Mail, title: 'Soporte prioritario', desc: 'Gestor de cuenta dedicado + SLA' },
                 { icon: Phone, title: 'Onboarding personalizado', desc: 'Formación y migración de datos' },
               ].map(({ icon: Icon, title, desc }) => (
-                <div key={title} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg, #EBF4FF, #FFF7ED)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Icon size={18} color="#1E6FD9" />
+                <div key={title} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg, #EBF4FF, #FFF7ED)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Icon size={20} color="#1E6FD9" />
                   </div>
                   <div>
-                    <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>{title}</p>
-                    <p style={{ fontSize: 13, color: '#64748B', margin: '2px 0 0' }}>{desc}</p>
+                    <p style={{ fontSize: 15, fontWeight: 600, margin: 0, color: '#0F172A' }}>{title}</p>
+                    <p style={{ fontSize: 13, color: '#64748B', margin: '3px 0 0' }}>{desc}</p>
                   </div>
                 </div>
               ))}
@@ -82,46 +91,51 @@ export default function ContactSalesPage() {
           </div>
 
           {/* Right — Form */}
-          <div style={{ backgroundColor: 'white', borderRadius: 16, padding: 32, border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
+          <div style={{ backgroundColor: 'white', borderRadius: 20, padding: '36px 32px', border: '1px solid #E2E8F0', boxShadow: '0 8px 30px rgba(0,0,0,0.06)' }}>
             {sent ? (
-              <div className="text-center py-8">
-                <CheckCircle className="w-14 h-14 text-green-500 mx-auto mb-4" />
-                <h2 className="text-xl font-bold text-gray-800 mb-2">Mensaje enviado</h2>
-                <p className="text-gray-500 text-sm mb-6">Te responderemos en menos de 24 horas laborables.</p>
-                <Link to="/" className="text-blue-600 font-semibold text-sm hover:underline">Volver al inicio</Link>
+              <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                <CheckCircle size={56} color="#10B981" style={{ margin: '0 auto 16px' }} />
+                <h2 style={{ fontSize: 22, fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Mensaje enviado</h2>
+                <p style={{ fontSize: 14, color: '#64748B', marginBottom: 24 }}>Te responderemos en menos de 24 horas laborables.</p>
+                <Link to="/" style={{ fontSize: 14, color: '#1E6FD9', fontWeight: 600, textDecoration: 'none' }}>Volver al inicio</Link>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <h2 style={{ fontSize: 20, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'", marginBottom: 4 }}>Solicitar información</h2>
-                <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>Rellena el formulario y te contactamos.</p>
+              <form onSubmit={handleSubmit}>
+                <h2 style={{ fontSize: 22, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'", marginBottom: 4, color: '#0F172A' }}>Solicitar información</h2>
+                <p style={{ fontSize: 14, color: '#64748B', marginBottom: 24 }}>Rellena el formulario y te contactamos.</p>
 
-                {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-2 rounded-lg">{error}</div>}
+                {error && <div style={{ backgroundColor: '#FEF2F2', color: '#DC2626', fontSize: 13, padding: '10px 14px', borderRadius: 10, marginBottom: 16, border: '1px solid #FECACA' }}>{error}</div>}
 
-                <div className="grid grid-cols-2 gap-3">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Nombre *</label>
-                    <input type="text" required value={form.name} onChange={update('name')} className="input w-full" placeholder="Tu nombre" />
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Nombre *</label>
+                    <input type="text" required value={form.name} onChange={update('name')} placeholder="Tu nombre"
+                      style={inputStyle} onFocus={inputFocus} onBlur={inputBlur} />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Email *</label>
-                    <input type="email" required value={form.email} onChange={update('email')} className="input w-full" placeholder="tu@empresa.com" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Empresa *</label>
-                    <input type="text" required value={form.company} onChange={update('company')} className="input w-full" placeholder="Empresa S.L." />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Teléfono</label>
-                    <input type="tel" value={form.phone} onChange={update('phone')} className="input w-full" placeholder="+34 600..." />
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Email *</label>
+                    <input type="email" required value={form.email} onChange={update('email')} placeholder="tu@empresa.com"
+                      style={inputStyle} onFocus={inputFocus} onBlur={inputBlur} />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Tamaño del equipo</label>
-                  <select value={form.teamSize} onChange={update('teamSize')} className="input w-full" style={{ appearance: 'auto' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Empresa *</label>
+                    <input type="text" required value={form.company} onChange={update('company')} placeholder="Empresa S.L."
+                      style={inputStyle} onFocus={inputFocus} onBlur={inputBlur} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Teléfono</label>
+                    <input type="tel" value={form.phone} onChange={update('phone')} placeholder="+34 600..."
+                      style={inputStyle} onFocus={inputFocus} onBlur={inputBlur} />
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Tamaño del equipo</label>
+                  <select value={form.teamSize} onChange={update('teamSize')}
+                    style={{ ...inputStyle, appearance: 'auto', cursor: 'pointer' }} onFocus={inputFocus} onBlur={inputBlur}>
                     <option value="">Seleccionar...</option>
                     <option value="10-25">10–25 personas</option>
                     <option value="25-50">25–50 personas</option>
@@ -130,24 +144,26 @@ export default function ContactSalesPage() {
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">¿Qué necesitas?</label>
-                  <textarea value={form.message} onChange={update('message')} className="input w-full" rows={3}
-                    placeholder="Cuéntanos sobre tus necesidades, integraciones, plazos..." style={{ resize: 'vertical' }} />
+                <div style={{ marginBottom: 20 }}>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>¿Qué necesitas?</label>
+                  <textarea value={form.message} onChange={update('message')} rows={3}
+                    placeholder="Cuéntanos sobre tus necesidades, integraciones, plazos..."
+                    style={{ ...inputStyle, resize: 'vertical' }} onFocus={inputFocus} onBlur={inputBlur} />
                 </div>
 
                 <button type="submit" disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-lg text-white font-semibold text-sm transition-all"
-                  style={{ background: 'linear-gradient(135deg, #0F172A, #334155)', boxShadow: '0 4px 14px rgba(15,23,42,0.3)' }}>
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 24px', borderRadius: 12, color: 'white', fontWeight: 700, fontSize: 15, border: 'none', cursor: loading ? 'wait' : 'pointer', background: 'linear-gradient(135deg, #0F172A, #334155)', boxShadow: '0 4px 14px rgba(15,23,42,0.3)', transition: 'opacity 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
+                  onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
                   {loading ? (
-                    <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Enviando...</>
+                    <><div style={{ width: 18, height: 18, border: '2px solid white', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /> Enviando...</>
                   ) : (
-                    <><Send className="w-4 h-4" /> Enviar solicitud</>
+                    <><Send size={16} /> Enviar solicitud</>
                   )}
                 </button>
 
-                <p className="text-xs text-gray-400 text-center mt-2">
-                  También puedes escribirnos a <a href="mailto:hello@st4rtup.com" className="text-blue-500 hover:underline">hello@st4rtup.com</a>
+                <p style={{ fontSize: 12, color: '#94A3B8', textAlign: 'center', marginTop: 12 }}>
+                  También puedes escribirnos a <a href="mailto:hello@st4rtup.com" style={{ color: '#1E6FD9', textDecoration: 'none' }}>hello@st4rtup.com</a>
                 </p>
               </form>
             )}
