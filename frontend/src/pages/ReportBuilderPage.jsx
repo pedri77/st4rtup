@@ -58,7 +58,7 @@ export default function ReportBuilderPage() {
       const url = URL.createObjectURL(new Blob([res.data]))
       const a = document.createElement('a')
       a.href = url
-      a.download = `riskitera_${reportType}_${new Date().toISOString().slice(0, 10)}.csv`
+      a.download = `st4rtup_${reportType}_${new Date().toISOString().slice(0, 10)}.csv`
       a.click()
       URL.revokeObjectURL(url)
       toast.success('CSV descargado')
@@ -71,7 +71,7 @@ export default function ReportBuilderPage() {
       const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }))
       const a = document.createElement('a')
       a.href = url
-      a.download = `riskitera_${reportType}_${new Date().toISOString().slice(0, 10)}.pdf`
+      a.download = `st4rtup_${reportType}_${new Date().toISOString().slice(0, 10)}.pdf`
       a.click()
       URL.revokeObjectURL(url)
       toast.success('PDF descargado')

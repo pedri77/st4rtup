@@ -180,7 +180,7 @@ function CompetitorDrawer({ comp, onClose }) {
               </div>
               <div className="rounded-lg p-3" style={{ backgroundColor: 'hsla(142,71%,45%,0.05)', border: `1px solid hsla(142,71%,45%,0.2)` }}>
                 <p className="text-xs font-medium mb-1" style={{ color: T.success }}>Ventaja St4rtup</p>
-                <p className="text-sm" style={{ color: '#94A3B8' }}>{comp.vs_riskitera || '—'}</p>
+                <p className="text-sm" style={{ color: '#94A3B8' }}>{comp.vs_st4rtup || '—'}</p>
               </div>
             </div>
           )}
@@ -206,7 +206,7 @@ export default function CompetitorsPage() {
   const [planFilter, setTierFilter] = useState('all')
   const [selected, setSelected] = useState(null)
   const [showAddForm, setShowAddForm] = useState(false)
-  const [addForm, setAddForm] = useState({ name: '', region: 'local', plan: 'medium', scope: '', website: '', maturity_score: 50, analysis: '', weakness: '', vs_riskitera: '' })
+  const [addForm, setAddForm] = useState({ name: '', region: 'local', plan: 'medium', scope: '', website: '', maturity_score: 50, analysis: '', weakness: '', vs_st4rtup: '' })
 
   const { data, isLoading } = useQuery({
     queryKey: ['competitors'],
@@ -229,7 +229,7 @@ export default function CompetitorsPage() {
       queryClient.invalidateQueries({ queryKey: ['competitors'] })
       toast.success('Competidor añadido')
       setShowAddForm(false)
-      setAddForm({ name: '', region: 'local', plan: 'medium', scope: '', website: '', maturity_score: 50, analysis: '', weakness: '', vs_riskitera: '' })
+      setAddForm({ name: '', region: 'local', plan: 'medium', scope: '', website: '', maturity_score: 50, analysis: '', weakness: '', vs_st4rtup: '' })
     },
     onError: () => toast.error('Error al crear'),
   })
@@ -263,7 +263,7 @@ export default function CompetitorsPage() {
     const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)
-    const a = document.createElement('a'); a.href = url; a.download = `riskitera_competitors_${new Date().toISOString().slice(0, 10)}.csv`; a.click()
+    const a = document.createElement('a'); a.href = url; a.download = `st4rtup_competitors_${new Date().toISOString().slice(0, 10)}.csv`; a.click()
     URL.revokeObjectURL(url)
     toast.success('CSV exportado')
   }
@@ -431,7 +431,7 @@ export default function CompetitorsPage() {
               </div>
               <textarea id="competitors-textarea-4" aria-label="Texto" value={addForm.analysis} onChange={e => setAddForm(f => ({ ...f, analysis: e.target.value }))} placeholder="Análisis del competidor" rows={2} className="input text-sm" />
               <textarea id="competitors-textarea-5" aria-label="Texto" value={addForm.weakness} onChange={e => setAddForm(f => ({ ...f, weakness: e.target.value }))} placeholder="Debilidad vs St4rtup" rows={2} className="input text-sm" />
-              <textarea id="competitors-textarea-6" aria-label="Texto" value={addForm.vs_riskitera} onChange={e => setAddForm(f => ({ ...f, vs_riskitera: e.target.value }))} placeholder="Ventaja St4rtup" rows={2} className="input text-sm" />
+              <textarea id="competitors-textarea-6" aria-label="Texto" value={addForm.vs_st4rtup} onChange={e => setAddForm(f => ({ ...f, vs_st4rtup: e.target.value }))} placeholder="Ventaja St4rtup" rows={2} className="input text-sm" />
               <button onClick={() => addForm.name && createMutation.mutate(addForm)} disabled={!addForm.name || createMutation.isPending}
                 className="btn-primary w-full text-sm">{createMutation.isPending ? 'Creando...' : 'Añadir competidor'}</button>
             </div>

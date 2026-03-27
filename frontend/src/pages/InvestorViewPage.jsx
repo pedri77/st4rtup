@@ -81,7 +81,7 @@ export default function InvestorViewPage() {
     try {
       const resp = await gtmApi.exportPDF()
       const url = window.URL.createObjectURL(new Blob([resp.data]))
-      const a = document.createElement('a'); a.href = url; a.download = 'riskitera_investor_pack.pdf'; a.click()
+      const a = document.createElement('a'); a.href = url; a.download = 'st4rtup_investor_pack.pdf'; a.click()
       window.URL.revokeObjectURL(url)
       toast.success('Board pack descargado')
     } catch { toast.error('Error') }

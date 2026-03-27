@@ -219,7 +219,7 @@ export default function GTMDashboardPage() {
           try {
             const resp = await gtmApi.exportPDF()
             const url = window.URL.createObjectURL(new Blob([resp.data]))
-            const a = document.createElement('a'); a.href = url; a.download = `riskitera_gtm_boardpack.pdf`; a.click()
+            const a = document.createElement('a'); a.href = url; a.download = `st4rtup_gtm_boardpack.pdf`; a.click()
             window.URL.revokeObjectURL(url)
             toast.success('Board pack descargado')
           } catch { toast.error('Error generando PDF') }

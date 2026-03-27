@@ -107,7 +107,7 @@ export default function ReportsPage() {
     else if (selectedReport === 'leaderboard' && topData) rows = topData.accounts
     else if (selectedReport === 'pipeline' && sourcesData) rows = sourcesData.sources
     if (rows.length) {
-      downloadCSV(rows, `riskitera_${selectedReport}_${period}.csv`)
+      downloadCSV(rows, `st4rtup_${selectedReport}_${period}.csv`)
       toast.success(`Exportado "${reportName}"`)
     }
   }

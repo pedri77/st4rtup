@@ -40,14 +40,14 @@ const CHANGELOG = [
 
 export default function Changelog() {
   const [dismissed, setDismissed] = useState(() => {
-    const saved = localStorage.getItem('riskitera_changelog_seen')
+    const saved = localStorage.getItem('st4rtup_changelog_seen')
     return saved === CHANGELOG[0].version
   })
 
   if (dismissed) return null
 
   const dismiss = () => {
-    localStorage.setItem('riskitera_changelog_seen', CHANGELOG[0].version)
+    localStorage.setItem('st4rtup_changelog_seen', CHANGELOG[0].version)
     setDismissed(true)
   }
 

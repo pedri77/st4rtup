@@ -624,7 +624,7 @@ export default function LLMVisibilityPage() {
                   value={form.brand_keywords}
                   onChange={(e) => setForm(f => ({ ...f, brand_keywords: e.target.value }))}
                   style={inputStyle}
-                  placeholder="riskitera, st4rtup.app"
+                  placeholder="st4rtup, st4rtup.app"
                 />
               </div>
 

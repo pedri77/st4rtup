@@ -14,7 +14,7 @@ const DEFAULT_WIDGETS = [
   { id: 'onboarding', label: 'Onboarding', visible: true, position: 7, size: 'md' },
 ]
 
-const STORAGE_KEY = 'riskitera_dashboard_widgets'
+const STORAGE_KEY = 'st4rtup_dashboard_widgets'
 const SIZE_LABELS = { sm: 'Compacto', md: 'Normal', lg: 'Grande' }
 const SIZE_ICONS = { sm: Minimize2, md: Square, lg: Maximize2 }
 

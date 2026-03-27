@@ -130,7 +130,7 @@ export default function PlaybookPage() {
               try {
                 const resp = await playbookApi.exportPDF()
                 const url = window.URL.createObjectURL(new Blob([resp.data]))
-                const a = document.createElement('a'); a.href = url; a.download = 'riskitera_playbook.pdf'; a.click()
+                const a = document.createElement('a'); a.href = url; a.download = 'st4rtup_playbook.pdf'; a.click()
                 window.URL.revokeObjectURL(url)
                 toast.success('Playbook exportado')
               } catch { toast.error('Error exportando') }

@@ -23,8 +23,8 @@ export default function CookiesPage() {
       <T headers={['Cookie', 'Proveedor', 'Finalidad', 'Duración']} rows={[
         ['sb-access-token', 'Supabase', 'Token de autenticación JWT', 'Sesión'],
         ['sb-refresh-token', 'Supabase', 'Renovación de sesión', '7 días'],
-        ['riskitera_user_prefs', 'St4rtup', 'Preferencias (idioma, tema, moneda)', 'Permanente'],
-        ['riskitera_dashboard_widgets', 'St4rtup', 'Configuración del dashboard', 'Permanente'],
+        ['st4rtup_user_prefs', 'St4rtup', 'Preferencias (idioma, tema, moneda)', 'Permanente'],
+        ['st4rtup_dashboard_widgets', 'St4rtup', 'Configuración del dashboard', 'Permanente'],
         ['__cf_bm', 'Cloudflare', 'Protección contra bots', '30 min'],
       ]} />
 

@@ -987,7 +987,7 @@ function CompetitorsBubbleChart() {
     x: c.keywords || c.x || i * 10,
     y: c.visibility || c.y || Math.random() * 100,
     z: c.size || c.traffic || 500,
-    isOwn: (c.name || c.label || '').toLowerCase().includes('riskitera'),
+    isOwn: (c.name || c.label || '').toLowerCase().includes('st4rtup'),
   }))
 
   return (
@@ -1416,7 +1416,7 @@ function BacklinksRadialGraph() {
         })}
         <circle cx={cx} cy={cy} r={25} fill={T.cyan} fillOpacity={0.9} />
         <text x={cx} y={cy + 4} textAnchor="middle" fill={T.bg} fontSize={8} fontWeight="bold" fontFamily={fontMono}>
-          riskitera
+          st4rtup
         </text>
       </svg>
       {tooltip && (
