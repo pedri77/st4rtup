@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { LogIn, Rocket, Mail, ArrowLeft, CheckCircle } from 'lucide-react'
+import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -65,7 +66,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center p-4">
+    <div className="public-page min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center p-4">
+      <div className="fixed top-4 right-4 z-50"><ThemeTogglePublic /></div>
       <div className="w-full max-w-md">
         {/* Logo and Title */}
         <div className="text-center mb-8">

@@ -103,7 +103,7 @@ const T = {
       { n: '02', title: 'Automatiza', desc: '22 automatizaciones listas: puntuación, emails, alertas, seguimientos. Actívalas con un clic.' },
       { n: '03', title: 'Vende', desc: 'Cierra más acuerdos con IA como copiloto. Panel en tiempo real con 14 gráficos y KPIs.' },
     ]},
-    pricing: { tag: 'Precios', h2: 'Planes para cada etapa', sub: 'Sin tarjeta de crédito. Cancela cuando quieras.', popular: 'Más popular', contact: 'Contactar', plans: [
+    pricing: { tag: 'Precios', h2: 'Planes para cada etapa', sub: 'Cancela cuando quieras. Migra tus datos en cualquier momento.', popular: 'Más popular', contact: 'Contactar', plans: [
       { name: 'Starter', price: '0', desc: 'Para empezar a vender', features: ['1 usuario', '100 leads', 'Pipeline básico', 'Email integrado', '1 integración'], cta: 'Empezar gratis' },
       { name: 'Growth', price: '19', desc: 'Para crecer rápido', features: ['3 usuarios', 'Leads ilimitados', 'Hub de Marketing completo', 'IA integrada (4 agentes)', 'Todas las integraciones', '22 automatizaciones', 'Centro de SEO', 'Analíticas avanzadas'], cta: 'Prueba 7 días gratis' },
       { name: 'Scale', price: '49', desc: 'Para escalar sin límites', features: ['10 usuarios', 'Todo en Growth', 'Sala de Negociación + NDA', 'WhatsApp Business + Bot', 'API pública', 'Soporte prioritario', 'Onboarding personalizado', 'Stripe + PayPal integrado'], cta: 'Empezar prueba' },
@@ -114,7 +114,7 @@ const T = {
       { quote: 'El Centro de SEO nos posicionó en el top 3 de Google en 6 semanas. Los 4 agentes IA generan contenido profesional.', name: 'Carlos Ruiz', role: 'Director de Marketing, GrowthLab', avatar: '/images/avatar-carlos-ruiz.webp' },
       { quote: 'Las llamadas IA cualifican leads mientras dormimos. La cualificación BANT automática ahorra 15h/semana a nuestro equipo.', name: 'Ana López', role: 'Directora Comercial, ScaleUp', avatar: '/images/avatar-ana-lopez.webp' },
     ]},
-    cta: { h2: 'Empieza a vender más. Hoy.', sub: 'Sin tarjeta de crédito. Listo en 5 minutos. Cancela cuando quieras.', btn: 'Empezar gratis' },
+    cta: { h2: 'Empieza a vender más. Hoy.', sub: 'Listo en 5 minutos. Cancela cuando quieras.', btn: 'Empezar gratis' },
     footer: { desc: 'CRM de ventas y marketing para startups. Simple, potente, con IA.', producto: 'Producto', recursos: 'Recursos', legal: 'Legal', copy: '© 2026 St4rtup. Todos los derechos reservados.' },
     mock: { revenue: 'Ingresos', leads: 'Leads', conversion: 'Conversión' },
   },
@@ -138,7 +138,7 @@ const T = {
       { n: '02', title: 'Automate', desc: '22 ready-to-use automations: scoring, emails, alerts, follow-ups. Activate with one click.' },
       { n: '03', title: 'Sell', desc: 'Close more deals with AI as your copilot. Real-time dashboard with 14 charts and KPIs.' },
     ]},
-    pricing: { tag: 'Pricing', h2: 'Plans for every stage', sub: 'No credit card required. Cancel anytime.', popular: 'Most popular', contact: 'Contact us', plans: [
+    pricing: { tag: 'Pricing', h2: 'Plans for every stage', sub: 'Cancel anytime. Migrate your data whenever you want.', popular: 'Most popular', contact: 'Contact us', plans: [
       { name: 'Starter', price: '0', desc: 'To start selling', features: ['1 user', '100 leads', 'Basic pipeline', 'Integrated email', '1 integration'], cta: 'Get started free' },
       { name: 'Growth', price: '19', desc: 'To grow fast', features: ['3 users', 'Unlimited leads', 'Full Marketing Hub', 'Integrated AI (4 agents)', 'All integrations', '22 automations', 'SEO Command Center', 'Advanced analytics'], cta: '7-day free trial' },
       { name: 'Scale', price: '49', desc: 'To scale without limits', features: ['10 users', 'Everything in Growth', 'Deal Room + NDA', 'WhatsApp Business + Bot', 'Public API', 'Priority support', 'Custom onboarding', 'Stripe + PayPal'], cta: 'Start free trial' },
@@ -149,7 +149,7 @@ const T = {
       { quote: 'The SEO Command Center got us to Google top 3 in 6 weeks. The 4 AI agents generate professional content.', name: 'Carlos Ruiz', role: 'CMO, GrowthLab', avatar: '/images/avatar-carlos-ruiz.webp' },
       { quote: 'AI calls qualify leads while we sleep. Automatic BANT qualification saves our team 15h/week.', name: 'Ana López', role: 'Head of Sales, ScaleUp', avatar: '/images/avatar-ana-lopez.webp' },
     ]},
-    cta: { h2: 'Start selling more. Today.', sub: 'No credit card. Setup in 5 minutes. Cancel anytime.', btn: 'Get started free' },
+    cta: { h2: 'Start selling more. Today.', sub: 'Setup in 5 minutes. Cancel anytime.', btn: 'Get started free' },
     footer: { desc: 'Sales & marketing CRM for startups. Simple, powerful, AI-driven.', producto: 'Product', recursos: 'Resources', legal: 'Legal', copy: '© 2026 St4rtup. All rights reserved.' },
     mock: { revenue: 'Revenue', leads: 'Leads', conversion: 'Conversion' },
   },
@@ -186,6 +186,7 @@ export default function LandingPage() {
   // Track A/B variant
   useEffect(() => {
     window.umami?.track('hero_ab_view', { variant: AB_IDX })
+    sessionStorage.setItem('ab_hero_variant', AB_IDX)
   }, [])
 
   // Auto-scroll testimonials on mobile

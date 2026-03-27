@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { UserPlus, Eye, EyeOff, Building2, ArrowRight, CheckCircle, Rocket } from 'lucide-react'
+import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 import confetti from 'canvas-confetti'
 
 function SuccessScreen() {
@@ -66,6 +67,11 @@ export default function RegisterPage() {
       await signUp(email, password, { full_name: fullName, company_name: companyName })
       setSuccess(true)
       fireConfetti()
+      // Track A/B conversion
+      const abVariant = sessionStorage.getItem('ab_hero_variant')
+      if (abVariant !== null) {
+        window.umami?.track('register_conversion', { ab_variant: abVariant, method: 'email' })
+      }
       setTimeout(() => navigate('/app/onboarding'), 2000)
     } catch (err) {
       console.error('Register error:', err)
@@ -92,7 +98,8 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center p-4">
+    <div className="public-page min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center p-4">
+      <div className="fixed top-4 right-4 z-50"><ThemeTogglePublic /></div>
       <div className="w-full max-w-md">
         {/* Logo and Title */}
         <div className="text-center mb-8">

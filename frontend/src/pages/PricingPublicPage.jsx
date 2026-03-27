@@ -3,6 +3,7 @@ import WebChatWidget from "@/components/WebChatWidget"
 import SEO from '@/components/SEO'
 import { Link } from 'react-router-dom'
 import { Check, Minus, ChevronDown, ChevronUp, ArrowRight } from 'lucide-react'
+import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 
 const NAV_LINKS = [
   { label: 'Features', href: '/#features' },
@@ -46,7 +47,7 @@ const FAQS = [
   { q: '¿Qué pasa cuando supero los límites del plan Starter?', a: 'Recibirás una notificación. Tus datos no se eliminan — simplemente no podrás crear más leads hasta que migres a Growth o elimines registros existentes.' },
   { q: '¿Puedo cambiar de plan en cualquier momento?', a: 'Sí. Puedes subir o bajar de plan cuando quieras. Al subir, se aplica la diferencia prorrateada. Al bajar, el cambio se aplica en el siguiente ciclo de facturación.' },
   { q: '¿Qué métodos de pago aceptáis?', a: 'Aceptamos tarjeta de crédito/débito (Visa, Mastercard, Amex) vía Stripe, y PayPal. Para planes Scale con facturación anual, también transferencia bancaria.' },
-  { q: '¿Ofrecéis descuento para startups early-stage?', a: 'Sí. Si tu startup tiene menos de 2 años y está en fase pre-seed o seed, escríbenos a hello@st4rtup.com para un descuento del 50% durante el primer año.' },
+  { q: '¿Ofrecéis descuento para startups early-stage?', a: 'Sí. Si tu startup tiene menos de 2 años y está en fase pre-seed o seed, escríbenos a hello@st4rtup.com y te regalamos 3 meses gratis del plan Growth para que arranques sin coste.' },
   { q: '¿Mis datos están seguros?', a: 'Absolutamente. Usamos cifrado AES-256 en reposo y TLS 1.3 en tránsito. Los datos se almacenan en la UE (Supabase región CDG). Cumplimos con RGPD.' },
   { q: '¿Puedo exportar mis datos si cancelo?', a: 'Sí. Puedes exportar todos tus datos en CSV o JSON en cualquier momento, incluso después de cancelar (durante 30 días). También soportamos export a Google Sheets y Airtable.' },
   { q: '¿Qué incluye el soporte prioritario?', a: 'Respuesta garantizada en menos de 4 horas laborables. Canal de Slack dedicado. Onboarding personalizado con sesión 1:1. Disponible solo en el plan Scale.' },
@@ -61,6 +62,7 @@ function Nav() {
         <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
         <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
           {NAV_LINKS.map(l => <a key={l.label} href={l.href} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{l.label}</a>)}
+          <ThemeTogglePublic />
           <Link to="/register" style={{ padding: '8px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
         </div>
       </div>
@@ -102,7 +104,7 @@ export default function PricingPublicPage() {
   const [openCats, setOpenCats] = useState({})
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+    <div className="public-page" style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
       <SEO title="Precios" description="Planes de St4rtup CRM: Starter gratis, Growth €19/mes, Scale €49/mes. Sin tarjeta de crédito." path="/pricing" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
       <Nav />

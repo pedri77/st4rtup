@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Send, CheckCircle, ArrowLeft, Building2, Users, Mail, Phone } from 'lucide-react'
+import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 import SEO from '@/components/SEO'
 
 const inputStyle = {
@@ -44,7 +45,7 @@ export default function ContactSalesPage() {
   const update = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }))
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)', fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+    <div className="public-page" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)', fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
       <SEO title="Contactar ventas" description="Habla con nuestro equipo para un plan Enterprise personalizado." path="/contact-sales" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
@@ -52,9 +53,12 @@ export default function ContactSalesPage() {
       <nav style={{ padding: '16px 24px', borderBottom: '1px solid #E2E8F0', backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link to="/"><img src="/logo.png" alt="St4rtup" style={{ height: 50 }} /></Link>
-          <Link to="/" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
-            <ArrowLeft size={16} /> Volver
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <ThemeTogglePublic />
+            <Link to="/" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <ArrowLeft size={16} /> Volver
+            </Link>
+          </div>
         </div>
       </nav>
 

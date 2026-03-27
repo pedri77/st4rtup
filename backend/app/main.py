@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
@@ -124,6 +124,52 @@ async def root():
         "status": "running",
         "docs": "/docs",
     }
+
+
+@app.websocket("/ws/logs")
+async def websocket_logs(websocket: WebSocket):
+    """WebSocket endpoint for real-time admin log streaming."""
+    await websocket.accept()
+    import asyncio, subprocess
+    try:
+        # Verify admin token from query param
+        token = websocket.query_params.get("token", "")
+        if token:
+            from app.core.security import get_current_user
+            from fastapi.security import HTTPAuthorizationCredentials
+            try:
+                creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
+                user = await get_current_user(creds)
+                if user.get("role") != "admin":
+                    await websocket.close(code=4003, reason="Admin required")
+                    return
+            except Exception:
+                await websocket.close(code=4001, reason="Invalid token")
+                return
+        else:
+            await websocket.close(code=4001, reason="Token required")
+            return
+
+        # Stream journalctl in real-time
+        proc = await asyncio.create_subprocess_exec(
+            "journalctl", "-u", "st4rtup", "-f", "-n", "0", "--no-pager",
+            stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
+        )
+        while True:
+            line = await asyncio.wait_for(proc.stdout.readline(), timeout=30)
+            if line:
+                await websocket.send_text(line.decode("utf-8", errors="replace").strip())
+            else:
+                await websocket.send_text("")  # keepalive
+    except (WebSocketDisconnect, asyncio.TimeoutError):
+        pass
+    except Exception as e:
+        logger.debug(f"WS logs closed: {e}")
+    finally:
+        try:
+            proc.terminate()
+        except Exception:
+            pass
 
 
 @app.get("/health")

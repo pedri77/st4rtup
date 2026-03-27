@@ -202,7 +202,7 @@ function WaterfallAndRadarSection() {
   )
 }
 
-function DraggableSection({ id, draggedWidget, setDraggedWidget, dragOverWidget, setDragOverWidget, onReorder, children }) {
+function DraggableSection({ id, draggedWidget, setDraggedWidget, dragOverWidget, setDragOverWidget, onReorder, widgets, children }) {
   const handleDragStart = (e) => {
     setDraggedWidget(id)
     e.dataTransfer.effectAllowed = 'move'
@@ -252,10 +252,11 @@ function DraggableSection({ id, draggedWidget, setDraggedWidget, dragOverWidget,
       onDrop={handleDrop}
       className="group/drag relative"
       style={{
-        transition: 'border-color 0.2s, box-shadow 0.2s',
+        transition: 'border-color 0.2s, box-shadow 0.2s, order 0.3s',
         borderRadius: 8,
         border: isOver ? `2px dashed ${T.cyan}` : '2px solid transparent',
         boxShadow: isOver ? `0 0 0 3px ${T.cyan}15` : 'none',
+        order: widgets?.find(w => w.id === id)?.position ?? 0,
       }}
     >
       <div
@@ -373,7 +374,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-5 -m-4 md:-m-8 p-4 md:p-8 min-h-full" style={{ backgroundColor: T.bg }}>
+    <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-full flex flex-col gap-5" style={{ backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
       {/* Onboarding */}
@@ -440,7 +441,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Bento KPI Grid */}
-      {isVisible('kpis') && <DraggableSection id="kpis" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+      {isVisible('kpis') && <DraggableSection id="kpis" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
           <div className="col-span-2">
             <Readout label="Revenue Mes" value={`€${((stats?.revenue_won_this_month || 0) / 1000).toFixed(0)}K`} color={T.warning} subtext="cerrados este mes" />
@@ -461,7 +462,7 @@ export default function DashboardPage() {
       </DraggableSection>}
 
       {/* Charts */}
-      {isVisible('charts') && <DraggableSection id="charts" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+      {isVisible('charts') && <DraggableSection id="charts" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Panel title="Pipeline por etapa">
           {pipelineChartData.length > 0 ? (
@@ -526,17 +527,17 @@ export default function DashboardPage() {
       </DraggableSection>}
 
       {/* Revenue Waterfall & Team Activity Radar */}
-      {isVisible('charts') && <DraggableSection id="charts" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+      {isVisible('charts') && <DraggableSection id="charts" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <WaterfallAndRadarSection />
       </DraggableSection>}
 
       {/* Activity Heatmap (GitHub-style) */}
-      {isVisible('activity') && <DraggableSection id="activity" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+      {isVisible('activity') && <DraggableSection id="activity" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <ActivityHeatmap months={6} />
       </DraggableSection>}
 
       {/* Conversion Funnel + Deals */}
-      {isVisible('pipeline') && <DraggableSection id="pipeline" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+      {isVisible('pipeline') && <DraggableSection id="pipeline" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Panel title="Embudo de conversion" className="lg:col-span-2">
           {stats?.conversion_funnel && stats.conversion_funnel.length > 0 ? (
@@ -590,7 +591,7 @@ export default function DashboardPage() {
       </DraggableSection>}
 
       {/* Top Leads + Activity Feed */}
-      {isVisible('activity') && <DraggableSection id="activity" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+      {isVisible('activity') && <DraggableSection id="activity" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Panel title="Top leads — score">
           {stats?.top_leads_by_score && stats.top_leads_by_score.length > 0 ? (
@@ -747,13 +748,13 @@ export default function DashboardPage() {
       </div>
 
       {/* Marketing, Automations & Agents */}
-      {isVisible('marketing') && <DraggableSection id="marketing" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+      {isVisible('marketing') && <DraggableSection id="marketing" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <div className={getSize('marketing') === 'lg' ? 'lg:col-span-2' : getSize('marketing') === 'sm' ? '' : ''}><MarketingSummary /></div>
       </DraggableSection>}
-      {isVisible('automations') && <DraggableSection id="automations" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+      {isVisible('automations') && <DraggableSection id="automations" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <div className={getSize('automations') === 'lg' ? 'lg:col-span-2' : getSize('automations') === 'sm' ? '' : ''}><AutomationsSummary /></div>
       </DraggableSection>}
-      {isVisible('agents') && <DraggableSection id="agents" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder}>
+      {isVisible('agents') && <DraggableSection id="agents" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <div className={getSize('agents') === 'lg' ? 'lg:col-span-2' : getSize('agents') === 'sm' ? '' : ''}><AgentsSummary /></div>
       </DraggableSection>}
     </div>
