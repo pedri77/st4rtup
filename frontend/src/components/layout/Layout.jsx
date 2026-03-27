@@ -214,6 +214,31 @@ export default function Layout() {
           </div>
         </nav>
 
+        {/* Onboarding Progress Widget */}
+        {!collapsed && (() => {
+          const steps = [
+            { key: 'lead', label: 'Crear lead' },
+            { key: 'pipeline', label: 'Pipeline' },
+            { key: 'email', label: 'Enviar email' },
+            { key: 'action', label: 'Crear acción' },
+          ]
+          const done = steps.filter(s => localStorage.getItem(`onb_${s.key}`) === '1').length
+          const pct = Math.round((done / steps.length) * 100)
+          if (pct >= 100) return null
+          return (
+            <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.border}` }}>
+              <div style={{ fontSize: '.65rem', color: T.fgMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>Onboarding</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
+                <span style={{ fontFamily: fontMono, fontWeight: 700, fontSize: '.85rem', color: pct > 50 ? T.success : T.cyan }}>{pct}%</span>
+                <span style={{ fontSize: '.65rem', color: T.fgMuted }}>{done}/{steps.length}</span>
+              </div>
+              <div style={{ height: 4, background: T.muted, borderRadius: 2, overflow: 'hidden' }}>
+                <div style={{ width: `${pct}%`, height: '100%', borderRadius: 2, background: pct > 50 ? T.success : T.cyan, transition: 'width 0.3s' }} />
+              </div>
+            </div>
+          )
+        })()}
+
         {/* API Cost Widget */}
         {!collapsed && <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.border}` }}>
           <div style={{ fontSize: '.65rem', color: T.fgMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>API · uso mensual</div>

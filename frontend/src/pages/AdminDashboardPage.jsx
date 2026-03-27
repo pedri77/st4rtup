@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useState, useEffect } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
-import { Shield, Users, DollarSign, TrendingUp, Building2, Activity, UserPlus, Zap, Heart, AlertTriangle, Server, Mail, BarChart3, Eye, ChevronRight } from 'lucide-react'
+import { Shield, Users, DollarSign, TrendingUp, Building2, Activity, UserPlus, Zap, Heart, AlertTriangle, Server, Mail, BarChart3, Eye, ChevronRight, FileText, RefreshCw, LogIn, ClipboardList } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import api from '@/services/api'
 
@@ -21,6 +21,7 @@ const ADMIN_TABS = [
   { id: 'affiliates', label: 'Afiliados', icon: DollarSign },
   { id: 'costs', label: 'Costes', icon: TrendingUp },
   { id: 'logs', label: 'Logs', icon: Server },
+  { id: 'audit', label: 'Audit Log', icon: ClipboardList },
   { id: 'onboarding', label: 'Onboarding', icon: UserPlus },
 ]
 
@@ -47,9 +48,12 @@ export default function AdminDashboardPage() {
   const { data: costs, refetch: refetchCosts } = useQuery({ queryKey: ['admin', 'costs'], queryFn: () => api.get('/admin/costs').then(r => r.data), staleTime: 60000, enabled: activeTab === 'costs' })
   const [costForm, setCostForm] = useState({ name: '', provider: '', category: 'infrastructure', amount_eur: 0, billing_cycle: 'monthly', is_variable: false, notes: '' })
   const [showCostForm, setShowCostForm] = useState(false)
-  const { data: logs } = useQuery({ queryKey: ['admin', 'logs'], queryFn: () => api.get('/admin/logs?lines=50').then(r => r.data), staleTime: 15000, enabled: activeTab === 'logs' })
+  const { data: logs } = useQuery({ queryKey: ['admin', 'logs'], queryFn: () => api.get('/admin/logs?lines=100').then(r => r.data), staleTime: 5000, refetchInterval: activeTab === 'logs' ? 10000 : false, enabled: activeTab === 'logs' })
+  const { data: auditLog } = useQuery({ queryKey: ['admin', 'audit-log'], queryFn: () => api.get('/audit-global/').then(r => r.data).catch(() => []), staleTime: 30000, enabled: activeTab === 'audit' })
   const { data: onbStatus } = useQuery({ queryKey: ['admin', 'onboarding-status'], queryFn: () => api.get('/admin/onboarding-status').then(r => r.data), staleTime: 60000, enabled: activeTab === 'onboarding' })
   const { data: impersonated } = useQuery({ queryKey: ['admin', 'impersonate', impersonateId], queryFn: () => api.post(`/admin/impersonate/${impersonateId}`).then(r => r.data), enabled: !!impersonateId })
+  const [orgMetricsId, setOrgMetricsId] = useState(null)
+  const { data: orgMetrics } = useQuery({ queryKey: ['admin', 'org-metrics', orgMetricsId], queryFn: () => api.get(`/admin/org/${orgMetricsId}/metrics`).then(r => r.data), enabled: !!orgMetricsId, staleTime: 60000 })
 
   const planData = kpis?.plans ? Object.entries(kpis.plans).map(([name, value]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), value, fill: PLAN_COLORS[name] })).filter(d => d.value > 0) : []
 
@@ -94,9 +98,29 @@ export default function AdminDashboardPage() {
 
         {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (<>
-          <h1 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
-            <BarChart3 size={20} color={T.cyan} /> Dashboard
-          </h1>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl font-bold flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
+              <BarChart3 size={20} color={T.cyan} /> Dashboard
+            </h1>
+            <button onClick={() => {
+              import('@/utils/exportPdf').then(({ exportToPDF }) => {
+                const sections = []
+                sections.push({ heading: 'Admin KPIs', type: 'metrics', data: [
+                  { label: 'Usuarios', value: kpis?.total_users || 0, color: T.cyan },
+                  { label: 'Organizaciones', value: kpis?.total_orgs || 0, color: T.purple },
+                  { label: 'MRR', value: `€${kpis?.mrr || 0}`, color: T.success },
+                  { label: 'ARR', value: `€${kpis?.arr || 0}`, color: T.warning },
+                  { label: 'Signups 7d', value: kpis?.signups_7d || 0, color: T.cyan },
+                  { label: 'Trials activos', value: kpis?.active_trials || 0, color: T.destructive },
+                ] })
+                exportToPDF('Informe Admin — St4rtup', sections)
+              })
+            }}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs"
+              style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted, fontFamily: fontDisplay, cursor: 'pointer' }}>
+              <FileText size={14} /> Exportar PDF
+            </button>
+          </div>
 
           {/* KPIs */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
@@ -199,9 +223,14 @@ export default function AdminDashboardPage() {
                     <td style={{ padding: '10px 12px', fontFamily: fontMono, color: T.fgMuted }}>{o.opportunities}</td>
                     <td style={{ padding: '10px 12px', fontFamily: fontMono, color: T.fgMuted, fontSize: 10 }}>{o.created_at ? new Date(o.created_at).toLocaleDateString('es-ES') : ''}</td>
                     <td style={{ padding: '10px 12px' }}>
-                      <button onClick={() => setImpersonateId(o.id)} style={{ padding: '4px 10px', borderRadius: 6, backgroundColor: T.muted, border: 'none', fontSize: 10, color: T.cyan, cursor: 'pointer', fontWeight: 600 }}>
-                        <Eye size={11} /> Ver
-                      </button>
+                      <div className="flex gap-1">
+                        <button onClick={() => setImpersonateId(o.id)} style={{ padding: '4px 8px', borderRadius: 6, backgroundColor: T.muted, border: 'none', fontSize: 10, color: T.cyan, cursor: 'pointer', fontWeight: 600 }} title="Ver detalles">
+                          <Eye size={11} />
+                        </button>
+                        <button onClick={() => setOrgMetricsId(o.id)} style={{ padding: '4px 8px', borderRadius: 6, backgroundColor: `${T.purple}10`, border: 'none', fontSize: 10, color: T.purple, cursor: 'pointer', fontWeight: 600 }} title="Métricas 30d">
+                          <BarChart3 size={11} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -248,6 +277,31 @@ export default function AdminDashboardPage() {
                   </div>
                 )}
                 <button onClick={() => setImpersonateId(null)} style={{ marginTop: 16, width: '100%', padding: '8px', borderRadius: 8, backgroundColor: T.muted, border: 'none', fontSize: 12, color: T.fgMuted, cursor: 'pointer' }}>Cerrar</button>
+              </div>
+            </div>
+          )}
+
+          {/* Org Metrics Modal */}
+          {orgMetricsId && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setOrgMetricsId(null)}>
+              <div style={{ backgroundColor: T.card, borderRadius: 16, padding: 24, maxWidth: 600, width: '90%', maxHeight: '80vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: T.fg, marginBottom: 16, fontFamily: fontDisplay }}>
+                  <BarChart3 size={18} color={T.purple} style={{ display: 'inline', marginRight: 8 }} />
+                  Métricas 30 días
+                </h3>
+                {orgMetrics ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                    {Object.entries(orgMetrics).filter(([k]) => typeof orgMetrics[k] === 'number').map(([key, val]) => (
+                      <div key={key} className="rounded-lg p-3" style={{ backgroundColor: T.muted }}>
+                        <p style={{ fontSize: 10, color: T.fgMuted, textTransform: 'uppercase', fontFamily: fontMono }}>{key.replace(/_/g, ' ')}</p>
+                        <p style={{ fontSize: 18, fontWeight: 700, color: T.fg, fontFamily: fontMono }}>{typeof val === 'number' && val > 100 ? val.toLocaleString('es-ES') : val}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p style={{ textAlign: 'center', padding: 20, color: T.fgMuted }}>Cargando métricas...</p>
+                )}
+                <button onClick={() => setOrgMetricsId(null)} style={{ marginTop: 8, width: '100%', padding: '8px', borderRadius: 8, backgroundColor: T.muted, border: 'none', fontSize: 12, color: T.fgMuted, cursor: 'pointer' }}>Cerrar</button>
               </div>
             </div>
           )}
@@ -443,22 +497,84 @@ export default function AdminDashboardPage() {
           </div>
         </>)}
 
-        {/* LOGS TAB */}
+        {/* LOGS TAB — Real-time polling */}
         {activeTab === 'logs' && (<>
-          <h1 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
-            <Server size={20} color={T.warning} /> Logs del sistema ({logs?.errors || 0} errores)
-          </h1>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl font-bold flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
+              <Server size={20} color={T.warning} /> Logs del sistema ({logs?.errors || 0} errores)
+            </h1>
+            <div className="flex items-center gap-2">
+              <span className="flex items-center gap-1.5 text-xs" style={{ color: T.success }}>
+                <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: T.success }} />
+                Auto-refresh 10s
+              </span>
+            </div>
+          </div>
           {logs?.error_lines?.length > 0 && (
             <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
-              <h3 style={{ fontSize: 13, fontWeight: 600, color: T.destructive, marginBottom: 8 }}>Errores recientes</h3>
-              {logs.error_lines.map((l, i) => <p key={i} style={{ fontSize: 11, fontFamily: fontMono, color: T.destructive, marginBottom: 2 }}>{l}</p>)}
+              <h3 style={{ fontSize: 13, fontWeight: 600, color: T.destructive, marginBottom: 8 }}>Errores recientes ({logs.error_lines.length})</h3>
+              {logs.error_lines.map((l, i) => (
+                <p key={i} style={{ fontSize: 11, fontFamily: fontMono, color: T.destructive, marginBottom: 2, padding: '3px 6px', borderRadius: 4, backgroundColor: i % 2 === 0 ? '#FEE2E220' : 'transparent' }}>{l}</p>
+              ))}
             </div>
           )}
           <div className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
-            <div style={{ maxHeight: 500, overflowY: 'auto', fontFamily: fontMono, fontSize: 11, color: T.fgMuted, lineHeight: 1.6 }}>
-              {(logs?.lines || []).map((l, i) => <div key={i} style={{ padding: '2px 0', borderBottom: `1px solid ${T.muted}` }}>{l}</div>)}
+            <div style={{ maxHeight: 600, overflowY: 'auto', fontFamily: fontMono, fontSize: 11, color: T.fgMuted, lineHeight: 1.6 }}>
+              {(logs?.lines || []).map((l, i) => {
+                const isError = /error|exception|traceback|critical/i.test(l)
+                const isWarning = /warn/i.test(l)
+                return (
+                  <div key={i} style={{
+                    padding: '3px 6px', borderBottom: `1px solid ${T.muted}`,
+                    backgroundColor: isError ? '#FEF2F210' : isWarning ? '#FFF7ED10' : 'transparent',
+                    color: isError ? T.destructive : isWarning ? T.warning : T.fgMuted,
+                    fontWeight: isError ? 600 : 400,
+                  }}>{l}</div>
+                )
+              })}
               {(!logs?.lines || logs.lines.length === 0) && <p style={{ textAlign: 'center', padding: 20, color: T.fgMuted }}>Sin logs disponibles</p>}
             </div>
+          </div>
+        </>)}
+
+        {/* AUDIT LOG TAB */}
+        {activeTab === 'audit' && (<>
+          <h1 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
+            <ClipboardList size={20} color={T.purple} /> Audit Log
+          </h1>
+          <div className="rounded-xl overflow-hidden" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <thead><tr style={{ borderBottom: `2px solid ${T.border}` }}>
+                {['Fecha', 'Usuario', 'Acción', 'Recurso', 'Detalles'].map(h => (
+                  <th key={h} style={{ padding: '8px 10px', textAlign: 'left', color: T.fgMuted, fontWeight: 500, fontFamily: fontMono, fontSize: 10, textTransform: 'uppercase' }}>{h}</th>
+                ))}
+              </tr></thead>
+              <tbody>
+                {(Array.isArray(auditLog) ? auditLog : auditLog?.items || []).slice(0, 100).map((entry, i) => {
+                  const actionColor = /delete|remove/i.test(entry.action) ? T.destructive : /create|add/i.test(entry.action) ? T.success : /update|edit/i.test(entry.action) ? T.warning : T.fgMuted
+                  return (
+                    <tr key={entry.id || i} style={{ borderBottom: `1px solid ${T.muted}` }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = T.muted}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
+                      <td style={{ padding: '8px 10px', fontFamily: fontMono, fontSize: 10, color: T.fgMuted, whiteSpace: 'nowrap' }}>
+                        {entry.created_at ? new Date(entry.created_at).toLocaleString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}
+                      </td>
+                      <td style={{ padding: '8px 10px', fontSize: 11, color: T.fg }}>{entry.user_email || entry.actor || '—'}</td>
+                      <td style={{ padding: '8px 10px' }}>
+                        <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 6, backgroundColor: `${actionColor}12`, color: actionColor, fontWeight: 600 }}>{entry.action}</span>
+                      </td>
+                      <td style={{ padding: '8px 10px', fontSize: 11, color: T.fg }}>{entry.resource_type || entry.entity_type || '—'}</td>
+                      <td style={{ padding: '8px 10px', fontSize: 10, color: T.fgMuted, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {typeof entry.details === 'object' ? JSON.stringify(entry.details) : entry.details || entry.description || '—'}
+                      </td>
+                    </tr>
+                  )
+                })}
+                {(!auditLog || (Array.isArray(auditLog) ? auditLog : auditLog?.items || []).length === 0) && (
+                  <tr><td colSpan={5} style={{ textAlign: 'center', padding: 30, color: T.fgMuted, fontFamily: fontMono }}>Sin registros de auditoría</td></tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </>)}
 

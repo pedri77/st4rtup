@@ -50,7 +50,7 @@ export default function ContactSalesPage() {
       </nav>
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '60px 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'start' }} className="grid-cols-1 md:grid-cols-2">
+        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 48, alignItems: 'start' }}>
 
           {/* Left — Info */}
           <div>
