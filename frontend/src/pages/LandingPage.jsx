@@ -1,3 +1,4 @@
+import SEO from '@/components/SEO'
 import ExitIntentPopup from '@/components/ExitIntentPopup'
 import WebChatWidget from '@/components/WebChatWidget'
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -157,10 +158,13 @@ function FadeIn({ children, delay = 0 }) {
 export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [lang, setLang] = useState('es')
+  const [annual, setAnnual] = useState(false)
+  const [testimonialIdx, setTestimonialIdx] = useState(0)
   const t = T[lang]
 
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+      <SEO path="/" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
       {/* Nav */}
@@ -215,20 +219,24 @@ export default function LandingPage() {
             </FadeIn>
           </div>
           <FadeIn delay={0.3}>
-            <div style={{ flex: '1 1 400px', background: 'white', borderRadius: 16, padding: 24, boxShadow: '0 20px 60px rgba(0,0,0,0.08)', border: '1px solid #E2E8F0' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 16 }}>
-                {[{ label: t.mock.revenue, value: '€47.2K', color: '#1E6FD9' }, { label: t.mock.leads, value: '284', color: '#F5820B' }, { label: t.mock.conversion, value: '12.4%', color: '#10B981' }].map(k => (
-                  <div key={k.label} style={{ backgroundColor: '#F8FAFC', borderRadius: 10, padding: 12, textAlign: 'center' }}>
-                    <p style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1, color: '#64748B', margin: 0 }}>{k.label}</p>
-                    <p style={{ fontSize: 22, fontWeight: 700, color: k.color, margin: '4px 0 0', fontFamily: "'Plus Jakarta Sans'" }}>{k.value}</p>
-                  </div>
-                ))}
+            <div style={{ flex: '1 1 400px', position: 'relative' }}>
+              <div style={{ background: 'white', borderRadius: 16, padding: 24, boxShadow: '0 20px 60px rgba(0,0,0,0.08)', border: '1px solid #E2E8F0', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 16 }}>
+                  {[{ label: t.mock.revenue, value: '€47.2K', color: '#1E6FD9' }, { label: t.mock.leads, value: '284', color: '#F5820B' }, { label: t.mock.conversion, value: '12.4%', color: '#10B981' }].map(k => (
+                    <div key={k.label} style={{ backgroundColor: '#F8FAFC', borderRadius: 10, padding: 12, textAlign: 'center' }}>
+                      <p style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1, color: '#64748B', margin: 0 }}>{k.label}</p>
+                      <p style={{ fontSize: 22, fontWeight: 700, color: k.color, margin: '4px 0 0', fontFamily: "'Plus Jakarta Sans'" }}>{k.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 80 }}>
+                  {[40, 55, 35, 70, 50, 85, 65, 90, 75, 95, 80, 100].map((h, i) => (
+                    <div key={i} style={{ flex: 1, height: `${h}%`, borderRadius: 4, background: 'linear-gradient(180deg, #1E6FD9, #F5820B)', opacity: 0.7 + h / 500 }} />
+                  ))}
+                </div>
               </div>
-              <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 80 }}>
-                {[40, 55, 35, 70, 50, 85, 65, 90, 75, 95, 80, 100].map((h, i) => (
-                  <div key={i} style={{ flex: 1, height: `${h}%`, borderRadius: 4, background: 'linear-gradient(180deg, #1E6FD9, #F5820B)', opacity: 0.7 + h / 500 }} />
-                ))}
-              </div>
+              {/* Floating rocket accent */}
+              <img src="/images/rocket.webp" alt="" style={{ position: 'absolute', top: -30, right: -20, width: 80, height: 80, objectFit: 'contain', opacity: 0.15, transform: 'rotate(-15deg)', pointerEvents: 'none' }} />
             </div>
           </FadeIn>
         </div>
@@ -300,10 +308,22 @@ export default function LandingPage() {
       <section id="pricing" style={{ padding: '100px 24px', backgroundColor: 'white' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <FadeIn>
-            <div style={{ textAlign: 'center', marginBottom: 60 }}>
+            <div style={{ textAlign: 'center', marginBottom: 40 }}>
               <p style={{ fontSize: 14, fontWeight: 600, color: '#1E6FD9', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>{t.pricing.tag}</p>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 36, fontWeight: 800, marginBottom: 16 }}>{t.pricing.h2}</h2>
-              <p style={{ fontSize: 16, color: '#64748B' }}>{t.pricing.sub}</p>
+              <p style={{ fontSize: 16, color: '#64748B', marginBottom: 24 }}>{t.pricing.sub}</p>
+              {/* Billing toggle */}
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '4px 6px', backgroundColor: '#F1F5F9', borderRadius: 12 }}>
+                <button onClick={() => setAnnual(false)}
+                  style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', border: 'none', backgroundColor: !annual ? 'white' : 'transparent', color: !annual ? '#1A1A2E' : '#64748B', boxShadow: !annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s' }}>
+                  {lang === 'es' ? 'Mensual' : 'Monthly'}
+                </button>
+                <button onClick={() => setAnnual(true)}
+                  style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', border: 'none', backgroundColor: annual ? 'white' : 'transparent', color: annual ? '#1A1A2E' : '#64748B', boxShadow: annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s', position: 'relative' }}>
+                  {lang === 'es' ? 'Anual' : 'Annual'}
+                  <span style={{ position: 'absolute', top: -8, right: -12, padding: '2px 6px', backgroundColor: '#10B981', color: 'white', borderRadius: 6, fontSize: 10, fontWeight: 700 }}>-20%</span>
+                </button>
+              </div>
             </div>
           </FadeIn>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20, alignItems: 'start' }}>
@@ -325,9 +345,18 @@ export default function LandingPage() {
                     <h3 style={{ fontSize: 20, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'" }}>{p.name}</h3>
                     <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.desc}</p>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 24 }}>
-                      {p.price !== null ? (
-                        <><span style={{ fontSize: 44, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'" }}>€{p.price}</span><span style={{ fontSize: 15, color: '#64748B' }}>/mes</span></>
-                      ) : (
+                      {p.price !== null ? (() => {
+                        const monthly = Number(p.price)
+                        const displayed = annual && monthly > 0 ? Math.round(monthly * 0.8) : monthly
+                        return (
+                          <>
+                            {annual && monthly > 0 && <span style={{ fontSize: 18, fontWeight: 500, color: '#94A3B8', textDecoration: 'line-through', marginRight: 4 }}>€{monthly}</span>}
+                            <span style={{ fontSize: 44, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'", transition: 'all 0.3s' }}>€{displayed}</span>
+                            <span style={{ fontSize: 15, color: '#64748B' }}>/{annual ? (lang === 'es' ? 'mes' : 'mo') : (lang === 'es' ? 'mes' : 'mo')}</span>
+                            {annual && monthly > 0 && <span style={{ fontSize: 11, color: '#10B981', fontWeight: 700, marginLeft: 6 }}>{lang === 'es' ? 'facturado anual' : 'billed yearly'}</span>}
+                          </>
+                        )
+                      })() : (
                         <span style={{ fontSize: 28, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'", color: '#1E6FD9' }}>{t.pricing.contact}</span>
                       )}
                     </div>
@@ -378,10 +407,13 @@ export default function LandingPage() {
               <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 36, fontWeight: 800 }}>{t.testimonials.h2}</h2>
             </div>
           </FadeIn>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
+          {/* Desktop grid */}
+          <div className="hidden md:grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {t.testimonials.items.map((item, i) => (
               <FadeIn key={item.name} delay={i * 0.1}>
-                <div style={{ padding: 28, borderRadius: 16, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
+                <div style={{ padding: 28, borderRadius: 16, backgroundColor: 'white', border: '1px solid #E2E8F0', transition: 'transform 0.2s, box-shadow 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.06)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}>
                   <div style={{ display: 'flex', gap: 2, marginBottom: 16 }}>{[1,2,3,4,5].map(j => <Star key={j} size={16} fill="#F59E0B" color="#F59E0B" />)}</div>
                   <p style={{ fontSize: 15, color: '#2D2D44', lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>"{item.quote}"</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -398,6 +430,36 @@ export default function LandingPage() {
                 </div>
               </FadeIn>
             ))}
+          </div>
+          {/* Mobile carousel */}
+          <div className="md:hidden" style={{ overflow: 'hidden' }}>
+            <div style={{ display: 'flex', transition: 'transform 0.4s ease', transform: `translateX(-${testimonialIdx * 100}%)` }}>
+              {t.testimonials.items.map((item, i) => (
+                <div key={item.name} style={{ minWidth: '100%', padding: '0 4px', boxSizing: 'border-box' }}>
+                  <div style={{ padding: 24, borderRadius: 16, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
+                    <div style={{ display: 'flex', gap: 2, marginBottom: 12 }}>{[1,2,3,4,5].map(j => <Star key={j} size={16} fill="#F59E0B" color="#F59E0B" />)}</div>
+                    <p style={{ fontSize: 15, color: '#2D2D44', lineHeight: 1.7, marginBottom: 16, fontStyle: 'italic' }}>"{item.quote}"</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      {item.avatar ? (
+                        <img src={item.avatar} alt={item.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: '2px solid #E2E8F0' }} />
+                      ) : (
+                        <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>{item.name[0]}</div>
+                      )}
+                      <div>
+                        <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>{item.name}</p>
+                        <p style={{ fontSize: 12, color: '#64748B', margin: 0 }}>{item.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 16 }}>
+              {t.testimonials.items.map((_, i) => (
+                <button key={i} onClick={() => setTestimonialIdx(i)}
+                  style={{ width: testimonialIdx === i ? 24 : 8, height: 8, borderRadius: 4, border: 'none', cursor: 'pointer', transition: 'all 0.3s', backgroundColor: testimonialIdx === i ? '#1E6FD9' : '#CBD5E1' }} />
+              ))}
+            </div>
           </div>
         </div>
       </section>

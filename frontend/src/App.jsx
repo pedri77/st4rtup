@@ -1,7 +1,10 @@
 import { lazy, Suspense, useEffect } from 'react'
+import { HelmetProvider } from 'react-helmet-async'
 import { initPostHog } from '@/utils/posthog'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
+import PWAInstallPrompt from '@/components/PWAInstallPrompt'
+import useFavicon from '@/hooks/useFavicon'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
@@ -114,13 +117,21 @@ function PageLoader() {
   )
 }
 
+function AppContent() {
+  useFavicon()
+  return null
+}
+
 function App() {
   useEffect(() => { initPostHog() }, [])
 
   return (
+    <HelmetProvider>
     <ErrorBoundary>
     <KeyboardShortcuts />
+    <PWAInstallPrompt />
     <AuthProvider>
+      <AppContent />
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
@@ -262,6 +273,7 @@ function App() {
       </Routes>
     </AuthProvider>
     </ErrorBoundary>
+    </HelmetProvider>
   )
 }
 

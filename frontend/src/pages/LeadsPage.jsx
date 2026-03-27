@@ -331,21 +331,28 @@ export default function LeadsPage() {
               <tbody>
                 {sortedItems.map((lead, idx) => (
                   <tr key={lead.id}
-                    className="cursor-pointer transition-colors"
+                    className="cursor-pointer group"
                     style={{
                       backgroundColor: idx % 2 === 0 ? T.bg : T.card,
-                      borderBottom: `1px solid ${T.border}40`,
+                      borderBottom: `1px solid ${T.border}20`,
+                      transition: 'background-color 0.15s, box-shadow 0.15s',
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = T.muted}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = idx % 2 === 0 ? T.bg : T.card}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = `${T.cyan}06`; e.currentTarget.style.boxShadow = `inset 3px 0 0 ${T.cyan}` }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = idx % 2 === 0 ? T.bg : T.card; e.currentTarget.style.boxShadow = 'none' }}
                     onClick={() => navigate(`/leads/${lead.id}`)}>
                     <td className="px-4 py-3">
-                      <Link to={`/leads/${lead.id}`}
-                        className="text-sm font-medium transition-colors"
-                        style={{ color: T.fg }}
-                        onClick={e => e.stopPropagation()}>
-                        {lead.company_name}
-                      </Link>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold"
+                          style={{ background: `linear-gradient(135deg, ${T.cyan}20, ${T.purple}15)`, color: T.cyan }}>
+                          {(lead.company_name || '?')[0]}
+                        </div>
+                        <Link to={`/leads/${lead.id}`}
+                          className="text-sm font-medium transition-colors group-hover:underline"
+                          style={{ color: T.fg }}
+                          onClick={e => e.stopPropagation()}>
+                          {lead.company_name}
+                        </Link>
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <p className="text-sm" style={{ color: T.fg }}>{lead.contact_name || '—'}</p>
