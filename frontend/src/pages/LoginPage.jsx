@@ -109,7 +109,10 @@ export default function LoginPage() {
                   <div>
                     <label htmlFor="reset-email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                     <input id="reset-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                      required disabled={loading} className="input w-full" placeholder="tu@email.com" autoComplete="email" />
+                      required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
+                      onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                      onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }}
+                      placeholder="tu@email.com" autoComplete="email" />
                   </div>
                   <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2">
                     {loading ? (
@@ -161,7 +164,10 @@ export default function LoginPage() {
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                   <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    required disabled={loading} className="input w-full" placeholder="tu@email.com" autoComplete="email" />
+                    required disabled={loading} placeholder="tu@email.com" autoComplete="email"
+                    style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }} />
                 </div>
 
                 <div>
@@ -171,7 +177,10 @@ export default function LoginPage() {
                       className="text-xs text-blue-600 hover:underline">¿Olvidaste tu contraseña?</button>
                   </div>
                   <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                    required disabled={loading} className="input w-full" placeholder="••••••••" autoComplete="current-password" />
+                    required disabled={loading} placeholder="••••••••" autoComplete="current-password"
+                    style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }} />
                 </div>
 
                 <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2">
