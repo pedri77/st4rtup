@@ -405,3 +405,94 @@ async def admin_delete_cost(
     await db.execute(sql_text("DELETE FROM platform_costs WHERE id = :id"), {"id": cost_id})
     await db.commit()
     return {"deleted": True}
+
+
+# ─── ADMIN V2: LOGS, AUDIT, ORG METRICS ─────────────────────
+
+@router.get("/logs")
+async def admin_logs(
+    lines: int = Query(50, ge=10, le=200),
+    current_user: dict = Depends(require_admin),
+):
+    """Recent backend logs (from journalctl)."""
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["journalctl", "-u", "st4rtup", "--no-pager", "-n", str(lines), "--output=short"],
+            capture_output=True, text=True, timeout=5,
+        )
+        log_lines = result.stdout.strip().split("\n") if result.stdout else []
+        errors = [l for l in log_lines if "ERROR" in l or "500" in l or "Traceback" in l]
+        return {"lines": log_lines[-lines:], "total": len(log_lines), "errors": len(errors), "error_lines": errors[-10:]}
+    except Exception as e:
+        return {"lines": [], "total": 0, "errors": 0, "error": str(e)}
+
+
+@router.get("/org/{org_id}/metrics")
+async def admin_org_metrics(
+    org_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Detailed metrics for a specific organization."""
+    now = datetime.now(timezone.utc)
+    week = now - timedelta(days=7)
+    month = now - timedelta(days=30)
+
+    leads_total = (await db.execute(select(func.count(Lead.id)).where(Lead.org_id == org_id))).scalar() or 0
+    leads_week = (await db.execute(select(func.count(Lead.id)).where(Lead.org_id == org_id, Lead.created_at >= week))).scalar() or 0
+    opps_total = (await db.execute(select(func.count(Opportunity.id)).where(Opportunity.org_id == org_id))).scalar() or 0
+    actions_total = (await db.execute(select(func.count(Action.id)).where(Action.org_id == org_id))).scalar() or 0
+    emails_total = (await db.execute(select(func.count(Email.id)).where(Email.org_id == org_id))).scalar() or 0
+
+    # Activity by day (last 30 days)
+    daily = await db.execute(
+        select(func.date(Lead.created_at), func.count(Lead.id))
+        .where(Lead.org_id == org_id, Lead.created_at >= month)
+        .group_by(func.date(Lead.created_at))
+        .order_by(func.date(Lead.created_at))
+    )
+    activity = [{"date": str(r[0]), "leads": r[1]} for r in daily.all()]
+
+    return {
+        "org_id": org_id,
+        "leads": {"total": leads_total, "last_7d": leads_week},
+        "opportunities": opps_total,
+        "actions": actions_total,
+        "emails": emails_total,
+        "daily_activity": activity,
+    }
+
+
+@router.get("/onboarding-status")
+async def admin_onboarding_status(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Overview of onboarding completion across all orgs."""
+    result = await db.execute(select(Organization).order_by(desc(Organization.created_at)).limit(50))
+    orgs = result.scalars().all()
+
+    statuses = []
+    for org in orgs:
+        has_leads = (await db.execute(select(func.count(Lead.id)).where(Lead.org_id == org.id))).scalar() or 0
+        has_opps = (await db.execute(select(func.count(Opportunity.id)).where(Opportunity.org_id == org.id))).scalar() or 0
+        has_emails = (await db.execute(select(func.count(Email.id)).where(Email.org_id == org.id))).scalar() or 0
+
+        steps_done = sum([
+            has_leads > 0,
+            has_opps > 0,
+            has_emails > 0,
+            bool(org.sector),
+            bool(org.stripe_subscription_id),
+        ])
+        statuses.append({
+            "org_id": str(org.id), "name": org.name, "plan": org.plan,
+            "steps_done": steps_done, "total_steps": 5,
+            "has_leads": has_leads > 0, "has_opps": has_opps > 0,
+            "has_emails": has_emails > 0, "has_sector": bool(org.sector),
+            "has_payment": bool(org.stripe_subscription_id),
+            "created_at": org.created_at.isoformat() if org.created_at else None,
+        })
+
+    return {"items": statuses, "total": len(statuses)}

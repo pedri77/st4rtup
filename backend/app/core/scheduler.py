@@ -367,6 +367,57 @@ async def run_in02_telegram_hub():
         logger.error(f"IN-02 error: {e}")
 
 
+async def run_founder_weekly_report():
+    """Send weekly KPI report to admin/founder — Mon 09:30"""
+    try:
+        from app.core.config import settings
+        admin_email = (settings.ADMIN_EMAILS or "").split(",")[0].strip()
+        if not admin_email or not settings.RESEND_API_KEY:
+            return
+        async with AsyncSessionLocal() as db:
+            from app.models import Lead, Opportunity, Action, ActionStatus, Email
+            from app.models.pipeline import OpportunityStage
+            from app.models.organization import Organization
+            now = datetime.now(timezone.utc)
+            week_ago = now - timedelta(days=7)
+
+            new_leads = (await db.execute(select(func.count(Lead.id)).where(Lead.created_at >= week_ago))).scalar() or 0
+            new_opps = (await db.execute(select(func.count(Opportunity.id)).where(Opportunity.created_at >= week_ago))).scalar() or 0
+            won = (await db.execute(select(func.count(Opportunity.id)).where(Opportunity.stage == OpportunityStage.CLOSED_WON, Opportunity.updated_at >= week_ago))).scalar() or 0
+            actions_done = (await db.execute(select(func.count(Action.id)).where(Action.status == ActionStatus.COMPLETED, Action.updated_at >= week_ago))).scalar() or 0
+            emails_sent = (await db.execute(select(func.count(Email.id)).where(Email.created_at >= week_ago))).scalar() or 0
+            total_orgs = (await db.execute(select(func.count(Organization.id)))).scalar() or 0
+            new_signups = (await db.execute(select(func.count(Organization.id)).where(Organization.created_at >= week_ago))).scalar() or 0
+            mrr = 0
+            for plan, price in [('growth', 19), ('scale', 49)]:
+                count = (await db.execute(select(func.count(Organization.id)).where(Organization.plan == plan))).scalar() or 0
+                mrr += count * price
+
+            subject = f"St4rtup Weekly Report — MRR €{mrr} · {new_signups} signups · {new_leads} leads"
+            body = f"""Resumen semanal St4rtup ({now.strftime('%d/%m/%Y')})
+
+NEGOCIO
+• MRR: €{mrr}
+• Organizaciones: {total_orgs} ({new_signups} nuevas)
+
+ACTIVIDAD (últimos 7 días)
+• Leads nuevos: {new_leads}
+• Oportunidades: {new_opps}
+• Deals ganados: {won}
+• Acciones completadas: {actions_done}
+• Emails enviados: {emails_sent}
+
+Dashboard: https://st4rtup.com/app/admin
+
+— St4rtup Platform"""
+
+            from app.services.email_service import send_email
+            await send_email(to=admin_email, subject=subject, body=body)
+            logger.info("Founder weekly report sent to %s", admin_email)
+    except Exception as e:
+        logger.error(f"Founder weekly report error: {e}")
+
+
 async def run_trial_expiry_check():
     """Check for trials expiring in 1-2 days and send emails — 10:00"""
     try:
@@ -473,6 +524,7 @@ def init_scheduler():
         # Platform
         (run_platform_metrics_snapshot, CronTrigger(hour=2, minute=0), 'platform_metrics', 'Platform metrics daily snapshot'),
         (run_trial_expiry_check, CronTrigger(hour=10, minute=0), 'trial_expiry', 'Trial expiry email check'),
+        (run_founder_weekly_report, CronTrigger(day_of_week='mon', hour=9, minute=30), 'founder_report', 'Founder weekly KPI report'),
     ]
 
     for func, trigger, job_id, name in JOBS:

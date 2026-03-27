@@ -20,6 +20,8 @@ const ADMIN_TABS = [
   { id: 'alerts', label: 'Alertas', icon: AlertTriangle },
   { id: 'affiliates', label: 'Afiliados', icon: DollarSign },
   { id: 'costs', label: 'Costes', icon: TrendingUp },
+  { id: 'logs', label: 'Logs', icon: Server },
+  { id: 'onboarding', label: 'Onboarding', icon: UserPlus },
 ]
 
 export default function AdminDashboardPage() {
@@ -45,6 +47,8 @@ export default function AdminDashboardPage() {
   const { data: costs, refetch: refetchCosts } = useQuery({ queryKey: ['admin', 'costs'], queryFn: () => api.get('/admin/costs').then(r => r.data), staleTime: 60000, enabled: activeTab === 'costs' })
   const [costForm, setCostForm] = useState({ name: '', provider: '', category: 'infrastructure', amount_eur: 0, billing_cycle: 'monthly', is_variable: false, notes: '' })
   const [showCostForm, setShowCostForm] = useState(false)
+  const { data: logs } = useQuery({ queryKey: ['admin', 'logs'], queryFn: () => api.get('/admin/logs?lines=50').then(r => r.data), staleTime: 15000, enabled: activeTab === 'logs' })
+  const { data: onbStatus } = useQuery({ queryKey: ['admin', 'onboarding-status'], queryFn: () => api.get('/admin/onboarding-status').then(r => r.data), staleTime: 60000, enabled: activeTab === 'onboarding' })
   const { data: impersonated } = useQuery({ queryKey: ['admin', 'impersonate', impersonateId], queryFn: () => api.post(`/admin/impersonate/${impersonateId}`).then(r => r.data), enabled: !!impersonateId })
 
   const planData = kpis?.plans ? Object.entries(kpis.plans).map(([name, value]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), value, fill: PLAN_COLORS[name] })).filter(d => d.value > 0) : []
@@ -432,6 +436,63 @@ export default function AdminDashboardPage() {
                     <td style={{ padding: '8px 10px' }}>
                       <button onClick={async () => { await api.delete(`/admin/costs/${c.id}`); refetchCosts() }} style={{ fontSize: 10, color: T.destructive, background: 'none', border: 'none', cursor: 'pointer' }}>Eliminar</button>
                     </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>)}
+
+        {/* LOGS TAB */}
+        {activeTab === 'logs' && (<>
+          <h1 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
+            <Server size={20} color={T.warning} /> Logs del sistema ({logs?.errors || 0} errores)
+          </h1>
+          {logs?.error_lines?.length > 0 && (
+            <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+              <h3 style={{ fontSize: 13, fontWeight: 600, color: T.destructive, marginBottom: 8 }}>Errores recientes</h3>
+              {logs.error_lines.map((l, i) => <p key={i} style={{ fontSize: 11, fontFamily: fontMono, color: T.destructive, marginBottom: 2 }}>{l}</p>)}
+            </div>
+          )}
+          <div className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+            <div style={{ maxHeight: 500, overflowY: 'auto', fontFamily: fontMono, fontSize: 11, color: T.fgMuted, lineHeight: 1.6 }}>
+              {(logs?.lines || []).map((l, i) => <div key={i} style={{ padding: '2px 0', borderBottom: `1px solid ${T.muted}` }}>{l}</div>)}
+              {(!logs?.lines || logs.lines.length === 0) && <p style={{ textAlign: 'center', padding: 20, color: T.fgMuted }}>Sin logs disponibles</p>}
+            </div>
+          </div>
+        </>)}
+
+        {/* ONBOARDING TAB */}
+        {activeTab === 'onboarding' && (<>
+          <h1 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
+            <UserPlus size={20} color={T.success} /> Progreso Onboarding ({onbStatus?.total || 0} orgs)
+          </h1>
+          <div className="rounded-xl overflow-hidden" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <thead><tr style={{ borderBottom: `2px solid ${T.border}` }}>
+                {['Organización', 'Plan', 'Progreso', 'Leads', 'Opps', 'Email', 'Sector', 'Pago', 'Creada'].map(h => (
+                  <th key={h} style={{ padding: '8px 10px', textAlign: 'left', color: T.fgMuted, fontWeight: 500, fontFamily: fontMono, fontSize: 10, textTransform: 'uppercase' }}>{h}</th>
+                ))}
+              </tr></thead>
+              <tbody>
+                {(onbStatus?.items || []).map(o => (
+                  <tr key={o.org_id} style={{ borderBottom: `1px solid ${T.muted}` }}>
+                    <td style={{ padding: '8px 10px', fontWeight: 500, color: T.fg }}>{o.name}</td>
+                    <td style={{ padding: '8px 10px' }}><span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, backgroundColor: `${PLAN_COLORS[o.plan] || T.fgMuted}15`, color: PLAN_COLORS[o.plan] || T.fgMuted, fontWeight: 600 }}>{o.plan}</span></td>
+                    <td style={{ padding: '8px 10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ width: 60, height: 5, backgroundColor: T.muted, borderRadius: 3 }}>
+                          <div style={{ width: `${(o.steps_done / o.total_steps) * 100}%`, height: '100%', backgroundColor: o.steps_done === o.total_steps ? T.success : T.cyan, borderRadius: 3 }} />
+                        </div>
+                        <span style={{ fontSize: 10, fontFamily: fontMono, color: T.fgMuted }}>{o.steps_done}/{o.total_steps}</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '8px 10px', textAlign: 'center' }}>{o.has_leads ? '✅' : '❌'}</td>
+                    <td style={{ padding: '8px 10px', textAlign: 'center' }}>{o.has_opps ? '✅' : '❌'}</td>
+                    <td style={{ padding: '8px 10px', textAlign: 'center' }}>{o.has_emails ? '✅' : '❌'}</td>
+                    <td style={{ padding: '8px 10px', textAlign: 'center' }}>{o.has_sector ? '✅' : '❌'}</td>
+                    <td style={{ padding: '8px 10px', textAlign: 'center' }}>{o.has_payment ? '✅' : '❌'}</td>
+                    <td style={{ padding: '8px 10px', fontFamily: fontMono, color: T.fgMuted, fontSize: 10 }}>{o.created_at ? new Date(o.created_at).toLocaleDateString('es-ES') : ''}</td>
                   </tr>
                 ))}
               </tbody>
