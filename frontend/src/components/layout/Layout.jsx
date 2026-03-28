@@ -98,6 +98,30 @@ function getNavigationGroups(t) {
   ]
 }
 
+function ApiCostWidget() {
+  const [data, setData] = useState(null)
+  useEffect(() => {
+    import('@/services/api').then(({ default: api }) => {
+      api.get('/admin/api-costs').then(r => setData(r.data)).catch(() => {})
+    })
+  }, [])
+  const cost = data?.total_cost_usd || 0
+  const budget = data?.budget_usd || 50
+  const pct = Math.min((cost / budget) * 100, 100)
+  return (
+    <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.border}` }}>
+      <div style={{ fontSize: '.65rem', color: T.fgMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>API · uso mensual</div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
+        <span style={{ fontFamily: fontMono, fontWeight: 700, fontSize: '.9rem', color: pct > 80 ? T.destructive : T.cyan }}>${cost.toFixed(2)}</span>
+        <span style={{ fontSize: '.65rem', color: T.fgMuted }}>/ ${budget}</span>
+      </div>
+      <div style={{ height: 4, background: T.muted, borderRadius: 2, overflow: 'hidden' }}>
+        <div style={{ width: `${pct}%`, height: '100%', borderRadius: 2, background: pct > 80 ? T.destructive : T.cyan, transition: 'width 0.5s' }} />
+      </div>
+    </div>
+  )
+}
+
 export default function Layout() {
   const { searchOpen, setSearchOpen, notificationsOpen, setNotificationsOpen } = useUIStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -240,16 +264,7 @@ export default function Layout() {
         })()}
 
         {/* API Cost Widget */}
-        {!collapsed && <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.border}` }}>
-          <div style={{ fontSize: '.65rem', color: T.fgMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>API · uso mensual</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
-            <span style={{ fontFamily: fontMono, fontWeight: 700, fontSize: '.9rem', color: T.cyan }}>$0.00</span>
-            <span style={{ fontSize: '.65rem', color: T.fgMuted }}>/ $50</span>
-          </div>
-          <div style={{ height: 4, background: T.muted, borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{ width: '0%', height: '100%', borderRadius: 2, background: T.cyan }} />
-          </div>
-        </div>}
+        {!collapsed && <ApiCostWidget />}
         {/* Collapse toggle */}
         <button onClick={toggleSidebar} style={{ width: '100%', padding: 12, border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'center', color: T.fgMuted, backgroundColor: 'transparent', borderTop: `1px solid ${T.border}` }} title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}>
           {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}

@@ -239,6 +239,11 @@ class Settings(BaseSettings):
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     OLLAMA_MODEL: str = "llama3"
 
+    # DeepSeek
+    DEEPSEEK_API_KEY: str = ""
+    DEEPSEEK_BASE_URL: str = "https://api.deepseek.com/v1"
+    DEEPSEEK_MODEL: str = "deepseek-chat"
+
     # vLLM self-hosted (soberanía de datos)
     VLLM_BASE_URL: str = ""  # e.g. http://hetzner-gpu:8000
 

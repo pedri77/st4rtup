@@ -21,6 +21,7 @@ const ADMIN_TABS = [
   { id: 'affiliates', label: 'Afiliados', icon: DollarSign },
   { id: 'costs', label: 'Costes', icon: TrendingUp },
   { id: 'logs', label: 'Logs', icon: Server },
+  { id: 'api-costs', label: 'API Costs', icon: DollarSign },
   { id: 'audit', label: 'Audit Log', icon: ClipboardList },
   { id: 'onboarding', label: 'Onboarding', icon: UserPlus },
 ]
@@ -71,6 +72,7 @@ export default function AdminDashboardPage() {
     return () => { if (wsRef.current) { wsRef.current.close(); wsRef.current = null } }
   }, [activeTab])
   const logs = wsConnected ? { lines: wsLines, errors: wsLines.filter(l => /error|exception/i.test(l) && !/\b[2-3]\d\d\b/.test(l)).length, error_lines: wsLines.filter(l => /error|exception|traceback/i.test(l) && !/\b[2-3]\d\d\b/.test(l)) } : logsHttp
+  const { data: apiCosts } = useQuery({ queryKey: ['admin', 'api-costs'], queryFn: () => api.get('/admin/api-costs').then(r => r.data), staleTime: 60000, enabled: activeTab === 'api-costs' || activeTab === 'overview' })
   const { data: auditLog } = useQuery({ queryKey: ['admin', 'audit-log'], queryFn: () => api.get('/audit-global/').then(r => r.data).catch(() => []), staleTime: 30000, enabled: activeTab === 'audit' })
   const { data: onbStatus } = useQuery({ queryKey: ['admin', 'onboarding-status'], queryFn: () => api.get('/admin/onboarding-status').then(r => r.data), staleTime: 60000, enabled: activeTab === 'onboarding' })
   const { data: impersonated } = useQuery({ queryKey: ['admin', 'impersonate', impersonateId], queryFn: () => api.post(`/admin/impersonate/${impersonateId}`).then(r => r.data), enabled: !!impersonateId })
@@ -606,6 +608,68 @@ export default function AdminDashboardPage() {
               })}
               {(!logs?.lines || logs.lines.length === 0) && <p style={{ textAlign: 'center', padding: 20, color: T.fgMuted }}>Sin logs disponibles</p>}
             </div>
+          </div>
+        </>)}
+
+        {/* API COSTS TAB */}
+        {activeTab === 'api-costs' && (<>
+          <h1 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
+            <DollarSign size={20} color={T.warning} /> Coste API — {apiCosts?.month || '...'}
+          </h1>
+
+          {/* KPIs */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            {[
+              { label: 'Coste mensual', value: `$${apiCosts?.total_cost_usd?.toFixed(2) || '0.00'}`, color: T.warning },
+              { label: 'Budget', value: `$${apiCosts?.budget_usd || 50}`, color: T.fgMuted },
+              { label: 'Uso', value: `${apiCosts?.usage_pct || 0}%`, color: (apiCosts?.usage_pct || 0) > 80 ? T.destructive : T.success },
+              { label: 'Tokens totales', value: (apiCosts?.total_tokens || 0).toLocaleString('es-ES'), color: T.cyan },
+            ].map(k => (
+              <div key={k.label} className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+                <p style={{ fontSize: 10, color: T.fgMuted, textTransform: 'uppercase', fontFamily: fontMono }}>{k.label}</p>
+                <p style={{ fontSize: 22, fontWeight: 700, color: k.color, fontFamily: fontMono }}>{k.value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Budget bar */}
+          <div className="rounded-xl p-5 mb-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+            <div className="flex justify-between mb-2">
+              <span style={{ fontSize: 12, fontWeight: 600, color: T.fg }}>Uso del budget mensual</span>
+              <span style={{ fontSize: 12, fontFamily: fontMono, color: T.fgMuted }}>${apiCosts?.total_cost_usd?.toFixed(2) || '0'} / ${apiCosts?.budget_usd || 50}</span>
+            </div>
+            <div style={{ height: 10, backgroundColor: T.muted, borderRadius: 6, overflow: 'hidden' }}>
+              <div style={{ width: `${Math.min(apiCosts?.usage_pct || 0, 100)}%`, height: '100%', borderRadius: 6, background: (apiCosts?.usage_pct || 0) > 80 ? `linear-gradient(90deg, ${T.warning}, ${T.destructive})` : `linear-gradient(90deg, ${T.cyan}, ${T.success})`, transition: 'width 0.5s' }} />
+            </div>
+          </div>
+
+          {/* Provider breakdown */}
+          <div className="rounded-xl overflow-hidden" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <thead><tr style={{ borderBottom: `2px solid ${T.border}` }}>
+                {['Modelo', 'Mensajes', 'Tokens In', 'Tokens Out', 'Coste ($)'].map(h => (
+                  <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: T.fgMuted, fontWeight: 500, fontFamily: fontMono, fontSize: 10, textTransform: 'uppercase' }}>{h}</th>
+                ))}
+              </tr></thead>
+              <tbody>
+                {(apiCosts?.providers || []).map((p, i) => (
+                  <tr key={p.model} style={{ borderBottom: `1px solid ${T.muted}` }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = T.muted}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
+                    <td style={{ padding: '10px 12px', fontWeight: 600, color: T.fg }}>
+                      <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 6, backgroundColor: `${T.cyan}12`, color: T.cyan, fontFamily: fontMono }}>{p.model}</span>
+                    </td>
+                    <td style={{ padding: '10px 12px', fontFamily: fontMono, color: T.fg }}>{p.messages}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: fontMono, color: T.fgMuted }}>{p.tokens_input?.toLocaleString('es-ES')}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: fontMono, color: T.fgMuted }}>{p.tokens_output?.toLocaleString('es-ES')}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: fontMono, fontWeight: 700, color: T.warning }}>${p.cost_usd?.toFixed(4)}</td>
+                  </tr>
+                ))}
+                {(!apiCosts?.providers || apiCosts.providers.length === 0) && (
+                  <tr><td colSpan={5} style={{ textAlign: 'center', padding: 30, color: T.fgMuted, fontFamily: fontMono }}>Sin uso de API este mes</td></tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </>)}
 

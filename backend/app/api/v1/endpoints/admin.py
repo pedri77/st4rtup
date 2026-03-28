@@ -386,6 +386,70 @@ async def admin_update_plan(
     return {"updated": True, "plan": plan}
 
 
+# ─── API USAGE COSTS ─────────────────────────────────────────
+
+@router.get("/api-costs")
+async def admin_api_costs(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Calculate API usage costs from chat messages (tokens consumed)."""
+    # Token prices per 1M tokens (approximate)
+    PRICES = {
+        "gpt-4o": {"input": 2.50, "output": 10.00},
+        "gpt-4o-mini": {"input": 0.15, "output": 0.60},
+        "gpt-3.5-turbo": {"input": 0.50, "output": 1.50},
+        "deepseek-chat": {"input": 0.14, "output": 0.28},
+        "deepseek-reasoner": {"input": 0.55, "output": 2.19},
+        "claude-sonnet-4-20250514": {"input": 3.00, "output": 15.00},
+        "mistral-large-latest": {"input": 2.00, "output": 6.00},
+        "text-embedding-3-small": {"input": 0.02, "output": 0.0},
+    }
+    now = datetime.now(timezone.utc)
+    month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+    from app.models import ChatMessage
+    result = await db.execute(
+        select(
+            ChatMessage.model,
+            func.sum(ChatMessage.tokens_input).label("total_input"),
+            func.sum(ChatMessage.tokens_output).label("total_output"),
+            func.count(ChatMessage.id).label("count"),
+        )
+        .where(ChatMessage.created_at >= month_start, ChatMessage.role == "assistant")
+        .group_by(ChatMessage.model)
+    )
+    rows = result.all()
+
+    providers = []
+    total_cost = 0.0
+    total_tokens = 0
+    for row in rows:
+        model = row.model or "unknown"
+        inp = row.total_input or 0
+        out = row.total_output or 0
+        price = PRICES.get(model, {"input": 1.0, "output": 3.0})
+        cost = (inp / 1_000_000 * price["input"]) + (out / 1_000_000 * price["output"])
+        total_cost += cost
+        total_tokens += inp + out
+        providers.append({
+            "model": model,
+            "messages": row.count,
+            "tokens_input": inp,
+            "tokens_output": out,
+            "cost_usd": round(cost, 4),
+        })
+
+    return {
+        "month": month_start.strftime("%Y-%m"),
+        "total_cost_usd": round(total_cost, 4),
+        "total_tokens": total_tokens,
+        "budget_usd": 50.0,
+        "usage_pct": round((total_cost / 50.0) * 100, 1) if total_cost > 0 else 0,
+        "providers": sorted(providers, key=lambda x: x["cost_usd"], reverse=True),
+    }
+
+
 # ─── PLATFORM COSTS ──────────────────────────────────────────
 
 from sqlalchemy import text as sql_text
