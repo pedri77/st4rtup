@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Shield, Users, DollarSign, TrendingUp, Building2, Activity, UserPlus, Zap, Heart, AlertTriangle, Server, Mail, BarChart3, Eye, ChevronRight, FileText, RefreshCw, LogIn, ClipboardList } from 'lucide-react'
@@ -48,7 +48,29 @@ export default function AdminDashboardPage() {
   const { data: costs, refetch: refetchCosts } = useQuery({ queryKey: ['admin', 'costs'], queryFn: () => api.get('/admin/costs').then(r => r.data), staleTime: 60000, enabled: activeTab === 'costs' })
   const [costForm, setCostForm] = useState({ name: '', provider: '', category: 'infrastructure', amount_eur: 0, billing_cycle: 'monthly', is_variable: false, notes: '' })
   const [showCostForm, setShowCostForm] = useState(false)
-  const { data: logs } = useQuery({ queryKey: ['admin', 'logs'], queryFn: () => api.get('/admin/logs?lines=100').then(r => r.data), staleTime: 5000, refetchInterval: activeTab === 'logs' ? 10000 : false, enabled: activeTab === 'logs' })
+  // Logs: WebSocket real-time with HTTP fallback
+  const { data: logsHttp } = useQuery({ queryKey: ['admin', 'logs'], queryFn: () => api.get('/admin/logs?lines=100').then(r => r.data), staleTime: 15000, enabled: activeTab === 'logs' })
+  const [wsLines, setWsLines] = useState([])
+  const [wsConnected, setWsConnected] = useState(false)
+  const wsRef = useRef(null)
+  useEffect(() => {
+    if (activeTab !== 'logs') { if (wsRef.current) { wsRef.current.close(); wsRef.current = null; setWsConnected(false) } return }
+    const token = document.cookie.match(/sb-.*-auth-token=([^;]+)/)?.[1] || localStorage.getItem('sb-ufwjtzvfclnmbskemdjp-auth-token')
+    let accessToken = ''
+    try { const parsed = JSON.parse(token || '{}'); accessToken = parsed?.access_token || parsed?.[0]?.access_token || '' } catch { accessToken = token || '' }
+    if (!accessToken) return
+    const wsUrl = (import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1').replace(/^http/, 'ws').replace('/api/v1', '') + `/ws/logs?token=${accessToken}`
+    try {
+      const ws = new WebSocket(wsUrl)
+      ws.onopen = () => { setWsConnected(true); setWsLines([]) }
+      ws.onmessage = (e) => { if (e.data) setWsLines(prev => [...prev.slice(-200), e.data]) }
+      ws.onclose = () => setWsConnected(false)
+      ws.onerror = () => setWsConnected(false)
+      wsRef.current = ws
+    } catch { setWsConnected(false) }
+    return () => { if (wsRef.current) { wsRef.current.close(); wsRef.current = null } }
+  }, [activeTab])
+  const logs = wsConnected ? { lines: wsLines, errors: wsLines.filter(l => /error|exception/i.test(l) && !/\b[2-3]\d\d\b/.test(l)).length, error_lines: wsLines.filter(l => /error|exception|traceback/i.test(l) && !/\b[2-3]\d\d\b/.test(l)) } : logsHttp
   const { data: auditLog } = useQuery({ queryKey: ['admin', 'audit-log'], queryFn: () => api.get('/audit-global/').then(r => r.data).catch(() => []), staleTime: 30000, enabled: activeTab === 'audit' })
   const { data: onbStatus } = useQuery({ queryKey: ['admin', 'onboarding-status'], queryFn: () => api.get('/admin/onboarding-status').then(r => r.data), staleTime: 60000, enabled: activeTab === 'onboarding' })
   const { data: impersonated } = useQuery({ queryKey: ['admin', 'impersonate', impersonateId], queryFn: () => api.post(`/admin/impersonate/${impersonateId}`).then(r => r.data), enabled: !!impersonateId })
@@ -113,6 +135,27 @@ export default function AdminDashboardPage() {
                   { label: 'Signups 7d', value: kpis?.signups_7d || 0, color: T.cyan },
                   { label: 'Trials activos', value: kpis?.active_trials || 0, color: T.destructive },
                 ] })
+                // Orgs table
+                if (orgs?.items?.length > 0) {
+                  sections.push({ heading: 'Organizaciones', type: 'table', data: {
+                    headers: [{ key: 'name', label: 'Nombre' }, { key: 'plan', label: 'Plan' }, { key: 'users', label: 'Usuarios' }, { key: 'leads', label: 'Leads' }],
+                    rows: orgs.items.slice(0, 20).map(o => ({ name: o.name, plan: o.plan, users: o.users, leads: o.leads })),
+                  }})
+                }
+                // Revenue chart
+                if (chart?.months?.length > 0) {
+                  sections.push({ heading: 'Revenue Mensual', type: 'table', data: {
+                    headers: [{ key: 'month', label: 'Mes' }, { key: 'revenue', label: 'Revenue (€)' }, { key: 'signups', label: 'Signups' }],
+                    rows: chart.months.map(m => ({ month: m.month, revenue: m.revenue, signups: m.signups })),
+                  }})
+                }
+                // Alerts
+                if (alerts?.alerts?.length > 0) {
+                  sections.push({ heading: 'Alertas Activas', type: 'table', data: {
+                    headers: [{ key: 'type', label: 'Tipo' }, { key: 'severity', label: 'Severidad' }, { key: 'message', label: 'Mensaje' }],
+                    rows: alerts.alerts.map(a => ({ type: a.type, severity: a.severity, message: a.message })),
+                  }})
+                }
                 exportToPDF('Informe Admin — St4rtup', sections)
               })
             }}
@@ -533,9 +576,9 @@ export default function AdminDashboardPage() {
               <Server size={20} color={T.warning} /> Logs del sistema ({logs?.errors || 0} errores)
             </h1>
             <div className="flex items-center gap-2">
-              <span className="flex items-center gap-1.5 text-xs" style={{ color: T.success }}>
-                <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: T.success }} />
-                Auto-refresh 10s
+              <span className="flex items-center gap-1.5 text-xs" style={{ color: wsConnected ? T.success : T.warning }}>
+                <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: wsConnected ? T.success : T.warning }} />
+                {wsConnected ? 'WebSocket en vivo' : 'Polling 15s'}
               </span>
             </div>
           </div>

@@ -273,6 +273,16 @@ async def send_message(
     for msg in history[-50:]:
         chat_messages.append({"role": msg.role, "content": msg.content})
 
+    # RAG: retrieve relevant context from Qdrant
+    try:
+        from app.services.rag_service import search_context
+        rag_results = await search_context(data.message, top_k=3)
+        if rag_results:
+            rag_context = "\n".join([f"- {r['text']}" for r in rag_results if r.get('text')])
+            system_prompt = f"{system_prompt}\n\nContexto relevante del producto:\n{rag_context}"
+    except Exception as rag_err:
+        logger.debug(f"RAG context retrieval skipped: {rag_err}")
+
     # Call AI provider
     ai_result = await ai_chat_service.chat(
         provider=provider,
