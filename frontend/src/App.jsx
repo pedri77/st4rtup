@@ -130,7 +130,6 @@ function App() {
     <HelmetProvider>
     <ErrorBoundary>
     <KeyboardShortcuts />
-    <PWAInstallPrompt />
     <AuthProvider>
       <AppContent />
       <Routes>
@@ -165,6 +164,7 @@ function App() {
           path="/app"
           element={
             <PrivateRoute>
+              <PWAInstallPrompt />
               <Layout />
             </PrivateRoute>
           }
