@@ -550,7 +550,7 @@ export default function AdminDashboardPage() {
           <div className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
             <div style={{ maxHeight: 600, overflowY: 'auto', fontFamily: fontMono, fontSize: 11, color: T.fgMuted, lineHeight: 1.6 }}>
               {(logs?.lines || []).map((l, i) => {
-                const isError = /error|exception|traceback|critical/i.test(l)
+                const isError = /(?:error|exception|traceback|critical)/i.test(l) && !/\b[2-3]\d\d\b/.test(l)
                 const isWarning = /warn/i.test(l)
                 return (
                   <div key={i} style={{
