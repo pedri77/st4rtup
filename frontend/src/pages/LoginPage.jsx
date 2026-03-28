@@ -141,7 +141,7 @@ export default function LoginPage() {
                 </div>
               )}
 
-              {/* Google OAuth */}
+              {/* Google OAuth — hidden until Google Cloud account is configured
               <button type="button" onClick={handleGoogle} disabled={googleLoading || loading}
                 className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 mb-6">
                 {googleLoading ? (
@@ -156,11 +156,11 @@ export default function LoginPage() {
                 )}
                 <span className="font-medium text-gray-700">{googleLoading ? 'Conectando...' : 'Continuar con Google'}</span>
               </button>
-
               <div className="relative mb-6">
                 <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
                 <div className="relative flex justify-center"><span className="bg-white px-3 text-sm text-gray-400">o con email</span></div>
               </div>
+              */}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
