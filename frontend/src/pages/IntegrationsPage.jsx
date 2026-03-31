@@ -432,7 +432,7 @@ export default function IntegrationsPage() {
         <EmailProviderTab settings={settings} onSave={(data) => updateSettings.mutate(data)} saving={updateSettings.isPending} isAdmin={isAdmin} />
       )}
       {activeTab === 'integrations' && (
-        <IntegrationsTab settings={settings} onSave={(data) => updateSettings.mutate(data)} saving={updateSettings.isPending} isAdmin={isAdmin} />
+        <IntegrationsTab settings={settings} onSave={(data) => updateSettings.mutate(data)} saving={updateSettings.isPending} isAdmin={isAdmin} getAffLink={getAffLink} trackAffClick={trackAffClick} />
       )}
       {activeTab === 'airtable' && (
         <AirtableMcpTab />
@@ -751,7 +751,7 @@ function EmailProviderTab({ settings, onSave, saving, isAdmin }) {
 
 // ─── Integrations Tab ───────────────────────────────────────────────
 
-function IntegrationCard({ integration, settings, onSave, saving, isAdmin }) {
+function IntegrationCard({ integration, settings, onSave, saving, isAdmin, getAffLink = () => null, trackAffClick = () => {} }) {
   const [expanded, setExpanded] = useState(false)
   const subKey = integration.configSubKey
   const initialConfig = subKey
@@ -942,7 +942,7 @@ function IntegrationCard({ integration, settings, onSave, saving, isAdmin }) {
   )
 }
 
-function IntegrationsTab({ settings, onSave, saving, isAdmin }) {
+function IntegrationsTab({ settings, onSave, saving, isAdmin, getAffLink, trackAffClick }) {
   const [search, setSearch] = useState('')
 
   const allIntegrations = INTEGRATION_CATEGORIES.flatMap(c => c.integrations)
@@ -1001,7 +1001,8 @@ function IntegrationsTab({ settings, onSave, saving, isAdmin }) {
                 <IntegrationCard
                   key={integration.id + (integration.configSubKey || integration.configKey)}
                   integration={integration} settings={settings}
-                  onSave={onSave} saving={saving} isAdmin={isAdmin} />
+                  onSave={onSave} saving={saving} isAdmin={isAdmin}
+                  getAffLink={getAffLink} trackAffClick={trackAffClick} />
               ))}
             </div>
           </div>
