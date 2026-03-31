@@ -8,6 +8,7 @@ from app.models.base import BaseModel
 class WAConversation(BaseModel):
     __tablename__ = "wa_conversations"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
     phone = Column(String(30), nullable=False, index=True)
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="SET NULL"), nullable=True, index=True)
     lead_name = Column(String(255))
@@ -21,6 +22,7 @@ class WAConversation(BaseModel):
 class WAMessage(BaseModel):
     __tablename__ = "wa_messages"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
     conversation_id = Column(UUID(as_uuid=True), ForeignKey("wa_conversations.id", ondelete="CASCADE"), nullable=False, index=True)
     direction = Column(String(10), nullable=False)  # inbound | outbound
     message_type = Column(String(20), default="text")  # text, template, image, document, audio

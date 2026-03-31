@@ -25,6 +25,7 @@ class PaymentPlan(BaseModel):
 class Payment(BaseModel):
     __tablename__ = "payments"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="SET NULL"), nullable=True)
     plan_id = Column(UUID(as_uuid=True), ForeignKey("payment_plans.id", ondelete="SET NULL"), nullable=True)
 
