@@ -33,19 +33,19 @@ const inputStyle = {
 
 const EMAIL_PROVIDERS = [
   {
-    id: 'resend', name: 'Resend',
+    id: 'resend', name: 'Resend', icon: Zap, accent: T.cyan,
     description: 'API moderna, facil setup. 3.000 emails/mes gratis.',
     url: 'https://resend.com', price: 'Gratis hasta 3K/mes, luego $20/mes',
     fields: [{ key: 'resend_api_key', label: 'API Key', type: 'password', placeholder: 're_...' }],
   },
   {
-    id: 'brevo', name: 'Brevo (Sendinblue)',
+    id: 'brevo', name: 'Brevo (Sendinblue)', icon: Send, accent: T.success,
     description: '300 emails/dia gratis. SMTP incluido, muy economico.',
     url: 'https://brevo.com', price: 'Gratis 300/dia, luego $9/mes (20K)',
     fields: [{ key: 'brevo_api_key', label: 'API Key', type: 'password', placeholder: 'xkeysib-...' }],
   },
   {
-    id: 'ses', name: 'Amazon SES',
+    id: 'ses', name: 'Amazon SES', icon: Cloud, accent: 'hsl(25,85%,55%)',
     description: 'El mas barato a escala. $0.10 por cada 1.000 emails.',
     url: 'https://aws.amazon.com/ses/', price: '$0.10/1.000 emails',
     fields: [
@@ -58,7 +58,7 @@ const EMAIL_PROVIDERS = [
     ],
   },
   {
-    id: 'mailgun', name: 'Mailgun',
+    id: 'mailgun', name: 'Mailgun', icon: Mail, accent: T.purple,
     description: 'Buen tracking y analytics. API robusta.',
     url: 'https://mailgun.com', price: '1.000/mes gratis (3 meses), luego $15/mes',
     fields: [
@@ -70,13 +70,13 @@ const EMAIL_PROVIDERS = [
     ],
   },
   {
-    id: 'zoho', name: 'Zoho ZeptoMail',
+    id: 'zoho', name: 'Zoho ZeptoMail', icon: Mail, accent: T.warning,
     description: 'Si ya usas Zoho Mail corporativo, integracion directa.',
     url: 'https://www.zoho.com/zeptomail/', price: '~$2.50/1.000 emails',
     fields: [{ key: 'zoho_api_key', label: 'API Key (SendMail Token)', type: 'password', placeholder: 'Zoho-enczapikey ...' }],
   },
   {
-    id: 'smtp', name: 'SMTP Generico',
+    id: 'smtp', name: 'SMTP Generico', icon: Globe, accent: T.fgMuted,
     description: 'Gmail, Outlook, o cualquier servidor SMTP personalizado.',
     url: null, price: 'Depende del servidor',
     fields: [
@@ -88,7 +88,7 @@ const EMAIL_PROVIDERS = [
     ],
   },
   {
-    id: 'gmail_oauth', name: 'Gmail OAuth2',
+    id: 'gmail_oauth', name: 'Gmail OAuth2', icon: Globe, accent: 'hsl(210,70%,55%)',
     description: 'Envia desde tu cuenta de Gmail/Google Workspace con OAuth2. No necesita contrasena de aplicacion.',
     url: 'https://console.cloud.google.com/apis/credentials', price: 'Gratis (cuenta de Google)',
     oauth: true, fields: [],
@@ -511,32 +511,49 @@ function EmailProviderTab({ settings, onSave, saving, isAdmin }) {
   return (
     <div className="space-y-6">
       {/* Provider selector */}
-      <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} className="rounded-xl p-5">
-        <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-base font-semibold mb-4 flex items-center gap-2">
-          <Mail className="w-5 h-5" style={{ color: T.cyan }} />
-          Proveedor de Email
-        </h2>
-
+      <div>
+        <p className="text-[10px] uppercase tracking-[0.2em] mb-3" style={{ fontFamily: fontMono, color: T.fgMuted }}>
+          Proveedor de email — {EMAIL_PROVIDERS.length} disponibles
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {EMAIL_PROVIDERS.map((provider) => (
-            <button
-              key={provider.id}
-              onClick={() => isAdmin && setSelectedProvider(provider.id)}
-              disabled={!isAdmin}
-              className="text-left p-4 rounded-lg transition-all"
-              style={{
-                border: selectedProvider === provider.id ? `2px solid ${T.cyan}` : `2px solid ${T.border}`,
-                backgroundColor: selectedProvider === provider.id ? `${T.cyan}10` : T.muted,
-              }}
-            >
-              <div className="flex items-start justify-between">
-                <h3 style={{ color: T.fg }} className="font-medium text-sm">{provider.name}</h3>
-                {selectedProvider === provider.id && <Check className="w-4 h-4 flex-shrink-0" style={{ color: T.cyan }} />}
-              </div>
-              <p style={{ color: T.fgMuted }} className="text-xs mt-1">{provider.description}</p>
-              <p style={{ color: T.cyan }} className="text-xs mt-2 font-medium opacity-70">{provider.price}</p>
-            </button>
-          ))}
+          {EMAIL_PROVIDERS.map((provider) => {
+            const isSelected = selectedProvider === provider.id
+            const ProvIcon = provider.icon
+            const accent = provider.accent
+            return (
+              <button
+                key={provider.id}
+                onClick={() => isAdmin && setSelectedProvider(provider.id)}
+                disabled={!isAdmin}
+                className="text-left rounded-xl p-4 transition-all group"
+                style={{
+                  border: `1px solid ${isSelected ? T.cyan : T.border}`,
+                  backgroundColor: T.muted,
+                }}
+                onMouseEnter={e => { if (!isSelected) e.currentTarget.style.borderColor = `${accent}40` }}
+                onMouseLeave={e => { if (!isSelected) e.currentTarget.style.borderColor = isSelected ? T.cyan : T.border }}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: isSelected ? `${T.cyan}20` : `${accent}15` }}>
+                    <ProvIcon className="w-5 h-5" style={{ color: isSelected ? T.cyan : accent }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <h3 style={{ fontFamily: fontDisplay, color: T.fg }} className="font-semibold text-sm">{provider.name}</h3>
+                      {isSelected && (
+                        <span className="flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${T.cyan}15`, color: T.cyan }}>
+                          <Check size={10} /> Activo
+                        </span>
+                      )}
+                    </div>
+                    <p style={{ color: T.fgMuted }} className="text-xs mt-0.5 leading-relaxed">{provider.description}</p>
+                    <p style={{ fontFamily: fontMono, color: isSelected ? T.cyan : T.fgMuted }} className="text-[10px] mt-1.5 font-medium">{provider.price}</p>
+                  </div>
+                </div>
+              </button>
+            )
+          })}
         </div>
       </div>
 
@@ -544,9 +561,14 @@ function EmailProviderTab({ settings, onSave, saving, isAdmin }) {
       {currentProvider && (
         <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} className="rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-base font-semibold">
-              Configurar {currentProvider.name}
-            </h2>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${currentProvider.accent}15` }}>
+                <currentProvider.icon className="w-4 h-4" style={{ color: currentProvider.accent }} />
+              </div>
+              <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-base font-semibold">
+                Configurar {currentProvider.name}
+              </h2>
+            </div>
             {currentProvider.url && (
               <a href={currentProvider.url} target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-1 text-xs" style={{ color: T.cyan }}>
@@ -726,13 +748,19 @@ function EmailProviderTab({ settings, onSave, saving, isAdmin }) {
       {/* Send test email */}
       {isAdmin && (
         <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} className="rounded-xl p-5">
-          <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-base font-semibold mb-4 flex items-center gap-2">
-            <Send className="w-5 h-5" style={{ color: T.cyan }} />
-            Enviar email de prueba
-          </h2>
-          <p style={{ color: T.fgMuted }} className="text-sm mb-4">
-            Guarda la configuracion primero, luego envia un email de prueba para verificar que funciona.
-          </p>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${T.success}15` }}>
+              <Send className="w-4 h-4" style={{ color: T.success }} />
+            </div>
+            <div>
+              <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-base font-semibold">
+                Enviar email de prueba
+              </h2>
+              <p style={{ color: T.fgMuted }} className="text-xs">
+                Guarda la configuracion primero, luego envia un email de prueba para verificar que funciona.
+              </p>
+            </div>
+          </div>
           <div className="flex gap-3">
             <input id="integ-test-email" type="email" value={testEmail}
               onChange={(e) => setTestEmail(e.target.value)} placeholder="tu@email.com"
