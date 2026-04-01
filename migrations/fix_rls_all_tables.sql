@@ -126,9 +126,13 @@ DECLARE
     ];
 BEGIN
     FOREACH tbl IN ARRAY tables LOOP
+        -- Drop existing policies if any (idempotent)
+        EXECUTE format('DROP POLICY IF EXISTS auth_users_all ON public.%I', tbl);
+        EXECUTE format('DROP POLICY IF EXISTS service_role_all ON public.%I', tbl);
+
         -- Allow authenticated users full access
         EXECUTE format(
-            'CREATE POLICY IF NOT EXISTS auth_users_all ON public.%I
+            'CREATE POLICY auth_users_all ON public.%I
              FOR ALL
              TO authenticated
              USING (true)
@@ -138,7 +142,7 @@ BEGIN
 
         -- Allow service_role full access (backend uses service_role key)
         EXECUTE format(
-            'CREATE POLICY IF NOT EXISTS service_role_all ON public.%I
+            'CREATE POLICY service_role_all ON public.%I
              FOR ALL
              TO service_role
              USING (true)
