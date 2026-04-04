@@ -39,8 +39,9 @@ async def get_my_profile(
 
     # 3. Only create new record if neither ID nor email matches
     if not user:
-        # Auto-promote if email is in ADMIN_EMAILS
-        role = UserRole.ADMIN if email and email.lower() in settings.admin_emails_list else UserRole.VIEWER
+        # New users get VIEWER role by default. Admin must be assigned explicitly
+        # via PUT /users/{id} by an existing admin.
+        role = UserRole.VIEWER
         user = User(
             id=user_id,
             email=email,
@@ -48,12 +49,6 @@ async def get_my_profile(
             is_active=True,
         )
         db.add(user)
-        await db.commit()
-        await db.refresh(user)
-
-    # Auto-promote existing user if email is in ADMIN_EMAILS and role is not admin
-    if email and email.lower() in settings.admin_emails_list and user.role != UserRole.ADMIN:
-        user.role = UserRole.ADMIN
         await db.commit()
         await db.refresh(user)
 

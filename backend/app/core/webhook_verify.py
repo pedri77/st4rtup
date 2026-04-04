@@ -1,4 +1,8 @@
-"""Webhook signature verification for external providers."""
+"""Webhook signature verification for external providers.
+
+In production (DEBUG=False): REJECTS webhooks if the signing secret is not configured.
+In development (DEBUG=True): logs a warning and allows the request through.
+"""
 import hmac
 import hashlib
 import logging
@@ -9,12 +13,11 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
+_is_dev = getattr(settings, "DEBUG", False)
+
 
 async def verify_webhook_signature(request: Request, provider: str) -> bytes:
-    """Verify webhook signature and return raw body.
-
-    Raises 401 if signature is invalid, or returns body if no secret is configured (dev mode).
-    """
+    """Verify webhook signature and return raw body."""
     body = await request.body()
 
     if provider == "stripe":
@@ -22,25 +25,14 @@ async def verify_webhook_signature(request: Request, provider: str) -> bytes:
     elif provider == "yousign":
         return _verify_hmac(request, body, settings.YOUSIGN_API_KEY, "x-yousign-signature-256", "sha256")
     elif provider == "docusign":
-        # DocuSign Connect uses HMAC-SHA256 with a connect key
-        secret = settings.DOCUSIGN_SECRET_KEY
-        if not secret:
-            logger.warning("DocuSign webhook received without DOCUSIGN_SECRET_KEY configured — skipping verification")
-            return body
-        return _verify_hmac(request, body, secret, "x-docusign-signature-1", "sha256")
+        return _verify_hmac(request, body, settings.DOCUSIGN_SECRET_KEY, "x-docusign-signature-1", "sha256")
     elif provider == "typeform":
         return _verify_hmac(request, body, settings.TYPEFORM_WEBHOOK_SECRET, "typeform-signature", "sha256")
     elif provider == "tally":
         return _verify_hmac(request, body, settings.TALLY_WEBHOOK_SECRET, "tally-signature", "sha256")
     elif provider in ("google_forms", "surveymonkey", "jotform"):
-        # These providers use a generic shared secret
-        secret = settings.SURVEY_WEBHOOK_SECRET
-        if not secret:
-            logger.warning(f"Survey webhook from {provider} received without SURVEY_WEBHOOK_SECRET — skipping verification")
-            return body
-        return _verify_hmac(request, body, secret, "x-webhook-signature", "sha256")
+        return _verify_hmac(request, body, settings.SURVEY_WEBHOOK_SECRET, "x-webhook-signature", "sha256")
 
-    # Unknown provider — reject if no handler matched
     logger.warning(f"Webhook received for unknown provider: {provider}")
     raise HTTPException(status_code=400, detail=f"Unknown webhook provider: {provider}")
 
@@ -49,8 +41,10 @@ def _verify_stripe(request: Request, body: bytes) -> bytes:
     """Verify Stripe webhook using their signature scheme."""
     secret = settings.STRIPE_WEBHOOK_SECRET
     if not secret:
-        logger.warning("Stripe webhook received without STRIPE_WEBHOOK_SECRET configured — skipping verification")
-        return body
+        if _is_dev:
+            logger.warning("DEV MODE: Stripe webhook without secret — allowing unsigned request")
+            return body
+        raise HTTPException(status_code=503, detail="Stripe webhook secret not configured")
 
     sig_header = request.headers.get("stripe-signature", "")
     if not sig_header:
@@ -64,7 +58,6 @@ def _verify_stripe(request: Request, body: bytes) -> bytes:
     if not timestamp or not signature:
         raise HTTPException(status_code=401, detail="Invalid Stripe signature format")
 
-    # Compute expected signature
     signed_payload = f"{timestamp}.{body.decode()}"
     expected = hmac.new(
         secret.encode(), signed_payload.encode(), hashlib.sha256
@@ -80,10 +73,13 @@ def _verify_stripe(request: Request, body: bytes) -> bytes:
 def _verify_hmac(
     request: Request, body: bytes, secret: str, header_name: str, algorithm: str
 ) -> bytes:
-    """Generic HMAC verification."""
+    """Generic HMAC verification. Rejects in production if secret is missing."""
     if not secret:
-        logger.warning(f"Webhook received without secret configured for {header_name} — skipping verification")
-        return body
+        if _is_dev:
+            logger.warning(f"DEV MODE: Webhook for {header_name} without secret — allowing unsigned request")
+            return body
+        logger.error(f"PRODUCTION: Webhook for {header_name} rejected — signing secret not configured")
+        raise HTTPException(status_code=503, detail="Webhook signing secret not configured")
 
     sig = request.headers.get(header_name, "")
     if not sig:
