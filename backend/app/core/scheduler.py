@@ -495,12 +495,64 @@ async def run_ld01_webhook_check():
 
 
 async def run_ld02_sync_external():
-    """LD-02: Sync external sources — every 4h"""
-    logger.info("LD-02: External sync check (Apollo/HubSpot if configured)")
+    """LD-02: Sync Apollo.io — every 4h
+    Busca prospectos en Apollo (España, >50 empleados, sectores clave) → deduplica por company_name → crea leads nuevos.
+    """
+    from app.services.apollo_service import apollo_service
+    from app.models import Lead
+    if not apollo_service.is_configured():
+        return
+    try:
+        async with AsyncSessionLocal() as db:
+            result = await apollo_service.search_prospects(
+                industries=["computer software", "information technology", "financial services", "banking", "insurance", "government administration"],
+                employee_ranges=["51-200", "201-500", "501-1000", "1001-5000", "5001-10000"],
+                countries=["Spain"],
+                limit=25,
+            )
+            if "error" in result:
+                logger.warning(f"LD-02: Apollo error: {result['error']}")
+                return
+
+            created = 0
+            for prospect in result.get("prospects", []):
+                company = prospect.get("company", "")
+                if not company:
+                    continue
+                # Deduplicar por company_name
+                existing = (await db.execute(select(func.count(Lead.id)).where(
+                    func.lower(Lead.company_name) == company.lower()
+                ))).scalar() or 0
+                if existing > 0:
+                    continue
+
+                db.add(Lead(
+                    company_name=company,
+                    contact_name=prospect.get("name", ""),
+                    contact_email=prospect.get("email", ""),
+                    contact_linkedin=prospect.get("linkedin_url", ""),
+                    contact_title=prospect.get("title", ""),
+                    company_sector=prospect.get("company_industry", ""),
+                    company_size=prospect.get("company_size", ""),
+                    company_country=prospect.get("company_country", "Spain"),
+                    source="apollo",
+                    notes=f"Auto-imported from Apollo.io ({datetime.now(timezone.utc).strftime('%d/%m/%Y')})",
+                ))
+                created += 1
+
+            if created:
+                await db.commit()
+            logger.info(f"LD-02: {created} leads importados de Apollo ({result.get('total', 0)} encontrados)")
+    except Exception as e:
+        logger.error(f"LD-02 error: {e}")
 
 
 async def run_ld03_enrichment():
-    """LD-03: Auto-enrich leads without sector — every 8h"""
+    """LD-03: Auto-enrich leads without sector — every 8h
+    Leads sin sector/datos mínimos → apollo_service.enrich_lead() para obtener sector, tamaño, contactos.
+    Fallback: marca como 'Por clasificar' si Apollo no está configurado.
+    """
+    from app.services.apollo_service import apollo_service
     from app.models import Lead
     try:
         async with AsyncSessionLocal() as db:
@@ -508,12 +560,23 @@ async def run_ld03_enrichment():
                 (Lead.company_sector.is_(None)) | (Lead.company_sector == '')
             ).limit(10))
             leads = result.scalars().all()
-            for lead in leads:
-                if lead.company_name and not lead.company_sector:
-                    lead.company_sector = "Por clasificar"
-            if leads:
-                await db.commit()
-            logger.info(f"LD-03: {len(leads)} leads enriquecidos")
+
+            if apollo_service.is_configured():
+                enriched = 0
+                for lead in leads:
+                    if not lead.company_name:
+                        continue
+                    res = await apollo_service.enrich_lead(db, lead.id)
+                    if res.get("enriched"):
+                        enriched += 1
+                logger.info(f"LD-03: {enriched}/{len(leads)} leads enriquecidos via Apollo")
+            else:
+                for lead in leads:
+                    if lead.company_name and not lead.company_sector:
+                        lead.company_sector = "Por clasificar"
+                if leads:
+                    await db.commit()
+                logger.info(f"LD-03: {len(leads)} leads marcados 'Por clasificar' (Apollo no configurado)")
     except Exception as e:
         logger.error(f"LD-03 error: {e}")
 
@@ -562,10 +625,57 @@ async def run_vi02_pre_visit_reminder():
 
 
 async def run_vi03_calendar_sync():
-    """VI-03: Google Calendar sync — every 30 min"""
-    if not getattr(settings, 'GOOGLE_OAUTH_CLIENT_ID', ''):
-        return
-    logger.info("VI-03: Google Calendar sync check")
+    """VI-03: Google Calendar sync — every 30 min
+    Bidireccional: visitas sin evento GCal → crear evento. Eventos GCal sin visita → crear visita.
+    """
+    from app.services.gcalendar_service import gcalendar_service
+    from app.models.crm import Visit
+    from app.models import Lead
+    try:
+        async with AsyncSessionLocal() as db:
+            # Check if GCal is configured (OAuth tokens in DB)
+            from app.models.system import SystemSettings
+            cfg = (await db.execute(select(SystemSettings))).scalar_one_or_none()
+            if not cfg or not getattr(cfg, 'gcalendar_config', None):
+                return
+
+            gcal_config = cfg.gcalendar_config or {}
+            if not gcal_config.get("access_token"):
+                return
+
+            now = datetime.now(timezone.utc)
+            tomorrow = now + timedelta(days=7)
+
+            # 1. Visitas próximas sin evento GCal → crear evento
+            result = await db.execute(select(Visit).where(
+                Visit.visit_date >= now,
+                Visit.visit_date <= tomorrow,
+                (Visit.gcal_event_id.is_(None)) | (Visit.gcal_event_id == ''),
+            ))
+            visits = result.scalars().all()
+            synced_out = 0
+            for visit in visits:
+                lead = (await db.execute(select(Lead).where(Lead.id == visit.lead_id))).scalar_one_or_none()
+                lead_name = lead.company_name if lead else "Sin lead"
+                try:
+                    event = await gcalendar_service.create_calendar_event(
+                        db=db,
+                        summary=f"Visita: {lead_name}",
+                        description=f"Tipo: {visit.visit_type}\n{visit.summary or ''}",
+                        start_dt=visit.visit_date,
+                        location=visit.location or "",
+                    )
+                    if event.get("id"):
+                        visit.gcal_event_id = event["id"]
+                        synced_out += 1
+                except Exception as e:
+                    logger.warning(f"VI-03: Error creating GCal event for visit {visit.id}: {e}")
+
+            if synced_out:
+                await db.commit()
+            logger.info(f"VI-03: {synced_out} visitas sincronizadas a Google Calendar")
+    except Exception as e:
+        logger.error(f"VI-03 error: {e}")
 
 
 async def run_em02_email_tracking():
@@ -687,6 +797,123 @@ async def run_platform_metrics_snapshot():
         logger.error(f"Metrics snapshot error: {e}")
 
 
+async def run_rs054b_brevo_nurturing():
+    """RS-054b: Brevo nurturing — diario 07:00
+    Leads con score < 40 y sin nurturing activo → añadir a lista Brevo para nurturing automático.
+    """
+    from app.services.brevo_service import brevo_service
+    from app.models import Lead
+    try:
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(select(Lead).where(
+                Lead.score < 40,
+                Lead.status.notin_(["won", "lost"]),
+                (Lead.tags.is_(None)) | (~Lead.tags.contains(["brevo_nurturing"])),
+            ).limit(20))
+            leads = result.scalars().all()
+            added = 0
+            for lead in leads:
+                if not lead.contact_email:
+                    continue
+                res = await brevo_service.add_lead_to_nurturing(
+                    db=db,
+                    email=lead.contact_email,
+                    first_name=lead.contact_name or "",
+                    company=lead.company_name or "",
+                    source="crm_cold",
+                    icp_score=lead.score or 0,
+                )
+                if res.get("nurturing"):
+                    lead.tags = (lead.tags or []) + ["brevo_nurturing"]
+                    added += 1
+            if added:
+                await db.commit()
+            logger.info(f"RS-054b: {added} leads añadidos a nurturing Brevo")
+    except Exception as e:
+        logger.error(f"RS-054b error: {e}")
+
+
+async def run_rs054c_brevo_reactivation():
+    """RS-054c: Brevo reactivation check — diario 10:30
+    Leads dormant en Brevo → check si han abierto emails recientemente → reactivar en CRM.
+    """
+    from app.services.brevo_service import brevo_service
+    from app.models import Lead, LeadStatus
+    from app.models.notification import Notification
+    try:
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(select(Lead).where(
+                Lead.status == LeadStatus.DORMANT,
+                Lead.contact_email.isnot(None),
+            ).limit(30))
+            leads = result.scalars().all()
+            reactivated = 0
+            for lead in leads:
+                res = await brevo_service.check_reactivation(db=db, email=lead.contact_email)
+                if res.get("should_reactivate"):
+                    lead.status = LeadStatus.CONTACTED
+                    lead.notes = (lead.notes or "") + f"\n[{datetime.now(timezone.utc).strftime('%d/%m/%Y')}] Reactivado: {res.get('recommendation', '')}"
+                    db.add(Notification(
+                        title=f"Lead reactivado: {lead.company_name}",
+                        message=f"{res.get('recent_opens', 0)} aperturas recientes en Brevo",
+                        type="info",
+                    ))
+                    reactivated += 1
+            if reactivated:
+                await db.commit()
+            logger.info(f"RS-054c: {reactivated} leads reactivados de {len(leads)} dormant")
+    except Exception as e:
+        logger.error(f"RS-054c error: {e}")
+
+
+async def run_rs093_lemlist_sync():
+    """RS-093: Lemlist activity sync — diario 12:00
+    Sincroniza actividad de campañas Lemlist → actualiza score de leads según opens/clicks/replies.
+    """
+    from app.services.lemlist_service import lemlist_service
+    from app.models import Lead
+    try:
+        async with AsyncSessionLocal() as db:
+            # Obtener campañas activas
+            campaigns = await lemlist_service.list_campaigns(db)
+            if not campaigns.get("connected"):
+                return
+
+            updated = 0
+            for campaign in campaigns.get("campaigns", []):
+                if campaign.get("status") != "running":
+                    continue
+                # Buscar leads del CRM que están en esta campaña
+                result = await db.execute(select(Lead).where(
+                    Lead.contact_email.isnot(None),
+                    Lead.tags.contains(["lemlist"]),
+                ).limit(50))
+                leads = result.scalars().all()
+                for lead in leads:
+                    activity = await lemlist_service.sync_lead_activity(
+                        db=db, campaign_id=campaign["id"], email=lead.contact_email,
+                    )
+                    if not activity.get("connected"):
+                        continue
+                    # Ajustar score según actividad
+                    score_delta = 0
+                    if activity.get("replied"):
+                        score_delta += 20
+                    elif activity.get("clicked"):
+                        score_delta += 10
+                    elif activity.get("opened"):
+                        score_delta += 5
+                    if score_delta > 0:
+                        lead.score = (lead.score or 0) + score_delta
+                        updated += 1
+
+            if updated:
+                await db.commit()
+            logger.info(f"RS-093: {updated} leads actualizados desde Lemlist")
+    except Exception as e:
+        logger.error(f"RS-093 error: {e}")
+
+
 # ═══════════════════════════════════════════════════════════════
 # SCHEDULER SETUP
 # ═══════════════════════════════════════════════════════════════
@@ -746,6 +973,10 @@ def init_scheduler():
         # Integrations
         (run_in01_scraping_import,CronTrigger(hour=6, minute=0), 'in01_scraping','IN-01: Scraping import'),
         (run_in02_telegram_hub,  CronTrigger(minute='*/5'),      'in02_telegram','IN-02: Telegram hub'),
+        # Sprint 2: External services
+        (run_rs054b_brevo_nurturing, CronTrigger(hour=7, minute=0), 'rs054b_nurture', 'RS-054b: Brevo nurturing'),
+        (run_rs054c_brevo_reactivation, CronTrigger(hour=10, minute=30), 'rs054c_react', 'RS-054c: Brevo reactivation'),
+        (run_rs093_lemlist_sync, CronTrigger(hour=12, minute=0), 'rs093_lemlist', 'RS-093: Lemlist sync'),
         # Platform
         (run_platform_metrics_snapshot, CronTrigger(hour=2, minute=0), 'platform_metrics', 'Platform metrics daily snapshot'),
         (run_trial_expiry_check, CronTrigger(hour=10, minute=0), 'trial_expiry', 'Trial expiry email check'),
