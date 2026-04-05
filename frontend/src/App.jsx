@@ -42,7 +42,6 @@ const ActionsPage = lazy(() => import('./pages/ActionsPage'))
 const ReviewsPage = lazy(() => import('./pages/ReviewsPage'))
 const SurveysPage = lazy(() => import('./pages/SurveysPage'))
 const AutomationsPage = lazy(() => import('./pages/AutomationsPage'))
-const N8nMonitorPage = lazy(() => import('./pages/N8nMonitorPage'))
 const UsersPage = lazy(() => import('./pages/UsersPage'))
 const SettingsPage = lazy(() => import('./pages/SettingsPage'))
 const IntegrationsPage = lazy(() => import('./pages/IntegrationsPage'))
@@ -193,7 +192,6 @@ function App() {
           <Route path="clients" element={<Suspense fallback={<PageLoader />}><ClientsPage /></Suspense>} />
           <Route path="calendar" element={<Suspense fallback={<PageLoader />}><CalendarPage /></Suspense>} />
           <Route path="automations" element={<Suspense fallback={<PageLoader />}><AutomationsPage /></Suspense>} />
-          <Route path="n8n-monitor" element={<RoleGuard allowedRoles="admin"><Suspense fallback={<PageLoader />}><N8nMonitorPage /></Suspense></RoleGuard>} />
 
           {/* Admin-only routes */}
           <Route

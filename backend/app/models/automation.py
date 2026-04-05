@@ -1,7 +1,7 @@
 """Modelos de automatizaciones n8n."""
 from sqlalchemy import (
     Column, String, Text, Integer, Float, Boolean, DateTime,
-    ForeignKey, JSON,
+    ForeignKey, JSON, UniqueConstraint,
     Enum as SAEnum,
 )
 from sqlalchemy.dialects.postgresql import UUID
@@ -16,11 +16,13 @@ from app.models.enums import (
 
 
 class Automation(BaseModel):
-    """Definición y configuración de automatizaciones n8n."""
+    """Definición y configuración de automatizaciones."""
     __tablename__ = "automations"
+    __table_args__ = (UniqueConstraint("org_id", "code", name="uq_automation_org_code"),)
+
     org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
-    code = Column(String(10), unique=True, nullable=False, index=True)
+    code = Column(String(10), nullable=False, index=True)
     name = Column(String(255), nullable=False)
     description = Column(Text)
     category = Column(SAEnum(AutomationCategory), nullable=False, index=True)

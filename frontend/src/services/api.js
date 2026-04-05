@@ -219,17 +219,6 @@ export const automationsApi = {
   flowNodes: (id) => api.get(`/automations/${id}/flow`),
 }
 
-export const n8nMonitorApi = {
-  health: () => api.get('/n8n-monitor/health'),
-  stats: () => api.get('/n8n-monitor/stats'),
-  workflows: (params) => api.get('/n8n-monitor/workflows', { params }),
-  workflow: (id) => api.get(`/n8n-monitor/workflows/${id}`),
-  activate: (id) => api.post(`/n8n-monitor/workflows/${id}/activate`),
-  deactivate: (id) => api.post(`/n8n-monitor/workflows/${id}/deactivate`),
-  executions: (params) => api.get('/n8n-monitor/executions', { params }),
-  execution: (id) => api.get(`/n8n-monitor/executions/${id}`),
-}
-
 export const automationTasksApi = {
   executeAC01: () => api.post('/automation-tasks/AC-01/execute'),
   previewAC01: () => api.get('/automation-tasks/AC-01/preview'),

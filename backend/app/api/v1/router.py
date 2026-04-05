@@ -18,7 +18,6 @@ from app.api.v1.endpoints import (
     organizations,
     admin,
     affiliates,
-    n8n_monitor,
 )
 api_router = APIRouter()
 
@@ -79,9 +78,6 @@ api_router.include_router(admin.router, prefix="/admin", tags=["Admin Dashboard"
 
 # Affiliates
 api_router.include_router(affiliates.router, prefix="/affiliates", tags=["Affiliates"])
-
-# n8n Monitor
-api_router.include_router(n8n_monitor.router, prefix="/n8n-monitor", tags=["n8n Monitor"])
 
 # GTM
 api_router.include_router(brand.router, prefix="/brand", tags=["Brand & Positioning"])

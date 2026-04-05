@@ -81,8 +81,7 @@ function getNavigationGroups(t) {
       label: t('nav.group.system'),
       items: [
         { name: t('nav.automations'), href: '/app/automations', icon: Zap },
-        { name: 'n8n Monitor', href: '/app/n8n-monitor', icon: Activity, adminOnly: true },
-        { name: t('nav.cost_control'), href: '/app/cost-control', icon: DollarSign, adminOnly: true },
+{ name: t('nav.cost_control'), href: '/app/cost-control', icon: DollarSign, adminOnly: true },
         { name: t('nav.integrations'), href: '/app/integrations', icon: Plug },
         { name: t('nav.forms'), href: '/app/formularios', icon: FileText },
         { name: t('nav.alert_channels'), href: '/app/alert-channels', icon: Bell },

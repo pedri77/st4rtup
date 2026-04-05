@@ -76,7 +76,10 @@ export default function PipelinePage() {
         return mockOpportunities.items
       }
       try {
-        return await opportunitiesApi.list().then(r => r.data.items || r.data || [])
+        return await opportunitiesApi.list().then(r => {
+          const d = r.data
+          return Array.isArray(d) ? d : (d?.items || [])
+        })
       } catch (err) {
         await mockDelay(400)
         return mockOpportunities.items

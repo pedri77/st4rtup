@@ -30,54 +30,54 @@ async def _auto_seed_and_activate():
     from app.api.v1.endpoints.automations import DEPLOYED_CODES
 
     async with AsyncSessionLocal() as db:
-        existing = (await db.execute(select(func.count(Automation.id)))).scalar() or 0
+        from app.models.organization import Organization
 
-        if existing == 0:
-            # First deploy or fresh DB — trigger seed via the endpoint logic
-            logger.info("No automations found — running auto-seed...")
-            from app.api.v1.endpoints.automations import seed_automations
+        # Seed automations for all orgs that don't have them yet
+        orgs = (await db.execute(select(Organization))).scalars().all()
+        if not orgs:
+            logger.warning("No organizations found — skipping auto-seed")
+            return
 
-            # Import seed_data directly to avoid auth dependency
-            from app.models.organization import Organization
-            org = (await db.execute(select(Organization).limit(1))).scalar_one_or_none()
-            if not org:
-                logger.warning("No organization found — skipping auto-seed (seed will run on first /seed call)")
-                return
+        seed_data = _get_seed_data()
+        total_seeded = 0
+        for org in orgs:
+            org_count = (await db.execute(select(func.count(Automation.id)).where(
+                Automation.org_id == org.id
+            ))).scalar() or 0
 
-            # Inline seed: reuse the seed_data from the endpoint
-            from app.models.enums import (
-                AutomationCategory, AutomationTriggerType, AutomationPriority,
-                AutomationComplexity, AutomationPhase,
-            )
-            seed_data = _get_seed_data()
-            for item in seed_data:
-                auto = Automation(**item, org_id=org.id)
-                if item["code"] in DEPLOYED_CODES:
-                    auto.is_enabled = True
-                    auto.status = AutomationStatus.ACTIVE
-                    auto.impl_status = AutomationImplStatus.DEPLOYED
-                db.add(auto)
+            if org_count == 0:
+                # Seed all automations for this org
+                for item in seed_data:
+                    auto = Automation(**item, org_id=org.id)
+                    if item["code"] in DEPLOYED_CODES:
+                        auto.is_enabled = True
+                        auto.status = AutomationStatus.ACTIVE
+                        auto.impl_status = AutomationImplStatus.DEPLOYED
+                    db.add(auto)
+                total_seeded += len(seed_data)
+                logger.info(f"✅ Auto-seeded {len(seed_data)} automations for org {org.id}")
+
+        if total_seeded:
             await db.commit()
-            logger.info(f"✅ Auto-seeded {len(seed_data)} automations for org {org.id}")
-        else:
-            # Existing DB — just activate any newly deployed codes
-            result = await db.execute(
-                select(Automation).where(
-                    Automation.code.in_(DEPLOYED_CODES),
-                    Automation.impl_status != AutomationImplStatus.DEPLOYED,
-                )
+
+        # Activate newly deployed codes across all orgs
+        result = await db.execute(
+            select(Automation).where(
+                Automation.code.in_(DEPLOYED_CODES),
+                Automation.impl_status != AutomationImplStatus.DEPLOYED,
             )
-            to_activate = result.scalars().all()
-            for auto in to_activate:
-                auto.is_enabled = True
-                auto.status = AutomationStatus.ACTIVE
-                auto.impl_status = AutomationImplStatus.DEPLOYED
-            if to_activate:
-                await db.commit()
-                codes = [a.code for a in to_activate]
-                logger.info(f"✅ Auto-activated {len(to_activate)} newly deployed automations: {codes}")
-            else:
-                logger.info(f"✅ All {len(DEPLOYED_CODES)} deployed automations already active")
+        )
+        to_activate = result.scalars().all()
+        for auto in to_activate:
+            auto.is_enabled = True
+            auto.status = AutomationStatus.ACTIVE
+            auto.impl_status = AutomationImplStatus.DEPLOYED
+        if to_activate:
+            await db.commit()
+            codes = list(set(a.code for a in to_activate))
+            logger.info(f"✅ Auto-activated {len(to_activate)} automations: {codes}")
+        elif not total_seeded:
+            logger.info(f"✅ All {len(DEPLOYED_CODES)} deployed automations already active")
 
 
 def _get_seed_data() -> list:

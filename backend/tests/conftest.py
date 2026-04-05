@@ -18,6 +18,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.core.database import Base, get_db
 from app.core.security import get_current_user, get_current_admin_user
+from app.core.tenant import get_org_id, get_current_org
 
 
 class SQLiteUUID(TypeDecorator):
@@ -57,6 +58,7 @@ def _patch_metadata_for_sqlite(metadata):
 # ─── Test user fixtures ──────────────────────────────────────────
 
 TEST_USER_ID = str(uuid.uuid4())
+TEST_ORG_ID = str(uuid.uuid4())
 TEST_USER_EMAIL = "test@st4rtup.app"
 
 TEST_USER = {
@@ -64,6 +66,16 @@ TEST_USER = {
     "email": TEST_USER_EMAIL,
     "user_metadata": {},
     "role": "admin",
+}
+
+TEST_ORG = {
+    "org_id": TEST_ORG_ID,
+    "name": "Test Organization",
+    "slug": "test-org",
+    "plan": "growth",
+    "max_users": 10,
+    "max_leads": 1000,
+    "is_active": True,
 }
 
 
@@ -116,6 +128,19 @@ async def client(db_session):
     """Cliente HTTP async para tests de endpoints."""
     from app.main import app
     from app.models import User, UserRole
+    from app.models.organization import Organization, OrgMember
+
+    # Insert test organization
+    test_org = Organization(
+        id=uuid.UUID(TEST_ORG_ID),
+        name="Test Organization",
+        slug="test-org",
+        plan="growth",
+        max_users=10,
+        max_leads=1000,
+    )
+    db_session.add(test_org)
+    await db_session.flush()
 
     # Insert test user in DB so FK constraints (e.g. invited_by) work
     test_user_obj = User(
@@ -125,6 +150,14 @@ async def client(db_session):
         role=UserRole.ADMIN,
     )
     db_session.add(test_user_obj)
+    await db_session.flush()
+
+    # Link user to org
+    db_session.add(OrgMember(
+        org_id=uuid.UUID(TEST_ORG_ID),
+        user_id=uuid.UUID(TEST_USER_ID),
+        role="owner",
+    ))
     await db_session.commit()
 
     async def override_get_db():
@@ -136,9 +169,17 @@ async def client(db_session):
     def override_get_current_admin_user():
         return TEST_USER
 
+    def override_get_org_id():
+        return TEST_ORG_ID
+
+    def override_get_current_org():
+        return TEST_ORG
+
     app.dependency_overrides[get_db] = override_get_db
     app.dependency_overrides[get_current_user] = override_get_current_user
     app.dependency_overrides[get_current_admin_user] = override_get_current_admin_user
+    app.dependency_overrides[get_org_id] = override_get_org_id
+    app.dependency_overrides[get_current_org] = override_get_current_org
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
