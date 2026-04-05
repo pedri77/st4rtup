@@ -438,6 +438,146 @@ async def sc01_generate_recurring(db: AsyncSession, **kwargs):
     await db.commit()
 
 
+# ── LD-01: Create lead from web form submission ─────────────
+
+@on_event("form.submitted")
+async def ld01_create_lead_from_form(db: AsyncSession, **kwargs):
+    """LD-01: Create a Lead from web form data, assign initial score, notify."""
+    from app.models import Lead
+    from app.services.telegram_service import notify_new_lead
+
+    form_data = kwargs.get("form_data", {})
+    email = form_data.get("email", "")
+    company = form_data.get("company", form_data.get("company_name", ""))
+    name = form_data.get("name", form_data.get("contact_name", ""))
+
+    if not email and not company:
+        return
+
+    # Deduplicar por email
+    if email:
+        existing = (await db.execute(select(func.count(Lead.id)).where(
+            func.lower(Lead.contact_email) == email.lower()
+        ))).scalar() or 0
+        if existing > 0:
+            logger.info(f"LD-01: Duplicate lead skipped: {email}")
+            return
+
+    lead = Lead(
+        company_name=company or "Web Form Lead",
+        contact_name=name,
+        contact_email=email,
+        contact_phone=form_data.get("phone", ""),
+        source="website",
+        score=15,  # Score inicial formulario web
+        notes=f"Origen: formulario web. Mensaje: {form_data.get('message', '')}",
+    )
+    db.add(lead)
+    await db.commit()
+    await db.refresh(lead)
+
+    await notify_new_lead(db, company or name, "website", email)
+    logger.info(f"LD-01: Lead created from form: {email} / {company}")
+
+
+# ── IN-01: Import batch of leads from scraping ──────────────
+
+@on_event("lead.import_batch")
+async def in01_import_leads_batch(db: AsyncSession, **kwargs):
+    """IN-01: Import array of leads from scraping, deduplicate by company_name."""
+    from app.models import Lead
+
+    leads_data = kwargs.get("leads", [])
+    if not leads_data:
+        return
+
+    created = 0
+    skipped = 0
+    for item in leads_data:
+        company = item.get("company_name", "")
+        if not company:
+            continue
+
+        # Deduplicar por company_name
+        existing = (await db.execute(select(func.count(Lead.id)).where(
+            func.lower(Lead.company_name) == company.lower()
+        ))).scalar() or 0
+        if existing > 0:
+            skipped += 1
+            continue
+
+        db.add(Lead(
+            company_name=company,
+            contact_name=item.get("contact_name", ""),
+            contact_email=item.get("contact_email", ""),
+            contact_phone=item.get("contact_phone", ""),
+            company_website=item.get("website", ""),
+            company_sector=item.get("sector", ""),
+            company_city=item.get("city", ""),
+            company_country=item.get("country", "Spain"),
+            source="scraping",
+            score=10,
+            notes=f"Importado por scraping ({datetime.now(timezone.utc).strftime('%d/%m/%Y')})",
+        ))
+        created += 1
+
+    if created:
+        await db.commit()
+    logger.info(f"IN-01: Batch import — {created} created, {skipped} duplicates skipped")
+
+
+# ── RS-092: FirstPromoter webhook events ─────────────────────
+
+@on_event("partner.event")
+async def rs092_firstpromoter_event(db: AsyncSession, **kwargs):
+    """RS-092: Handle FirstPromoter webhook events — new referral or sale."""
+    from app.models import Lead
+    from app.services.firstpromoter_service import track_referral_sale
+
+    event_type = kwargs.get("event_type", "")
+    data = kwargs.get("data", {})
+
+    if event_type == "new_referral":
+        email = data.get("email", "")
+        company = data.get("company", "")
+        promoter = data.get("promoter_name", "partner")
+
+        if email:
+            existing = (await db.execute(select(func.count(Lead.id)).where(
+                func.lower(Lead.contact_email) == email.lower()
+            ))).scalar() or 0
+            if existing > 0:
+                logger.info(f"RS-092: Referral lead already exists: {email}")
+                return
+
+        lead = Lead(
+            company_name=company or f"Referral from {promoter}",
+            contact_name=data.get("name", ""),
+            contact_email=email,
+            source="referral",
+            score=25,  # Referrals get higher initial score
+            notes=f"Referido por: {promoter}. FirstPromoter ID: {data.get('referral_id', '')}",
+            tags=["firstpromoter", "referral"],
+        )
+        db.add(lead)
+        await db.commit()
+        logger.info(f"RS-092: Referral lead created from {promoter}: {email}")
+
+    elif event_type == "sale":
+        referral_id = data.get("referral_id")
+        amount = data.get("amount", 0)
+        if referral_id:
+            try:
+                await track_referral_sale(
+                    referral_id=referral_id,
+                    amount=amount,
+                    plan=data.get("plan", ""),
+                )
+                logger.info(f"RS-092: Sale tracked for referral {referral_id}: {amount} EUR")
+            except Exception as e:
+                logger.warning(f"RS-092: Failed to track sale: {e}")
+
+
 # ═══════════════════════════════════════════════════════════════
 # SCHEDULED JOBS REGISTRATION
 # ═══════════════════════════════════════════════════════════════

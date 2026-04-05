@@ -110,6 +110,8 @@ def _get_seed_data() -> list:
         {"code": "RS-054b", "name": "Brevo Nurturing", "description": "Leads ICP < 40 a lista nurturing automático Brevo.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 7 * * *"}, "priority": "medium", "complexity": "medium", "phase": "phase_2"},
         {"code": "RS-054c", "name": "Brevo Reactivation", "description": "Check leads dormant en Brevo por aperturas recientes.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "30 10 * * *"}, "priority": "medium", "complexity": "medium", "phase": "phase_2"},
         {"code": "RS-093", "name": "Lemlist Sync", "description": "Sync actividad campañas Lemlist → actualizar score leads.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 12 * * *"}, "priority": "medium", "complexity": "medium", "phase": "phase_2"},
+        # Sprint 3: Event-driven
+        {"code": "RS-092", "name": "FirstPromoter Webhook", "description": "Handle partner referrals y sales desde FirstPromoter.", "category": "integraciones", "trigger_type": "webhook", "trigger_config": {"event": "partner.event"}, "priority": "medium", "complexity": "medium", "phase": "phase_3"},
     ]
 
 
