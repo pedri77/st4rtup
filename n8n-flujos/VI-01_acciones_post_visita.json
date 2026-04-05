@@ -2,12 +2,23 @@
   "name": "VI-01 Acciones Post-Visita",
   "nodes": [
     {
-      "parameters": { "httpMethod": "POST", "path": "hooks/visit-completed", "responseMode": "onReceived", "options": {} },
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hooks/visit-completed",
+        "responseMode": "onReceived",
+        "options": {
+          "responseCode": 200,
+          "responseData": ""
+        }
+      },
       "id": "webhook-visit",
       "name": "Webhook Visita Completada",
       "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [250, 300]
+      "typeVersion": 2.1,
+      "position": [
+        250,
+        300
+      ]
     },
     {
       "parameters": {
@@ -17,15 +28,24 @@
       "name": "Generar Acciones",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [470, 300]
+      "position": [
+        470,
+        300
+      ]
     },
     {
-      "parameters": { "batchSize": 3, "options": {} },
+      "parameters": {
+        "batchSize": 3,
+        "options": {}
+      },
       "id": "batch",
       "name": "SplitInBatches",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [690, 300]
+      "position": [
+        690,
+        300
+      ]
     },
     {
       "parameters": {
@@ -41,31 +61,110 @@
       "id": "create-action",
       "name": "Crear Acción",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [910, 300],
-      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        910,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
+        "operation": "sendMessage",
         "chatId": "={{$env.TELEGRAM_CHAT_ID}}",
-        "text": "=✅ *Acciones post-visita creadas*\n\n🏢 {{$node['Webhook Visita Completada'].json.company_name || 'Lead'}}\n📋 Acciones generadas automáticamente tras visita.",
-        "additionalFields": { "parse_mode": "Markdown" }
+        "text": "={{\"\\u2705 *Acciones post-visita creadas*\\n\\n\\ud83c\\udfe2 \" + $('Webhook Visita Completada').first().json.company_name + \"\\n\\ud83d\\udccb Acciones generadas autom\\u00e1ticamente tras visita.\"}}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
       },
       "id": "telegram",
       "name": "Notificar Telegram",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [1130, 300],
-      "credentials": { "telegramApi": { "id": "telegram-bot", "name": "Riskitera Telegram Bot" } }
+      "position": [
+        1130,
+        300
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-bot",
+          "name": "Riskitera Telegram Bot"
+        }
+      }
     }
   ],
   "connections": {
-    "Webhook Visita Completada": { "main": [[{ "node": "Generar Acciones", "type": "main", "index": 0 }]] },
-    "Generar Acciones": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] },
-    "SplitInBatches": { "main": [[{ "node": "Crear Acción", "type": "main", "index": 0 }]] },
-    "Crear Acción": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] }
+    "Webhook Visita Completada": {
+      "main": [
+        [
+          {
+            "node": "Generar Acciones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generar Acciones": {
+      "main": [
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SplitInBatches": {
+      "main": [
+        [
+          {
+            "node": "Crear Acción",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Acción": {
+      "main": [
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
-  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
-  "tags": [{ "name": "visitas" }, { "name": "high" }, { "name": "phase_2" }],
-  "meta": { "code": "VI-01", "category": "visitas", "priority": "high", "estimated_hours": 5, "description": "Genera acciones automáticas tras completar una visita según resultado y próximos pasos." }
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Madrid"
+  },
+  "tags": [
+    {
+      "name": "visitas"
+    },
+    {
+      "name": "high"
+    },
+    {
+      "name": "phase_2"
+    }
+  ],
+  "meta": {
+    "code": "VI-01",
+    "category": "visitas",
+    "priority": "high",
+    "estimated_hours": 5,
+    "description": "Genera acciones automáticas tras completar una visita según resultado y próximos pasos."
+  }
 }

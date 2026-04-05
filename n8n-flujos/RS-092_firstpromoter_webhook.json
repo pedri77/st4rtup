@@ -5,42 +5,67 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "firstpromoter-webhook",
-        "responseMode": "onReceived"
+        "responseMode": "onReceived",
+        "options": {
+          "responseCode": 200,
+          "responseData": ""
+        }
       },
+      "id": "firstpromoter-webhook",
       "name": "FirstPromoter Webhook",
       "type": "n8n-nodes-base.webhook",
-      "typeVersion": 1,
-      "position": [250, 300],
+      "typeVersion": 2.1,
+      "position": [
+        250,
+        300
+      ],
       "notes": "Configura este webhook URL en FirstPromoter > Settings > Webhooks"
     },
     {
       "parameters": {
         "jsCode": "const event = $input.first().json;\nconst type = event.event_type || event.type || '';\nconst data = event.data || event;\n\nreturn [{\n  json: {\n    type,\n    email: data.email || data.lead?.email || '',\n    promoter_email: data.promoter?.email || '',\n    promoter_name: `${data.promoter?.first_name || ''} ${data.promoter?.last_name || ''}`.trim(),\n    company: data.promoter?.company || '',\n    amount: (data.amount || 0) / 100,\n    plan: data.plan || 'grc_annual',\n    ref_id: data.ref_id || '',\n    timestamp: new Date().toISOString()\n  }\n}];"
       },
+      "id": "map-event",
       "name": "Mapear Evento",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [470, 300]
+      "position": [
+        470,
+        300
+      ]
     },
     {
       "parameters": {
         "rules": {
           "rules": [
-            { "output": 0, "value": "new_referral" },
-            { "output": 1, "value": "new_customer" },
-            { "output": 2, "value": "sale" }
+            {
+              "output": 0,
+              "value": "new_referral"
+            },
+            {
+              "output": 1,
+              "value": "new_customer"
+            },
+            {
+              "output": 2,
+              "value": "sale"
+            }
           ]
         },
         "dataPropertyName": "type"
       },
+      "id": "switch-event-type",
       "name": "Switch Tipo Evento",
       "type": "n8n-nodes-base.switch",
-      "typeVersion": 2,
-      "position": [690, 300]
+      "typeVersion": 3,
+      "position": [
+        690,
+        300
+      ]
     },
     {
       "parameters": {
-        "url": "https://riskitera-sales-backend.fly.dev/api/v1/leads",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/leads",
         "method": "POST",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
@@ -48,15 +73,25 @@
         "specifyBody": "json",
         "jsonBody": "={\n  \"company_name\": \"Referido MSSP — {{$json.promoter_name}}\",\n  \"contact_email\": \"{{$json.email}}\",\n  \"source\": \"mssp\",\n  \"score\": 60,\n  \"tags\": [\"mssp\", \"partner:{{$json.promoter_name}}\"],\n  \"notes\": \"Lead referido por partner MSSP: {{$json.promoter_name}} ({{$json.company}})\"\n}"
       },
+      "id": "create-lead-mssp",
       "name": "Crear Lead MSSP",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [910, 200],
-      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        910,
+        200
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "url": "https://riskitera-sales-backend.fly.dev/api/v1/costs/record",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/costs/record",
         "method": "POST",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
@@ -64,39 +99,110 @@
         "specifyBody": "json",
         "jsonBody": "={\n  \"tool_id\": \"firstpromoter\",\n  \"amount\": {{$json.amount * 0.2}},\n  \"category\": \"commission\",\n  \"description\": \"Comisión partner {{$json.promoter_name}} — deal {{$json.email}}\"\n}"
       },
+      "id": "register-commission",
       "name": "Registrar Comisión en Cost Control",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [910, 400],
-      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        910,
+        400
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "url": "https://api.telegram.org/bot{{$env.TELEGRAM_BOT_TOKEN}}/sendMessage",
+        "url": "=https://api.telegram.org/bot{{$env.TELEGRAM_BOT_TOKEN}}/sendMessage",
         "method": "POST",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"chat_id\": \"{{$env.TELEGRAM_CHAT_ID}}\",\n  \"text\": \"🤝 <b>Partner MSSP — {{$json.type}}</b>\\nPartner: {{$json.promoter_name}} ({{$json.company}})\\nEmail: {{$json.email}}\\nImporte: €{{$json.amount}}\",\n  \"parse_mode\": \"HTML\"\n}"
       },
+      "id": "telegram-notification",
       "name": "Telegram Notificación",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [1130, 300]
+      "typeVersion": 4.4,
+      "position": [
+        1130,
+        300
+      ],
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
-    "FirstPromoter Webhook": { "main": [[{ "node": "Mapear Evento", "type": "main", "index": 0 }]] },
-    "Mapear Evento": { "main": [[{ "node": "Switch Tipo Evento", "type": "main", "index": 0 }]] },
+    "FirstPromoter Webhook": {
+      "main": [
+        [
+          {
+            "node": "Mapear Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mapear Evento": {
+      "main": [
+        [
+          {
+            "node": "Switch Tipo Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Switch Tipo Evento": {
       "main": [
-        [{ "node": "Crear Lead MSSP", "type": "main", "index": 0 }],
-        [{ "node": "Telegram Notificación", "type": "main", "index": 0 }],
-        [{ "node": "Registrar Comisión en Cost Control", "type": "main", "index": 0 }, { "node": "Telegram Notificación", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Crear Lead MSSP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram Notificación",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registrar Comisión en Cost Control",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram Notificación",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
-  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
-  "tags": [{ "name": "firstpromoter" }, { "name": "mssp" }, { "name": "sprint-9" }],
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Madrid"
+  },
+  "tags": [
+    {
+      "name": "firstpromoter"
+    },
+    {
+      "name": "mssp"
+    },
+    {
+      "name": "sprint-9"
+    }
+  ],
   "meta": {
     "code": "RS-092",
     "category": "integraciones",

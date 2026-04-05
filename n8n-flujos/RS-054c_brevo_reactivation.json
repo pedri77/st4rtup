@@ -2,16 +2,28 @@
   "name": "RS-054c — Brevo Re-activation Trigger",
   "nodes": [
     {
+      "id": "cron-miercoles-900",
       "parameters": {
-        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 9 * * 3" }] }
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 3"
+            }
+          ]
+        }
       },
       "name": "Cron Miércoles 9:00",
       "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1,
-      "position": [250, 300],
+      "typeVersion": 1.3,
+      "position": [
+        250,
+        300
+      ],
       "notes": "Cada miércoles revisa leads en nurturing que hayan abierto 2+ emails en 7 días"
     },
     {
+      "id": "get-leads-nurturing",
       "parameters": {
         "url": "https://riskitera-sales-backend.fly.dev/api/v1/leads",
         "authentication": "genericCredentialType",
@@ -19,34 +31,63 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "status", "value": "nurturing" },
-            { "name": "page_size", "value": "100" }
+            {
+              "name": "status",
+              "value": "nurturing"
+            },
+            {
+              "name": "page_size",
+              "value": "100"
+            }
           ]
         }
       },
       "name": "GET Leads en Nurturing",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [470, 300],
-      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        470,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
+      "id": "extraer-emails",
       "parameters": {
         "jsCode": "const leads = $input.first().json.items || [];\nreturn leads.filter(l => l.contact_email).map(l => ({ json: { email: l.contact_email, lead_id: l.id, company: l.company_name } }));"
       },
       "name": "Extraer Emails",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [690, 300]
+      "position": [
+        690,
+        300
+      ]
     },
     {
-      "parameters": { "batchSize": 1, "options": { "reset": false } },
+      "id": "split-in-batches",
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "reset": false
+        }
+      },
       "name": "SplitInBatches",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [910, 300]
+      "position": [
+        910,
+        300
+      ]
     },
     {
+      "id": "check-reactivation",
       "parameters": {
         "url": "=https://riskitera-sales-backend.fly.dev/api/v1/analytics/external/brevo/reactivation/{{$json.email}}",
         "authentication": "genericCredentialType",
@@ -54,20 +95,52 @@
       },
       "name": "Check Reactivation",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [1130, 300],
-      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        1130,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
+      "id": "if-reactivar",
       "parameters": {
-        "conditions": { "boolean": [{ "value1": "={{$json.should_reactivate}}", "value2": true }] }
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{$json.should_reactivate}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ]
+        }
       },
       "name": "¿Reactivar?",
       "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [1350, 300]
+      "typeVersion": 2.3,
+      "position": [
+        1350,
+        300
+      ]
     },
     {
+      "id": "rescore-agent-lead",
       "parameters": {
         "url": "=https://riskitera-sales-backend.fly.dev/api/v1/agents/lead-intelligence/{{$json.lead_id}}",
         "method": "POST",
@@ -76,23 +149,37 @@
       },
       "name": "Re-score con AGENT-LEAD-001",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [1570, 200],
-      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } },
-      "notes": "Re-evalúa ICP con el agente. Si score >= 40 → vuelve al pipeline activo"
+      "typeVersion": 4.4,
+      "position": [
+        1570,
+        200
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "notes": "Re-evalúa ICP con el agente. Si score >= 40 → vuelve al pipeline activo",
+      "onError": "continueRegularOutput"
     },
     {
+      "id": "evaluar-resultado",
       "parameters": {
         "jsCode": "const scoring = $input.first().json;\nconst prev = $('Check Reactivation').first().json;\n\nif (scoring.icp_score >= 40) {\n  return [{ json: { reactivated: true, email: prev.email, new_score: scoring.icp_score, tier: scoring.tier } }];\n}\nreturn [{ json: { reactivated: false, email: prev.email, reason: 'Score sigue bajo: ' + scoring.icp_score } }];"
       },
       "name": "Evaluar Resultado",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1790, 200]
+      "position": [
+        1790,
+        200
+      ]
     },
     {
+      "id": "telegram-notificacion",
       "parameters": {
-        "url": "https://api.telegram.org/bot{{$env.TELEGRAM_BOT_TOKEN}}/sendMessage",
+        "url": "=https://api.telegram.org/bot{{$env.TELEGRAM_BOT_TOKEN}}/sendMessage",
         "method": "POST",
         "sendBody": true,
         "specifyBody": "json",
@@ -100,26 +187,130 @@
       },
       "name": "Telegram Notificación",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [2010, 200]
+      "typeVersion": 4.4,
+      "position": [
+        2010,
+        200
+      ],
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
-    "Cron Miércoles 9:00": { "main": [[{ "node": "GET Leads en Nurturing", "type": "main", "index": 0 }]] },
-    "GET Leads en Nurturing": { "main": [[{ "node": "Extraer Emails", "type": "main", "index": 0 }]] },
-    "Extraer Emails": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] },
-    "SplitInBatches": { "main": [[{ "node": "Check Reactivation", "type": "main", "index": 0 }]] },
-    "Check Reactivation": { "main": [[{ "node": "¿Reactivar?", "type": "main", "index": 0 }]] },
-    "¿Reactivar?": {
+    "Cron Miércoles 9:00": {
       "main": [
-        [{ "node": "Re-score con AGENT-LEAD-001", "type": "main", "index": 0 }],
-        [{ "node": "SplitInBatches", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "GET Leads en Nurturing",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
-    "Re-score con AGENT-LEAD-001": { "main": [[{ "node": "Evaluar Resultado", "type": "main", "index": 0 }]] },
-    "Evaluar Resultado": { "main": [[{ "node": "Telegram Notificación", "type": "main", "index": 0 }]] }
+    "GET Leads en Nurturing": {
+      "main": [
+        [
+          {
+            "node": "Extraer Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Emails": {
+      "main": [
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SplitInBatches": {
+      "main": [
+        [
+          {
+            "node": "Check Reactivation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Reactivation": {
+      "main": [
+        [
+          {
+            "node": "¿Reactivar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Reactivar?": {
+      "main": [
+        [
+          {
+            "node": "Re-score con AGENT-LEAD-001",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Re-score con AGENT-LEAD-001": {
+      "main": [
+        [
+          {
+            "node": "Evaluar Resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluar Resultado": {
+      "main": [
+        [
+          {
+            "node": "Telegram Notificación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
-  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
-  "tags": [{ "name": "brevo" }, { "name": "reactivation" }, { "name": "sprint-3" }],
-  "meta": { "code": "RS-054c", "category": "nurturing", "priority": "alta", "estimated_hours": 2 }
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Madrid"
+  },
+  "tags": [
+    {
+      "name": "brevo"
+    },
+    {
+      "name": "reactivation"
+    },
+    {
+      "name": "sprint-3"
+    }
+  ],
+  "meta": {
+    "code": "RS-054c",
+    "category": "nurturing",
+    "priority": "alta",
+    "estimated_hours": 2
+  }
 }

@@ -3,72 +3,128 @@
   "nodes": [
     {
       "parameters": {
-        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 8 * * *" }] }
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
       },
+      "id": "cron-daily",
       "name": "Cron Diario 8:00",
       "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1,
-      "position": [250, 300],
+      "typeVersion": 1.3,
+      "position": [
+        250,
+        300
+      ],
       "notes": "Cada día a las 8:00 — revisa costes acumulados del mes"
     },
     {
       "parameters": {
-        "url": "https://sheets.googleapis.com/v4/spreadsheets/{{$env.COST_SHEET_ID}}/values/Costes!A2:G100",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{$env.COST_SHEET_ID}}/values/Costes!A2:G100",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "headerParameters": {
-          "parameters": [{ "name": "Authorization", "value": "Bearer {{$env.GOOGLE_SHEETS_TOKEN}}" }]
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.GOOGLE_SHEETS_TOKEN}}"
+            }
+          ]
         }
       },
+      "id": "get-sheet-costs",
       "name": "GET Google Sheet Costes",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [470, 300],
-      "notes": "Columnas: Fecha | Herramienta | Concepto | Importe | Moneda | Categoría | Notas"
+      "typeVersion": 4.4,
+      "position": [
+        470,
+        300
+      ],
+      "notes": "Columnas: Fecha | Herramienta | Concepto | Importe | Moneda | Categoría | Notas",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
         "jsCode": "// Calcular costes acumulados por herramienta en el mes actual\nconst rows = $input.first().json.values || [];\nconst now = new Date();\nconst currentMonth = now.getMonth();\nconst currentYear = now.getFullYear();\n\n// Topes mensuales configurables (€)\nconst BUDGET_CAPS = {\n  'retell_ai': { cap: 50, warn_pct: 70, cut_pct: 90, name: 'Retell AI' },\n  'hetzner_gpu': { cap: 98, warn_pct: 80, cut_pct: 95, name: 'Hetzner GPU' },\n  'n8n_cloud': { cap: 20, warn_pct: 75, cut_pct: 90, name: 'n8n Cloud' },\n  'microsoft_graph': { cap: 12, warn_pct: 70, cut_pct: 90, name: 'Microsoft Graph' },\n  'cal_com': { cap: 12, warn_pct: 70, cut_pct: 90, name: 'Cal.com' },\n  'supabase': { cap: 25, warn_pct: 70, cut_pct: 90, name: 'Supabase' },\n  'otros': { cap: 50, warn_pct: 80, cut_pct: 95, name: 'Otros' }\n};\n\nconst accumulated = {};\n\nfor (const row of rows) {\n  const [dateStr, tool, , amount] = row;\n  const date = new Date(dateStr);\n  if (date.getMonth() !== currentMonth || date.getFullYear() !== currentYear) continue;\n  \n  const toolKey = (tool || 'otros').toLowerCase().replace(/[\\s.]/g, '_');\n  if (!accumulated[toolKey]) accumulated[toolKey] = 0;\n  accumulated[toolKey] += parseFloat(amount) || 0;\n}\n\n// Evaluar guardrails\nconst alerts = [];\nlet totalSpent = 0;\nlet totalCap = 0;\n\nfor (const [toolKey, config] of Object.entries(BUDGET_CAPS)) {\n  const spent = accumulated[toolKey] || 0;\n  totalSpent += spent;\n  totalCap += config.cap;\n  const pct = config.cap > 0 ? (spent / config.cap * 100) : 0;\n  \n  if (pct >= config.cut_pct) {\n    alerts.push({\n      tool: config.name,\n      level: '🔴 CORTE',\n      spent: spent.toFixed(2),\n      cap: config.cap,\n      pct: pct.toFixed(1)\n    });\n  } else if (pct >= config.warn_pct) {\n    alerts.push({\n      tool: config.name,\n      level: '🟡 AVISO',\n      spent: spent.toFixed(2),\n      cap: config.cap,\n      pct: pct.toFixed(1)\n    });\n  }\n}\n\nconst totalPct = totalCap > 0 ? (totalSpent / totalCap * 100) : 0;\n\nreturn [{\n  json: {\n    alerts,\n    has_alerts: alerts.length > 0,\n    total_spent: totalSpent.toFixed(2),\n    total_cap: totalCap,\n    total_pct: totalPct.toFixed(1),\n    accumulated,\n    month: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`,\n    evaluated_at: now.toISOString()\n  }\n}];"
       },
+      "id": "eval-guardrails",
       "name": "Evaluar Guardrails",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [690, 300]
+      "position": [
+        690,
+        300
+      ]
     },
     {
       "parameters": {
-        "conditions": { "boolean": [{ "value1": "={{$json.has_alerts}}", "value2": true }] }
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{$json.has_alerts}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ]
+        }
       },
+      "id": "if-has-alerts",
       "name": "¿Hay Alertas?",
       "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [910, 300]
+      "typeVersion": 2.3,
+      "position": [
+        910,
+        300
+      ]
     },
     {
       "parameters": {
         "jsCode": "const data = $input.first().json;\nconst alerts = data.alerts;\n\nlet message = `⚠️ <b>Alerta de Costes — ${data.month}</b>\\n\\n`;\nmessage += `Total: €${data.total_spent} / €${data.total_cap} (${data.total_pct}%)\\n\\n`;\n\nfor (const alert of alerts) {\n  message += `${alert.level} <b>${alert.tool}</b>: €${alert.spent} / €${alert.cap} (${alert.pct}%)\\n`;\n}\n\nmessage += `\\n📊 Evaluado: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}`;\n\nreturn [{ json: { message, alerts_count: alerts.length } }];"
       },
+      "id": "format-message",
       "name": "Formatear Mensaje",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1130, 200]
+      "position": [
+        1130,
+        200
+      ]
     },
     {
       "parameters": {
-        "url": "https://api.telegram.org/bot{{$env.TELEGRAM_BOT_TOKEN}}/sendMessage",
+        "url": "=https://api.telegram.org/bot{{$env.TELEGRAM_BOT_TOKEN}}/sendMessage",
         "method": "POST",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"chat_id\": \"{{$env.TELEGRAM_CHAT_ID}}\",\n  \"text\": \"{{$json.message}}\",\n  \"parse_mode\": \"HTML\"\n}"
       },
+      "id": "telegram-alert",
       "name": "Telegram Alert",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [1350, 200]
+      "typeVersion": 4.4,
+      "position": [
+        1350,
+        200
+      ],
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "url": "https://riskitera-sales-backend.fly.dev/api/v1/marketing/webhooks/external-alert",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/marketing/webhooks/external-alert",
         "method": "POST",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
@@ -76,15 +132,25 @@
         "specifyBody": "json",
         "jsonBody": "={\n  \"event_id\": \"cost_alert_{{$now.format('yyyyMMdd')}}\",\n  \"alert_type\": \"cost_guardrail\",\n  \"severity\": \"warning\",\n  \"title\": \"Alerta de costes: {{$json.alerts_count}} herramientas cerca del tope\",\n  \"message\": \"Total: €{{$input.first().json.total_spent}} / €{{$input.first().json.total_cap}}\",\n  \"data\": {{JSON.stringify($input.first().json)}}\n}"
       },
+      "id": "register-alert-crm",
       "name": "Registrar Alerta CRM",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [1350, 400],
-      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        1350,
+        400
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "url": "https://riskitera-sales-backend.fly.dev/api/v1/marketing/webhooks/metrics-sync",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/marketing/webhooks/metrics-sync",
         "method": "POST",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
@@ -92,30 +158,109 @@
         "specifyBody": "json",
         "jsonBody": "={\n  \"event_id\": \"cost_daily_{{$now.format('yyyyMMdd')}}\",\n  \"source\": \"cost_tracking\",\n  \"date\": \"{{$now.format('yyyy-MM-dd')}}\",\n  \"metrics\": {{JSON.stringify($json)}}\n}"
       },
+      "id": "sync-daily-metrics",
       "name": "Sync Métricas Diarias",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [1130, 450],
-      "credentials": { "httpHeaderAuth": { "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        1130,
+        450
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
-    "Cron Diario 8:00": { "main": [[{ "node": "GET Google Sheet Costes", "type": "main", "index": 0 }]] },
-    "GET Google Sheet Costes": { "main": [[{ "node": "Evaluar Guardrails", "type": "main", "index": 0 }]] },
-    "Evaluar Guardrails": { "main": [[{ "node": "¿Hay Alertas?", "type": "main", "index": 0 }]] },
-    "¿Hay Alertas?": {
+    "Cron Diario 8:00": {
       "main": [
-        [{ "node": "Formatear Mensaje", "type": "main", "index": 0 }],
-        [{ "node": "Sync Métricas Diarias", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "GET Google Sheet Costes",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
-    "Formatear Mensaje": { "main": [
-      [{ "node": "Telegram Alert", "type": "main", "index": 0 }],
-      [{ "node": "Registrar Alerta CRM", "type": "main", "index": 0 }]
-    ] }
+    "GET Google Sheet Costes": {
+      "main": [
+        [
+          {
+            "node": "Evaluar Guardrails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluar Guardrails": {
+      "main": [
+        [
+          {
+            "node": "¿Hay Alertas?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Hay Alertas?": {
+      "main": [
+        [
+          {
+            "node": "Formatear Mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sync Métricas Diarias",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatear Mensaje": {
+      "main": [
+        [
+          {
+            "node": "Telegram Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registrar Alerta CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
-  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
-  "tags": [{ "name": "cost-control" }, { "name": "guardrails" }, { "name": "fase-0" }],
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Madrid"
+  },
+  "tags": [
+    {
+      "name": "cost-control"
+    },
+    {
+      "name": "guardrails"
+    },
+    {
+      "name": "fase-0"
+    }
+  ],
   "meta": {
     "code": "RS-076b",
     "category": "cost_control",

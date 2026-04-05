@@ -2,29 +2,54 @@
   "name": "LD-02 Sincronización Apollo.io",
   "nodes": [
     {
-      "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "0 8 * * *" }] } },
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
       "id": "cron-daily",
       "name": "Diario 8:00",
       "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.2,
-      "position": [250, 300]
+      "typeVersion": 1.3,
+      "position": [
+        250,
+        300
+      ]
     },
     {
       "parameters": {
         "method": "POST",
         "url": "https://api.apollo.io/v1/mixed_people/search",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [{ "name": "X-Api-Key", "value": "={{$env.APOLLO_API_KEY}}" }] },
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "={{$env.APOLLO_API_KEY}}"
+            }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "{\"person_locations\":[\"Spain\"],\"organization_num_employees_ranges\":[\"51,200\",\"201,500\",\"501,1000\",\"1001,5000\",\"5001,10000\"],\"person_seniorities\":[\"c_suite\",\"vp\",\"director\"],\"q_keywords\":\"ciberseguridad OR compliance OR CISO OR seguridad informática\",\"page\":1,\"per_page\":50}",
-        "options": {}
+        "options": {
+          "timeout": 30000
+        }
       },
       "id": "apollo-search",
       "name": "Buscar en Apollo.io",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [470, 300]
+      "typeVersion": 4.4,
+      "position": [
+        470,
+        300
+      ],
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -34,15 +59,24 @@
       "name": "Mapear Datos Apollo",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [690, 300]
+      "position": [
+        690,
+        300
+      ]
     },
     {
-      "parameters": { "batchSize": 3, "options": {} },
+      "parameters": {
+        "batchSize": 3,
+        "options": {}
+      },
       "id": "batch",
       "name": "SplitInBatches",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [910, 300]
+      "position": [
+        910,
+        300
+      ]
     },
     {
       "parameters": {
@@ -50,26 +84,56 @@
         "url": "=https://riskitera-sales-backend.fly.dev/api/v1/leads?search={{encodeURIComponent($json.company_name)}}&page_size=1",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
-        "options": {}
+        "options": {
+          "timeout": 30000
+        }
       },
       "id": "check-dup",
       "name": "Check Duplicado",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [1130, 300],
-      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        1130,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "conditions": { "options": { "leftValue": "={{$json.total}}", "typeValidation": "strict" },
-          "conditions": [{ "leftValue": "={{$json.total}}", "rightValue": 0, "operator": { "type": "number", "operation": "equals" } }]
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{$json.total}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ]
         }
       },
       "id": "if-new",
       "name": "¿No existe?",
       "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [1350, 300]
+      "typeVersion": 2.3,
+      "position": [
+        1350,
+        300
+      ]
     },
     {
       "parameters": {
@@ -79,40 +143,161 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{JSON.stringify($node['SplitInBatches'].json)}}",
-        "options": {}
+        "jsonBody": "={{JSON.stringify($('SplitInBatches').first().json)}}",
+        "options": {
+          "timeout": 30000
+        }
       },
       "id": "create-lead",
       "name": "Crear Lead",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [1570, 250],
-      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        1570,
+        250
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
+        "operation": "sendMessage",
         "chatId": "={{$env.TELEGRAM_CHAT_ID}}",
         "text": "=📊 *Apollo.io sync completado*\n\nResultados procesados del día.",
-        "additionalFields": { "parse_mode": "Markdown" }
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
       },
       "id": "telegram",
       "name": "Resumen Telegram",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [1790, 300],
-      "credentials": { "telegramApi": { "id": "telegram-bot", "name": "Riskitera Telegram Bot" } }
+      "position": [
+        1790,
+        300
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-bot",
+          "name": "Riskitera Telegram Bot"
+        }
+      }
     }
   ],
   "connections": {
-    "Diario 8:00": { "main": [[{ "node": "Buscar en Apollo.io", "type": "main", "index": 0 }]] },
-    "Buscar en Apollo.io": { "main": [[{ "node": "Mapear Datos Apollo", "type": "main", "index": 0 }]] },
-    "Mapear Datos Apollo": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] },
-    "SplitInBatches": { "main": [[{ "node": "Check Duplicado", "type": "main", "index": 0 }]] },
-    "Check Duplicado": { "main": [[{ "node": "¿No existe?", "type": "main", "index": 0 }]] },
-    "¿No existe?": { "main": [[{ "node": "Crear Lead", "type": "main", "index": 0 }], [{ "node": "SplitInBatches", "type": "main", "index": 0 }]] },
-    "Crear Lead": { "main": [[{ "node": "SplitInBatches", "type": "main", "index": 0 }]] }
+    "Diario 8:00": {
+      "main": [
+        [
+          {
+            "node": "Buscar en Apollo.io",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar en Apollo.io": {
+      "main": [
+        [
+          {
+            "node": "Mapear Datos Apollo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mapear Datos Apollo": {
+      "main": [
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SplitInBatches": {
+      "main": [
+        [
+          {
+            "node": "Check Duplicado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Duplicado": {
+      "main": [
+        [
+          {
+            "node": "¿No existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿No existe?": {
+      "main": [
+        [
+          {
+            "node": "Crear Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Lead": {
+      "main": [
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
-  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
-  "tags": [{ "name": "leads_captacion" }, { "name": "high" }, { "name": "phase_3" }],
-  "meta": { "code": "LD-02", "category": "leads_captacion", "priority": "high", "estimated_hours": 8, "description": "Sincronización diaria con Apollo.io. Busca prospects en España, deduplica y crea leads.", "integrations": ["Apollo.io API"] }
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Madrid"
+  },
+  "tags": [
+    {
+      "name": "leads_captacion"
+    },
+    {
+      "name": "high"
+    },
+    {
+      "name": "phase_3"
+    }
+  ],
+  "meta": {
+    "code": "LD-02",
+    "category": "leads_captacion",
+    "priority": "high",
+    "estimated_hours": 8,
+    "description": "Sincronización diaria con Apollo.io. Busca prospects en España, deduplica y crea leads.",
+    "integrations": [
+      "Apollo.io API"
+    ]
+  }
 }

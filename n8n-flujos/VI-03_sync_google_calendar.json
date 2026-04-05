@@ -2,12 +2,23 @@
   "name": "VI-03 Sync Google Calendar",
   "nodes": [
     {
-      "parameters": { "httpMethod": "POST", "path": "hooks/visit-created-or-updated", "responseMode": "onReceived", "options": {} },
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hooks/visit-created-or-updated",
+        "responseMode": "onReceived",
+        "options": {
+          "responseCode": 200,
+          "responseData": ""
+        }
+      },
       "id": "webhook-visit",
       "name": "Webhook Visita",
       "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [250, 300]
+      "typeVersion": 2.1,
+      "position": [
+        250,
+        300
+      ]
     },
     {
       "parameters": {
@@ -20,85 +31,224 @@
       "id": "get-lead",
       "name": "GET Lead",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [470, 300],
-      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        470,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "conditions": { "conditions": [{ "leftValue": "={{$node['Webhook Visita'].json.action}}", "rightValue": "created", "operator": { "type": "string", "operation": "equals" } }] }
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{$('Webhook Visita').first().json.action}}",
+              "rightValue": "created",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        }
       },
       "id": "if-new",
       "name": "¿Nueva o Actualización?",
       "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [690, 300]
+      "typeVersion": 2.3,
+      "position": [
+        690,
+        300
+      ]
     },
     {
       "parameters": {
         "resource": "event",
         "operation": "create",
-        "calendar": { "__rl": true, "value": "primary", "mode": "list" },
-        "start": "={{$node['Webhook Visita'].json.scheduled_date}}",
-        "end": "={{$node['Webhook Visita'].json.end_date || ''}}",
+        "calendar": {
+          "__rl": true,
+          "value": "primary",
+          "mode": "list"
+        },
+        "start": "={{$('Webhook Visita').first().json.scheduled_date}}",
+        "end": "={{$('Webhook Visita').first().json.end_date || ''}}",
         "additionalFields": {
           "summary": "=Visita: {{$json.company_name}} — {{$json.contact_name}}",
-          "description": "=Lead: {{$json.company_name}}\nContacto: {{$json.contact_name}} ({{$json.contact_email}})\nNotas: {{$node['Webhook Visita'].json.notes || 'Sin notas'}}",
-          "location": "={{$node['Webhook Visita'].json.location || ''}}"
+          "description": "=Lead: {{$json.company_name}}\nContacto: {{$json.contact_name}} ({{$json.contact_email}})\nNotas: {{$('Webhook Visita').first().json.notes || 'Sin notas'}}",
+          "location": "={{$('Webhook Visita').first().json.location || ''}}"
         }
       },
       "id": "gcal-create",
       "name": "Crear Evento GCal",
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.2,
-      "position": [910, 250],
-      "credentials": { "googleCalendarOAuth2Api": { "id": "google-calendar", "name": "Google Calendar OAuth2" } }
+      "position": [
+        910,
+        250
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "google-calendar",
+          "name": "Google Calendar OAuth2"
+        }
+      }
     },
     {
       "parameters": {
         "resource": "event",
         "operation": "update",
-        "calendar": { "__rl": true, "value": "primary", "mode": "list" },
-        "eventId": "={{$node['Webhook Visita'].json.gcal_event_id}}",
+        "calendar": {
+          "__rl": true,
+          "value": "primary",
+          "mode": "list"
+        },
+        "eventId": "={{$('Webhook Visita').first().json.gcal_event_id}}",
         "updateFields": {
-          "start": "={{$node['Webhook Visita'].json.scheduled_date}}",
-          "end": "={{$node['Webhook Visita'].json.end_date || ''}}",
+          "start": "={{$('Webhook Visita').first().json.scheduled_date}}",
+          "end": "={{$('Webhook Visita').first().json.end_date || ''}}",
           "summary": "=Visita: {{$json.company_name}} — {{$json.contact_name}}",
-          "location": "={{$node['Webhook Visita'].json.location || ''}}"
+          "location": "={{$('Webhook Visita').first().json.location || ''}}"
         }
       },
       "id": "gcal-update",
       "name": "Actualizar Evento GCal",
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.2,
-      "position": [910, 380],
-      "credentials": { "googleCalendarOAuth2Api": { "id": "google-calendar", "name": "Google Calendar OAuth2" } }
+      "position": [
+        910,
+        380
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "google-calendar",
+          "name": "Google Calendar OAuth2"
+        }
+      }
     },
     {
       "parameters": {
         "method": "PUT",
-        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/visits/{{$node['Webhook Visita'].json.visit_id}}",
+        "url": "=https://riskitera-sales-backend.fly.dev/api/v1/visits/{{$('Webhook Visita').first().json.visit_id}}",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
-        "bodyParameters": { "parameters": [{ "name": "gcal_event_id", "value": "={{$json.id}}" }] },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "gcal_event_id",
+              "value": "={{$json.id}}"
+            }
+          ]
+        },
         "options": {}
       },
       "id": "save-gcal-id",
       "name": "Guardar GCal ID",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [1130, 250],
-      "credentials": { "httpHeaderAuth": { "id": "riskitera-api", "name": "Riskitera API Bearer" } }
+      "typeVersion": 4.4,
+      "position": [
+        1130,
+        250
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "riskitera-api",
+          "name": "Riskitera API Bearer"
+        }
+      },
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
-    "Webhook Visita": { "main": [[{ "node": "GET Lead", "type": "main", "index": 0 }]] },
-    "GET Lead": { "main": [[{ "node": "¿Nueva o Actualización?", "type": "main", "index": 0 }]] },
-    "¿Nueva o Actualización?": { "main": [[{ "node": "Crear Evento GCal", "type": "main", "index": 0 }], [{ "node": "Actualizar Evento GCal", "type": "main", "index": 0 }]] },
-    "Crear Evento GCal": { "main": [[{ "node": "Guardar GCal ID", "type": "main", "index": 0 }]] }
+    "Webhook Visita": {
+      "main": [
+        [
+          {
+            "node": "GET Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Lead": {
+      "main": [
+        [
+          {
+            "node": "¿Nueva o Actualización?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Nueva o Actualización?": {
+      "main": [
+        [
+          {
+            "node": "Crear Evento GCal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Actualizar Evento GCal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Evento GCal": {
+      "main": [
+        [
+          {
+            "node": "Guardar GCal ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
-  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
-  "tags": [{ "name": "visitas" }, { "name": "medium" }, { "name": "phase_4" }],
-  "meta": { "code": "VI-03", "category": "visitas", "priority": "medium", "estimated_hours": 5, "description": "Sincroniza visitas con Google Calendar. Crea/actualiza eventos automáticamente.", "integrations": ["Google Calendar API"] }
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Madrid"
+  },
+  "tags": [
+    {
+      "name": "visitas"
+    },
+    {
+      "name": "medium"
+    },
+    {
+      "name": "phase_4"
+    }
+  ],
+  "meta": {
+    "code": "VI-03",
+    "category": "visitas",
+    "priority": "medium",
+    "estimated_hours": 5,
+    "description": "Sincroniza visitas con Google Calendar. Crea/actualiza eventos automáticamente.",
+    "integrations": [
+      "Google Calendar API"
+    ]
+  }
 }
