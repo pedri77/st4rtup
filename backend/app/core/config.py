@@ -305,6 +305,9 @@ class Settings(BaseSettings):
     FRESHDESK_API_KEY: str = ""
     FRESHDESK_DOMAIN: str = ""
 
+    # Frontend
+    FRONTEND_URL: str = "https://sales.riskitera.com"
+
     # Admin
     ADMIN_EMAILS: str = "admin@st4rtup.app"
 
