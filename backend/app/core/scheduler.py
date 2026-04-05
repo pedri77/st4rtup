@@ -110,14 +110,56 @@ async def run_em03_reengagement():
 
 
 async def run_em04_post_visit():
-    """EM-04: Follow-up post-visita — 11:00"""
-    from app.models.crm import Visit
+    """EM-04: Follow-up post-visita — 11:00
+    Query visitas de ayer con resultado positivo/follow_up → crear email follow-up → crear acción de seguimiento.
+    """
+    from app.models.crm import Visit, Action, ActionStatus, VisitResult, ActionPriority
+    from app.models import Lead
     try:
         async with AsyncSessionLocal() as db:
             yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).date()
-            result = await db.execute(select(Visit).where(func.date(Visit.visit_date) == yesterday))
+            result = await db.execute(
+                select(Visit).join(Lead, Lead.id == Visit.lead_id).where(
+                    func.date(Visit.visit_date) == yesterday,
+                    Visit.result.in_([VisitResult.POSITIVE, VisitResult.FOLLOW_UP])
+                )
+            )
             visits = result.scalars().all()
-            logger.info(f"EM-04: {len(visits)} visitas de ayer para follow-up")
+            sent = 0
+            for visit in visits:
+                lead = (await db.execute(select(Lead).where(Lead.id == visit.lead_id))).scalar_one_or_none()
+                if not lead or not lead.contact_email:
+                    continue
+
+                subject = f"Seguimiento de nuestra reunión — {lead.company_name}"
+                html_body = f"""<p>Hola {lead.contact_name or 'equipo'},</p>
+<p>Gracias por la reunión de ayer. {visit.summary or 'Fue un placer conversar con vosotros.'}</p>
+{'<p><b>Próximos pasos:</b></p><ul>' + ''.join(f'<li>{step}</li>' for step in visit.next_steps) + '</ul>' if visit.next_steps else ''}
+<p>Quedamos a vuestra disposición para cualquier consulta.</p>
+<p>Un saludo,<br>Equipo Comercial</p>"""
+
+                from app.services.email_service import email_service
+                await email_service.send_email(to=lead.contact_email, subject=subject, html_body=html_body)
+
+                # Crear acción de seguimiento a 3 días
+                existing = (await db.execute(select(func.count(Action.id)).where(
+                    Action.lead_id == visit.lead_id,
+                    Action.title.ilike('%follow-up post-visita%'),
+                    func.date(Action.created_at) == datetime.now(timezone.utc).date()
+                ))).scalar() or 0
+                if existing == 0:
+                    db.add(Action(
+                        lead_id=visit.lead_id,
+                        title=f"Follow-up post-visita {yesterday.strftime('%d/%m')}",
+                        description=f"Seguimiento de visita con resultado {'positivo' if visit.result == VisitResult.POSITIVE else 'pendiente follow-up'}. {visit.summary or ''}",
+                        due_date=datetime.now(timezone.utc).date() + timedelta(days=3),
+                        status=ActionStatus.PENDING,
+                        action_type="follow_up",
+                        priority=ActionPriority.HIGH if visit.result == VisitResult.POSITIVE else ActionPriority.MEDIUM,
+                    ))
+                sent += 1
+            await db.commit()
+            logger.info(f"EM-04: {sent} follow-ups enviados de {len(visits)} visitas")
     except Exception as e:
         logger.error(f"EM-04 error: {e}")
 
@@ -140,14 +182,65 @@ async def run_pi01_stage_triggers():
 
 
 async def run_pi02_weekly_pipeline():
-    """PI-02: Report semanal pipeline — Lun 08:00"""
+    """PI-02: Report semanal pipeline — Lun 08:00
+    Calcula totales por stage + deals ganados/perdidos en la semana → envía resumen por Telegram + notificación.
+    """
     from app.models.pipeline import Opportunity, OpportunityStage
+    from app.models.notification import Notification
     try:
         async with AsyncSessionLocal() as db:
-            total = (await db.execute(select(func.coalesce(func.sum(Opportunity.value), 0)).where(
-                Opportunity.stage.notin_([OpportunityStage.CLOSED_WON, OpportunityStage.CLOSED_LOST])
+            week_ago = datetime.now(timezone.utc) - timedelta(days=7)
+
+            # Totales por stage activo
+            stages_data = []
+            total_pipeline = 0
+            for stage in [OpportunityStage.DISCOVERY, OpportunityStage.QUALIFICATION,
+                          OpportunityStage.PROPOSAL, OpportunityStage.NEGOTIATION]:
+                val = (await db.execute(select(func.coalesce(func.sum(Opportunity.value), 0)).where(
+                    Opportunity.stage == stage
+                ))).scalar() or 0
+                count = (await db.execute(select(func.count(Opportunity.id)).where(
+                    Opportunity.stage == stage
+                ))).scalar() or 0
+                if count > 0:
+                    stages_data.append(f"  • {stage.value.replace('_', ' ').title()}: {count} deals — {val:,.0f} EUR")
+                total_pipeline += val
+
+            # Deals ganados/perdidos esta semana
+            won_count = (await db.execute(select(func.count(Opportunity.id)).where(
+                Opportunity.stage == OpportunityStage.CLOSED_WON, Opportunity.updated_at >= week_ago
             ))).scalar() or 0
-            logger.info(f"PI-02: Pipeline activo: {total:,.0f} EUR")
+            won_value = (await db.execute(select(func.coalesce(func.sum(Opportunity.value), 0)).where(
+                Opportunity.stage == OpportunityStage.CLOSED_WON, Opportunity.updated_at >= week_ago
+            ))).scalar() or 0
+            lost_count = (await db.execute(select(func.count(Opportunity.id)).where(
+                Opportunity.stage == OpportunityStage.CLOSED_LOST, Opportunity.updated_at >= week_ago
+            ))).scalar() or 0
+
+            # Nuevas oportunidades esta semana
+            new_count = (await db.execute(select(func.count(Opportunity.id)).where(
+                Opportunity.created_at >= week_ago
+            ))).scalar() or 0
+
+            report = f"""<b>📊 Report Semanal Pipeline</b>
+<b>Pipeline activo:</b> {total_pipeline:,.0f} EUR
+{chr(10).join(stages_data) if stages_data else '  Sin deals activos'}
+
+<b>Esta semana:</b>
+  • Nuevas oportunidades: {new_count}
+  • Ganadas: {won_count} ({won_value:,.0f} EUR)
+  • Perdidas: {lost_count}"""
+
+            from app.services.telegram_service import send_message
+            await send_message(report, db=db)
+
+            db.add(Notification(
+                title="Report semanal pipeline",
+                message=f"Pipeline activo: {total_pipeline:,.0f} EUR | Ganadas: {won_count} | Perdidas: {lost_count}",
+                type="info",
+            ))
+            await db.commit()
+            logger.info(f"PI-02: Pipeline activo: {total_pipeline:,.0f} EUR, {won_count} won, {lost_count} lost")
     except Exception as e:
         logger.error(f"PI-02 error: {e}")
 
@@ -178,8 +271,85 @@ async def run_mr01_monthly_review():
 
 
 async def run_mr02_consolidated_report():
-    """MR-02: Informe mensual consolidado — 1° mes 09:00"""
-    logger.info("MR-02: Monthly consolidated report")
+    """MR-02: Informe mensual consolidado — 1° mes 09:00
+    Query pipeline + actividad + rendimiento del mes anterior → formatear → enviar por Telegram + notificación.
+    """
+    from app.models.pipeline import Opportunity, OpportunityStage
+    from app.models import Lead, Action, ActionStatus
+    from app.models.crm import Visit, Email
+    from app.models.notification import Notification
+    try:
+        async with AsyncSessionLocal() as db:
+            now = datetime.now(timezone.utc)
+            first_day_this_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            first_day_last_month = (first_day_this_month - timedelta(days=1)).replace(day=1)
+            month_name = first_day_last_month.strftime('%B %Y')
+
+            # Leads
+            new_leads = (await db.execute(select(func.count(Lead.id)).where(
+                Lead.created_at >= first_day_last_month, Lead.created_at < first_day_this_month
+            ))).scalar() or 0
+
+            # Visitas
+            total_visits = (await db.execute(select(func.count(Visit.id)).where(
+                Visit.visit_date >= first_day_last_month, Visit.visit_date < first_day_this_month
+            ))).scalar() or 0
+
+            # Emails enviados
+            emails_sent = (await db.execute(select(func.count(Email.id)).where(
+                Email.created_at >= first_day_last_month, Email.created_at < first_day_this_month
+            ))).scalar() or 0
+
+            # Acciones completadas
+            actions_done = (await db.execute(select(func.count(Action.id)).where(
+                Action.status == ActionStatus.COMPLETED,
+                Action.updated_at >= first_day_last_month, Action.updated_at < first_day_this_month
+            ))).scalar() or 0
+
+            # Pipeline
+            won_count = (await db.execute(select(func.count(Opportunity.id)).where(
+                Opportunity.stage == OpportunityStage.CLOSED_WON,
+                Opportunity.updated_at >= first_day_last_month, Opportunity.updated_at < first_day_this_month
+            ))).scalar() or 0
+            won_value = (await db.execute(select(func.coalesce(func.sum(Opportunity.value), 0)).where(
+                Opportunity.stage == OpportunityStage.CLOSED_WON,
+                Opportunity.updated_at >= first_day_last_month, Opportunity.updated_at < first_day_this_month
+            ))).scalar() or 0
+            lost_count = (await db.execute(select(func.count(Opportunity.id)).where(
+                Opportunity.stage == OpportunityStage.CLOSED_LOST,
+                Opportunity.updated_at >= first_day_last_month, Opportunity.updated_at < first_day_this_month
+            ))).scalar() or 0
+            active_pipeline = (await db.execute(select(func.coalesce(func.sum(Opportunity.value), 0)).where(
+                Opportunity.stage.notin_([OpportunityStage.CLOSED_WON, OpportunityStage.CLOSED_LOST])
+            ))).scalar() or 0
+
+            report = f"""<b>📋 Informe Mensual Consolidado — {month_name}</b>
+
+<b>Captación:</b>
+  • Leads nuevos: {new_leads}
+  • Visitas realizadas: {total_visits}
+  • Emails enviados: {emails_sent}
+
+<b>Actividad:</b>
+  • Acciones completadas: {actions_done}
+
+<b>Pipeline:</b>
+  • Deals ganados: {won_count} ({won_value:,.0f} EUR)
+  • Deals perdidos: {lost_count}
+  • Pipeline activo: {active_pipeline:,.0f} EUR"""
+
+            from app.services.telegram_service import send_message
+            await send_message(report, db=db)
+
+            db.add(Notification(
+                title=f"Informe mensual {month_name}",
+                message=f"Leads: {new_leads} | Won: {won_count} ({won_value:,.0f} EUR) | Pipeline: {active_pipeline:,.0f} EUR",
+                type="info",
+            ))
+            await db.commit()
+            logger.info(f"MR-02: Informe {month_name} — {new_leads} leads, {won_count} won, pipeline {active_pipeline:,.0f} EUR")
+    except Exception as e:
+        logger.error(f"MR-02 error: {e}")
 
 
 async def run_sv01_post_close_nps():
@@ -199,8 +369,63 @@ async def run_sv01_post_close_nps():
 
 
 async def run_sv02_quarterly_csat():
-    """SV-02: Encuesta trimestral CSAT — 1° trimestre 08:00"""
-    logger.info("SV-02: Quarterly CSAT survey trigger")
+    """SV-02: Encuesta trimestral CSAT — 1° trimestre 08:00
+    Query leads con status=WON → crear Survey tipo CSAT por cada uno → enviar email con link de respuesta.
+    """
+    from app.models import Lead, LeadStatus
+    from app.models.survey import Survey
+    import secrets
+    try:
+        async with AsyncSessionLocal() as db:
+            now = datetime.now(timezone.utc)
+            quarter = f"Q{(now.month - 1) // 3 + 1} {now.year}"
+
+            result = await db.execute(select(Lead).where(Lead.status == LeadStatus.WON))
+            clients = result.scalars().all()
+            created = 0
+            for lead in clients:
+                if not lead.contact_email:
+                    continue
+
+                # Evitar duplicados: no crear si ya hay CSAT este trimestre
+                existing = (await db.execute(select(func.count(Survey.id)).where(
+                    Survey.lead_id == lead.id,
+                    Survey.survey_type == "csat",
+                    Survey.created_at >= now.replace(month=((now.month - 1) // 3) * 3 + 1, day=1, hour=0, minute=0, second=0, microsecond=0),
+                ))).scalar() or 0
+                if existing > 0:
+                    continue
+
+                token = secrets.token_urlsafe(32)
+                survey = Survey(
+                    lead_id=lead.id,
+                    title=f"Encuesta CSAT {quarter} — {lead.company_name}",
+                    survey_type="csat",
+                    status="sent",
+                    sent_at=now,
+                    expires_at=now + timedelta(days=30),
+                    response_token=token,
+                )
+                db.add(survey)
+
+                from app.services.email_service import email_service
+                survey_url = f"{getattr(settings, 'FRONTEND_URL', 'https://sales.riskitera.com')}/survey/{token}"
+                await email_service.send_email(
+                    to=lead.contact_email,
+                    subject=f"¿Cómo valorarías nuestro servicio? — Encuesta {quarter}",
+                    html_body=f"""<p>Hola {lead.contact_name or 'equipo'},</p>
+<p>Nos gustaría conocer tu opinión sobre nuestro servicio durante este trimestre.</p>
+<p>La encuesta solo te llevará 2 minutos:</p>
+<p><a href="{survey_url}" style="background:#2563eb;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Responder encuesta</a></p>
+<p>Tu feedback es muy valioso para seguir mejorando.</p>
+<p>Gracias,<br>Equipo Riskitera</p>""",
+                )
+                created += 1
+
+            await db.commit()
+            logger.info(f"SV-02: {created} encuestas CSAT {quarter} enviadas a {len(clients)} clientes")
+    except Exception as e:
+        logger.error(f"SV-02 error: {e}")
 
 
 async def run_drip_emails():

@@ -303,9 +303,9 @@ async def toggle_automation(
 
 # Codes with real implementation in workflow engine / scheduler
 DEPLOYED_CODES = {
-    "EM-01", "EM-02", "EM-03", "LD-04", "IN-02",
-    "PI-01", "PI-03", "AC-01", "AC-02", "AC-03",
-    "VI-02", "MR-01", "SV-01",
+    "EM-01", "EM-02", "EM-03", "EM-04", "LD-04", "IN-02",
+    "PI-01", "PI-02", "PI-03", "AC-01", "AC-02", "AC-03",
+    "VI-01", "VI-02", "MR-01", "MR-02", "SV-01", "SV-02",
 }
 
 
