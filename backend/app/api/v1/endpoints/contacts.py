@@ -45,6 +45,7 @@ async def list_contacts(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Listar contactos con filtros opcionales."""
     query = select(Contact).options(selectinload(Contact.lead))
@@ -177,6 +178,7 @@ async def create_contact(
     data: ContactCreate,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Crear un nuevo contacto/stakeholder."""
     # Verificar que el lead existe

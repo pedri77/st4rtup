@@ -120,11 +120,12 @@ async def list_automations(
 async def get_automation_stats(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     now = datetime.now(timezone.utc)
     t24h = now - timedelta(hours=24)
 
-    total = (await db.execute(select(func.count(Automation.id)))).scalar() or 0
+    total = (await db.execute(select(func.count(Automation.id)).where(Automation.org_id == org_id))).scalar() or 0
 
     # By status
     status_q = await db.execute(
@@ -239,11 +240,15 @@ async def create_automation(
     data: AutomationCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
-    existing = await db.execute(select(Automation).where(Automation.code == data.code))
+    existing = await db.execute(select(Automation).where(
+        Automation.code == data.code, Automation.org_id == org_id
+    ))
     if existing.scalar_one_or_none():
         raise HTTPException(status_code=409, detail=f"Automation with code {data.code} already exists")
     auto = Automation(**data.model_dump())
+    auto.org_id = org_id
     db.add(auto)
     await db.commit()
     await db.refresh(auto)
@@ -321,10 +326,11 @@ DEPLOYED_CODES = {
 async def activate_deployed_automations(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Activa todas las automatizaciones que tienen implementación real desplegada."""
     result = await db.execute(
-        select(Automation).where(Automation.code.in_(DEPLOYED_CODES))
+        select(Automation).where(Automation.code.in_(DEPLOYED_CODES), Automation.org_id == org_id)
     )
     automations = result.scalars().all()
     activated = 0
@@ -425,9 +431,10 @@ async def automation_flow(
 async def seed_automations(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Seed all 22 automations from the master plan."""
-    existing = (await db.execute(select(func.count(Automation.id)))).scalar()
+    existing = (await db.execute(select(func.count(Automation.id)).where(Automation.org_id == org_id))).scalar()
     if existing > 0:
         return {"message": f"Already {existing} automations exist. Delete first to re-seed.", "seeded": 0}
 
@@ -459,7 +466,7 @@ async def seed_automations(
 
     count = 0
     for item in seed_data:
-        auto = Automation(**item)
+        auto = Automation(**item, org_id=org_id)
         # Mark deployed automations as active
         if item["code"] in DEPLOYED_CODES:
             auto.is_enabled = True

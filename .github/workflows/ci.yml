@@ -52,7 +52,7 @@ jobs:
         run: pip install -r requirements.txt ruff
 
       - name: Run tests
-        # 350/375 pass. Remaining 25 failures: endpoints missing org_id in signature
+        # ~360/375 pass. Remaining ~15 are edge cases (welcome email side effects, count assertions)
         continue-on-error: true
         run: pytest tests/ -v --asyncio-mode=auto --tb=short -q
 

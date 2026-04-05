@@ -149,6 +149,7 @@ async def get_lead(
     lead_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Get lead details."""
     query = select(Lead).where(Lead.id == lead_id)
