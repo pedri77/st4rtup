@@ -21,6 +21,94 @@ import app.agents.customer_success  # noqa: register AGENT-CS-001
 logger = logging.getLogger(__name__)
 
 
+async def _auto_seed_and_activate():
+    """Seed automations if DB is empty + activate all deployed ones.
+    Runs on every startup to ensure new deploys have automations ready.
+    """
+    from sqlalchemy import select, func
+    from app.models import Automation, AutomationStatus, AutomationImplStatus
+    from app.api.v1.endpoints.automations import DEPLOYED_CODES
+
+    async with AsyncSessionLocal() as db:
+        existing = (await db.execute(select(func.count(Automation.id)))).scalar() or 0
+
+        if existing == 0:
+            # First deploy or fresh DB — trigger seed via the endpoint logic
+            logger.info("No automations found — running auto-seed...")
+            from app.api.v1.endpoints.automations import seed_automations
+
+            # Import seed_data directly to avoid auth dependency
+            from app.models.organization import Organization
+            org = (await db.execute(select(Organization).limit(1))).scalar_one_or_none()
+            if not org:
+                logger.warning("No organization found — skipping auto-seed (seed will run on first /seed call)")
+                return
+
+            # Inline seed: reuse the seed_data from the endpoint
+            from app.models.enums import (
+                AutomationCategory, AutomationTriggerType, AutomationPriority,
+                AutomationComplexity, AutomationPhase,
+            )
+            seed_data = _get_seed_data()
+            for item in seed_data:
+                auto = Automation(**item, org_id=org.id)
+                if item["code"] in DEPLOYED_CODES:
+                    auto.is_enabled = True
+                    auto.status = AutomationStatus.ACTIVE
+                    auto.impl_status = AutomationImplStatus.DEPLOYED
+                db.add(auto)
+            await db.commit()
+            logger.info(f"✅ Auto-seeded {len(seed_data)} automations for org {org.id}")
+        else:
+            # Existing DB — just activate any newly deployed codes
+            result = await db.execute(
+                select(Automation).where(
+                    Automation.code.in_(DEPLOYED_CODES),
+                    Automation.impl_status != AutomationImplStatus.DEPLOYED,
+                )
+            )
+            to_activate = result.scalars().all()
+            for auto in to_activate:
+                auto.is_enabled = True
+                auto.status = AutomationStatus.ACTIVE
+                auto.impl_status = AutomationImplStatus.DEPLOYED
+            if to_activate:
+                await db.commit()
+                codes = [a.code for a in to_activate]
+                logger.info(f"✅ Auto-activated {len(to_activate)} newly deployed automations: {codes}")
+            else:
+                logger.info(f"✅ All {len(DEPLOYED_CODES)} deployed automations already active")
+
+
+def _get_seed_data() -> list:
+    """Master seed data for all 22 automations. Single source of truth."""
+    return [
+        {"code": "EM-01", "name": "Secuencia Welcome", "description": "Secuencia de 3 emails automáticos para leads nuevos.", "category": "email_automation", "trigger_type": "webhook", "trigger_config": {"event": "lead.created"}, "priority": "critical", "complexity": "medium", "phase": "phase_1"},
+        {"code": "EM-02", "name": "Tracking de Email", "description": "Webhook Resend para tracking opens/clicks/replies.", "category": "email_automation", "trigger_type": "webhook", "trigger_config": {"events": ["email.opened", "email.clicked"]}, "priority": "critical", "complexity": "low", "phase": "phase_1"},
+        {"code": "EM-03", "name": "Re-engagement Automático", "description": "Reactivación semanal de leads inactivos >30 días.", "category": "email_automation", "trigger_type": "cron", "trigger_config": {"cron": "0 9 * * 1"}, "priority": "high", "complexity": "medium", "phase": "phase_4"},
+        {"code": "EM-04", "name": "Follow-up Post-Visita", "description": "Email follow-up 24h después de visita positiva/follow_up.", "category": "email_automation", "trigger_type": "cron", "trigger_config": {"cron": "0 11 * * *"}, "priority": "high", "complexity": "low", "phase": "phase_2"},
+        {"code": "LD-01", "name": "Webhook Formulario Web", "description": "Crea lead desde formulario web + notifica Telegram.", "category": "leads_captacion", "trigger_type": "webhook", "trigger_config": {"event": "form.submitted"}, "priority": "critical", "complexity": "low", "phase": "phase_1"},
+        {"code": "LD-02", "name": "Sincronización Apollo.io", "description": "Sync diario de prospectos desde Apollo.io.", "category": "leads_captacion", "trigger_type": "cron", "trigger_config": {"cron": "0 8 * * *"}, "priority": "high", "complexity": "high", "phase": "phase_3"},
+        {"code": "LD-03", "name": "Enriquecimiento Automático", "description": "Enriquece leads sin sector con datos Apollo/CNAE.", "category": "leads_captacion", "trigger_type": "webhook", "trigger_config": {"filter": "minimal_data"}, "priority": "medium", "complexity": "high", "phase": "phase_3"},
+        {"code": "LD-04", "name": "Lead Scoring Automático", "description": "Recalcula score por reglas de sector, tamaño e interacción.", "category": "leads_captacion", "trigger_type": "event", "trigger_config": {"events": ["lead.updated"]}, "priority": "high", "complexity": "medium", "phase": "phase_1"},
+        {"code": "VI-01", "name": "Auto-crear Acciones Post-Visita", "description": "Crea acciones de seguimiento según resultado de visita.", "category": "visitas", "trigger_type": "webhook", "trigger_config": {"event": "visit.created"}, "priority": "high", "complexity": "low", "phase": "phase_2"},
+        {"code": "VI-02", "name": "Recordatorio Pre-Visita", "description": "Briefing 24h antes de visita programada.", "category": "visitas", "trigger_type": "cron", "trigger_config": {"cron": "0 8 * * *"}, "priority": "medium", "complexity": "medium", "phase": "phase_4"},
+        {"code": "VI-03", "name": "Sync Google Calendar", "description": "Sincronización bidireccional con Google Calendar.", "category": "visitas", "trigger_type": "webhook", "trigger_config": {"bidirectional": True}, "priority": "medium", "complexity": "high", "phase": "phase_4"},
+        {"code": "AC-01", "name": "Resumen Diario de Acciones", "description": "Resumen diario 08:30 de acciones pendientes/vencidas.", "category": "acciones_alertas", "trigger_type": "cron", "trigger_config": {"cron": "30 8 * * *"}, "priority": "critical", "complexity": "low", "phase": "phase_1"},
+        {"code": "AC-02", "name": "Escalado Automático", "description": "Escala acciones vencidas >3 días con alerta.", "category": "acciones_alertas", "trigger_type": "cron", "trigger_config": {"cron": "0 9 * * *"}, "priority": "high", "complexity": "low", "phase": "phase_2"},
+        {"code": "AC-03", "name": "Auto-cierre Acciones", "description": "Cierra acciones pendientes al completar email/visita.", "category": "acciones_alertas", "trigger_type": "event", "trigger_config": {"events": ["email.sent", "visit.created"]}, "priority": "medium", "complexity": "medium", "phase": "phase_4"},
+        {"code": "PI-01", "name": "Triggers por Cambio de Etapa", "description": "Dispara acciones al cambiar stage de oportunidad.", "category": "pipeline", "trigger_type": "webhook", "trigger_config": {"event": "opportunity.stage_changed"}, "priority": "high", "complexity": "high", "phase": "phase_2"},
+        {"code": "PI-02", "name": "Report Semanal Pipeline", "description": "Informe semanal con valor pipeline y forecast.", "category": "pipeline", "trigger_type": "cron", "trigger_config": {"cron": "0 8 * * 1"}, "priority": "high", "complexity": "medium", "phase": "phase_2"},
+        {"code": "PI-03", "name": "Alerta Deal Estancado", "description": "Alerta deals sin actividad en 14 días.", "category": "pipeline", "trigger_type": "cron", "trigger_config": {"cron": "30 10 * * *"}, "priority": "high", "complexity": "medium", "phase": "phase_2"},
+        {"code": "MR-01", "name": "Auto-generación Monthly Review", "description": "Genera monthly review por lead activo el día 1.", "category": "seguimiento_mensual", "trigger_type": "cron", "trigger_config": {"cron": "0 8 1 * *"}, "priority": "critical", "complexity": "high", "phase": "phase_3"},
+        {"code": "MR-02", "name": "Informe Mensual Consolidado", "description": "Informe mensual con KPIs y comparativa.", "category": "seguimiento_mensual", "trigger_type": "cron", "trigger_config": {"cron": "0 9 1 * *"}, "priority": "high", "complexity": "high", "phase": "phase_3"},
+        {"code": "SV-01", "name": "Encuesta Post-Cierre (NPS)", "description": "NPS 30 días después de closed_won.", "category": "encuestas", "trigger_type": "cron", "trigger_config": {"cron": "30 11 * * *"}, "priority": "high", "complexity": "high", "phase": "phase_4"},
+        {"code": "SV-02", "name": "Encuesta Trimestral CSAT", "description": "CSAT trimestral a clientes activos.", "category": "encuestas", "trigger_type": "cron", "trigger_config": {"cron": "0 8 1 1,4,7,10 *"}, "priority": "medium", "complexity": "medium", "phase": "phase_4"},
+        {"code": "IN-01", "name": "Importar Leads Scraping", "description": "Importa y deduplica leads desde scraping.", "category": "integraciones", "trigger_type": "webhook", "trigger_config": {"event": "lead.import_batch"}, "priority": "high", "complexity": "medium", "phase": "phase_3"},
+        {"code": "IN-02", "name": "Notificaciones Telegram Hub", "description": "Bot Telegram centralizado para notificaciones.", "category": "integraciones", "trigger_type": "event", "trigger_config": {"channels": ["leads", "actions", "pipeline"]}, "priority": "high", "complexity": "medium", "phase": "phase_1"},
+    ]
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -45,6 +133,12 @@ async def lifespan(app: FastAPI):
         logger.info("✅ Automation scheduler initialized")
     except Exception as e:
         logger.error(f"❌ Failed to initialize scheduler: {e}")
+
+    # Auto-seed + activate deployed automations for all organizations
+    try:
+        await _auto_seed_and_activate()
+    except Exception as e:
+        logger.error(f"❌ Auto-seed automations failed: {e}")
 
     yield
 
