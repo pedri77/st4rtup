@@ -117,6 +117,9 @@ def _get_seed_data() -> list:
         {"code": "RS-045c", "name": "Metricool Social", "description": "Programar posts sociales via Metricool API.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "30 8 * * 1,3,5"}, "priority": "medium", "complexity": "medium", "phase": "phase_4"},
         {"code": "RS-033", "name": "Regulatory Trigger BOE/ENISA", "description": "Monitorizar BOE + ENISA RSS por publicaciones regulatorias.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "30 7 * * *"}, "priority": "high", "complexity": "medium", "phase": "phase_4"},
         {"code": "RS-094", "name": "Competitor Alerts", "description": "Detectar cambios en pricing/features de competidores.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 13 * * *"}, "priority": "medium", "complexity": "high", "phase": "phase_4"},
+        # Sprint 5: Infrastructure
+        {"code": "RS-076b", "name": "Cost Tracking", "description": "Monitorizar costes vs presupuesto, alertar si >80%.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 9 * * *"}, "priority": "high", "complexity": "low", "phase": "phase_5"},
+        {"code": "RS-095", "name": "DB Backup Check", "description": "Verificar backup diario de la DB, alertar si falta.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 3 * * *"}, "priority": "critical", "complexity": "low", "phase": "phase_5"},
     ]
 
 
