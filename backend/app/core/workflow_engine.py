@@ -26,6 +26,54 @@ from app.core.database import AsyncSessionLocal
 
 logger = logging.getLogger(__name__)
 
+# Handler name → automation code mapping
+_HANDLER_CODE_MAP = {
+    "em01_trigger_welcome": "EM-01",
+    "em02_score_on_open": "EM-02", "em02_score_on_click": "EM-02",
+    "em03_reengagement": "EM-03",
+    "ld01_create_lead_from_form": "LD-01",
+    "ld04_auto_score": "LD-04",
+    "in01_import_leads_batch": "IN-01",
+    "in02_telegram_notify": "IN-02",
+    "pi01_stage_triggers": "PI-01",
+    "pi03_stale_deals": "PI-03",
+    "ac02_escalate_overdue": "AC-02",
+    "ac03_auto_close": "AC-03",
+    "vi02_visit_reminder": "VI-02",
+    "mr01_auto_review": "MR-01",
+    "sv01_nps_trigger": "SV-01",
+    "rs092_firstpromoter_event": "RS-092",
+}
+
+
+async def _log_handler_execution(handler_name: str, status: str, started_at: datetime, error: str = None):
+    """Log event-driven handler execution to automation_executions."""
+    code = _HANDLER_CODE_MAP.get(handler_name)
+    if not code:
+        return
+    try:
+        from app.models import Automation, AutomationExecution
+        async with AsyncSessionLocal() as db:
+            auto = (await db.execute(
+                select(Automation).where(Automation.code == code)
+            )).scalar_one_or_none()
+            if not auto:
+                return
+            now = datetime.now(timezone.utc)
+            db.add(AutomationExecution(
+                automation_id=auto.id,
+                started_at=started_at,
+                finished_at=now,
+                duration_ms=int((now - started_at).total_seconds() * 1000),
+                status=status,
+                trigger_source="event",
+                error_message=error,
+            ))
+            await db.commit()
+    except Exception:
+        pass
+
+
 # Registry of event handlers
 _event_handlers: dict[str, list[Callable]] = {}
 
@@ -50,14 +98,17 @@ async def dispatch_event(event_name: str, data: dict, db: Optional[AsyncSession]
     logger.info(f"Dispatching event '{event_name}' to {len(handlers)} handler(s)")
 
     for handler in handlers:
+        start = datetime.now(timezone.utc)
         try:
             if db:
                 await handler(db=db, **data)
             else:
                 async with AsyncSessionLocal() as session:
                     await handler(db=session, **data)
+            await _log_handler_execution(handler.__name__, "success", start)
         except Exception as e:
             logger.error(f"Workflow error in {handler.__name__} for {event_name}: {e}")
+            await _log_handler_execution(handler.__name__, "error", start, str(e))
 
     # Also dispatch to external webhook subscribers (n8n optional)
     try:

@@ -16,6 +16,41 @@ scheduler: AsyncIOScheduler = None
 
 
 # ═══════════════════════════════════════════════════════════════
+# EXECUTION LOGGING
+# ═══════════════════════════════════════════════════════════════
+
+async def _log_execution(code: str, status: str, items_processed: int = 0,
+                         items_succeeded: int = 0, items_failed: int = 0,
+                         error_message: str = None, started_at: datetime = None):
+    """Registra ejecución en automation_executions para el panel admin."""
+    try:
+        from app.models import Automation, AutomationExecution
+        async with AsyncSessionLocal() as db:
+            auto = (await db.execute(
+                select(Automation).where(Automation.code == code)
+            )).scalar_one_or_none()
+            if not auto:
+                return
+            now = datetime.now(timezone.utc)
+            start = started_at or now
+            db.add(AutomationExecution(
+                automation_id=auto.id,
+                started_at=start,
+                finished_at=now,
+                duration_ms=int((now - start).total_seconds() * 1000),
+                status=status,
+                trigger_source="scheduler",
+                items_processed=items_processed,
+                items_succeeded=items_succeeded,
+                items_failed=items_failed,
+                error_message=error_message,
+            ))
+            await db.commit()
+    except Exception as e:
+        logger.debug(f"Failed to log execution for {code}: {e}")
+
+
+# ═══════════════════════════════════════════════════════════════
 # AUTOMATION FUNCTIONS
 # ═══════════════════════════════════════════════════════════════
 
@@ -1299,8 +1334,29 @@ def init_scheduler():
         (run_founder_weekly_report, CronTrigger(day_of_week='mon', hour=9, minute=30), 'founder_report', 'Founder weekly KPI report'),
     ]
 
-    for func, trigger, job_id, name in JOBS:
-        scheduler.add_job(func, trigger=trigger, id=job_id, name=name, replace_existing=True, misfire_grace_time=3600)
+    import functools
+
+    def _wrap_with_logging(fn, automation_name):
+        """Wrap a scheduler job to log execution to automation_executions table."""
+        # Extract automation code from name (e.g. "EM-04: Follow-up" -> "EM-04")
+        code = automation_name.split(":")[0].strip() if ":" in automation_name else ""
+
+        @functools.wraps(fn)
+        async def wrapper():
+            start = datetime.now(timezone.utc)
+            try:
+                await fn()
+                if code:
+                    await _log_execution(code, "success", started_at=start)
+            except Exception as e:
+                logger.error(f"Job {automation_name} failed: {e}")
+                if code:
+                    await _log_execution(code, "error", error_message=str(e), started_at=start)
+        return wrapper
+
+    for fn, trigger, job_id, name in JOBS:
+        wrapped = _wrap_with_logging(fn, name)
+        scheduler.add_job(wrapped, trigger=trigger, id=job_id, name=name, replace_existing=True, misfire_grace_time=3600)
 
     # Workflow engine scheduled jobs
     try:
