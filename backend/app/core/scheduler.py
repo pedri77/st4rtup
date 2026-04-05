@@ -914,6 +914,216 @@ async def run_rs093_lemlist_sync():
         logger.error(f"RS-093 error: {e}")
 
 
+async def run_rs045b_clarity_enrichment():
+    """RS-045b: Clarity enrichment — diario 14:00
+    Sessions con ≥2 product page views → buscar lead por email → incrementar score.
+    """
+    from app.services.clarity_service import get_engaged_sessions
+    from app.models import Lead
+    try:
+        async with AsyncSessionLocal() as db:
+            result = await get_engaged_sessions(db, min_product_views=2, days=1)
+            if not result.get("connected") or not result.get("sessions"):
+                return
+
+            updated = 0
+            for session in result["sessions"]:
+                email = session.get("email", "")
+                if not email:
+                    continue
+                lead = (await db.execute(select(Lead).where(
+                    func.lower(Lead.contact_email) == email.lower()
+                ))).scalar_one_or_none()
+                if lead:
+                    views = session.get("page_views", 2)
+                    bonus = min(views * 5, 25)  # Max +25 per session
+                    lead.score = min(100, (lead.score or 0) + bonus)
+                    updated += 1
+
+            if updated:
+                await db.commit()
+            logger.info(f"RS-045b: {updated} leads enriched from Clarity ({len(result['sessions'])} sessions)")
+    except Exception as e:
+        logger.error(f"RS-045b error: {e}")
+
+
+async def run_rs045c_metricool_social():
+    """RS-045c: Metricool social scheduling — Lun/Mié/Vie 08:30
+    Busca posts en estado 'scheduled' → programa en Metricool API.
+    """
+    try:
+        async with AsyncSessionLocal() as db:
+            from app.models.system import SystemSettings
+            cfg_row = (await db.execute(select(SystemSettings).limit(1))).scalar_one_or_none()
+            if not cfg_row:
+                return
+            metricool_cfg = (cfg_row.general_config or {}).get("metricool", {})
+            api_key = metricool_cfg.get("api_key", "")
+            if not api_key:
+                return
+
+            from app.models.social import SocialPost
+            result = await db.execute(select(SocialPost).where(
+                SocialPost.status == "scheduled",
+            ).limit(10))
+            posts = result.scalars().all()
+            if not posts:
+                return
+
+            import httpx
+            published = 0
+            async with httpx.AsyncClient(timeout=15) as client:
+                for post in posts:
+                    try:
+                        resp = await client.post(
+                            "https://app.metricool.com/api/v2/scheduler/post",
+                            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+                            json={
+                                "platform": post.platform or "linkedin",
+                                "content": post.content,
+                                "media_url": post.media_url or "",
+                                "scheduled_at": post.scheduled_at.isoformat() if post.scheduled_at else "",
+                            },
+                        )
+                        if resp.status_code in (200, 201):
+                            post.status = "published"
+                            published += 1
+                        else:
+                            logger.warning(f"RS-045c: Metricool API {resp.status_code} for post {post.id}")
+                    except Exception as e:
+                        logger.warning(f"RS-045c: Failed to publish post {post.id}: {e}")
+
+            if published:
+                await db.commit()
+            logger.info(f"RS-045c: {published}/{len(posts)} posts published via Metricool")
+    except Exception as e:
+        logger.error(f"RS-045c error: {e}")
+
+
+async def run_rs033_regulatory_trigger():
+    """RS-033: Regulatory trigger BOE/ENISA — diario 07:30
+    Fetch BOE + ENISA RSS → filtrar por keywords regulatorios → crear notificación.
+    """
+    import httpx
+    from app.models.notification import Notification
+    try:
+        async with AsyncSessionLocal() as db:
+            keywords = ["ciberseguridad", "ENS", "NIS2", "DORA", "protección de datos", "RGPD",
+                        "seguridad de la información", "ISO 27001", "ENISA", "AI Act", "inteligencia artificial"]
+            alerts = []
+
+            async with httpx.AsyncClient(timeout=20) as client:
+                # BOE — buscar en el API de últimas disposiciones
+                try:
+                    resp = await client.get("https://www.boe.es/datosabiertos/api/boe/dias/ultimos/1", timeout=15)
+                    if resp.status_code == 200:
+                        import xml.etree.ElementTree as ET
+                        root = ET.fromstring(resp.content)
+                        for item in root.iter("item"):
+                            titulo = (item.findtext("titulo") or "").lower()
+                            if any(kw.lower() in titulo for kw in keywords):
+                                alerts.append({
+                                    "source": "BOE",
+                                    "title": item.findtext("titulo", ""),
+                                    "url": item.findtext("urlPdf", item.findtext("url", "")),
+                                })
+                except Exception as e:
+                    logger.debug(f"RS-033: BOE fetch error: {e}")
+
+                # ENISA — RSS feed
+                try:
+                    resp = await client.get("https://www.enisa.europa.eu/rss/rss_publications.xml", timeout=15)
+                    if resp.status_code == 200:
+                        import xml.etree.ElementTree as ET
+                        root = ET.fromstring(resp.content)
+                        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+                        for item in root.iter("item"):
+                            title = (item.findtext("title") or "").lower()
+                            pub_date = item.findtext("pubDate", "")
+                            if any(kw.lower() in title for kw in keywords) or today in pub_date:
+                                alerts.append({
+                                    "source": "ENISA",
+                                    "title": item.findtext("title", ""),
+                                    "url": item.findtext("link", ""),
+                                })
+                except Exception as e:
+                    logger.debug(f"RS-033: ENISA fetch error: {e}")
+
+            if alerts:
+                summary = "\n".join(f"[{a['source']}] {a['title'][:80]}" for a in alerts[:5])
+                db.add(Notification(
+                    title=f"Alerta regulatoria: {len(alerts)} publicaciones relevantes",
+                    message=summary,
+                    type="warning",
+                ))
+                from app.services.telegram_service import send_message
+                await send_message(
+                    f"<b>⚖️ Alerta Regulatoria</b>\n\n{summary}",
+                    db=db,
+                )
+                await db.commit()
+
+            logger.info(f"RS-033: {len(alerts)} alertas regulatorias (BOE + ENISA)")
+    except Exception as e:
+        logger.error(f"RS-033 error: {e}")
+
+
+async def run_rs094_competitor_alerts():
+    """RS-094: Competitor alerts — diario 13:00
+    Monitoriza webs de competidores → detecta cambios en pricing/features → alerta.
+    """
+    import httpx
+    import hashlib
+    from app.models.notification import Notification
+    from app.models.system import SystemSettings
+    try:
+        async with AsyncSessionLocal() as db:
+            cfg_row = (await db.execute(select(SystemSettings).limit(1))).scalar_one_or_none()
+            competitors = (cfg_row.general_config or {}).get("competitors", []) if cfg_row else []
+            if not competitors:
+                # Default competitors for Riskitera
+                competitors = [
+                    {"name": "SecurityScorecard", "url": "https://securityscorecard.com/pricing"},
+                    {"name": "Vanta", "url": "https://www.vanta.com/pricing"},
+                ]
+
+            changes = []
+            async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+                for comp in competitors:
+                    url = comp.get("url", "")
+                    name = comp.get("name", url)
+                    if not url:
+                        continue
+                    try:
+                        resp = await client.get(url, timeout=15)
+                        if resp.status_code != 200:
+                            continue
+                        # Hash del contenido para detectar cambios
+                        content_hash = hashlib.md5(resp.text.encode()).hexdigest()
+                        stored_hash = (cfg_row.general_config or {}).get(f"competitor_hash_{name}", "")
+
+                        if stored_hash and stored_hash != content_hash:
+                            changes.append(name)
+
+                        # Guardar nuevo hash
+                        if cfg_row and cfg_row.general_config is not None:
+                            cfg_row.general_config[f"competitor_hash_{name}"] = content_hash
+                    except Exception as e:
+                        logger.debug(f"RS-094: Error fetching {name}: {e}")
+
+            if changes:
+                msg = f"Cambios detectados en: {', '.join(changes)}"
+                db.add(Notification(title="Alerta competencia", message=msg, type="warning"))
+                from app.services.telegram_service import send_message
+                await send_message(f"<b>🔍 Alerta Competencia</b>\n\n{msg}", db=db)
+
+            if changes or competitors:
+                await db.commit()
+            logger.info(f"RS-094: {len(changes)} cambios detectados en {len(competitors)} competidores")
+    except Exception as e:
+        logger.error(f"RS-094 error: {e}")
+
+
 # ═══════════════════════════════════════════════════════════════
 # SCHEDULER SETUP
 # ═══════════════════════════════════════════════════════════════
@@ -977,6 +1187,11 @@ def init_scheduler():
         (run_rs054b_brevo_nurturing, CronTrigger(hour=7, minute=0), 'rs054b_nurture', 'RS-054b: Brevo nurturing'),
         (run_rs054c_brevo_reactivation, CronTrigger(hour=10, minute=30), 'rs054c_react', 'RS-054c: Brevo reactivation'),
         (run_rs093_lemlist_sync, CronTrigger(hour=12, minute=0), 'rs093_lemlist', 'RS-093: Lemlist sync'),
+        # Sprint 4: New APIs
+        (run_rs045b_clarity_enrichment, CronTrigger(hour=14, minute=0), 'rs045b_clarity', 'RS-045b: Clarity enrichment'),
+        (run_rs045c_metricool_social, CronTrigger(day_of_week='mon,wed,fri', hour=8, minute=30), 'rs045c_metricool', 'RS-045c: Metricool social'),
+        (run_rs033_regulatory_trigger, CronTrigger(hour=7, minute=30), 'rs033_regulatory', 'RS-033: BOE/ENISA regulatory'),
+        (run_rs094_competitor_alerts, CronTrigger(hour=13, minute=0), 'rs094_competitors', 'RS-094: Competitor alerts'),
         # Platform
         (run_platform_metrics_snapshot, CronTrigger(hour=2, minute=0), 'platform_metrics', 'Platform metrics daily snapshot'),
         (run_trial_expiry_check, CronTrigger(hour=10, minute=0), 'trial_expiry', 'Trial expiry email check'),

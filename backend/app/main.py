@@ -112,6 +112,11 @@ def _get_seed_data() -> list:
         {"code": "RS-093", "name": "Lemlist Sync", "description": "Sync actividad campañas Lemlist → actualizar score leads.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 12 * * *"}, "priority": "medium", "complexity": "medium", "phase": "phase_2"},
         # Sprint 3: Event-driven
         {"code": "RS-092", "name": "FirstPromoter Webhook", "description": "Handle partner referrals y sales desde FirstPromoter.", "category": "integraciones", "trigger_type": "webhook", "trigger_config": {"event": "partner.event"}, "priority": "medium", "complexity": "medium", "phase": "phase_3"},
+        # Sprint 4: New APIs
+        {"code": "RS-045b", "name": "Clarity Enrichment", "description": "Sessions con product page views → incrementar score leads.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 14 * * *"}, "priority": "medium", "complexity": "medium", "phase": "phase_4"},
+        {"code": "RS-045c", "name": "Metricool Social", "description": "Programar posts sociales via Metricool API.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "30 8 * * 1,3,5"}, "priority": "medium", "complexity": "medium", "phase": "phase_4"},
+        {"code": "RS-033", "name": "Regulatory Trigger BOE/ENISA", "description": "Monitorizar BOE + ENISA RSS por publicaciones regulatorias.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "30 7 * * *"}, "priority": "high", "complexity": "medium", "phase": "phase_4"},
+        {"code": "RS-094", "name": "Competitor Alerts", "description": "Detectar cambios en pricing/features de competidores.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 13 * * *"}, "priority": "medium", "complexity": "high", "phase": "phase_4"},
     ]
 
 

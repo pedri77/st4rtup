@@ -58,6 +58,51 @@ async def get_project_summary(db: AsyncSession, days: int = 30) -> dict:
     return {"connected": True, **resp.json()}
 
 
+async def get_engaged_sessions(db: AsyncSession, min_product_views: int = 2, days: int = 7) -> dict:
+    """Obtiene sessions con ≥N vistas a páginas de producto (pricing, features, demo).
+    Retorna emails identificados para enriquecer scoring de leads.
+    """
+    cfg = await _get_clarity_config(db)
+    if not cfg or not cfg.get("api_key"):
+        return {"connected": False, "sessions": []}
+
+    project_id = cfg["project_id"]
+    api_key = cfg["api_key"]
+
+    try:
+        async with httpx.AsyncClient(timeout=15) as client:
+            resp = await client.get(
+                f"{API_BASE}/projects/{project_id}/sessions",
+                params={
+                    "days": days,
+                    "pageFilter": "/pricing,/features,/demo,/product",
+                    "minPageViews": min_product_views,
+                },
+                headers={"Authorization": f"Bearer {api_key}"},
+            )
+
+        if resp.status_code != 200:
+            logger.warning("Clarity sessions API error %d", resp.status_code)
+            return {"connected": True, "sessions": [], "error": f"API error {resp.status_code}"}
+
+        data = resp.json()
+        sessions = []
+        for s in data.get("sessions", data.get("results", [])):
+            email = s.get("email") or s.get("userEmail") or s.get("customUserId", "")
+            if email and "@" in str(email):
+                sessions.append({
+                    "email": email,
+                    "page_views": s.get("pageViews", 0),
+                    "pages": s.get("pages", []),
+                    "duration": s.get("duration", 0),
+                })
+
+        return {"connected": True, "sessions": sessions, "total": len(sessions)}
+    except Exception as e:
+        logger.error(f"Clarity engaged sessions error: {e}")
+        return {"connected": True, "sessions": [], "error": str(e)}
+
+
 def get_tracking_script(project_id: str) -> str:
     """Genera el script de tracking de Clarity para insertar en el frontend."""
     return f"""<!-- Microsoft Clarity -->
