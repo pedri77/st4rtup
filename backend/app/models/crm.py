@@ -44,6 +44,8 @@ class Visit(BaseModel):
     demo_score = Column(Integer)
     demo_poc_requested = Column(String(50))
     objections = Column(Text)
+    # Google Calendar sync
+    gcal_event_id = Column(String(255), nullable=True)
 
     lead = relationship("Lead", back_populates="visits")
 

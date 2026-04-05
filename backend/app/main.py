@@ -106,6 +106,10 @@ def _get_seed_data() -> list:
         {"code": "SV-02", "name": "Encuesta Trimestral CSAT", "description": "CSAT trimestral a clientes activos.", "category": "encuestas", "trigger_type": "cron", "trigger_config": {"cron": "0 8 1 1,4,7,10 *"}, "priority": "medium", "complexity": "medium", "phase": "phase_4"},
         {"code": "IN-01", "name": "Importar Leads Scraping", "description": "Importa y deduplica leads desde scraping.", "category": "integraciones", "trigger_type": "webhook", "trigger_config": {"event": "lead.import_batch"}, "priority": "high", "complexity": "medium", "phase": "phase_3"},
         {"code": "IN-02", "name": "Notificaciones Telegram Hub", "description": "Bot Telegram centralizado para notificaciones.", "category": "integraciones", "trigger_type": "event", "trigger_config": {"channels": ["leads", "actions", "pipeline"]}, "priority": "high", "complexity": "medium", "phase": "phase_1"},
+        # Sprint 2: External services
+        {"code": "RS-054b", "name": "Brevo Nurturing", "description": "Leads ICP < 40 a lista nurturing automático Brevo.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 7 * * *"}, "priority": "medium", "complexity": "medium", "phase": "phase_2"},
+        {"code": "RS-054c", "name": "Brevo Reactivation", "description": "Check leads dormant en Brevo por aperturas recientes.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "30 10 * * *"}, "priority": "medium", "complexity": "medium", "phase": "phase_2"},
+        {"code": "RS-093", "name": "Lemlist Sync", "description": "Sync actividad campañas Lemlist → actualizar score leads.", "category": "integraciones", "trigger_type": "cron", "trigger_config": {"cron": "0 12 * * *"}, "priority": "medium", "complexity": "medium", "phase": "phase_2"},
     ]
 
 
