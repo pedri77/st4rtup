@@ -68,6 +68,7 @@ async def create_survey(
     data: SurveyCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Crear nueva encuesta."""
     # Verificar que el lead existe
