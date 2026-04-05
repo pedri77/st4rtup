@@ -15,6 +15,19 @@ logger = logging.getLogger(__name__)
 scheduler: AsyncIOScheduler = None
 
 
+async def _get_active_org_ids() -> list[str]:
+    """Get all active organization IDs for multi-tenant job execution."""
+    try:
+        from app.models.organization import Organization
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(
+                select(Organization.id).where(Organization.is_active == True)  # noqa: E712
+            )
+            return [str(row[0]) for row in result.all()]
+    except Exception:
+        return []
+
+
 # ═══════════════════════════════════════════════════════════════
 # EXECUTION LOGGING
 # ═══════════════════════════════════════════════════════════════
