@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Users, CalendarCheck, Mail, GitBranch,
   CheckSquare, BarChart3, MessageSquare, Settings, Zap, Search, Bell, FileText, Shield, Menu, X,
   Plug, Sparkles, Contact, Calendar, Megaphone, Phone, Bot, DollarSign, Target, Heart, Columns3, BrainCircuit,
-  CalendarDays, CreditCard, BookOpen, ShoppingBag, ChevronLeft, ChevronRight, LogOut
+  CalendarDays, CreditCard, BookOpen, ShoppingBag, ChevronLeft, ChevronRight, LogOut, Activity
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import GlobalSearch from '@/components/GlobalSearch'
