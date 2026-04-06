@@ -16,7 +16,7 @@ describe('ThemeToggle', () => {
 
   it('muestra titulo correcto en modo oscuro', () => {
     render(<ThemeToggle />)
-    expect(screen.getByTitle('Cambiar a modo claro')).toBeInTheDocument()
+    expect(screen.getByTitle('Modo claro')).toBeInTheDocument()
   })
 
   it('cambia a light al hacer click', () => {
@@ -29,7 +29,7 @@ describe('ThemeToggle', () => {
   it('cambia de light a dark al hacer click', () => {
     useUserPreferencesStore.setState({ theme: 'light' })
     render(<ThemeToggle />)
-    expect(screen.getByTitle('Cambiar a modo oscuro')).toBeInTheDocument()
+    expect(screen.getByTitle('Modo oscuro')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button'))
     const state = useUserPreferencesStore.getState()
     expect(state.theme).toBe('dark')

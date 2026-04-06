@@ -41,7 +41,7 @@ describe('ContentPipelinePage', () => {
 
   it('tiene campo de tema del articulo', () => {
     renderPage()
-    expect(screen.getByPlaceholderText(/implementar SaaS/i)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/implementar Scale/i)).toBeInTheDocument()
   })
 
   it('tiene boton ejecutar pipeline', () => {

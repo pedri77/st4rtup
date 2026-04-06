@@ -111,9 +111,9 @@ describe('DashboardPage', () => {
     renderPage()
     await waitFor(() => {
       expect(screen.getByText('Estado')).toBeInTheDocument()
+      expect(screen.getByText('vencidas')).toBeInTheDocument()
+      expect(screen.getByText('acciones hoy')).toBeInTheDocument()
     })
-    expect(screen.getByText('vencidas')).toBeInTheDocument()
-    expect(screen.getByText('acciones hoy')).toBeInTheDocument()
   })
 
   it('muestra barra de acciones rapidas', async () => {
