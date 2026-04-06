@@ -1,4 +1,5 @@
 import { useRef, useCallback } from 'react'
+import DOMPurify from 'dompurify'
 import { Bold, Italic, Underline, List, ListOrdered, Link, Image, AlignLeft, AlignCenter, Type } from 'lucide-react'
 
 const T = {
@@ -49,8 +50,12 @@ export default function RichTextEditor({ value = '', onChange, placeholder = 'Es
 
   const handlePaste = useCallback((e) => {
     e.preventDefault()
-    const text = e.clipboardData.getData('text/html') || e.clipboardData.getData('text/plain')
-    document.execCommand('insertHTML', false, text)
+    const html = e.clipboardData.getData('text/html')
+    const text = e.clipboardData.getData('text/plain')
+    const sanitized = html
+      ? DOMPurify.sanitize(html, { ALLOWED_TAGS: ['b', 'i', 'u', 'strong', 'em', 'p', 'br', 'ul', 'ol', 'li', 'h2', 'a', 'img'], ALLOWED_ATTR: ['href', 'src', 'alt', 'target'] })
+      : text
+    document.execCommand('insertHTML', false, sanitized)
   }, [])
 
   return (
@@ -102,7 +107,7 @@ export default function RichTextEditor({ value = '', onChange, placeholder = 'Es
         contentEditable
         onInput={handleInput}
         onPaste={handlePaste}
-        dangerouslySetInnerHTML={{ __html: value }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(value) }}
         data-placeholder={placeholder}
         style={{
           minHeight, padding: '1rem',
