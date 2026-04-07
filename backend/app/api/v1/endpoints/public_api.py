@@ -18,6 +18,18 @@ from app.schemas import LeadResponse, PaginatedResponse
 router = APIRouter()
 
 
+def _api_key_bucket(request: Request) -> str:
+    """Rate-limit bucket key: use the X-API-Key header so each integrator gets
+    its own quota. Falls back to the client IP for unauthenticated requests
+    (e.g. /public/docs).
+    """
+    api_key = request.headers.get("x-api-key") or request.headers.get("X-API-Key")
+    if api_key:
+        # Hash-ish prefix so we don't log the raw key in slowapi's state
+        return f"apikey:{api_key[:16]}"
+    return f"ip:{request.client.host if request.client else 'unknown'}"
+
+
 async def verify_api_key_and_org(x_api_key: str = Header(None)) -> dict:
     """Verifica API key y devuelve la org_id asociada.
 
@@ -52,7 +64,7 @@ verify_api_key = verify_api_key_and_org
 # ─── Leads (read-only) ──────────────────────────────────────────
 
 @router.get("/leads")
-@limiter.limit("60/minute")
+@limiter.limit("120/minute", key_func=_api_key_bucket)
 async def public_list_leads(
     request: Request,
     status: Optional[str] = None,
@@ -96,7 +108,9 @@ async def public_list_leads(
 
 
 @router.get("/leads/{lead_id}")
+@limiter.limit("600/minute", key_func=_api_key_bucket)
 async def public_get_lead(
+    request: Request,
     lead_id: UUID,
     db: AsyncSession = Depends(get_db),
     auth: dict = Depends(verify_api_key_and_org),
@@ -126,7 +140,7 @@ async def public_get_lead(
 # ─── Create Lead (write) ────────────────────────────────────────
 
 @router.post("/leads", status_code=201)
-@limiter.limit("20/minute")
+@limiter.limit("20/minute", key_func=_api_key_bucket)
 async def public_create_lead(
     request: Request,
     company_name: str = Query(...),
@@ -162,7 +176,9 @@ async def public_create_lead(
 # ─── Pipeline (read-only) ───────────────────────────────────────
 
 @router.get("/pipeline/summary")
+@limiter.limit("60/minute", key_func=_api_key_bucket)
 async def public_pipeline_summary(
+    request: Request,
     db: AsyncSession = Depends(get_db),
     auth: dict = Depends(verify_api_key_and_org),
 ):
@@ -193,7 +209,15 @@ async def public_api_docs():
         "version": "1.0",
         "base_url": "https://api.st4rtup.com/api/v1",
         "auth": "Header X-API-Key or Bearer JWT",
-        "rate_limit": "100 requests/minute per API key",
+        "rate_limits": {
+            "per_api_key": {
+                "GET /public/leads": "120/minute",
+                "GET /public/leads/{id}": "600/minute",
+                "POST /public/leads": "20/minute",
+                "GET /public/pipeline/summary": "60/minute",
+            },
+            "note": "Each API key has its own bucket — noisy integrators don't affect others",
+        },
         "endpoints": [
             {"method": "GET", "path": "/public/docs", "auth": "none", "description": "Esta documentación"},
             {"method": "GET", "path": "/dashboard/embed/{type}", "auth": "api_key", "description": "Widget embebible (pipeline, leads, revenue, conversion)"},

@@ -605,3 +605,144 @@ async def admin_onboarding_status(
         })
 
     return {"items": statuses, "total": len(statuses)}
+
+
+# ─── Integration health dashboard ──────────────────────────────
+
+@router.get("/integration-health")
+async def integration_health(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Estado de las integraciones por org: OAuth tokens, último refresh,
+    automatizaciones activas. Lee `system_settings` (no descifra — solo
+    reporta presencia/ausencia) y cuenta `automations`.
+
+    Returns:
+        {
+          "orgs": [
+            {
+              "org_id": "...", "name": "...",
+              "integrations": {
+                "gmail":   {"connected": bool, "email": "...", "token_age_days": int|null},
+                "gsc":     {"connected": bool, "site_url": "...", "token_age_days": int|null},
+                "linkedin":{"connected": bool, "name": "...", "token_age_days": int|null},
+                ...
+              },
+              "automations": {"total": int, "active": int, "failing": int}
+            }
+          ],
+          "summary": {"total_orgs": int, "orgs_with_oauth": int, "active_automations": int}
+        }
+    """
+    from app.models.system import SystemSettings
+    from app.models.automation import Automation, AutomationExecution
+    from app.models.enums import AutomationStatus, AutomationImplStatus
+
+    # 1. Fetch all orgs with their settings
+    orgs_result = await db.execute(
+        select(Organization).order_by(Organization.created_at.desc())
+    )
+    orgs = orgs_result.scalars().all()
+
+    # 2. For each org, check settings row + automations stats
+    items = []
+    total_with_oauth = 0
+    total_active_automations = 0
+
+    for org in orgs:
+        settings_result = await db.execute(
+            select(SystemSettings).limit(1)  # currently SystemSettings is global, not per-org
+        )
+        settings_row = settings_result.scalar_one_or_none()
+
+        def _check(cfg_attr: str, name_field: str = "email"):
+            cfg = getattr(settings_row, cfg_attr, None) if settings_row else None
+            if not cfg or not isinstance(cfg, dict):
+                return {"connected": False, name_field: None, "token_age_days": None}
+            connected = bool(cfg.get("connected") or cfg.get("access_token"))
+            # We never decrypt here — just expose metadata
+            expires_at = cfg.get("expires_at", 0)
+            age_days = None
+            if expires_at:
+                try:
+                    age_days = max(0, int((datetime.now(timezone.utc).timestamp() - float(expires_at)) / 86400))
+                except Exception:
+                    pass
+            return {
+                "connected": connected,
+                name_field: cfg.get(name_field) or cfg.get("name") or cfg.get("site_url"),
+                "token_age_days": age_days,
+            }
+
+        integrations = {
+            "gmail": _check("gmail_oauth_config", "email"),
+            "gsc": _check("gsc_config", "site_url"),
+            "gcalendar": _check("gcalendar_config", "email"),
+            "gdrive": _check("gdrive_config", "email"),
+            "linkedin": _check("linkedin_config", "name"),
+            "youtube": _check("youtube_config", "name"),
+            "brevo": {
+                "connected": bool(settings_row and settings_row.email_config
+                                  and isinstance(settings_row.email_config, dict)
+                                  and (settings_row.email_config.get("brevo_api_key") or "").startswith("enc:")),
+                "email": None, "token_age_days": None,
+            } if settings_row else {"connected": False, "email": None, "token_age_days": None},
+            "telegram": {
+                "connected": bool(settings_row and settings_row.telegram_config
+                                  and isinstance(settings_row.telegram_config, dict)
+                                  and settings_row.telegram_config.get("bot_token")),
+                "email": None, "token_age_days": None,
+            } if settings_row else {"connected": False, "email": None, "token_age_days": None},
+        }
+
+        if any(i.get("connected") for i in integrations.values()):
+            total_with_oauth += 1
+
+        # Automations stats for this org
+        total_auto = (await db.execute(
+            select(func.count(Automation.id)).where(Automation.org_id == org.id)
+        )).scalar() or 0
+        active_auto = (await db.execute(
+            select(func.count(Automation.id)).where(
+                Automation.org_id == org.id,
+                Automation.status == AutomationStatus.ACTIVE,
+                Automation.is_enabled.is_(True),
+            )
+        )).scalar() or 0
+
+        # Count failing executions in last 24h
+        since = datetime.now(timezone.utc) - timedelta(days=1)
+        failing_auto = (await db.execute(
+            select(func.count(func.distinct(AutomationExecution.automation_id)))
+            .join(Automation, Automation.id == AutomationExecution.automation_id)
+            .where(
+                Automation.org_id == org.id,
+                AutomationExecution.status == "error",
+                AutomationExecution.created_at >= since,
+            )
+        )).scalar() or 0
+
+        total_active_automations += active_auto
+
+        items.append({
+            "org_id": str(org.id),
+            "name": org.name,
+            "slug": org.slug,
+            "plan": org.plan,
+            "integrations": integrations,
+            "automations": {
+                "total": total_auto,
+                "active": active_auto,
+                "failing_24h": failing_auto,
+            },
+        })
+
+    return {
+        "orgs": items,
+        "summary": {
+            "total_orgs": len(items),
+            "orgs_with_oauth": total_with_oauth,
+            "active_automations": total_active_automations,
+        },
+    }

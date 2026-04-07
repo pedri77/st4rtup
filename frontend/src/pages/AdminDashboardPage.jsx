@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
-import { Shield, Users, DollarSign, TrendingUp, Building2, Activity, UserPlus, Zap, Heart, AlertTriangle, Server, Mail, BarChart3, Eye, ChevronRight, FileText, RefreshCw, LogIn, ClipboardList } from 'lucide-react'
+import { Shield, Users, DollarSign, TrendingUp, Building2, Activity, UserPlus, Zap, Heart, AlertTriangle, Server, Mail, BarChart3, Eye, ChevronRight, FileText, RefreshCw, LogIn, ClipboardList, Plug, CheckCircle2, XCircle } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import api from '@/services/api'
 import toast from 'react-hot-toast'
@@ -25,6 +25,7 @@ const ADMIN_TABS = [
   { id: 'api-costs', label: 'API Costs', icon: DollarSign },
   { id: 'audit', label: 'Audit Log', icon: ClipboardList },
   { id: 'onboarding', label: 'Onboarding', icon: UserPlus },
+  { id: 'integrations', label: 'Integraciones', icon: Plug },
 ]
 
 export default function AdminDashboardPage() {
@@ -76,6 +77,7 @@ export default function AdminDashboardPage() {
   const { data: apiCosts } = useQuery({ queryKey: ['admin', 'api-costs'], queryFn: () => api.get('/admin/api-costs').then(r => r.data), staleTime: 60000, enabled: activeTab === 'api-costs' || activeTab === 'overview' })
   const { data: auditLog } = useQuery({ queryKey: ['admin', 'audit-log'], queryFn: () => api.get('/audit-global/').then(r => r.data).catch(() => []), staleTime: 30000, enabled: activeTab === 'audit' })
   const { data: onbStatus } = useQuery({ queryKey: ['admin', 'onboarding-status'], queryFn: () => api.get('/admin/onboarding-status').then(r => r.data), staleTime: 60000, enabled: activeTab === 'onboarding' })
+  const { data: integrationHealth } = useQuery({ queryKey: ['admin', 'integration-health'], queryFn: () => api.get('/admin/integration-health').then(r => r.data), staleTime: 30000, enabled: activeTab === 'integrations' })
   const { data: impersonated } = useQuery({ queryKey: ['admin', 'impersonate', impersonateId], queryFn: () => api.post(`/admin/impersonate/${impersonateId}`).then(r => r.data), enabled: !!impersonateId })
   const [orgMetricsId, setOrgMetricsId] = useState(null)
   const { data: orgMetrics } = useQuery({ queryKey: ['admin', 'org-metrics', orgMetricsId], queryFn: () => api.get(`/admin/org/${orgMetricsId}/metrics`).then(r => r.data), enabled: !!orgMetricsId, staleTime: 60000 })
@@ -751,6 +753,74 @@ export default function AdminDashboardPage() {
               </tbody>
             </table>
           </div>
+        </>)}
+
+        {/* INTEGRATIONS HEALTH TAB */}
+        {activeTab === 'integrations' && (<>
+          <h1 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
+            <Plug size={20} color={T.cyan} /> Salud de Integraciones
+          </h1>
+
+          {/* Summary cards */}
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            {[
+              { label: 'Orgs totales', value: integrationHealth?.summary?.total_orgs || 0, color: T.cyan },
+              { label: 'Orgs con OAuth', value: integrationHealth?.summary?.orgs_with_oauth || 0, color: T.success },
+              { label: 'Automations activas', value: integrationHealth?.summary?.active_automations || 0, color: T.purple },
+            ].map(s => (
+              <div key={s.label} style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 12, padding: 16 }}>
+                <div style={{ fontSize: 11, color: T.fgMuted, textTransform: 'uppercase', letterSpacing: 0.5 }}>{s.label}</div>
+                <div style={{ fontSize: 28, fontWeight: 700, color: s.color, fontFamily: fontDisplay, marginTop: 4 }}>{s.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Per-org grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 16 }}>
+            {(integrationHealth?.orgs || []).map(org => (
+              <div key={org.org_id} style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 12, padding: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: T.fg }}>{org.name}</div>
+                    <div style={{ fontSize: 10, color: T.fgMuted, fontFamily: fontMono }}>{org.slug} · {org.plan}</div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, backgroundColor: `${T.success}15`, color: T.success, fontWeight: 600 }}>
+                      {org.automations.active}/{org.automations.total} auto
+                    </span>
+                    {org.automations.failing_24h > 0 && (
+                      <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, backgroundColor: `${T.destructive}15`, color: T.destructive, fontWeight: 600 }}>
+                        {org.automations.failing_24h} failing
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                  {Object.entries(org.integrations || {}).map(([key, info]) => (
+                    <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, padding: '6px 8px', borderRadius: 6, backgroundColor: T.muted }}>
+                      {info.connected
+                        ? <CheckCircle2 size={12} color={T.success} />
+                        : <XCircle size={12} color={T.fgMuted} />}
+                      <span style={{ fontWeight: 500, color: info.connected ? T.fg : T.fgMuted, textTransform: 'capitalize' }}>{key}</span>
+                      {info.token_age_days !== null && info.token_age_days !== undefined && info.token_age_days > 0 && (
+                        <span style={{ marginLeft: 'auto', fontSize: 9, color: info.token_age_days > 30 ? T.warning : T.fgMuted, fontFamily: fontMono }}>
+                          {info.token_age_days}d
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {!integrationHealth && (
+            <div style={{ textAlign: 'center', padding: 40, color: T.fgMuted }}>Cargando…</div>
+          )}
+          {integrationHealth && integrationHealth.orgs?.length === 0 && (
+            <div style={{ textAlign: 'center', padding: 40, color: T.fgMuted }}>No hay organizaciones registradas.</div>
+          )}
         </>)}
 
         {/* AFFILIATES TAB */}

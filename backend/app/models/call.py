@@ -89,7 +89,7 @@ class CallQueueItem(BaseModel):
 class CallPrompt(BaseModel):
     """Prompt/guión para llamadas con IA."""
     __tablename__ = "call_prompts"
-    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True, nullable=True)
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True, nullable=False)
 
     nombre = Column(String(255), nullable=False)
     objetivo = Column(String(50), nullable=False, index=True)
@@ -145,7 +145,7 @@ class CallPromptVersion(BaseModel):
 class CallRecord(BaseModel):
     """Registro de una llamada con IA."""
     __tablename__ = "call_records"
-    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True, nullable=True)
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True, nullable=False)
 
     # Relaciones
     lead_id = Column(
