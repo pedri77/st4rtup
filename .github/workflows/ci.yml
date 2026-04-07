@@ -126,13 +126,19 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no \
             root@${{ secrets.HETZNER_HOST }} \
-            "systemctl restart st4rtup && sleep 3 && systemctl is-active st4rtup"
+            "systemctl restart st4rtup && sleep 5 && systemctl is-active st4rtup"
 
-      - name: Health check
+      - name: Health check (retry up to 30s)
         run: |
           ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no \
             root@${{ secrets.HETZNER_HOST }} \
-            "curl -sf http://127.0.0.1:8001/health | grep -q healthy"
+            'for i in $(seq 1 15); do
+               if curl -sf http://127.0.0.1:8001/health | grep -q healthy; then
+                 echo "healthy after ${i}s"; exit 0;
+               fi
+               sleep 2
+             done
+             echo "health check failed after 30s"; exit 1'
 
       - name: Cleanup SSH key
         if: always()

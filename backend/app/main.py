@@ -21,6 +21,32 @@ import app.agents.customer_success  # noqa: register AGENT-CS-001
 logger = logging.getLogger(__name__)
 
 
+# ─── RGPD: truncate IPs in access logs to /24 (IPv4) or /48 (IPv6) ─────
+# Uvicorn logs lines like: "162.158.120.183:0 - "GET /..." 200 OK"
+# We install a filter on `uvicorn.access` so IPs are masked before write.
+class _IPAnonymiserFilter(logging.Filter):
+    import re as _re
+
+    _v4 = _re.compile(r"(\d{1,3}\.\d{1,3}\.\d{1,3})\.\d{1,3}")
+    _v6 = _re.compile(r"([0-9a-fA-F:]+:)[0-9a-fA-F]+:[0-9a-fA-F]+")
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        try:
+            # Uvicorn access args = (client_addr, method, path, http_version, status)
+            if record.args and isinstance(record.args, tuple) and record.args:
+                first = record.args[0]
+                if isinstance(first, str):
+                    masked = self._v4.sub(r"\1.0", first)
+                    masked = self._v6.sub(r"\1xxxx:xxxx", masked)
+                    record.args = (masked,) + record.args[1:]
+        except Exception:
+            pass
+        return True
+
+
+logging.getLogger("uvicorn.access").addFilter(_IPAnonymiserFilter())
+
+
 async def _auto_seed_and_activate():
     """Seed automations if DB is empty + activate all deployed ones.
     Runs on every startup to ensure new deploys have automations ready.

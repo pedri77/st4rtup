@@ -61,9 +61,9 @@ export const dashboardApi = {
 }
 
 export const leadsApi = {
-  list: (params) => api.get('/leads', { params }),
+  list: (params) => api.get('/leads/', { params }),
   get: (id) => api.get(`/leads/${id}`),
-  create: (data) => api.post('/leads', data),
+  create: (data) => api.post('/leads/', data),
   update: (id, data) => api.put(`/leads/${id}`, data),
   delete: (id) => api.delete(`/leads/${id}`),
   enrich: (id) => api.post(`/leads/${id}/enrich`),
@@ -121,17 +121,17 @@ export const contentPipelineApi = {
 }
 
 export const visitsApi = {
-  list: (params) => api.get('/visits', { params }),
+  list: (params) => api.get('/visits/', { params }),
   get: (id) => api.get(`/visits/${id}`),
-  create: (data) => api.post('/visits', data),
+  create: (data) => api.post('/visits/', data),
   update: (id, data) => api.put(`/visits/${id}`, data),
   delete: (id) => api.delete(`/visits/${id}`),
 }
 
 export const emailsApi = {
-  list: (params) => api.get('/emails', { params }),
+  list: (params) => api.get('/emails/', { params }),
   get: (id) => api.get(`/emails/${id}`),
-  create: (data) => api.post('/emails', data),
+  create: (data) => api.post('/emails/', data),
   send: (id) => api.post(`/emails/${id}/send`),
 }
 
@@ -144,16 +144,16 @@ export const emailTemplatesApi = {
 }
 
 export const actionsApi = {
-  list: (params) => api.get('/actions', { params }),
-  create: (data) => api.post('/actions', data),
+  list: (params) => api.get('/actions/', { params }),
+  create: (data) => api.post('/actions/', data),
   update: (id, data) => api.put(`/actions/${id}`, data),
   delete: (id) => api.delete(`/actions/${id}`),
 }
 
 export const opportunitiesApi = {
-  list: (params) => api.get('/opportunities', { params }),
+  list: (params) => api.get('/opportunities/', { params }),
   get: (id) => api.get(`/opportunities/${id}`),
-  create: (data) => api.post('/opportunities', data),
+  create: (data) => api.post('/opportunities/', data),
   update: (id, data) => api.put(`/opportunities/${id}`, data),
   delete: (id) => api.delete(`/opportunities/${id}`),
   forecast: (id) => api.post(`/opportunities/${id}/forecast`),
@@ -161,7 +161,7 @@ export const opportunitiesApi = {
 
 export const accountPlansApi = {
   getByLead: (leadId) => api.get(`/account-plans/lead/${leadId}`),
-  create: (data) => api.post('/account-plans', data),
+  create: (data) => api.post('/account-plans/', data),
   update: (id, data) => api.put(`/account-plans/${id}`, data),
 }
 
@@ -186,15 +186,15 @@ export const reportBuilderApi = {
 }
 
 export const reviewsApi = {
-  list: (params) => api.get('/monthly-reviews', { params }),
+  list: (params) => api.get('/monthly-reviews/', { params }),
   get: (id) => api.get(`/monthly-reviews/${id}`),
-  create: (data) => api.post('/monthly-reviews', data),
+  create: (data) => api.post('/monthly-reviews/', data),
 }
 
 export const surveysApi = {
-  list: (params) => api.get('/surveys', { params }),
+  list: (params) => api.get('/surveys/', { params }),
   get: (id) => api.get(`/surveys/${id}`),
-  create: (data) => api.post('/surveys', data),
+  create: (data) => api.post('/surveys/', data),
   update: (id, data) => api.put(`/surveys/${id}`, data),
   delete: (id) => api.delete(`/surveys/${id}`),
   send: (id, data) => api.post(`/surveys/${id}/send`, data || {}),
@@ -206,9 +206,9 @@ export const surveysApi = {
 }
 
 export const automationsApi = {
-  list: (params) => api.get('/automations', { params }),
+  list: (params) => api.get('/automations/', { params }),
   get: (id) => api.get(`/automations/${id}`),
-  create: (data) => api.post('/automations', data),
+  create: (data) => api.post('/automations/', data),
   update: (id, data) => api.put(`/automations/${id}`, data),
   delete: (id) => api.delete(`/automations/${id}`),
   toggle: (id) => api.post(`/automations/${id}/toggle`),
@@ -228,9 +228,9 @@ export const automationTasksApi = {
 }
 
 export const usersApi = {
-  list: (params) => api.get('/users', { params }),
+  list: (params) => api.get('/users/', { params }),
   get: (id) => api.get(`/users/${id}`),
-  create: (data) => api.post('/users', data),
+  create: (data) => api.post('/users/', data),
   update: (id, data) => api.put(`/users/${id}`, data),
   delete: (id) => api.delete(`/users/${id}`),
 }
@@ -273,9 +273,9 @@ export const serviceCatalogApi = {
 }
 
 export const offersApi = {
-  list: (params) => api.get('/offers', { params }),
+  list: (params) => api.get('/offers/', { params }),
   get: (id) => api.get(`/offers/${id}`),
-  create: (data) => api.post('/offers', data),
+  create: (data) => api.post('/offers/', data),
   update: (id, data) => api.put(`/offers/${id}`, data),
   delete: (id) => api.delete(`/offers/${id}`),
   sign: (id, data) => api.post(`/offers/${id}/sign`, data),
@@ -284,10 +284,10 @@ export const offersApi = {
 }
 
 export const contactsApi = {
-  list: (params) => api.get('/contacts', { params }),
+  list: (params) => api.get('/contacts/', { params }),
   get: (id) => api.get(`/contacts/${id}`),
   getByLead: (leadId) => api.get(`/contacts/by-lead/${leadId}`),
-  create: (data) => api.post('/contacts', data),
+  create: (data) => api.post('/contacts/', data),
   update: (id, data) => api.put(`/contacts/${id}`, data),
   delete: (id) => api.delete(`/contacts/${id}`),
   stats: (params) => api.get('/contacts/stats', { params }),
