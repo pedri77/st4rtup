@@ -13,6 +13,7 @@ import Layout from './components/layout/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 const ContactSalesPage = lazy(() => import('./pages/ContactSalesPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 import LandingPage from './pages/LandingPage'
 import PricingPublicPage from './pages/PricingPublicPage'
 const PrivacyPage = lazy(() => import('./pages/legal/PrivacyPage'))
@@ -272,6 +273,9 @@ function App() {
           <Route path="marketplace" element={<Suspense fallback={<PageLoader />}><MarketplacePage /></Suspense>} />
           <Route path="content-pipeline" element={<Navigate to="/app/marketing/seo-center" replace />} />
         </Route>
+
+        {/* 404 catch-all */}
+        <Route path="*" element={<Suspense fallback={<PageLoader />}><NotFoundPage /></Suspense>} />
       </Routes>
     </AuthProvider>
     </ErrorBoundary>
