@@ -48,8 +48,8 @@ async def test_generate_activity_report(client):
 @pytest.mark.asyncio
 async def test_generate_leads_report(client, lead_data):
     """Generate leads report with data."""
-    # Create a lead first
-    await client.post("/api/v1/leads", json=lead_data)
+    # Create a lead first (trailing slash to avoid 307 redirect)
+    await client.post("/api/v1/leads/", json=lead_data)
 
     resp = await client.post("/api/v1/report-builder/generate", json={
         "name": "Leads Report",

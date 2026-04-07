@@ -2,6 +2,11 @@
 import pytest
 from unittest.mock import patch
 
+from tests.conftest import TEST_ORG_ID
+
+# API key format: "org_uuid:key" — debe coincidir con la org del test user
+_TEST_API_KEY = f"{TEST_ORG_ID}:test-key-123"
+
 
 @pytest.mark.asyncio
 async def test_public_leads_no_key(client):
@@ -18,7 +23,7 @@ async def test_public_leads_invalid_key(client):
 
 
 @pytest.mark.asyncio
-@patch("app.core.config.settings.PUBLIC_API_KEYS", "test-key-123")
+@patch("app.core.config.settings.PUBLIC_API_KEYS", _TEST_API_KEY)
 async def test_public_leads_valid_key(client, lead_data):
     """Public API returns leads with valid key."""
     # Create a lead first
@@ -32,7 +37,7 @@ async def test_public_leads_valid_key(client, lead_data):
 
 
 @pytest.mark.asyncio
-@patch("app.core.config.settings.PUBLIC_API_KEYS", "test-key-123")
+@patch("app.core.config.settings.PUBLIC_API_KEYS", _TEST_API_KEY)
 async def test_public_create_lead(client):
     """Public API can create leads."""
     resp = await client.post(
@@ -47,7 +52,7 @@ async def test_public_create_lead(client):
 
 
 @pytest.mark.asyncio
-@patch("app.core.config.settings.PUBLIC_API_KEYS", "test-key-123")
+@patch("app.core.config.settings.PUBLIC_API_KEYS", _TEST_API_KEY)
 async def test_public_pipeline_summary(client):
     """Public API returns pipeline summary."""
     resp = await client.get("/api/v1/public/pipeline/summary", headers={"X-API-Key": "test-key-123"})

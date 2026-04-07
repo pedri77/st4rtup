@@ -66,9 +66,26 @@ export default function OnboardingPage() {
     } catch {}
     next()
   }
-  function finish() {
+  async function finish() {
+    const onboardingData = { name, company, sector, teamSize, pipeline: selectedPipeline, target: monthlyTarget }
+    // Persist to backend so it syncs cross-device
+    try {
+      const { supabase } = await import('@/lib/supabase')
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
+        await fetch(`${apiUrl}/users/me/onboarding`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ completed: true, data: onboardingData }),
+        })
+      }
+    } catch (e) {
+      console.error('Failed to persist onboarding state', e)
+    }
+    // Cache locally too for instant loads
     localStorage.setItem('st4rtup_onboarding_done', 'true')
-    localStorage.setItem('st4rtup_onboarding_data', JSON.stringify({ name, company, sector, teamSize, pipeline: selectedPipeline, target: monthlyTarget }))
+    localStorage.setItem('st4rtup_onboarding_data', JSON.stringify(onboardingData))
     nav('/app')
   }
 

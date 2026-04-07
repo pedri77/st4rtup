@@ -73,9 +73,8 @@ export default function RegisterPage() {
         window.umami?.track('register_conversion', { ab_variant: abVariant, method: 'email' })
       }
       setTimeout(() => {
-        // Check if onboarding already completed
-        const done = localStorage.getItem('onboarding_completed')
-        navigate(done ? '/app' : '/app/onboarding')
+        // New signup → always start onboarding (backend will mark completed when done)
+        navigate('/app/onboarding')
       }, 2000)
     } catch (err) {
       console.error('Register error:', err)

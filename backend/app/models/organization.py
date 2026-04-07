@@ -20,6 +20,8 @@ class Organization(BaseModel):
     max_users = Column(Integer, default=1)
     max_leads = Column(Integer, default=100)
     is_active = Column(Boolean, default=True)
+    onboarding_completed = Column(Boolean, default=False, nullable=False)
+    onboarding_data = Column(JSON, default={})
 
 
 class OrgMember(BaseModel):

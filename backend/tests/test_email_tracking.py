@@ -18,11 +18,11 @@ async def test_tracking_pixel_returns_gif(client):
 async def test_tracking_pixel_records_open(client, lead_data):
     """Tracking pixel records email open in metadata."""
     # Create lead
-    lead_resp = await client.post("/api/v1/leads", json=lead_data)
+    lead_resp = await client.post("/api/v1/leads/", json=lead_data)
     lead_id = lead_resp.json()["id"]
 
     # Create email
-    email_resp = await client.post("/api/v1/emails", json={
+    email_resp = await client.post("/api/v1/emails/", json={
         "lead_id": lead_id,
         "subject": "Test tracking",
         "to_email": "test@example.com",

@@ -79,6 +79,21 @@ TEST_ORG = {
 }
 
 
+# ─── Isolate side-effects: disable workflow event handlers in tests ──
+# El dispatcher de workflow_engine tiene handlers registrados vía @on_event
+# (EM-01 welcome email, LD-04 auto-scoring, IN-02 telegram notify, etc.)
+# que se disparan en lead.created y otros eventos. En tests queremos aislar
+# los endpoints: verificamos lo que el endpoint persiste, no los side-effects.
+@pytest.fixture(autouse=True)
+def _disable_workflow_handlers():
+    from app.core import workflow_engine
+    saved = dict(workflow_engine._event_handlers)
+    workflow_engine._event_handlers.clear()
+    yield
+    workflow_engine._event_handlers.clear()
+    workflow_engine._event_handlers.update(saved)
+
+
 # ─── Database fixtures ───────────────────────────────────────────
 
 @pytest.fixture
@@ -97,8 +112,19 @@ async def db_engine():
         cursor.execute("PRAGMA foreign_keys=ON")
         cursor.close()
 
-    # Import all models before creating tables
+    # Import ALL model modules so every table is registered on Base.metadata.
+    # app/models/__init__.py only exports a subset; walk the models package and
+    # importlib each submodule to ensure create_all covers everything.
     import app.models  # noqa
+    import importlib
+    import pkgutil
+    for _finder, _name, _ispkg in pkgutil.iter_modules(app.models.__path__):
+        if _name.startswith("_"):
+            continue
+        try:
+            importlib.import_module(f"app.models.{_name}")
+        except Exception:
+            pass  # skip any legacy/shim modules that fail standalone
 
     # Patch PostgreSQL-specific types for SQLite
     _patch_metadata_for_sqlite(Base.metadata)

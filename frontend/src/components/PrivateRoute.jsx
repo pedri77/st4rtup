@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
-import { Navigate, useSearchParams } from 'react-router-dom'
+import { Navigate, useSearchParams, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 
 export default function PrivateRoute({ children }) {
   const { user, loading } = useAuth()
+  const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const [impersonating, setImpersonating] = useState(false)
+  // null = unknown (still fetching), true/false = known
+  const [onboardingDone, setOnboardingDone] = useState(() => {
+    // Warm from localStorage to avoid flash on repeat visits
+    return localStorage.getItem('st4rtup_onboarding_done') === 'true' ? true : null
+  })
 
   // Handle impersonation token from admin
   // SECURITY: clean URL FIRST to prevent token leak via referer/history,
@@ -38,6 +44,31 @@ export default function PrivateRoute({ children }) {
       .finally(() => setImpersonating(false))
   }, [searchParams, user, setSearchParams])
 
+  // Check backend onboarding state on first mount (only if not cached locally)
+  useEffect(() => {
+    if (!user || onboardingDone !== null) return
+    let cancelled = false
+    ;(async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) return
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
+        const r = await fetch(`${apiUrl}/users/me/onboarding`, {
+          headers: { 'Authorization': `Bearer ${session.access_token}` },
+        })
+        if (!r.ok) return
+        const data = await r.json()
+        if (cancelled) return
+        setOnboardingDone(!!data.completed)
+        if (data.completed) localStorage.setItem('st4rtup_onboarding_done', 'true')
+      } catch {
+        // On failure assume done to avoid a redirect loop
+        if (!cancelled) setOnboardingDone(true)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [user, onboardingDone])
+
   if (loading || impersonating) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -51,6 +82,12 @@ export default function PrivateRoute({ children }) {
 
   if (!user) {
     return <Navigate to="/login" replace />
+  }
+
+  // Redirect to onboarding if not completed (except when already on onboarding page)
+  const isOnboardingRoute = location.pathname.startsWith('/app/onboarding')
+  if (onboardingDone === false && !isOnboardingRoute) {
+    return <Navigate to="/app/onboarding" replace />
   }
 
   return children

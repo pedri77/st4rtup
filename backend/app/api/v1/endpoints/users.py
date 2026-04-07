@@ -7,6 +7,7 @@ from datetime import datetime
 
 from app.core.database import get_db
 from app.core.security import get_current_user, get_current_admin_user
+from app.core.tenant import get_current_org
 from app.core.config import settings
 from app.models.models import User, UserRole
 from app.schemas import UserCreate, UserUpdate, UserResponse, UserListItem, PaginatedResponse
@@ -53,6 +54,48 @@ async def get_my_profile(
         await db.refresh(user)
 
     return UserResponse.model_validate(user)
+
+
+# ─── Onboarding state ──────────────────────────────────────────
+
+@router.get("/me/onboarding")
+async def get_my_onboarding(
+    db: AsyncSession = Depends(get_db),
+    org: dict = Depends(get_current_org),
+):
+    """Devuelve el estado de onboarding de la org del usuario."""
+    from app.models.organization import Organization
+
+    result = await db.execute(select(Organization).where(Organization.id == UUID(org["org_id"])))
+    organization = result.scalar_one_or_none()
+    if not organization:
+        return {"completed": False, "data": {}}
+
+    return {
+        "completed": bool(getattr(organization, "onboarding_completed", False)),
+        "data": getattr(organization, "onboarding_data", {}) or {},
+    }
+
+
+@router.post("/me/onboarding")
+async def set_my_onboarding(
+    payload: dict,
+    db: AsyncSession = Depends(get_db),
+    org: dict = Depends(get_current_org),
+):
+    """Marca el onboarding como completado y persiste los datos del wizard."""
+    from app.models.organization import Organization
+
+    result = await db.execute(select(Organization).where(Organization.id == UUID(org["org_id"])))
+    organization = result.scalar_one_or_none()
+    if not organization:
+        raise HTTPException(status_code=404, detail="Organization not found")
+
+    organization.onboarding_completed = bool(payload.get("completed", True))
+    organization.onboarding_data = payload.get("data", {}) or {}
+    await db.commit()
+
+    return {"completed": organization.onboarding_completed, "data": organization.onboarding_data}
 
 
 @router.get("", response_model=PaginatedResponse)
