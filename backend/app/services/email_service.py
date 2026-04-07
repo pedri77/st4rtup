@@ -465,7 +465,11 @@ class EmailService:
                     result = await session.execute(sa_select(SystemSettings).limit(1))
                     settings_row = result.scalar_one_or_none()
                     if settings_row and settings_row.gmail_oauth_config:
-                        db_cfg = settings_row.gmail_oauth_config
+                        from app.core.credential_store import credential_store, SENSITIVE_KEYS
+                        db_cfg = credential_store.decrypt_config(
+                            settings_row.gmail_oauth_config,
+                            SENSITIVE_KEYS.get("gmail_oauth_config", []),
+                        )
                         access_token = db_cfg.get('access_token')
                         refresh_token = db_cfg.get('refresh_token')
                         # Merge DB config into cfg for token refresh

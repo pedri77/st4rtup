@@ -122,12 +122,15 @@ async def create_token(
     current_user: dict = Depends(get_current_user),
 ):
     """Crea token y opcionalmente envia email con link."""
-    token_str = secrets.token_urlsafe(32)
+    # Stronger token: 64 bytes → 86 char URL-safe string
+    token_str = secrets.token_urlsafe(64)
+    # Cap expiration to 30 days max (defense against long-lived stolen tokens)
+    expires_days = min(max(int(data.expires_days), 1), 30)
     ft = FormToken(
         token=token_str, form_id=data.form_id,
         lead_id=data.lead_id, recipient_email=data.recipient_email,
         recipient_name=data.recipient_name,
-        expires_at=datetime.now(timezone.utc) + timedelta(days=data.expires_days),
+        expires_at=datetime.now(timezone.utc) + timedelta(days=expires_days),
         max_uses=data.max_uses, created_by=current_user.get("email", ""),
     )
     db.add(ft)
@@ -323,7 +326,17 @@ async def submit_form(
             raise HTTPException(status_code=403, detail="Token expirado")
         if ft.max_uses and ft.uses >= ft.max_uses:
             raise HTTPException(status_code=403, detail="Token ya utilizado")
-        # Mark token as used
+        # Mark token as used + audit log of who used it (IP + UA)
+        client_ip = (
+            request.headers.get("fly-client-ip")
+            or request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+            or (request.client.host if request.client else "?")
+        )
+        user_agent = request.headers.get("user-agent", "")[:200]
+        logger.info(
+            f"Form token used: form={form_id} token=...{submission.token[-8:]} "
+            f"ip={client_ip} ua={user_agent[:60]}"
+        )
         ft.uses = (ft.uses or 0) + 1
         ft.submitted_at = datetime.now(timezone.utc)
         if not lead_id and ft.lead_id:

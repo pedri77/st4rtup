@@ -25,7 +25,10 @@ async def _get_access_token(db: AsyncSession) -> str:
     if not sys_settings or not sys_settings.gcalendar_config:
         raise ValueError("Google Calendar no configurado")
 
-    config = sys_settings.gcalendar_config
+    from app.core.credential_store import credential_store, SENSITIVE_KEYS
+    config = credential_store.decrypt_config(
+        sys_settings.gcalendar_config, SENSITIVE_KEYS.get("gcalendar_config", [])
+    )
     access_token = config.get("access_token", "")
     refresh_token = config.get("refresh_token", "")
     expires_at = config.get("expires_at", 0)
@@ -52,7 +55,9 @@ async def _get_access_token(db: AsyncSession) -> str:
             access_token = data["access_token"]
             config["access_token"] = access_token
             config["expires_at"] = time.time() + data.get("expires_in", 3600)
-            sys_settings.gcalendar_config = config
+            sys_settings.gcalendar_config = credential_store.encrypt_config(
+                config, SENSITIVE_KEYS.get("gcalendar_config", [])
+            )
             await db.commit()
 
     return access_token

@@ -415,7 +415,10 @@ async def export_to_sheets(
         if not sys_settings or not sys_settings.gdrive_config:
             raise HTTPException(status_code=400, detail="Google OAuth no configurado")
 
-        cfg = sys_settings.gdrive_config
+        from app.core.credential_store import credential_store, SENSITIVE_KEYS
+        cfg = credential_store.decrypt_config(
+            sys_settings.gdrive_config, SENSITIVE_KEYS.get("gdrive_config", [])
+        )
         access_token = cfg.get("access_token")
         refresh_token = cfg.get("refresh_token")
 
@@ -439,7 +442,9 @@ async def export_to_sheets(
                         access_token = data["access_token"]
                         cfg["access_token"] = access_token
                         cfg["expires_at"] = time.time() + data.get("expires_in", 3600)
-                        sys_settings.gdrive_config = cfg
+                        sys_settings.gdrive_config = credential_store.encrypt_config(
+                            cfg, SENSITIVE_KEYS.get("gdrive_config", [])
+                        )
                         await db.commit()
                     else:
                         raise HTTPException(status_code=502, detail="Error refreshing Google token")

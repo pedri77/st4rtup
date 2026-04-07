@@ -18,7 +18,10 @@ async def _get_gsc_config(db: AsyncSession) -> dict | None:
     settings = result.scalar_one_or_none()
     if not settings or not settings.gsc_config:
         return None
-    cfg = settings.gsc_config
+    from app.core.credential_store import credential_store, SENSITIVE_KEYS
+    cfg = credential_store.decrypt_config(
+        settings.gsc_config, SENSITIVE_KEYS.get("gsc_config", [])
+    )
     if not cfg.get("connected") or not cfg.get("access_token"):
         return None
     return cfg
@@ -50,11 +53,18 @@ async def _refresh_token_if_needed(db: AsyncSession, cfg: dict) -> str | None:
 
     new_token = resp.json().get("access_token")
     if new_token:
+        from app.core.credential_store import credential_store, SENSITIVE_KEYS
         result = await db.execute(select(SystemSettings).limit(1))
         settings = result.scalar_one_or_none()
         if settings:
-            updated = {**settings.gsc_config, "access_token": new_token}
-            settings.gsc_config = updated
+            # Decifrar lo existente, actualizar, re-cifrar
+            existing = credential_store.decrypt_config(
+                settings.gsc_config or {}, SENSITIVE_KEYS.get("gsc_config", [])
+            )
+            updated = {**existing, "access_token": new_token}
+            settings.gsc_config = credential_store.encrypt_config(
+                updated, SENSITIVE_KEYS.get("gsc_config", [])
+            )
             await db.commit()
     return new_token
 

@@ -53,7 +53,10 @@ async def _get_oauth_credentials_from_db():
             if not sys_settings or not sys_settings.gdrive_config:
                 return None
 
-            cfg = sys_settings.gdrive_config
+            from app.core.credential_store import credential_store, SENSITIVE_KEYS
+            cfg = credential_store.decrypt_config(
+                sys_settings.gdrive_config, SENSITIVE_KEYS.get("gdrive_config", [])
+            )
             access_token = cfg.get("access_token")
             refresh_token = cfg.get("refresh_token")
 
@@ -78,7 +81,9 @@ async def _get_oauth_credentials_from_db():
                             access_token = data["access_token"]
                             cfg["access_token"] = access_token
                             cfg["expires_at"] = time.time() + data.get("expires_in", 3600)
-                            sys_settings.gdrive_config = cfg
+                            sys_settings.gdrive_config = credential_store.encrypt_config(
+                                cfg, SENSITIVE_KEYS.get("gdrive_config", [])
+                            )
                             await session.commit()
 
             if access_token:

@@ -329,6 +329,17 @@ async def test_integration(
     if not integration_id:
         raise HTTPException(status_code=400, detail="Se requiere integration_id")
 
+    # Whitelist of allowed integrations — prevents arbitrary attribute access
+    ALLOWED_INTEGRATIONS = {
+        'email', 'gmail_oauth', 'gdrive', 'gcalendar', 'google_forms',
+        'notion', 'hubspot', 'telegram', 'slack', 'whatsapp', 'teams',
+        'apollo', 'hunter', 'resend', 'n8n', 'stripe', 'pandadoc',
+        'calendly', 'linkedin', 'clearbit', 'posthog', 'general',
+        'airtable', 'brevo', 'mailchimp', 'sendgrid', 'mailgun',
+    }
+    if integration_id not in ALLOWED_INTEGRATIONS:
+        raise HTTPException(status_code=400, detail=f"Integración no permitida: {integration_id}")
+
     # Get config from DB and merge with provided config
     settings = await _get_or_create_settings(db)
     config_field = f"{integration_id}_config"
@@ -621,7 +632,8 @@ async def google_oauth_callback(
             if user_resp.status_code == 200:
                 email = user_resp.json().get("email", "")
 
-    # Save tokens to DB
+    # Save tokens to DB — cifrados at-rest (Fernet via credential_store)
+    from app.core.credential_store import credential_store, SENSITIVE_KEYS
     updated_config = {
         **gmail_cfg,
         "access_token": access_token,
@@ -632,6 +644,9 @@ async def google_oauth_callback(
     if refresh_token:
         updated_config["refresh_token"] = refresh_token
 
+    updated_config = credential_store.encrypt_config(
+        updated_config, SENSITIVE_KEYS.get("gmail_oauth_config", [])
+    )
     settings_row.gmail_oauth_config = updated_config
     await db.commit()
 
@@ -661,8 +676,12 @@ async def google_oauth_disconnect(
     settings_row = await _get_or_create_settings(db)
     gmail_cfg = settings_row.gmail_oauth_config or {}
 
-    # Revoke token if we have one
-    access_token = gmail_cfg.get("access_token")
+    # Revoke token if we have one — descifrar antes de revocar
+    from app.core.credential_store import credential_store, SENSITIVE_KEYS
+    decrypted_cfg = credential_store.decrypt_config(
+        gmail_cfg, SENSITIVE_KEYS.get("gmail_oauth_config", [])
+    )
+    access_token = decrypted_cfg.get("access_token")
     if access_token:
         import httpx
         try:
@@ -674,13 +693,16 @@ async def google_oauth_disconnect(
         except Exception:
             pass  # Best effort revocation
 
-    # Clear tokens but keep client_id/secret config
-    settings_row.gmail_oauth_config = {
-        "client_id": gmail_cfg.get("client_id", ""),
-        "client_secret": gmail_cfg.get("client_secret", ""),
-        "redirect_uri": gmail_cfg.get("redirect_uri", ""),
+    # Clear tokens but keep client_id/secret config (client_secret re-cifrado)
+    cleared = {
+        "client_id": decrypted_cfg.get("client_id", ""),
+        "client_secret": decrypted_cfg.get("client_secret", ""),
+        "redirect_uri": decrypted_cfg.get("redirect_uri", ""),
         "connected": False,
     }
+    settings_row.gmail_oauth_config = credential_store.encrypt_config(
+        cleared, SENSITIVE_KEYS.get("gmail_oauth_config", [])
+    )
     await db.commit()
 
     return {"success": True, "message": "Gmail OAuth2 desconectado"}
@@ -890,6 +912,10 @@ async def generic_oauth_callback(
     if refresh_token:
         updated_config["refresh_token"] = refresh_token
 
+    # Cifrar tokens at-rest antes de persistir
+    from app.core.credential_store import credential_store, SENSITIVE_KEYS
+    sensitive = SENSITIVE_KEYS.get(provider_cfg["config_attr"], ["access_token", "refresh_token", "client_secret"])
+    updated_config = credential_store.encrypt_config(updated_config, sensitive)
     setattr(settings_row, provider_cfg["config_attr"], updated_config)
     await db.commit()
 
@@ -928,7 +954,10 @@ async def generic_oauth_disconnect(
     settings_row = await _get_or_create_settings(db)
     cfg = getattr(settings_row, provider_cfg["config_attr"]) or {}
 
-    access_token = cfg.get("access_token")
+    from app.core.credential_store import credential_store, SENSITIVE_KEYS
+    sensitive = SENSITIVE_KEYS.get(provider_cfg["config_attr"], ["access_token", "refresh_token", "client_secret"])
+    decrypted_cfg = credential_store.decrypt_config(cfg, sensitive)
+    access_token = decrypted_cfg.get("access_token")
     if access_token:
         import httpx
         try:
@@ -940,12 +969,13 @@ async def generic_oauth_disconnect(
         except Exception:
             pass
 
-    setattr(settings_row, provider_cfg["config_attr"], {
-        "client_id": cfg.get("client_id", ""),
-        "client_secret": cfg.get("client_secret", ""),
-        "redirect_uri": cfg.get("redirect_uri", ""),
+    cleared = {
+        "client_id": decrypted_cfg.get("client_id", ""),
+        "client_secret": decrypted_cfg.get("client_secret", ""),
+        "redirect_uri": decrypted_cfg.get("redirect_uri", ""),
         "connected": False,
-    })
+    }
+    setattr(settings_row, provider_cfg["config_attr"], credential_store.encrypt_config(cleared, sensitive))
     await db.commit()
 
     return {"success": True, "message": f"{provider_cfg['name']} OAuth2 desconectado"}
@@ -1075,12 +1105,16 @@ async def _linkedin_oauth_callback(code: str, state: str, db: AsyncSession):
                 data = profile_resp.json()
                 name = f"{data.get('localizedFirstName', '')} {data.get('localizedLastName', '')}".strip()
 
-    settings_row.linkedin_config = {
+    from app.core.credential_store import credential_store, SENSITIVE_KEYS
+    linkedin_cfg_new = {
         **cfg,
         "access_token": access_token,
         "name": name,
         "connected": True,
     }
+    settings_row.linkedin_config = credential_store.encrypt_config(
+        linkedin_cfg_new, SENSITIVE_KEYS.get("linkedin_config", [])
+    )
     await db.commit()
 
     from app.core.config import settings as app_settings
@@ -1103,12 +1137,16 @@ async def _linkedin_oauth_disconnect(db: AsyncSession, current_user: dict):
     settings_row = await _get_or_create_settings(db)
     cfg = settings_row.linkedin_config or {}
 
-    settings_row.linkedin_config = {
-        "client_id": cfg.get("client_id", ""),
-        "client_secret": cfg.get("client_secret", ""),
-        "redirect_uri": cfg.get("redirect_uri", ""),
+    from app.core.credential_store import credential_store, SENSITIVE_KEYS
+    sensitive = SENSITIVE_KEYS.get("linkedin_config", [])
+    decrypted_cfg = credential_store.decrypt_config(cfg, sensitive)
+    cleared = {
+        "client_id": decrypted_cfg.get("client_id", ""),
+        "client_secret": decrypted_cfg.get("client_secret", ""),
+        "redirect_uri": decrypted_cfg.get("redirect_uri", ""),
         "connected": False,
     }
+    settings_row.linkedin_config = credential_store.encrypt_config(cleared, sensitive)
     await db.commit()
 
     return {"success": True, "message": "LinkedIn OAuth2 desconectado"}

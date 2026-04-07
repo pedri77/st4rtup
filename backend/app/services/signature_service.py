@@ -27,7 +27,10 @@ async def _get_provider_config(db: AsyncSession, provider: str) -> dict:
     config = getattr(sys_settings, config_field, None)
     if not config:
         raise ValueError(f"No hay configuración para {provider}")
-    return config
+    # Decifrar credenciales sensibles si están cifradas at-rest
+    from app.core.credential_store import credential_store, SENSITIVE_KEYS
+    sensitive = SENSITIVE_KEYS.get(config_field, ["access_token", "refresh_token", "client_secret", "api_key", "secret_key"])
+    return credential_store.decrypt_config(config, sensitive)
 
 
 async def _get_offer_with_lead(db: AsyncSession, offer_id: UUID) -> tuple:

@@ -270,11 +270,11 @@ async def score_lead(
         lead.enrichment_data = enrichment
     await db.commit()
 
-    # 8. Audit trail
+    # 8. Audit trail — minimal PII (only IDs, no PII)
     audit_id = await audit_trail.log(
         db=db, agent_id="AGENT-LEAD-001",
         model=llm_result.get("model", "unknown"),
-        input_data={"lead_id": str(lead_id), "company": lead.company_name},
+        input_data={"lead_id": str(lead_id)},  # PII removed: company_name no longer logged
         output_data=scoring,
         tokens_in=llm_result.get("tokens_in", 0),
         tokens_out=llm_result.get("tokens_out", 0),

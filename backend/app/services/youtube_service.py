@@ -31,9 +31,14 @@ async def _get_access_token() -> Optional[str]:
                 return None
 
             # Try youtube_config first, fallback to gdrive_config (same OAuth)
-            cfg = sys_settings.youtube_config or sys_settings.gdrive_config
-            if not cfg:
+            from app.core.credential_store import credential_store, SENSITIVE_KEYS
+            source = "youtube_config" if sys_settings.youtube_config else "gdrive_config"
+            raw_cfg = sys_settings.youtube_config or sys_settings.gdrive_config
+            if not raw_cfg:
                 return None
+            cfg = credential_store.decrypt_config(
+                raw_cfg, SENSITIVE_KEYS.get(source, ["access_token", "refresh_token", "client_secret"])
+            )
 
             access_token = cfg.get("access_token")
             refresh_token = cfg.get("refresh_token")
@@ -57,11 +62,13 @@ async def _get_access_token() -> Optional[str]:
                             access_token = data["access_token"]
                             cfg["access_token"] = access_token
                             cfg["expires_at"] = time.time() + data.get("expires_in", 3600)
-                            # Save back to whichever config we loaded from
+                            # Save back to whichever config we loaded from — re-cifrado
+                            sensitive = SENSITIVE_KEYS.get(source, ["access_token", "refresh_token", "client_secret"])
+                            encrypted_cfg = credential_store.encrypt_config(cfg, sensitive)
                             if sys_settings.youtube_config:
-                                sys_settings.youtube_config = cfg
+                                sys_settings.youtube_config = encrypted_cfg
                             else:
-                                sys_settings.gdrive_config = cfg
+                                sys_settings.gdrive_config = encrypted_cfg
                             await session.commit()
 
             return access_token

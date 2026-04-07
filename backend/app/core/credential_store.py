@@ -128,4 +128,11 @@ SENSITIVE_KEYS = {
     "gdrive_config": ["access_token", "refresh_token", "client_secret"],
     "gcalendar_config": ["access_token", "refresh_token", "client_secret"],
     "google_forms_config": ["access_token", "refresh_token", "client_secret"],
+    # Added for MEDIUM security fix — OAuth tokens at rest
+    "gmail_oauth_config": ["access_token", "refresh_token", "client_secret"],
+    "gsc_config": ["access_token", "refresh_token", "client_secret"],
+    "linkedin_config": ["access_token", "refresh_token", "client_secret"],
+    "youtube_config": ["access_token", "refresh_token", "client_secret"],
+    "docusign_config": ["access_token", "refresh_token", "integration_key", "secret_key"],
+    "yousign_config": ["api_key", "access_token"],
 }
