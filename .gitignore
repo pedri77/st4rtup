@@ -37,3 +37,7 @@ frontend/dist/
 
 # Blog image prompts (local only)
 content/blog/IMAGE_PROMPTS.md
+
+# Local test virtualenv (never commit)
+backend/.venv_test/
+backend/venv/
