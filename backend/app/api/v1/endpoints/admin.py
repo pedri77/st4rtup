@@ -332,16 +332,19 @@ async def impersonate_login(
     Uses the existing session to create an admin-scoped redirect token.
     The frontend opens the app as that org's admin.
     """
-    # Find the admin member of this org
+    # Find an admin/owner member of this org. Owner is the highest role and
+    # is also impersonatable; some orgs only have an owner (no separate admin)
+    # and would otherwise be unreachable.
     result = await db.execute(
         select(OrgMember, User)
         .join(User, User.id == OrgMember.user_id)
-        .where(OrgMember.org_id == org_id, OrgMember.role == "admin")
+        .where(OrgMember.org_id == org_id, OrgMember.role.in_(("admin", "owner")))
+        .order_by(OrgMember.role.asc())  # admin before owner alphabetically
         .limit(1)
     )
     row = result.first()
     if not row:
-        raise HTTPException(404, "No admin user found for this org")
+        raise HTTPException(404, "No admin or owner user found for this org")
 
     member, user = row
     from app.core.security import create_access_token
