@@ -288,6 +288,10 @@ class Settings(BaseSettings):
     SENTRY_DSN: str = ""  # Leave empty to disable
     SENTRY_TRACES_SAMPLE_RATE: float = 0.05  # 5% of transactions
 
+    # Backup encryption — used by ops/backup.sh, not by the Python app,
+    # but declared here so Pydantic (extra=forbid) doesn't reject the .env
+    BACKUP_GPG_PASSPHRASE: str = ""
+
     # Integrations - Facturación y Post-venta
     STRIPE_SECRET_KEY: str = ""
     STRIPE_WEBHOOK_SECRET: str = ""

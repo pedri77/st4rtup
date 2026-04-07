@@ -546,7 +546,7 @@ async def run_ld02_sync_external():
     """LD-02: Sync Apollo.io — every 4h
     Busca prospectos en Apollo (España, >50 empleados, sectores clave) → deduplica por company_name → crea leads nuevos.
     """
-    from app.services.apollo_service import apollo_service
+    from app.services import apollo_service
     from app.models import Lead
     if not apollo_service.is_configured():
         return
@@ -600,7 +600,7 @@ async def run_ld03_enrichment():
     Leads sin sector/datos mínimos → apollo_service.enrich_lead() para obtener sector, tamaño, contactos.
     Fallback: marca como 'Por clasificar' si Apollo no está configurado.
     """
-    from app.services.apollo_service import apollo_service
+    from app.services import apollo_service
     from app.models import Lead
     try:
         async with AsyncSessionLocal() as db:
@@ -676,7 +676,7 @@ async def run_vi03_calendar_sync():
     """VI-03: Google Calendar sync — every 30 min
     Bidireccional: visitas sin evento GCal → crear evento. Eventos GCal sin visita → crear visita.
     """
-    from app.services.gcalendar_service import gcalendar_service
+    from app.services import gcalendar_service
     from app.models.crm import Visit
     from app.models import Lead
     try:
@@ -849,7 +849,7 @@ async def run_rs054b_brevo_nurturing():
     """RS-054b: Brevo nurturing — diario 07:00
     Leads con score < 40 y sin nurturing activo → añadir a lista Brevo para nurturing automático.
     """
-    from app.services.brevo_service import brevo_service
+    from app.services import brevo_service
     from app.models import Lead
     try:
         async with AsyncSessionLocal() as db:
@@ -885,7 +885,7 @@ async def run_rs054c_brevo_reactivation():
     """RS-054c: Brevo reactivation check — diario 10:30
     Leads dormant en Brevo → check si han abierto emails recientemente → reactivar en CRM.
     """
-    from app.services.brevo_service import brevo_service
+    from app.services import brevo_service
     from app.models import Lead, LeadStatus
     from app.models.notification import Notification
     try:
@@ -918,7 +918,7 @@ async def run_rs093_lemlist_sync():
     """RS-093: Lemlist activity sync — diario 12:00
     Sincroniza actividad de campañas Lemlist → actualiza score de leads según opens/clicks/replies.
     """
-    from app.services.lemlist_service import lemlist_service
+    from app.services import lemlist_service
     from app.models import Lead
     try:
         async with AsyncSessionLocal() as db:
