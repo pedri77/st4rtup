@@ -23,19 +23,33 @@ export default class ErrorBoundary extends Component {
       return
     }
     // Best-effort error reporting to backend (silent — never throws)
+    // Sanitizes PII and removes auth tokens from URL before sending
     try {
       const apiUrl = import.meta.env.VITE_API_URL || ''
-      if (apiUrl && navigator.sendBeacon) {
-        const payload = JSON.stringify({
-          message: error?.message || 'Unknown',
-          stack: (error?.stack || '').slice(0, 2000),
-          component_stack: (info?.componentStack || '').slice(0, 1000),
-          url: window.location.href,
-          ua: navigator.userAgent,
-          ts: new Date().toISOString(),
-        })
-        navigator.sendBeacon(`${apiUrl}/audit/client-error`, new Blob([payload], { type: 'application/json' }))
+      if (!apiUrl || !navigator.sendBeacon) return
+
+      // Strip sensitive query params from URL
+      const url = new URL(window.location.href)
+      for (const k of ['token', 'access_token', 'refresh_token', 'impersonate_token', 'key', 'code', 'api_key']) {
+        url.searchParams.delete(k)
       }
+      const safeUrl = url.pathname + url.search
+
+      // Redact common PII patterns from text
+      const redact = (s) => (s || '')
+        .replace(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '[uuid]')
+        .replace(/[\w.+-]+@[\w-]+\.[\w.-]+/g, '[email]')
+        .replace(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g, '[ip]')
+
+      const payload = JSON.stringify({
+        message: redact(error?.message || 'Unknown').slice(0, 500),
+        stack: redact(error?.stack || '').slice(0, 2000),
+        component_stack: redact(info?.componentStack || '').slice(0, 1000),
+        url: safeUrl,
+        ua: navigator.userAgent,
+        ts: new Date().toISOString(),
+      })
+      navigator.sendBeacon(`${apiUrl}/audit/client-error`, new Blob([payload], { type: 'application/json' }))
     } catch {}
   }
 

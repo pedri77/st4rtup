@@ -474,6 +474,15 @@ function EmailProviderTab({ settings, onSave, saving, isAdmin }) {
     if (selectedProvider === 'gmail_oauth') checkOAuthStatus()
     const params = new URLSearchParams(window.location.search)
     if (params.get('oauth') === 'success') {
+      // CSRF protection: verify state matches what we stored before the OAuth redirect
+      const returnedState = params.get('state')
+      const expectedState = sessionStorage.getItem('oauth_state')
+      sessionStorage.removeItem('oauth_state')
+      if (!expectedState || returnedState !== expectedState) {
+        toast.error('OAuth state inválido — posible ataque CSRF detectado')
+        window.history.replaceState({}, '', window.location.pathname)
+        return
+      }
       setSelectedProvider('gmail_oauth'); checkOAuthStatus()
       toast.success('Gmail OAuth2 conectado correctamente')
       window.history.replaceState({}, '', window.location.pathname)

@@ -192,15 +192,26 @@ async def score_lead(
     user_template = await prompt_registry.get_prompt("AGENT-LEAD-001", "user_template", db)
 
     # 4. Format user prompt with lead data
+    # GDPR/ENS Alto: anonymize PII when sending to external LLMs.
+    # Personal contact data (name, email) is replaced with role/initials —
+    # the LLM only needs business context (sector, size, role) to score.
+    use_external_llm = bool(getattr(settings, "OPENAI_API_KEY", None) or getattr(settings, "ANTHROPIC_API_KEY", None))
+    if use_external_llm:
+        contact_name_for_llm = "[Contact]"
+        contact_email_for_llm = "[redacted-email]"
+    else:
+        contact_name_for_llm = lead.contact_name or "Desconocido"
+        contact_email_for_llm = lead.contact_email or "No disponible"
+
     user_prompt = user_template.format(
         company_name=lead.company_name or "Desconocida",
         sector=lead.company_sector or "No especificado",
         company_size=lead.company_size or "Desconocido",
         country=lead.company_country or "España",
         city=lead.company_city or "No especificada",
-        contact_name=lead.contact_name or "Desconocido",
+        contact_name=contact_name_for_llm,
         contact_title=lead.contact_title or "No especificado",
-        contact_email=lead.contact_email or "No disponible",
+        contact_email=contact_email_for_llm,
         source=lead.source or "No especificada",
         website=lead.company_website or "No disponible",
         revenue=lead.company_revenue or "No disponible",

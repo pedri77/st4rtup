@@ -16,7 +16,7 @@ def _get_client_ip(request: Request) -> str:
 limiter = Limiter(key_func=_get_client_ip, default_limits=["120/minute"])
 
 # Rate limit presets for different endpoint types
-RATE_AUTH = "10/minute"       # Auth-related (login, token refresh)
+RATE_AUTH = "5/minute"        # Auth-related (login, token refresh) — strict to prevent brute-force
 RATE_WRITE = "30/minute"      # Create/Update/Delete operations
 RATE_READ = "120/minute"      # Read/List operations
 RATE_WEBHOOK = "60/minute"    # Webhook endpoints

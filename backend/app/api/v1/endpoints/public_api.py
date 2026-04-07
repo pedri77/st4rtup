@@ -18,21 +18,35 @@ from app.schemas import LeadResponse, PaginatedResponse
 router = APIRouter()
 
 
-async def verify_api_key(x_api_key: str = Header(None)):
-    """Verifica API key para acceso publico (comparacion en tiempo constante)."""
-    import hashlib
+async def verify_api_key_and_org(x_api_key: str = Header(None)) -> dict:
+    """Verifica API key y devuelve la org_id asociada.
+
+    Format esperado en PUBLIC_API_KEYS: "org_uuid:key,org_uuid:key,..."
+    Esto evita el cross-tenant leak: cada API key está vinculada a una organización.
+    """
     import hmac
     from app.core.config import settings
+
     if not x_api_key:
         raise HTTPException(status_code=401, detail="Missing API key")
-    valid_keys = [k.strip() for k in getattr(settings, "PUBLIC_API_KEYS", "").split(",") if k.strip()]
-    if not valid_keys:
+
+    raw = getattr(settings, "PUBLIC_API_KEYS", "") or ""
+    if not raw:
         raise HTTPException(status_code=503, detail="Public API not configured")
-    # Constant-time comparison to prevent timing attacks
-    for valid_key in valid_keys:
-        if hmac.compare_digest(x_api_key, valid_key):
-            return x_api_key
+
+    for entry in raw.split(","):
+        entry = entry.strip()
+        if not entry or ":" not in entry:
+            continue
+        org_id, key = entry.split(":", 1)
+        if hmac.compare_digest(x_api_key, key.strip()):
+            return {"api_key": x_api_key, "org_id": org_id.strip()}
+
     raise HTTPException(status_code=401, detail="Invalid API key")
+
+
+# Backwards-compat alias for any other endpoints that might import the old name
+verify_api_key = verify_api_key_and_org
 
 
 # ─── Leads (read-only) ──────────────────────────────────────────
@@ -45,14 +59,15 @@ async def public_list_leads(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
-    api_key: str = Depends(verify_api_key),
+    auth: dict = Depends(verify_api_key_and_org),
 ):
     """Lista leads (API publica, read-only).
 
     **Auth:** Header `X-API-Key`
     **Paginacion:** `?page=1&page_size=20`
+    Solo devuelve leads de la organización asociada a la API key.
     """
-    q = select(Lead)
+    q = select(Lead).where(Lead.org_id == UUID(auth["org_id"]))
     if status:
         q = q.where(Lead.status == status)
     total = await db.scalar(select(func.count()).select_from(q.subquery())) or 0
@@ -84,10 +99,12 @@ async def public_list_leads(
 async def public_get_lead(
     lead_id: UUID,
     db: AsyncSession = Depends(get_db),
-    api_key: str = Depends(verify_api_key),
+    auth: dict = Depends(verify_api_key_and_org),
 ):
-    """Obtiene un lead por ID (API publica)."""
-    result = await db.execute(select(Lead).where(Lead.id == lead_id))
+    """Obtiene un lead por ID (API publica). Solo si pertenece a la org."""
+    result = await db.execute(
+        select(Lead).where(Lead.id == lead_id, Lead.org_id == UUID(auth["org_id"]))
+    )
     lead = result.scalar_one_or_none()
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
@@ -118,15 +135,16 @@ async def public_create_lead(
     contact_phone: Optional[str] = None,
     source: str = "api",
     db: AsyncSession = Depends(get_db),
-    api_key: str = Depends(verify_api_key),
+    auth: dict = Depends(verify_api_key_and_org),
 ):
-    """Crea un lead via API publica.
+    """Crea un lead via API publica. Asignado a la org de la API key.
 
     **Auth:** Header `X-API-Key`
     **Campos requeridos:** `company_name`
     """
     from app.models.enums import LeadSource
     lead = Lead(
+        org_id=UUID(auth["org_id"]),
         company_name=company_name,
         contact_email=contact_email,
         contact_name=contact_name,
@@ -146,13 +164,18 @@ async def public_create_lead(
 @router.get("/pipeline/summary")
 async def public_pipeline_summary(
     db: AsyncSession = Depends(get_db),
-    api_key: str = Depends(verify_api_key),
+    auth: dict = Depends(verify_api_key_and_org),
 ):
-    """Resumen del pipeline (API publica)."""
+    """Resumen del pipeline (API publica). Solo de la org de la API key."""
     from app.models.enums import OpportunityStage
+    org_uuid = UUID(auth["org_id"])
 
-    total = await db.scalar(select(func.count(Opportunity.id))) or 0
-    total_value = await db.scalar(select(func.coalesce(func.sum(Opportunity.value), 0))) or 0
+    total = await db.scalar(
+        select(func.count(Opportunity.id)).where(Opportunity.org_id == org_uuid)
+    ) or 0
+    total_value = await db.scalar(
+        select(func.coalesce(func.sum(Opportunity.value), 0)).where(Opportunity.org_id == org_uuid)
+    ) or 0
 
     return {
         "total_opportunities": total,

@@ -327,3 +327,30 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+# ─── Security validation at startup ────────────────────────
+def _validate_security_settings():
+    """Block startup with insecure config in production."""
+    if settings.APP_ENV == "production":
+        # SECRET_KEY must be strong
+        if len(settings.SECRET_KEY) < 32:
+            raise RuntimeError(
+                "FATAL: SECRET_KEY must be at least 32 chars in production. "
+                "Generate with: python -c \"import secrets; print(secrets.token_urlsafe(64))\""
+            )
+        if "dev-secret" in settings.SECRET_KEY.lower() or "change" in settings.SECRET_KEY.lower():
+            raise RuntimeError(
+                "FATAL: SECRET_KEY appears to be a placeholder. "
+                "Generate a proper key with: python -c \"import secrets; print(secrets.token_urlsafe(64))\""
+            )
+        # DEBUG must be False
+        if settings.DEBUG:
+            raise RuntimeError("FATAL: DEBUG=True is not allowed in production")
+        # CORS must not include localhost
+        cors = getattr(settings, "BACKEND_CORS_ORIGINS", []) or []
+        if any("localhost" in str(o) or "127.0.0.1" in str(o) for o in cors):
+            raise RuntimeError("FATAL: CORS origins must not include localhost in production")
+
+
+_validate_security_settings()

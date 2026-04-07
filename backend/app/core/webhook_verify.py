@@ -13,7 +13,12 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-_is_dev = getattr(settings, "DEBUG", False)
+# Only allow unsigned webhooks if BOTH DEBUG=True AND env is local development
+# This prevents accidentally bypassing signature verification in staging/production
+_is_local_dev = (
+    getattr(settings, "DEBUG", False)
+    and getattr(settings, "APP_ENV", "production").lower() in ("development", "dev", "local")
+)
 
 
 async def verify_webhook_signature(request: Request, provider: str) -> bytes:
@@ -41,7 +46,7 @@ def _verify_stripe(request: Request, body: bytes) -> bytes:
     """Verify Stripe webhook using their signature scheme."""
     secret = settings.STRIPE_WEBHOOK_SECRET
     if not secret:
-        if _is_dev:
+        if _is_local_dev:
             logger.warning("DEV MODE: Stripe webhook without secret — allowing unsigned request")
             return body
         raise HTTPException(status_code=503, detail="Stripe webhook secret not configured")
@@ -75,7 +80,7 @@ def _verify_hmac(
 ) -> bytes:
     """Generic HMAC verification. Rejects in production if secret is missing."""
     if not secret:
-        if _is_dev:
+        if _is_local_dev:
             logger.warning(f"DEV MODE: Webhook for {header_name} without secret — allowing unsigned request")
             return body
         logger.error(f"PRODUCTION: Webhook for {header_name} rejected — signing secret not configured")

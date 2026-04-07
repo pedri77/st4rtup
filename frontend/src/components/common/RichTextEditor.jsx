@@ -38,13 +38,13 @@ export default function RichTextEditor({ value = '', onChange, placeholder = 'Es
       document.execCommand(cmd, false, null)
     }
     if (editorRef.current && onChange) {
-      onChange(editorRef.current.innerHTML)
+      onChange(DOMPurify.sanitize(editorRef.current.innerHTML))
     }
   }, [onChange])
 
   const handleInput = useCallback(() => {
     if (editorRef.current && onChange) {
-      onChange(editorRef.current.innerHTML)
+      onChange(DOMPurify.sanitize(editorRef.current.innerHTML))
     }
   }, [onChange])
 

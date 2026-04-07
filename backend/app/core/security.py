@@ -50,12 +50,14 @@ async def get_current_user(
 
     try:
         # Check if it's an n8n/service API key (bypass Supabase auth)
+        # Constant-time comparison + service role (NOT admin)
+        import hmac as _hmac
         n8n_api_key = getattr(settings, "N8N_API_KEY", "")
-        if n8n_api_key and token == n8n_api_key:
+        if n8n_api_key and _hmac.compare_digest(token, n8n_api_key):
             return {
                 "user_id": "00000000-0000-0000-0000-000000000000",
                 "email": "n8n@st4rtup.app",
-                "role": "admin",
+                "role": "service",  # NOT admin — service can only call workflow endpoints
                 "user_metadata": {"service": "n8n"},
             }
 

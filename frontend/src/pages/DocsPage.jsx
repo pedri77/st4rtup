@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import DOMPurify from 'dompurify'
 import {
   BookOpen, Search, Printer, ChevronRight, ChevronDown,
   Target, BarChart3, Megaphone, BrainCircuit, Phone, Plug, Shield,
@@ -1176,8 +1177,14 @@ function renderMarkdown(md) {
     .replace(/## (.*)/g, `<h2 style="font-size:18px;font-weight:700;margin:28px 0 12px;color:${T.fg};font-family:${fontDisplay};padding-bottom:8px;border-bottom:1px solid ${T.border}">$1</h2>`)
     // Bold
     .replace(/\*\*(.*?)\*\*/g, `<strong style="color:${T.fg};font-weight:600">$1</strong>`)
-    // Links
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, `<a href="$2" target="_blank" rel="noopener" style="color:${T.cyan};text-decoration:none;border-bottom:1px dashed ${T.cyan}40">$1</a>`)
+    // Links — only allow http(s) and relative URLs (block javascript:, data:, etc.)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
+      const safe = /^(https?:|\/)/i.test(url.trim())
+      if (!safe) return text  // strip unsafe URLs entirely
+      const isExternal = /^https?:/i.test(url.trim())
+      const attrs = isExternal ? ' target="_blank" rel="noopener noreferrer"' : ''
+      return `<a href="${url}"${attrs} style="color:${T.cyan};text-decoration:none;border-bottom:1px dashed ${T.cyan}40">${text}</a>`
+    })
     // Lists
     .replace(/^(\d+)\. (.*)/gm, `<li style="margin:4px 0;padding-left:4px;color:${T.fgMuted};font-size:13px;list-style-type:decimal">$2</li>`)
     .replace(/^- (.*)/gm, `<li style="margin:3px 0;padding-left:4px;color:${T.fgMuted};font-size:13px">$1</li>`)
@@ -1197,9 +1204,15 @@ function renderMarkdown(md) {
 // ─── Copy button for code blocks ────────────────────────────────────
 
 function ContentRenderer({ html }) {
+  // Sanitize HTML to prevent XSS — allow only safe markdown-generated tags
+  const clean = DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'p', 'br', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'code', 'pre', 'blockquote', 'span', 'div'],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'style', 'class'],
+    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto):|\/|#)/i,
+  })
   return (
     <div
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: clean }}
       style={{ fontSize: 13, lineHeight: 1.75, color: '#475569' }}
     />
   )

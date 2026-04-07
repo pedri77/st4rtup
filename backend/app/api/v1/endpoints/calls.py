@@ -77,9 +77,15 @@ async def get_prompt(
     prompt_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
-    """Obtiene un prompt por ID."""
-    result = await db.execute(select(CallPrompt).where(CallPrompt.id == prompt_id))
+    """Obtiene un prompt por ID. Solo si pertenece a la org del usuario."""
+    result = await db.execute(
+        select(CallPrompt).where(
+            CallPrompt.id == prompt_id,
+            or_(CallPrompt.org_id == org_id, CallPrompt.org_id.is_(None)),
+        )
+    )
     prompt = result.scalar_one_or_none()
     if not prompt:
         raise HTTPException(status_code=404, detail="Prompt no encontrado")
@@ -431,9 +437,15 @@ async def get_call(
     call_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
-    """Obtiene detalle de una llamada."""
-    result = await db.execute(select(CallRecord).where(CallRecord.id == call_id))
+    """Obtiene detalle de una llamada. Solo si pertenece a la org del usuario."""
+    result = await db.execute(
+        select(CallRecord).where(
+            CallRecord.id == call_id,
+            or_(CallRecord.org_id == org_id, CallRecord.org_id.is_(None)),
+        )
+    )
     call = result.scalar_one_or_none()
     if not call:
         raise HTTPException(status_code=404, detail="Llamada no encontrada")
