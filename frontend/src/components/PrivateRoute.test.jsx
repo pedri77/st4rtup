@@ -12,11 +12,13 @@ vi.mock('@/contexts/AuthContext', () => ({
 
 const mockSetSession = vi.fn()
 const mockGetSession = vi.fn()
+const mockSignOut = vi.fn(() => Promise.resolve({ error: null }))
 vi.mock('@/lib/supabase', () => ({
   supabase: {
     auth: {
       getSession: () => mockGetSession(),
       setSession: (...args) => mockSetSession(...args),
+      signOut: (...args) => mockSignOut(...args),
     },
   },
 }))

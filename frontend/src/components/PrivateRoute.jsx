@@ -14,12 +14,17 @@ export default function PrivateRoute({ children }) {
     return localStorage.getItem('st4rtup_onboarding_done') === 'true' ? true : null
   })
 
-  // Handle impersonation token from admin
+  // Handle impersonation token from admin.
   // SECURITY: clean URL FIRST to prevent token leak via referer/history,
-  // then exchange token via backend (validates signature + audit log)
+  // then exchange token via backend (validates signature + audit log).
+  //
+  // We do NOT gate on `user` being null because impersonate is opened in
+  // a new tab from the admin's session — supabase shares localStorage
+  // across tabs of the same origin, so the admin's session leaks in.
+  // The exchanged token MUST replace whatever session is already present.
   useEffect(() => {
     const token = searchParams.get('impersonate_token')
-    if (!token || user) return
+    if (!token) return
 
     // 1. Clean URL immediately so the token is gone from the address bar
     searchParams.delete('impersonate_token')
@@ -27,7 +32,11 @@ export default function PrivateRoute({ children }) {
 
     setImpersonating(true)
 
-    // 2. Exchange token with backend (verifies signature, expiry, and logs the action)
+    // 2. Sign out any existing session first so we don't keep the
+    //    admin's tokens around in this tab.
+    supabase.auth.signOut({ scope: 'local' }).catch(() => {})
+
+    // 3. Exchange token with backend (verifies signature, expiry, audit log)
     fetch(`${import.meta.env.VITE_API_URL || ''}/auth/verify-impersonate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -38,11 +47,16 @@ export default function PrivateRoute({ children }) {
         if (!access_token) throw new Error('No session returned')
         return supabase.auth.setSession({ access_token, refresh_token: refresh_token || '' })
       })
+      .then(() => {
+        // Force a hard reload so AuthContext picks up the new session cleanly
+        // and PrivateRoute re-runs the onboarding check against the new user.
+        window.location.reload()
+      })
       .catch((err) => {
         console.error('Impersonation failed:', err)
+        setImpersonating(false)
       })
-      .finally(() => setImpersonating(false))
-  }, [searchParams, user, setSearchParams])
+  }, [searchParams, setSearchParams])
 
   // Check backend onboarding state on first mount (only if not cached locally)
   useEffect(() => {
