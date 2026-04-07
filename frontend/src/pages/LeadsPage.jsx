@@ -339,7 +339,7 @@ export default function LeadsPage() {
                     }}
                     onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = `${T.cyan}06`; e.currentTarget.style.boxShadow = `inset 3px 0 0 ${T.cyan}` }}
                     onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = idx % 2 === 0 ? T.bg : T.card; e.currentTarget.style.boxShadow = 'none' }}
-                    onClick={() => navigate(`/leads/${lead.id}`)}>
+                    onClick={() => navigate(`/app/leads/${lead.id}`)}>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold"

@@ -52,7 +52,7 @@ export default function ABMAccountPage() {
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen space-y-6" style={{ backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-      <Breadcrumbs items={[{ label: 'Leads', href: '/leads' }, { label: lead.company_name || 'Cuenta' }]} />
+      <Breadcrumbs items={[{ label: 'Leads', href: '/app/leads' }, { label: lead.company_name || 'Cuenta' }]} />
 
       {/* Header */}
       <div className="flex items-start justify-between">

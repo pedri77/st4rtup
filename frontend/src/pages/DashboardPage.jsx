@@ -419,12 +419,12 @@ export default function DashboardPage() {
         <span className="text-xs uppercase tracking-[0.15em] px-2" style={{ fontFamily: fontDisplay, color: T.fgMuted }}>Acciones</span>
         <div className="w-px h-4" style={{ backgroundColor: T.border }} />
         {[
-          { icon: Plus, label: 'Lead', to: '/leads?action=new' },
-          { icon: CalendarCheck, label: 'Visita', to: '/visits?action=new' },
-          { icon: Send, label: 'Email', to: '/emails?action=new' },
-          { icon: GitBranch, label: 'Pipeline', to: '/pipeline' },
-          { icon: Receipt, label: 'Ofertas', to: '/offers' },
-          { icon: Activity, label: 'Informes', to: '/reports' },
+          { icon: Plus, label: 'Lead', to: '/app/leads?action=new' },
+          { icon: CalendarCheck, label: 'Visita', to: '/app/visits?action=new' },
+          { icon: Send, label: 'Email', to: '/app/emails?action=new' },
+          { icon: GitBranch, label: 'Pipeline', to: '/app/pipeline' },
+          { icon: Receipt, label: 'Ofertas', to: '/app/offers' },
+          { icon: Activity, label: 'Informes', to: '/app/reports' },
         ].map(({ icon: Icon, label, to }) => (
           <Link
             key={label}

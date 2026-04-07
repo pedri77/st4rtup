@@ -184,7 +184,7 @@ function App() {
           <Route path="actions" element={<Suspense fallback={<PageLoader />}><ActionsPage /></Suspense>} />
           <Route path="actions/kanban" element={<Suspense fallback={<PageLoader />}><ActionsKanbanPage /></Suspense>} />
           <Route path="customer-health" element={<Suspense fallback={<PageLoader />}><CustomerHealthPage /></Suspense>} />
-          <Route path="social" element={<Navigate to="/marketing/social" replace />} />
+          <Route path="social" element={<Navigate to="/app/marketing/social" replace />} />
           <Route path="marketing/social" element={<Suspense fallback={<PageLoader />}><SocialMediaPage /></Suspense>} />
           <Route path="gtm/funnel" element={<Suspense fallback={<PageLoader />}><PipelineFunnelPage /></Suspense>} />
           <Route path="reviews" element={<Suspense fallback={<PageLoader />}><ReviewsPage /></Suspense>} />
@@ -270,7 +270,7 @@ function App() {
           <Route path="docs" element={<Suspense fallback={<PageLoader />}><DocsPage /></Suspense>} />
           <Route path="billing" element={<Suspense fallback={<PageLoader />}><BillingPage /></Suspense>} />
           <Route path="marketplace" element={<Suspense fallback={<PageLoader />}><MarketplacePage /></Suspense>} />
-          <Route path="content-pipeline" element={<Suspense fallback={<PageLoader />}><Navigate to="/marketing/seo-center" replace /></Suspense>} />
+          <Route path="content-pipeline" element={<Navigate to="/app/marketing/seo-center" replace />} />
         </Route>
       </Routes>
     </AuthProvider>

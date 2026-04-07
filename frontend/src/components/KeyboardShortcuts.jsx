@@ -62,7 +62,7 @@ export default function KeyboardShortcuts() {
     // Ctrl+N → leads
     if (ctrl && !e.shiftKey && e.key === 'n') {
       e.preventDefault()
-      navigate('/leads')
+      navigate('/app/leads')
       return
     }
 
@@ -71,19 +71,19 @@ export default function KeyboardShortcuts() {
       switch (e.key.toUpperCase()) {
         case 'P':
           e.preventDefault()
-          navigate('/pipeline')
+          navigate('/app/pipeline')
           break
         case 'D':
           e.preventDefault()
-          navigate('/')
+          navigate('/app/dashboard')
           break
         case 'M':
           e.preventDefault()
-          navigate('/marketing')
+          navigate('/app/marketing')
           break
         case 'S':
           e.preventDefault()
-          navigate('/marketing/seo-center')
+          navigate('/app/marketing/seo-center')
           break
         default:
           break
