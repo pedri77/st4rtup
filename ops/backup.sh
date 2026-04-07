@@ -10,18 +10,59 @@
 #   monthly: 12 most recent files (~1 year)
 #
 # Encryption: GPG symmetric (AES256) with passphrase from .env
+# Failure alerting: any non-zero exit → Sentry event (via curl to DSN)
 # ─────────────────────────────────────────────────────────────────
 set -u
 
 # Load DB credentials
 source /opt/st4rtup/backup.env
 
-# Load GPG passphrase from the main .env (keeps secrets in one place)
+# Load GPG passphrase and Sentry DSN from the main .env (single source of secrets)
 BACKUP_GPG_PASSPHRASE=$(grep '^BACKUP_GPG_PASSPHRASE=' /opt/st4rtup/.env | cut -d= -f2-)
+SENTRY_DSN=$(grep '^SENTRY_DSN=' /opt/st4rtup/.env | cut -d= -f2-)
+
+# ─── Failure handler: send an event to Sentry via its Store API ───
+# Uses curl so there are no Python dependencies in the backup pipeline.
+_alert_sentry() {
+    local message="$1"
+    if [ -z "${SENTRY_DSN:-}" ]; then
+        return 0
+    fi
+    # Parse https://<key>@o<orgid>.ingest.<region>.sentry.io/<projectid>
+    local key=$(echo "$SENTRY_DSN" | sed -E 's|https://([^@]+)@.*|\1|')
+    local host=$(echo "$SENTRY_DSN" | sed -E 's|https://[^@]+@([^/]+)/.*|\1|')
+    local project=$(echo "$SENTRY_DSN" | sed -E 's|.*/([0-9]+)$|\1|')
+    if [ -z "$key" ] || [ -z "$host" ] || [ -z "$project" ]; then
+        echo "[$(date)] WARN: Could not parse SENTRY_DSN, skipping alert"
+        return 0
+    fi
+    local payload=$(cat <<PAYLOAD
+{
+  "message": "st4rtup backup FAILED: ${message}",
+  "level": "error",
+  "platform": "other",
+  "environment": "production",
+  "tags": {"service": "backup", "component": "ops/backup.sh"}
+}
+PAYLOAD
+)
+    curl -sS --max-time 10 \
+         -X POST "https://${host}/api/${project}/store/" \
+         -H "Content-Type: application/json" \
+         -H "X-Sentry-Auth: Sentry sentry_version=7, sentry_key=${key}, sentry_client=st4rtup-backup/1.0" \
+         -d "$payload" >/dev/null 2>&1 || true
+}
+
+# Trap any UNEXPECTED exit (set -u or unhandled command failures).
+# Explicit error paths below set _ALERTED=1 before `exit` to prevent
+# double-posting to Sentry.
+_ALERTED=0
+trap '_rc=$?; if [ $_rc -ne 0 ] && [ "$_ALERTED" = "0" ]; then _alert_sentry "script exited with code $_rc"; fi' EXIT
 
 if [ -z "${BACKUP_GPG_PASSPHRASE:-}" ]; then
     echo "[$(date)] ERROR: BACKUP_GPG_PASSPHRASE not set in /opt/st4rtup/.env"
-    exit 1
+    _alert_sentry "BACKUP_GPG_PASSPHRASE missing from .env"
+    _ALERTED=1; exit 1
 fi
 
 DATE=$(date +%Y%m%d_%H%M)
@@ -47,7 +88,8 @@ PGPASSWORD=$SUPABASE_DB_PASSWORD pg_dump \
 
 if [ $? -ne 0 ] || [ ! -f "$DUMP_FILE" ]; then
     echo "[$(date)] Backup FAILED at pg_dump stage"
-    exit 2
+    _alert_sentry "pg_dump failed — check Supabase connectivity or credentials"
+    _ALERTED=1; exit 2
 fi
 
 SIZE_RAW=$(du -h "$DUMP_FILE" | cut -f1)
@@ -64,7 +106,8 @@ echo "$BACKUP_GPG_PASSPHRASE" | gpg \
 if [ $? -ne 0 ] || [ ! -f "$ENCRYPTED_FILE" ]; then
     echo "[$(date)] Encryption FAILED"
     rm -f "$DUMP_FILE"
-    exit 3
+    _alert_sentry "GPG encryption failed — check BACKUP_GPG_PASSPHRASE or disk space"
+    _ALERTED=1; exit 3
 fi
 
 # Remove the plaintext dump — we only keep the encrypted version
