@@ -61,6 +61,39 @@ async def get_current_user(
                 "user_metadata": {"service": "n8n"},
             }
 
+        # Try as a local impersonation JWT first (signed with our SECRET_KEY).
+        # These are short-lived tokens issued by /admin/impersonate/{org_id}/login
+        # and exchanged via /auth/verify-impersonate. If decode succeeds AND the
+        # payload has `impersonated_by`, we trust it as the user identity.
+        try:
+            from jose import jwt as _jwt, JWTError as _JWTError
+            payload = _jwt.decode(
+                token,
+                settings.SECRET_KEY,
+                algorithms=[settings.ALGORITHM],
+                options={"verify_aud": False},
+            )
+            if payload.get("impersonated_by") and payload.get("sub"):
+                from app.core.database import AsyncSessionLocal
+                from app.models.models import User as UserModel
+                user_id = payload["sub"]
+                role = "viewer"
+                email = payload.get("email", "")
+                async with AsyncSessionLocal() as db:
+                    db_user = await db.get(UserModel, UUID(user_id))
+                    if db_user:
+                        role = db_user.role.value if hasattr(db_user.role, 'value') else str(db_user.role)
+                        email = db_user.email
+                logger.warning(f"IMPERSONATION request: admin={payload['impersonated_by']} → user={email}")
+                return {
+                    "user_id": user_id,
+                    "email": email,
+                    "role": role,
+                    "user_metadata": {"impersonated_by": payload["impersonated_by"], "org_id": payload.get("org_id")},
+                }
+        except _JWTError:
+            pass  # Not a local JWT, fall through to Supabase
+
         # Validate Supabase JWT token
         user_response = supabase.auth.get_user(token)
 

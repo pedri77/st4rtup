@@ -15,41 +15,42 @@ export default function PrivateRoute({ children }) {
   })
 
   // Handle impersonation token from admin.
-  // SECURITY: clean URL FIRST to prevent token leak via referer/history,
-  // then exchange token via backend (validates signature + audit log).
   //
-  // We do NOT gate on `user` being null because impersonate is opened in
-  // a new tab from the admin's session — supabase shares localStorage
-  // across tabs of the same origin, so the admin's session leaks in.
-  // The exchanged token MUST replace whatever session is already present.
+  // The token is a backend-issued JWT (not a Supabase JWT), so we cannot
+  // use supabase.auth.setSession() — it would reject the signature.
+  // Instead we store the token in localStorage under a known key. The
+  // axios interceptor uses it for backend calls, and AuthContext reads
+  // it on next mount to populate the user state from the JWT claims.
+  //
+  // SECURITY: clean URL FIRST so the token is gone from the address bar
+  // (no leak via referer/history), then exchange via backend audit log,
+  // then persist + reload.
   useEffect(() => {
     const token = searchParams.get('impersonate_token')
     if (!token) return
 
-    // 1. Clean URL immediately so the token is gone from the address bar
+    // 1. Clean URL immediately
     searchParams.delete('impersonate_token')
     setSearchParams(searchParams, { replace: true })
 
     setImpersonating(true)
 
-    // 2. Sign out any existing session first so we don't keep the
-    //    admin's tokens around in this tab.
+    // 2. Sign out the admin's Supabase session in this tab so it doesn't
+    //    interfere with the impersonated session
     supabase.auth.signOut({ scope: 'local' }).catch(() => {})
 
-    // 3. Exchange token with backend (verifies signature, expiry, audit log)
+    // 3. Exchange the token with backend (verifies signature + jti single-use + audit log)
     fetch(`${import.meta.env.VITE_API_URL || ''}/auth/verify-impersonate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token }),
     })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('Invalid impersonation token'))))
-      .then(({ access_token, refresh_token }) => {
-        if (!access_token) throw new Error('No session returned')
-        return supabase.auth.setSession({ access_token, refresh_token: refresh_token || '' })
-      })
-      .then(() => {
-        // Force a hard reload so AuthContext picks up the new session cleanly
-        // and PrivateRoute re-runs the onboarding check against the new user.
+      .then(({ access_token }) => {
+        if (!access_token) throw new Error('No token returned from /verify-impersonate')
+        // 4. Persist the token under our own key (NOT the supabase key)
+        localStorage.setItem('st4rtup_impersonate_token', access_token)
+        // 5. Hard reload so AuthContext re-mounts and reads the new token
         window.location.reload()
       })
       .catch((err) => {

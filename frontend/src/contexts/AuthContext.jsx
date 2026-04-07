@@ -11,13 +11,54 @@ export const useAuth = () => {
   return context
 }
 
+// Decode a JWT payload client-side without verification (used only to read
+// claims from an impersonation token we received from our own backend).
+function _decodeJwtPayload(token) {
+  try {
+    const base64Url = token.split('.')[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const json = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join(''),
+    )
+    return JSON.parse(json)
+  } catch {
+    return null
+  }
+}
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check active session
+    // Check for an active impersonation session in localStorage first.
+    // If present, build a synthetic user from the JWT claims and skip Supabase.
+    const impersonateToken = localStorage.getItem('st4rtup_impersonate_token')
+    if (impersonateToken) {
+      const payload = _decodeJwtPayload(impersonateToken)
+      const exp = payload?.exp ? payload.exp * 1000 : 0
+      if (payload && exp > Date.now()) {
+        setUser({
+          id: payload.sub,
+          email: payload.email,
+          user_metadata: {
+            impersonated_by: payload.impersonated_by,
+            org_id: payload.org_id,
+          },
+        })
+        setSession({ access_token: impersonateToken, refresh_token: '' })
+        setLoading(false)
+        return  // Don't subscribe to Supabase auth changes during impersonation
+      }
+      // Token expired → clean up
+      localStorage.removeItem('st4rtup_impersonate_token')
+    }
+
+    // Check active Supabase session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)

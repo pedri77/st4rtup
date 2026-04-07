@@ -10,10 +10,14 @@ const api = axios.create({
   },
 })
 
-// Auth interceptor - Get token from Supabase session
+// Auth interceptor — prefer impersonation token if active, else Supabase session
 api.interceptors.request.use(
   (config) => {
-    // Return a promise that resolves with the config
+    const impersonateToken = localStorage.getItem('st4rtup_impersonate_token')
+    if (impersonateToken) {
+      config.headers.Authorization = `Bearer ${impersonateToken}`
+      return config
+    }
     return supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.access_token) {
         config.headers.Authorization = `Bearer ${session.access_token}`
@@ -31,7 +35,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Session expired or invalid - sign out
+      // Session expired or invalid — sign out + clear any impersonation token
+      localStorage.removeItem('st4rtup_impersonate_token')
       supabase.auth.signOut().then(() => {
         window.location.href = '/login'
       })
