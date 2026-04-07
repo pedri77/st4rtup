@@ -122,6 +122,17 @@ jobs:
             root@${{ secrets.HETZNER_HOST }} \
             "cd /opt/st4rtup && venv/bin/pip install -q -r requirements.txt"
 
+      - name: Sync alembic migrations + upgrade DB
+        run: |
+          rsync -az --delete \
+            --exclude '__pycache__' \
+            -e "ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no" \
+            backend/alembic/ \
+            root@${{ secrets.HETZNER_HOST }}:/opt/st4rtup/alembic/
+          ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no \
+            root@${{ secrets.HETZNER_HOST }} \
+            "cd /opt/st4rtup && PYTHONPATH=/opt/st4rtup venv/bin/alembic upgrade head"
+
       - name: Restart backend service
         run: |
           ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no \

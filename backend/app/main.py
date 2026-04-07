@@ -21,6 +21,54 @@ import app.agents.customer_success  # noqa: register AGENT-CS-001
 logger = logging.getLogger(__name__)
 
 
+# ─── Sentry error monitoring ──────────────────────────────────────
+# Initialise before FastAPI app creation so startup errors are captured.
+# PII is stripped in `before_send` per RGPD — we only want stack traces.
+if settings.SENTRY_DSN:
+    try:
+        import sentry_sdk
+        from sentry_sdk.integrations.fastapi import FastApiIntegration
+        from sentry_sdk.integrations.starlette import StarletteIntegration
+        from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+
+        _SENSITIVE_KEYS = {"password", "token", "authorization", "api_key", "secret",
+                           "access_token", "refresh_token", "client_secret"}
+
+        def _scrub_pii(event, hint):
+            # Strip request headers, cookies and query params that may contain PII
+            req = event.get("request") or {}
+            for k in ("headers", "cookies", "env"):
+                if k in req:
+                    req[k] = {kk: "[redacted]" for kk in req[k]} if isinstance(req[k], dict) else "[redacted]"
+            # Scrub data payload
+            data = req.get("data")
+            if isinstance(data, dict):
+                for k in list(data.keys()):
+                    if k.lower() in _SENSITIVE_KEYS:
+                        data[k] = "[redacted]"
+            # Strip user email / IP
+            if "user" in event:
+                event["user"] = {k: v for k, v in event["user"].items() if k not in ("email", "ip_address")}
+            return event
+
+        sentry_sdk.init(
+            dsn=settings.SENTRY_DSN,
+            integrations=[
+                FastApiIntegration(transaction_style="endpoint"),
+                StarletteIntegration(transaction_style="endpoint"),
+                SqlalchemyIntegration(),
+            ],
+            traces_sample_rate=settings.SENTRY_TRACES_SAMPLE_RATE,
+            send_default_pii=False,
+            before_send=_scrub_pii,
+            environment=settings.APP_ENV,
+            release="st4rtup@main",
+        )
+        logger.info("Sentry initialised (env=%s)", settings.APP_ENV)
+    except Exception as e:
+        logger.warning("Sentry init failed: %s", e)
+
+
 # ─── RGPD: truncate IPs in access logs to /24 (IPv4) or /48 (IPv6) ─────
 # Uvicorn logs lines like: "162.158.120.183:0 - "GET /..." 200 OK"
 # We install a filter on `uvicorn.access` so IPs are masked before write.

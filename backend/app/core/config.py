@@ -284,6 +284,10 @@ class Settings(BaseSettings):
     N8N_API_KEY: str = ""  # API key for n8n service auth (bypasses Supabase JWT)
     CREDENTIAL_ENCRYPTION_KEY: str = ""  # Fernet key for encrypting API keys in DB
 
+    # Error monitoring (Sentry)
+    SENTRY_DSN: str = ""  # Leave empty to disable
+    SENTRY_TRACES_SAMPLE_RATE: float = 0.05  # 5% of transactions
+
     # Integrations - Facturación y Post-venta
     STRIPE_SECRET_KEY: str = ""
     STRIPE_WEBHOOK_SECRET: str = ""
