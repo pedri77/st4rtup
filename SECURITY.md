@@ -47,3 +47,8 @@ No monetary bounty at this time. Accepted reports are credited in the CHANGELOG 
 - Input validation via Pydantic v2; output sanitization via DOMPurify.
 - Access logs anonymise IPs to /24 (IPv4) / /48 (IPv6) for RGPD compliance.
 - Audit trail for admin actions, impersonation, webhook subscriptions.
+- Error monitoring via Sentry with PII scrubbing (`before_send` filters headers, cookies, user email and IP).
+
+## Known limitations
+
+- **Cloudflare edge logs** (plan Free) retain visitor IPs in CF's internal infrastructure for ~30 days. CF's "Pseudonymize originating IP" managed transform is only available on Pro+ plans. This is mitigated by our backend-side `/24` anonymisation of access logs and by not storing raw IPs in our DB, but it means a subpoena to Cloudflare could surface recent visitor IPs. Upgrade to CF Pro for full edge-level scrubbing if required.

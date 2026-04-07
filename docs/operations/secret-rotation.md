@@ -179,7 +179,61 @@ Estas keys se generan en el dashboard de Supabase. La rotación se hace **desde 
 
 ---
 
-## 5. Database password (`DATABASE_URL`)
+## 5. `BACKUP_GPG_PASSPHRASE` (off-site backup encryption)
+
+**⚠️ Crítico:** si pierdes esta passphrase y NO has rotado primero, **todos los backups cifrados son irrecuperables**. Solo te quedarían los de Supabase (últimos 7 días).
+
+**Cuándo rotar:**
+- Anualmente
+- Inmediatamente si sospechas compromiso del `.env`
+- Tras cambios en el equipo con acceso al server
+
+**Procedimiento (dual-passphrase temporal):**
+
+1. **Generar nueva passphrase** (64 chars):
+   ```bash
+   python3 -c "import secrets, string; a=string.ascii_letters+string.digits+'!@#\$%&*-_=+'; print(''.join(secrets.choice(a) for _ in range(64)))"
+   ```
+
+2. **Re-cifrar todos los backups existentes** con la nueva passphrase antes de desactivar la vieja:
+   ```bash
+   # SSH al server
+   ssh -i ~/.ssh/id_hetzner root@188.245.166.253
+
+   OLD=$(grep '^BACKUP_GPG_PASSPHRASE=' /opt/st4rtup/.env | cut -d= -f2-)
+   NEW='<nueva_passphrase>'
+
+   for f in /opt/st4rtup/backups/daily/*.gpg /opt/st4rtup/backups/monthly/*.gpg; do
+       # Descifrar con vieja
+       echo "$OLD" | gpg --batch --passphrase-fd 0 --decrypt --output "${f}.tmp" "$f"
+       # Re-cifrar con nueva
+       echo "$NEW" | gpg --batch --yes --passphrase-fd 0 --cipher-algo AES256 \
+           --symmetric --output "${f}.new" "${f}.tmp"
+       # Swap
+       mv "${f}.new" "$f"
+       rm "${f}.tmp"
+       echo "Rotated: $f"
+   done
+   ```
+
+3. **Actualizar `.env`** con la nueva passphrase:
+   ```bash
+   sed -i "s|^BACKUP_GPG_PASSPHRASE=.*|BACKUP_GPG_PASSPHRASE=$NEW|" /opt/st4rtup/.env
+   ```
+
+4. **Verificar** descifrando el último backup:
+   ```bash
+   LATEST=$(ls -t /opt/st4rtup/backups/daily/*.gpg | head -1)
+   echo "$NEW" | gpg --batch --passphrase-fd 0 --decrypt --output /tmp/verify.dump "$LATEST"
+   pg_restore --list /tmp/verify.dump | head -5
+   rm /tmp/verify.dump
+   ```
+
+5. **Guardar la nueva passphrase** en tu password manager + registrar en `docs/operations/rotation-log.md`
+
+---
+
+## 6. Database password (`DATABASE_URL`)
 
 Rotación desde Supabase Dashboard → Project Settings → Database → Reset database password.
 
