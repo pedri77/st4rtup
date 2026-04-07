@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { X, Bell, BellOff, Check, CheckCheck, Trash2, Filter } from 'lucide-react'
 import { format } from 'date-fns'
@@ -31,6 +32,7 @@ const PRIORITY_BORDER_COLORS = {
 }
 
 export default function NotificationsPanel({ isOpen, onClose }) {
+  const navigate = useNavigate()
   const [filterRead, setFilterRead] = useState('all')
   const [filterType, setFilterType] = useState('all')
   const [showFilters, setShowFilters] = useState(false)
@@ -91,7 +93,22 @@ export default function NotificationsPanel({ isOpen, onClose }) {
 
   const handleNotificationClick = (notification) => {
     if (!notification.is_read) markAsRead.mutate(notification.id)
-    if (notification.action_url) { window.location.href = notification.action_url; onClose() }
+    if (!notification.action_url) return
+
+    let url = notification.action_url
+    // Backend stores action_url as plain routes like /leads/{id} or /pipeline.
+    // The actual app routes live under /app/*. Prepend the prefix if missing
+    // (legacy notifications may not have it).
+    if (url.startsWith('/') && !url.startsWith('/app/') && !url.startsWith('//') && !/^https?:/.test(url)) {
+      url = '/app' + url
+    }
+    // Use SPA navigation so we don't reload the page (preserves state, faster)
+    if (url.startsWith('/app/') || url.startsWith('/')) {
+      navigate(url)
+    } else {
+      window.location.href = url
+    }
+    onClose()
   }
 
   useEffect(() => {
