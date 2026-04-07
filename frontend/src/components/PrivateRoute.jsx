@@ -84,9 +84,13 @@ export default function PrivateRoute({ children }) {
     return <Navigate to="/login" replace />
   }
 
-  // Redirect to onboarding if not completed (except when already on onboarding page)
+  // Redirect to onboarding if not completed (except when already on onboarding page).
+  // We re-check localStorage on every render so that finish() can mark the wizard
+  // as done synchronously and the next navigation reflects it without waiting
+  // for state propagation from the (now-stale) backend fetch result.
   const isOnboardingRoute = location.pathname.startsWith('/app/onboarding')
-  if (onboardingDone === false && !isOnboardingRoute) {
+  const cachedDone = localStorage.getItem('st4rtup_onboarding_done') === 'true'
+  if (onboardingDone === false && !cachedDone && !isOnboardingRoute) {
     return <Navigate to="/app/onboarding" replace />
   }
 

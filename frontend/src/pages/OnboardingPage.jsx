@@ -91,13 +91,19 @@ export default function OnboardingPage() {
 
   const card = { maxWidth: 560, margin: '0 auto', backgroundColor: 'white', borderRadius: 20, padding: '40px 36px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }
   const btn = { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 12, fontSize: 15, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: fontDisplay }
-  const input = { width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #E2E8F0', fontSize: 14, outline: 'none', marginBottom: 12, boxSizing: 'border-box' }
+  // Explicit text + placeholder colours so the form is readable on white.
+  // The browser default placeholder is too light against #FFFFFF.
+  const input = { width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #CBD5E1', fontSize: 14, outline: 'none', marginBottom: 12, boxSizing: 'border-box', color: '#1A1A2E', backgroundColor: '#FFFFFF' }
   const primaryBtn = { ...btn, backgroundColor: '#1E6FD9', color: 'white', width: '100%', justifyContent: 'center', marginTop: 8 }
   const skipBtn = { ...btn, backgroundColor: 'transparent', color: '#64748B', width: '100%', justifyContent: 'center', marginTop: 8, fontSize: 13 }
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#F8FAFC', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: "'Inter', sans-serif" }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+      <style>{`
+        .onb-input::placeholder { color: #64748B; opacity: 1; }
+        .onb-input:focus { border-color: #1E6FD9; box-shadow: 0 0 0 3px rgba(30,111,217,0.12); }
+      `}</style>
 
       <img src="/logo.png" alt="st4rtup" style={{ height: 70, marginBottom: 24 }} />
 
@@ -127,8 +133,8 @@ export default function OnboardingPage() {
           <>
             <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>¡Bienvenido a St4rtup!</h2>
             <p style={{ color: '#64748B', marginBottom: 24, fontSize: 15 }}>Configuremos tu CRM en menos de 5 minutos. Todo lo que configures ahora se puede cambiar después.</p>
-            <input placeholder="Tu nombre completo" value={name} onChange={e => setName(e.target.value)} style={input} id="onb-name" name="name" />
-            <input placeholder="Nombre de tu empresa" value={company} onChange={e => setCompany(e.target.value)} style={input} id="onb-company" name="company" />
+            <input className="onb-input" placeholder="Tu nombre completo" value={name} onChange={e => setName(e.target.value)} style={input} id="onb-name" name="name" />
+            <input className="onb-input" placeholder="Nombre de tu empresa" value={company} onChange={e => setCompany(e.target.value)} style={input} id="onb-company" name="company" />
             <button onClick={next} style={primaryBtn}>Siguiente <ArrowRight size={16} /></button>
           </>
         )}
