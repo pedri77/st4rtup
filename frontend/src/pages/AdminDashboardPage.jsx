@@ -4,6 +4,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { Shield, Users, DollarSign, TrendingUp, Building2, Activity, UserPlus, Zap, Heart, AlertTriangle, Server, Mail, BarChart3, Eye, ChevronRight, FileText, RefreshCw, LogIn, ClipboardList } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import api from '@/services/api'
+import toast from 'react-hot-toast'
 
 const T = { bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9', border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B', cyan: '#1E6FD9', success: '#10B981', warning: '#F59E0B', destructive: '#EF4444', purple: '#8B5CF6' }
 const fontDisplay = "'Rajdhani', sans-serif"
@@ -338,7 +339,7 @@ export default function AdminDashboardPage() {
                       const { token } = res.data
                       window.open(`${window.location.origin}/app?impersonate_token=${token}`, '_blank')
                     } catch (err) {
-                      alert('Error: ' + (err.response?.data?.detail || err.message))
+                      toast.error('Error: ' + (err.response?.data?.detail || err.message))
                     }
                   }} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'linear-gradient(135deg, #F5820B, #F59E0B)', border: 'none', fontSize: 12, fontWeight: 700, color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                     <LogIn size={14} /> Entrar como usuario

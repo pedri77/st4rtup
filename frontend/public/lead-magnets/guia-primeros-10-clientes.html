@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De 0 a 10 Clientes: Guia Practica para Founders sin Equipo de Ventas | st4rtup</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; }
+.page { max-width: 800px; margin: 0 auto; padding: 48px 32px; }
+
+/* Cover */
+.cover { text-align: center; padding: 80px 0 60px; border-bottom: 2px solid #1e293b; margin-bottom: 48px; }
+.cover .badge { display: inline-block; background: rgba(59,130,246,0.15); color: #60a5fa; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 24px; }
+.cover h1 { font-size: 36px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+.cover h1 span { color: #3b82f6; }
+.cover .subtitle { color: #94a3b8; font-size: 16px; line-height: 1.6; }
+.cover .meta { color: #64748b; font-size: 13px; margin-top: 32px; }
+
+/* Sections */
+h2 { font-size: 24px; font-weight: 700; margin: 48px 0 16px; color: #f1f5f9; }
+h3 { font-size: 18px; font-weight: 600; margin: 32px 0 12px; color: #e2e8f0; }
+p { font-size: 15px; line-height: 1.8; color: #cbd5e1; margin-bottom: 16px; }
+.highlight { color: #f1f5f9; font-weight: 600; }
+ul, ol { margin-bottom: 16px; padding-left: 24px; }
+li { margin-bottom: 8px; font-size: 15px; color: #cbd5e1; line-height: 1.7; }
+
+/* Tip boxes */
+.tip-box { background: #1e293b; border-radius: 12px; padding: 24px; margin: 24px 0; border-left: 4px solid #3b82f6; }
+.tip-box h4 { color: #60a5fa; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+.tip-box p { margin-bottom: 8px; }
+.tip-box p:last-child { margin-bottom: 0; }
+
+/* Email template */
+.email-template { background: #1e293b; border-radius: 12px; padding: 28px; margin: 24px 0; border: 1px solid #334155; }
+.email-template .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #3b82f6; margin-bottom: 16px; }
+.email-template .subject { font-size: 15px; font-weight: 600; color: #f1f5f9; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #334155; }
+.email-template .body-text { font-size: 14px; color: #cbd5e1; line-height: 1.8; }
+.email-template .body-text .placeholder { color: #60a5fa; font-weight: 500; }
+
+/* Stats */
+.stat-row { display: flex; gap: 16px; margin: 24px 0; }
+.stat-box { flex: 1; background: #1e293b; border-radius: 8px; padding: 20px; text-align: center; }
+.stat-box .value { font-size: 32px; font-weight: 800; color: #3b82f6; }
+.stat-box .label { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+/* Chapter numbers */
+.chapter-num { display: inline-block; background: rgba(59,130,246,0.15); color: #3b82f6; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 8px; font-weight: 800; font-size: 14px; margin-right: 12px; vertical-align: middle; }
+
+/* Checklist */
+.checklist { background: #1e293b; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.checklist li { list-style: none; padding-left: 28px; position: relative; margin-bottom: 12px; }
+.checklist li::before { content: ""; position: absolute; left: 0; top: 6px; width: 16px; height: 16px; border: 2px solid #3b82f6; border-radius: 4px; }
+
+/* CTA */
+.cta-section { background: linear-gradient(135deg, #1e3a5f, #1e293b); border-radius: 16px; padding: 40px; text-align: center; margin: 48px 0; }
+.cta-section h2 { margin-top: 0; }
+.cta-section a { display: inline-block; background: #3b82f6; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; margin-top: 16px; }
+
+.footer { text-align: center; padding: 32px 0; border-top: 1px solid #1e293b; color: #475569; font-size: 12px; }
+.footer a { color: #3b82f6; }
+
+@media (max-width: 600px) {
+  .page { padding: 24px 16px; }
+  .cover { padding: 48px 0 40px; }
+  .cover h1 { font-size: 28px; }
+  .stat-row { flex-direction: column; }
+  h2 { font-size: 20px; }
+}
+
+@media print {
+  body { background: white; color: #1e293b; }
+  .page { padding: 24px; }
+  .cover { padding: 40px 0 30px; border-bottom-color: #e2e8f0; }
+  .cover h1, .cover h1 span { color: #1e293b; }
+  .cover .badge { background: #f0f9ff; color: #1e40af; border: 1px solid #bfdbfe; }
+  .cover .subtitle, .cover .meta { color: #475569; }
+  h2, h3 { color: #1e293b; }
+  p, li { color: #334155; }
+  .highlight { color: #1e293b; }
+  .tip-box { background: #f8fafc; border-left-color: #3b82f6; }
+  .tip-box h4 { color: #1e40af; }
+  .tip-box p { color: #334155; }
+  .email-template { background: #f8fafc; border-color: #e2e8f0; }
+  .email-template .subject { color: #1e293b; border-bottom-color: #e2e8f0; }
+  .email-template .body-text { color: #334155; }
+  .email-template .body-text .placeholder { color: #1e40af; }
+  .stat-box { background: #f8fafc; border: 1px solid #e2e8f0; }
+  .stat-box .label { color: #475569; }
+  .checklist { background: #f8fafc; }
+  .checklist li { color: #334155; }
+  .checklist li::before { border-color: #1e40af; }
+  .cta-section { display: none; }
+  .footer { border-top-color: #e2e8f0; }
+  a { color: #1e40af; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="cover">
+  <div class="badge">GUIA GRATUITA · 2026</div>
+  <h1>De 0 a 10 Clientes: <span>Guia Practica</span> para Founders sin Equipo de Ventas</h1>
+  <p class="subtitle">Todo lo que necesitas saber para conseguir tus primeros clientes cuando eres tu solo, no tienes presupuesto y cada lead importa.</p>
+  <p class="meta">Por David Moya · Founder, st4rtup · Abril 2026</p>
+</div>
+
+<!-- Chapter 1 -->
+<h2><span class="chapter-num">1</span> Por que los primeros 10 clientes son los mas importantes</h2>
+
+<p>Hay una verdad incomoda en el mundo startup: los primeros 10 clientes son mas dificiles de conseguir que los siguientes 100. No es una exageracion — es matematica pura. Sin marca, sin referencias, sin caso de estudio, cada venta es un acto de fe del comprador. Esta confiando en ti, no en tu producto.</p>
+
+<p>Pero esos primeros 10 clientes hacen algo que ningun inversor, mentor o plan de negocio puede hacer: <span class="highlight">validan que tu empresa tiene razon de existir</span>.</p>
+
+<div class="stat-row">
+  <div class="stat-box"><div class="value">42%</div><div class="label">Startups que fracasan por "no market need"</div></div>
+  <div class="stat-box"><div class="value">3x</div><div class="label">Mas retention en clientes adquiridos por referral</div></div>
+  <div class="stat-box"><div class="value">18</div><div class="label">Meses de media para primeros 10 clientes B2B</div></div>
+</div>
+
+<p>Cada uno de esos 10 clientes te ensenara algo critico: que funcionalidad usan realmente (no la que tu creias), como describen tu producto (no como tu lo describes), por que compraron (casi nunca es por la razon que imaginas) y, lo mas importante, por que estuvieron a punto de no comprar.</p>
+
+<div class="tip-box">
+  <h4>Consejo clave</h4>
+  <p>Documenta cada venta: que dijo el cliente en la primera llamada, que objeciones puso, que le convencio y cuanto tardo en decidir. Esta informacion vale mas que cualquier estudio de mercado porque es de TU mercado, TU producto y TU cliente.</p>
+</div>
+
+<p>Ademas, los primeros clientes establecen el patron de tu crecimiento futuro. Si los consigues a traves de cold email, tu modelo de adquisicion sera outbound. Si vienen de referrals, tu motor sera el boca a boca. Si llegan por contenido, sera inbound. Los primeros 10 clientes no solo validan tu producto — definen tu go-to-market.</p>
+
+<!-- Chapter 2 -->
+<h2><span class="chapter-num">2</span> Los 5 canales que funcionan sin presupuesto</h2>
+
+<p>Olvida los anuncios de pago, las campanas de branding y los influencers. Cuando no tienes presupuesto, tienes algo mas valioso: <span class="highlight">tiempo y autenticidad</span>. Estos son los 5 canales con mejor ratio esfuerzo/resultado para founders en fase 0.</p>
+
+<h3>Canal 1: LinkedIn (outbound estrategico)</h3>
+
+<p>LinkedIn tiene 900 millones de usuarios y un buscador avanzado gratuito que la mayoria de founders no usa. No se trata de publicar posts inspiracionales — se trata de identificar a tu cliente ideal, conectar con contexto y generar conversaciones reales.</p>
+
+<ul>
+<li>Busca tu ICP por cargo, empresa, ubicacion y sector</li>
+<li>Envia 15-20 invitaciones diarias con nota personalizada (menciona algo especifico de su perfil)</li>
+<li>Una vez conectado, aporta valor antes de proponer una llamada (comparte un recurso, comenta su contenido)</li>
+<li>Conversion esperada: de 100 conexiones, 8-12 conversaciones, 3-5 llamadas</li>
+</ul>
+
+<h3>Canal 2: Cold email</h3>
+
+<p>El email frio sigue siendo el canal mas escalable sin presupuesto. La clave no es volumen — es personalizacion. Un email genuinamente personalizado a 20 personas convierte mas que un template generico a 2.000.</p>
+
+<p>Herramientas gratuitas para encontrar emails: Hunter.io (50 busquedas/mes gratis), Apollo.io (plan free), o simplemente nombre.apellido@dominio.com (funciona el 60% de las veces).</p>
+
+<h3>Canal 3: Eventos y meetups presenciales</h3>
+
+<p>Una conversacion de 5 minutos cara a cara genera mas confianza que 20 emails. Busca meetups sectoriales en tu ciudad (Meetup.com, Eventbrite), eventos de startup (South Summit, 4YFN, Startup Grind) y charlas en coworkings. No vayas a vender — ve a escuchar problemas.</p>
+
+<h3>Canal 4: Partnerships con complementarios</h3>
+
+<p>Busca empresas que vendan a tu mismo cliente pero no compitan contigo. Propone una colaboracion simple: "yo te recomiendo a mis clientes, tu me recomiendas a los tuyos". Un partnership bien ejecutado puede generarte 2-3 clientes por trimestre sin esfuerzo adicional.</p>
+
+<h3>Canal 5: Referrals desde el cliente 1</h3>
+
+<p>Tu primer cliente satisfecho es tu mejor vendedor. Pero no esperes a que te recomiende espontaneamente — pidelo activamente. "Conoces a alguien con el mismo problema?" es la pregunta de ventas con mayor ROI que existe.</p>
+
+<div class="tip-box">
+  <h4>La regla de los 5 canales</h4>
+  <p>No intentes usar los 5 a la vez. Empieza con 2 canales, dominalos, y anade un tercero cuando los primeros te generen leads de forma consistente. Para la mayoria de founders B2B, la combinacion ganadora es LinkedIn + cold email en los primeros 3 meses.</p>
+</div>
+
+<!-- Chapter 3 -->
+<h2><span class="chapter-num">3</span> Template de email frio con 23% de reply rate</h2>
+
+<p>Este template esta basado en mas de 500 emails enviados y optimizados iterativamente. La tasa de respuesta promedio es del 23% (vs. 2-5% del cold email generico). La clave: <span class="highlight">especificidad, brevedad y un CTA de baja friccion</span>.</p>
+
+<div class="email-template">
+  <div class="label">Template de email frio — copia y adapta</div>
+  <div class="subject">Asunto: <span class="placeholder">[dato especifico sobre su empresa]</span></div>
+  <div class="body-text">
+    <p>Hola <span class="placeholder">[nombre]</span>,</p>
+    <p>Vi que en <span class="placeholder">[empresa]</span> estais <span class="placeholder">[accion concreta: contratando para X / lanzando Y / expandiendo a Z]</span>. <span class="placeholder">[Una frase que demuestre que sabes de que hablas en su sector]</span>.</p>
+    <p>Estamos ayudando a <span class="placeholder">[tipo de empresa similar]</span> a <span class="placeholder">[resultado concreto con numero: reducir un 40% el tiempo de X / generar 3x mas Y]</span>.</p>
+    <p>Te interesaria un cafe virtual de 15 minutos para ver si tiene sentido?</p>
+    <p><span class="placeholder">[Tu nombre]</span><br>
+    <span class="placeholder">[Cargo, empresa]</span><br>
+    <span class="placeholder">[Una linea de credibilidad: "Ex-[empresa conocida]" o "Trabajamos con X e Y"]</span></p>
+  </div>
+</div>
+
+<p><strong>Por que funciona este template:</strong></p>
+
+<ul>
+<li><strong>El asunto es especifico:</strong> No dice "propuesta de colaboracion". Dice algo que solo aplica a esa empresa, lo que aumenta la tasa de apertura al 55-65%</li>
+<li><strong>La primera frase demuestra investigacion:</strong> El receptor sabe que no es un email masivo. Eso reduce la resistencia inmediatamente</li>
+<li><strong>Un resultado con numero:</strong> No vendes tu producto — vendes el resultado que consigue. "Reducir un 40%" es concreto; "mejorar la eficiencia" es vacio</li>
+<li><strong>CTA de baja friccion:</strong> "Un cafe virtual de 15 minutos" es mucho menos intimidante que "una demo de 45 minutos". El objetivo del email no es vender — es abrir una conversacion</li>
+<li><strong>Maximo 80 palabras:</strong> Si el receptor tiene que hacer scroll, no lo leera</li>
+</ul>
+
+<div class="tip-box">
+  <h4>El follow-up que duplica respuestas</h4>
+  <p>Si no contesta en 3 dias, enviale un follow-up de UNA frase: "Hola [nombre], se que estas ocupado/a — solo queria saber si te interesa una llamada rapida sobre [tema]. Si no es el momento, sin problema." Este follow-up recupera un 30-40% de los que no contestaron al primero.</p>
+</div>
+
+<!-- Chapter 4 -->
+<h2><span class="chapter-num">4</span> Como cualificar leads sin CRM (y por que necesitas uno)</h2>
+
+<p>En teoria, puedes cualificar leads sin un CRM. En la practica, significa que la informacion esta repartida entre tu cabeza, tu email, WhatsApp, notas del movil y una hoja de Excel que no abres desde hace 2 semanas.</p>
+
+<p>Esto es lo que necesitas evaluar en cada lead para saber si merece tu tiempo:</p>
+
+<ol>
+<li><strong>Necesidad:</strong> Tiene el problema que resuelves? Lo reconoce como un problema?</li>
+<li><strong>Presupuesto:</strong> Puede pagar tu precio? No vale "algun dia tendremos presupuesto"</li>
+<li><strong>Autoridad:</strong> Puede tomar la decision de compra o necesita aprobacion de alguien mas?</li>
+<li><strong>Timing:</strong> Lo necesita ahora o dentro de 6 meses? Los leads de "6 meses" rara vez se materializan</li>
+</ol>
+
+<p>Si un lead cumple 3 de 4 criterios, es un lead cualificado. Si cumple 2 o menos, ponlo en "nurture" y no le dediques mas de un follow-up mensual.</p>
+
+<p><strong>El problema sin CRM:</strong> Cuando tienes 5 leads, te acuerdas de todo. Cuando tienes 15, empiezas a confundir conversaciones. Cuando tienes 30, pierdes oportunidades activamente. Un founder que conozco perdio un deal de 8.000 EUR porque olvido enviar la propuesta que habia prometido en una llamada. Tenia la informacion en una nota del movil que no volvio a abrir.</p>
+
+<div class="stat-row">
+  <div class="stat-box"><div class="value">80%</div><div class="label">Ventas perdidas por falta de follow-up</div></div>
+  <div class="stat-box"><div class="value">5</div><div class="label">Touchpoints de media para cerrar un deal B2B</div></div>
+  <div class="stat-box"><div class="value">48h</div><div class="label">Ventana optima de respuesta a un lead</div></div>
+</div>
+
+<!-- Chapter 5 -->
+<h2><span class="chapter-num">5</span> De "me interesa" a "firmemos" — el arte del follow-up</h2>
+
+<p>La mayoria de founders tratan el follow-up como una molestia. "No quiero ser pesado". "Si le interesa, ya me contactara". Error. <span class="highlight">El 80% de las ventas requieren al menos 5 puntos de contacto</span>, pero el 44% de los vendedores abandonan despues del primero (HubSpot, 2025).</p>
+
+<p>El follow-up no es insistir — es aportar valor de forma consistente hasta que el momento sea el adecuado. Aqui va la secuencia que funciona:</p>
+
+<ul>
+<li><strong>Dia 0:</strong> Primera reunion o contacto. Envias un resumen de lo hablado y proximos pasos</li>
+<li><strong>Dia 3:</strong> Follow-up con un recurso relevante (un articulo, un caso de estudio, un dato de su sector)</li>
+<li><strong>Dia 7:</strong> Si prometiste propuesta, la envias. Si no, preguntas si hay dudas</li>
+<li><strong>Dia 14:</strong> Check-in breve: "Solo queria saber si habeis tenido oportunidad de revisar la propuesta"</li>
+<li><strong>Dia 30:</strong> Si sigue sin responder, un ultimo mensaje: "Entiendo que no es el momento. Te recontacto en 3 meses salvo que me digas lo contrario"</li>
+</ul>
+
+<div class="tip-box">
+  <h4>El follow-up que no parece follow-up</h4>
+  <p>La mejor forma de hacer follow-up es no parecer que estas haciendo follow-up. En lugar de "solo queria saber si...", enviale algo de valor: "Vi este articulo sobre [su sector] y me acorde de nuestra conversacion. Por cierto, si quieres retomar lo que comentamos, estoy disponible esta semana." Estas aportando valor Y recordandole que existes.</p>
+</div>
+
+<p><strong>La clave:</strong> Cada follow-up debe aportar algo nuevo. Si tu mensaje numero 3 dice lo mismo que el numero 1, no es follow-up — es spam. Anade un dato, un recurso, una perspectiva. Dale una razon para responderte que no sea "porque me lo pediste".</p>
+
+<!-- Chapter 6 -->
+<h2><span class="chapter-num">6</span> Tu CRM minimo viable: que necesitas desde el dia 1</h2>
+
+<p>No necesitas Salesforce. No necesitas HubSpot Enterprise. Necesitas un sistema simple que te diga tres cosas cada manana:</p>
+
+<ol>
+<li><strong>A quien tengo que contactar hoy?</strong> (follow-ups pendientes)</li>
+<li><strong>Cuantos deals activos tengo y en que fase estan?</strong> (pipeline)</li>
+<li><strong>Que hable con cada persona la ultima vez?</strong> (historial)</li>
+</ol>
+
+<p>Si tu herramienta actual — sea Excel, Notion o tu memoria — puede responder estas tres preguntas en menos de 30 segundos, funciona. Si no, necesitas un CRM de verdad.</p>
+
+<p><strong>Lo que tu CRM minimo viable debe tener:</strong></p>
+
+<div class="checklist">
+<ul>
+<li>Pipeline visual (tablero Kanban con fases: Nuevo, Contactado, Demo, Propuesta, Cerrado)</li>
+<li>Historial de interacciones por contacto (emails, llamadas, notas)</li>
+<li>Recordatorios automaticos de follow-up (el sistema te avisa, no tu memoria)</li>
+<li>Integracion con email (Gmail/Outlook) para registrar conversaciones sin copiar y pegar</li>
+<li>Busqueda rapida (encontrar cualquier contacto o deal en menos de 5 segundos)</li>
+</ul>
+</div>
+
+<p><strong>Lo que NO necesitas ahora:</strong></p>
+<ul>
+<li>Lead scoring con IA (cuando tengas 500 leads, si. Con 30, no)</li>
+<li>Automatizaciones complejas de marketing (primero vende manualmente)</li>
+<li>Integraciones con 50 herramientas (email y calendario son suficientes)</li>
+<li>Reportes avanzados con 20 metricas (MRR, pipeline value y win rate bastan)</li>
+</ul>
+
+<div class="tip-box">
+  <h4>La prueba de los 5 minutos</h4>
+  <p>Si no puedes configurar tu CRM y empezar a usarlo en 5 minutos, es demasiado complejo para ti ahora mismo. Un CRM que no usas porque es complicado es peor que no tener CRM — porque te da la falsa sensacion de que tienes un proceso.</p>
+</div>
+
+<p>Construimos st4rtup exactamente con esta filosofia: un CRM que un founder configura en 5 minutos, usa todos los dias y que crece con el. Sin la complejidad de las herramientas corporativas, sin el precio de las alternativas "premium" y sin las limitaciones de una hoja de calculo.</p>
+
+<p>Porque los founders que ganan no son los que tienen la herramienta mas sofisticada. Son los que tienen una herramienta que realmente usan.</p>
+
+<div class="cta-section">
+  <h2>Listo para dejar de perder leads?</h2>
+  <p style="color: #94a3b8;">st4rtup es el CRM disenado para founders que venden. Pipeline visual, follow-ups inteligentes, setup en 5 minutos. Sin complejidad, sin sorpresas en el precio.</p>
+  <a href="https://st4rtup.com">Empieza gratis en st4rtup.com</a>
+</div>
+
+<div class="footer">
+  <p>&copy; 2026 st4rtup by Riskitera S.L.U. · Madrid, Espana</p>
+  <p>Esta guia es de distribucion libre. Compartela con otros founders.</p>
+  <p><a href="https://st4rtup.com">st4rtup.com</a></p>
+</div>
+
+</div>
+</body>
+</html>

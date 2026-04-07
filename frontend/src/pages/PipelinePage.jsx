@@ -473,7 +473,7 @@ function OpportunityCard({ opportunity, lead, isDragging, onDragStart, onDragEnd
       <div className="flex gap-1.5 mt-2" onClick={e => e.stopPropagation()}>
         <select id="pipeline-select-2" aria-label="Selector" value={opportunity.pricing_plan || ''}
           onChange={async (e) => {
-            try { await opportunitiesApi.update(opportunity.id, { pricing_plan: e.target.value || null }); toast.success('Tier actualizado') } catch {}
+            try { await opportunitiesApi.update(opportunity.id, { pricing_plan: e.target.value || null }); toast.success('Tier actualizado') } catch (err) { toast.error('Error al actualizar tier'); console.error(err) }
           }}
           className="flex-1 text-[10px] bg-gray-50/50 border border-gray-200 rounded px-1.5 py-1 text-gray-400"
         >
@@ -487,7 +487,7 @@ function OpportunityCard({ opportunity, lead, isDragging, onDragStart, onDragEnd
           placeholder="Competidor..."
           onBlur={async (e) => {
             if (e.target.value !== (opportunity.competitor || '')) {
-              try { await opportunitiesApi.update(opportunity.id, { competitor: e.target.value || null }); toast.success('Competidor actualizado') } catch {}
+              try { await opportunitiesApi.update(opportunity.id, { competitor: e.target.value || null }); toast.success('Competidor actualizado') } catch (err) { toast.error('Error al actualizar competidor'); console.error(err) }
             }
           }}
           className="flex-1 text-[10px] bg-gray-50/50 border border-gray-200 rounded px-1.5 py-1 text-gray-400"

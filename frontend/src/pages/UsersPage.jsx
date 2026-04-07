@@ -4,6 +4,7 @@ import { Plus, User, Users, Crown, Eye, CheckCircle2, XCircle, Mail, Phone, Cale
 import toast from 'react-hot-toast'
 import { usersApi } from '@/services/api'
 import { ListItemSkeleton } from '@/components/LoadingStates'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
@@ -22,6 +23,7 @@ const roleConfig = {
 }
 
 export default function UsersPage() {
+  const confirm = useConfirm()
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
   const [showEditModal, setShowEditModal] = useState(false)
@@ -57,7 +59,7 @@ export default function UsersPage() {
   }
 
   const handleEdit = (user) => { setSelectedUser(user); setShowEditModal(true) }
-  const handleDelete = (user) => { if (window.confirm(`Estas seguro de eliminar a ${user.full_name || user.email}?`)) deleteUser.mutate(user.id) }
+  const handleDelete = async (user) => { if (await confirm({ title: '¿Eliminar?', description: `Estas seguro de eliminar a ${user.full_name || user.email}?`, confirmText: 'Eliminar' })) deleteUser.mutate(user.id) }
 
   const statCards = [
     { label: 'Total Usuarios', value: stats.total, icon: Users, color: T.cyan },

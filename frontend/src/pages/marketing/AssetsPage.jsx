@@ -9,6 +9,7 @@ import {
 import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { marketingAssetsApi, campaignsApi } from '@/services/api'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
@@ -58,6 +59,7 @@ const selectStyle = { ...inputStyle }
 const labelStyle = { display: 'block', fontSize: 14, color: T.fgMuted, marginBottom: 4 }
 
 export default function AssetsPage() {
+  const confirm = useConfirm()
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
@@ -156,8 +158,8 @@ export default function AssetsPage() {
     }
   }
 
-  function handleDelete(asset) {
-    if (window.confirm(`¿Eliminar "${asset.name}"?`)) {
+  async function handleDelete(asset) {
+    if (await confirm({ title: '¿Eliminar?', description: `¿Eliminar "${asset.name}"?`, confirmText: 'Eliminar' })) {
       deleteMutation.mutate(asset.id)
       if (viewingAsset?.id === asset.id) setViewingAsset(null)
     }

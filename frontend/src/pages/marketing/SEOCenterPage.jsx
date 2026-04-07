@@ -9,6 +9,7 @@ import {
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { seoCenterApi, contentPipelineApi } from '@/services/api'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 import {
   ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer, Cell
@@ -43,6 +44,7 @@ function ScoreBadge({ score }) {
 }
 
 export default function SEOCenterPage() {
+  const confirm = useConfirm()
   const [tab, setTab] = useState('content')
   const tabs = [
     { id: 'content', label: 'Content Hub', icon: FileText },
@@ -1895,7 +1897,7 @@ function ContentTrackerTab() {
                           className="p-1 rounded hover:opacity-80" title="Editar metricas" style={{ color: T.cyan }}>
                           <Eye className="w-3.5 h-3.5" />
                         </button>
-                        <button onClick={() => { if (window.confirm('Eliminar esta publicacion?')) deleteMut.mutate(pub.id) }}
+                        <button onClick={async () => { if (await confirm({ title: '¿Eliminar?', description: 'Eliminar esta publicacion?', confirmText: 'Eliminar' })) deleteMut.mutate(pub.id) }}
                           className="p-1 rounded hover:opacity-80" title="Eliminar" style={{ color: T.destructive }}>
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>

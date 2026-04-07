@@ -3,6 +3,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { initPostHog } from '@/utils/posthog'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
+import { ConfirmProvider } from '@/components/common/ConfirmDialog'
 import PWAInstallPrompt from '@/components/PWAInstallPrompt'
 import useFavicon from '@/hooks/useFavicon'
 import { Routes, Route, Navigate } from 'react-router-dom'
@@ -130,6 +131,7 @@ function App() {
   return (
     <HelmetProvider>
     <ErrorBoundary>
+    <ConfirmProvider>
     <KeyboardShortcuts />
     <AuthProvider>
       <AppContent />
@@ -278,6 +280,7 @@ function App() {
         <Route path="*" element={<Suspense fallback={<PageLoader />}><NotFoundPage /></Suspense>} />
       </Routes>
     </AuthProvider>
+    </ConfirmProvider>
     </ErrorBoundary>
     </HelmetProvider>
   )

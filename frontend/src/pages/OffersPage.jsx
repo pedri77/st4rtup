@@ -13,6 +13,7 @@ import { generateOfferPDF } from '@/utils/offerPdf'
 import ExportButton from '@/components/ExportButton'
 import { formatDateForExport } from '@/utils/export'
 import { ListItemSkeleton } from '@/components/LoadingStates'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 
 const T = {
   bg: '#F8FAFC',
@@ -94,7 +95,12 @@ export default function OffersPage() {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['offers'] }); toast.success('Oferta eliminada') },
   })
 
-  const handleDelete = (offer) => { if (window.confirm(`Eliminar oferta ${offer.reference}?`)) deleteOffer.mutate(offer.id) }
+  const confirm = useConfirm()
+  const handleDelete = async (offer) => {
+    if (await confirm({ title: 'Eliminar oferta', description: `¿Eliminar la oferta ${offer.reference}? Esta acción no se puede deshacer.`, confirmText: 'Eliminar' })) {
+      deleteOffer.mutate(offer.id)
+    }
+  }
 
   return (
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen" style={{ backgroundColor: T.bg, color: T.fg, fontFamily: fontDisplay }}>

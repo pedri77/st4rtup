@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts'
 import { llmVisibilityApi } from '@/services/api'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
@@ -64,6 +65,7 @@ const CustomTooltip = ({ active, payload }) => {
 }
 
 export default function LLMVisibilityPage() {
+  const confirm = useConfirm()
   const queryClient = useQueryClient()
   const [tab, setTab] = useState('queries') // queries, results, dashboard
   const [showModal, setShowModal] = useState(false)
@@ -360,7 +362,7 @@ export default function LLMVisibilityPage() {
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => { if (window.confirm('¿Eliminar query y resultados?')) deleteMutation.mutate(q.id) }}
+                        onClick={async () => { if (await confirm({ title: '¿Eliminar?', description: '¿Eliminar query y resultados?', confirmText: 'Eliminar' })) deleteMutation.mutate(q.id) }}
                         style={{ padding: 6, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}
                       >
                         <Trash2 className="w-4 h-4" />

@@ -8,6 +8,7 @@ import {
 import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { utmCodesApi, campaignsApi } from '@/services/api'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
@@ -32,6 +33,7 @@ const INITIAL_FORM = {
 }
 
 export default function UTMGeneratorPage() {
+  const confirm = useConfirm()
   const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [showModal, setShowModal] = useState(false)
@@ -226,8 +228,8 @@ export default function UTMGeneratorPage() {
                     <ExternalLink className="w-4 h-4" />
                   </a>
                   <button
-                    onClick={() => {
-                      if (window.confirm('¿Eliminar este UTM?')) deleteMutation.mutate(utm.id)
+                    onClick={async () => {
+                      if (await confirm({ title: '¿Eliminar?', description: '¿Eliminar este UTM?', confirmText: 'Eliminar' })) deleteMutation.mutate(utm.id)
                     }}
                     title="Eliminar"
                     style={{ padding: 6, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}

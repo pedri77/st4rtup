@@ -8,6 +8,7 @@ import {
 import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { marketingAlertsApi } from '@/services/api'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
@@ -25,6 +26,7 @@ const SEVERITY_CONFIG = {
 }
 
 export default function AlertsPage() {
+  const confirm = useConfirm()
   const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [showFilters, setShowFilters] = useState(false)
@@ -271,8 +273,8 @@ export default function AlertsPage() {
                       </button>
                     )}
                     <button
-                      onClick={() => {
-                        if (window.confirm('¿Eliminar esta alerta?')) deleteMutation.mutate(alert.id)
+                      onClick={async () => {
+                        if (await confirm({ title: '¿Eliminar?', description: '¿Eliminar esta alerta?', confirmText: 'Eliminar' })) deleteMutation.mutate(alert.id)
                       }}
                       className="p-1.5 rounded-lg transition-colors"
                       style={{ color: T.fgMuted }}

@@ -10,6 +10,7 @@ import {
 import toast from 'react-hot-toast'
 import ExportButton from '@/components/ExportButton'
 import { ListItemSkeleton } from '@/components/LoadingStates'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 
 const T = {
   bg: '#F8FAFC',
@@ -65,6 +66,7 @@ const RELATIONSHIP_COLORS = {
 }
 
 export default function ClientsPage() {
+  const confirm = useConfirm()
   const queryClient = useQueryClient()
   const { leads } = useLeadsSelect()
 
@@ -138,8 +140,8 @@ export default function ClientsPage() {
     setShowForm(true)
   }
 
-  const handleDelete = (contact) => {
-    if (window.confirm(`Eliminar contacto "${contact.full_name}"?`)) {
+  const handleDelete = async (contact) => {
+    if (await confirm({ title: '¿Eliminar?', description: `Eliminar contacto "${contact.full_name}"?`, confirmText: 'Eliminar' })) {
       deleteMutation.mutate(contact.id)
     }
   }

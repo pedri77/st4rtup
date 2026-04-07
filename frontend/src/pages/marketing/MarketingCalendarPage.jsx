@@ -8,6 +8,7 @@ import {
 import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { marketingCalendarApi, campaignsApi } from '@/services/api'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
@@ -42,6 +43,7 @@ const INITIAL_FORM = {
 const DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
 
 export default function MarketingCalendarPage() {
+  const confirm = useConfirm()
   const queryClient = useQueryClient()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [showModal, setShowModal] = useState(false)
@@ -431,8 +433,8 @@ export default function MarketingCalendarPage() {
                         <Edit3 className="w-3.5 h-3.5" />
                       </button>
                       <button
-                        onClick={() => {
-                          if (window.confirm(`¿Eliminar "${ev.title}"?`)) deleteMutation.mutate(ev.id)
+                        onClick={async () => {
+                          if (await confirm({ title: '¿Eliminar?', description: `¿Eliminar "${ev.title}"?`, confirmText: 'Eliminar' })) deleteMutation.mutate(ev.id)
                         }}
                         style={{ padding: 4, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}
                       >

@@ -13,6 +13,7 @@ import {
   ResponsiveContainer, Cell,
 } from 'recharts'
 import { campaignsApi, dashboardApi } from '@/services/api'
+import { useConfirm } from '@/components/common/ConfirmDialog'
 
 const T = {
   bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
@@ -65,6 +66,7 @@ const INITIAL_FORM = {
 }
 
 export default function CampaignsPage() {
+  const confirm = useConfirm()
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
@@ -177,8 +179,8 @@ export default function CampaignsPage() {
     }
   }
 
-  function handleDelete(campaign) {
-    if (window.confirm(`¿Eliminar la campaña "${campaign.name}"?`)) {
+  async function handleDelete(campaign) {
+    if (await confirm({ title: '¿Eliminar?', description: `¿Eliminar la campaña "${campaign.name}"?`, confirmText: 'Eliminar' })) {
       deleteMutation.mutate(campaign.id)
     }
   }
