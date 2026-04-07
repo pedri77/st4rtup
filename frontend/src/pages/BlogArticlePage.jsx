@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import WebChatWidget from "@/components/WebChatWidget"
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { ArrowLeft, Clock, Calendar, User, Share2 } from 'lucide-react'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
@@ -20,17 +21,41 @@ function renderMarkdown(md) {
     .replace(/(<li.*<\/li>\n?)+/g, '<ul style="padding-left:20px;margin:12px 0">$&</ul>')
     .replace(/^\d+\. (.*$)/gm, '<li style="margin:4px 0;color:#475569">$1</li>')
     .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="width:100%;border-radius:12px;margin:20px 0" />')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#1E6FD9;font-weight:500" target="_blank" rel="noopener noreferrer">$1</a>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
+      const isExternal = /^https?:\/\//.test(url)
+      const attrs = isExternal ? ' target="_blank" rel="noopener noreferrer"' : ''
+      return `<a href="${url}" style="color:#1E6FD9;font-weight:500"${attrs}>${text}</a>`
+    })
     .replace(/\n{2,}/g, '</p><p style="margin:0 0 16px;line-height:1.8;color:#334155">')
     .replace(/^(?!<[hubloia])(.+)$/gm, '<p style="margin:0 0 16px;line-height:1.8;color:#334155">$1</p>')
 }
 
 export default function BlogArticlePage() {
   const { slug } = useParams()
+  const navigate = useNavigate()
+  const contentRef = useRef(null)
   const [article, setArticle] = useState(null)
   const [content, setContent] = useState('')
   const [related, setRelated] = useState([])
   const [loading, setLoading] = useState(true)
+
+  // Intercept clicks on internal links rendered from markdown to use SPA navigation
+  useEffect(() => {
+    const el = contentRef.current
+    if (!el) return
+    const handler = (e) => {
+      const link = e.target.closest('a')
+      if (!link) return
+      const href = link.getAttribute('href') || ''
+      if (href.startsWith('/') && !link.target) {
+        e.preventDefault()
+        navigate(href)
+        window.scrollTo(0, 0)
+      }
+    }
+    el.addEventListener('click', handler)
+    return () => el.removeEventListener('click', handler)
+  }, [content, navigate])
 
   useEffect(() => {
     async function load() {
@@ -76,6 +101,32 @@ export default function BlogArticlePage() {
 
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+      <Helmet>
+        <title>{article.titulo} | st4rtup Blog</title>
+        <meta name="description" content={article.excerpt} />
+        <meta name="keywords" content={(article.keywords || []).join(', ')} />
+        <link rel="canonical" href={`https://st4rtup.com/blog/${article.slug}`} />
+        <meta property="og:title" content={article.titulo} />
+        <meta property="og:description" content={article.excerpt} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://st4rtup.com/blog/${article.slug}`} />
+        {article.imagen && <meta property="og:image" content={`https://st4rtup.com${article.imagen}`} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={article.titulo} />
+        <meta name="twitter:description" content={article.excerpt} />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": article.titulo,
+          "description": article.excerpt,
+          "author": { "@type": "Person", "name": article.autor },
+          "datePublished": article.fecha,
+          "image": article.imagen ? `https://st4rtup.com${article.imagen}` : undefined,
+          "publisher": { "@type": "Organization", "name": "st4rtup", "logo": { "@type": "ImageObject", "url": "https://st4rtup.com/logo.png" } },
+          "mainEntityOfPage": `https://st4rtup.com/blog/${article.slug}`,
+          "keywords": (article.keywords || []).join(', '),
+        })}</script>
+      </Helmet>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
 
       {/* Nav */}
@@ -112,7 +163,7 @@ export default function BlogArticlePage() {
 
         {/* Content */}
         {content ? (
-          <div style={{ fontSize: 16, lineHeight: 1.8, color: '#334155' }} dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }} />
+          <div ref={contentRef} style={{ fontSize: 16, lineHeight: 1.8, color: '#334155' }} dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }} />
         ) : (
           <div style={{ padding: '40px 24px', borderRadius: 14, backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0', textAlign: 'center' }}>
             <p style={{ fontSize: 16, color: '#64748B' }}>Este artículo se publicará próximamente.</p>

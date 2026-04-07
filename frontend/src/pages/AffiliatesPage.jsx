@@ -55,7 +55,7 @@ export default function AffiliatesPage() {
         <p style={{ fontSize: '1.05rem', color: '#64748B', lineHeight: 1.7, marginBottom: 32 }}>
           Gana desde un <strong style={{ color: '#1E6FD9' }}>20% hasta un 30% recurrente</strong> por cada startup que refieras a St4rtup. Cuantos más referidos, mayor tu comisión.
         </p>
-        <Link to="/contact" style={{ display: 'inline-block', background: '#1E6FD9', color: 'white', padding: '14px 36px', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: '1rem', boxShadow: '0 4px 14px rgba(30,111,217,0.3)' }}>Unirme al programa →</Link>
+        <Link to="/contact-sales" style={{ display: 'inline-block', background: '#1E6FD9', color: 'white', padding: '14px 36px', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: '1rem', boxShadow: '0 4px 14px rgba(30,111,217,0.3)' }}>Unirme al programa →</Link>
       </section>
 
       {/* How it works */}
@@ -135,7 +135,7 @@ export default function AffiliatesPage() {
         <div style={{ maxWidth: 600, margin: '0 auto', background: 'linear-gradient(135deg, #1E6FD908, #F5820B08)', border: '1px solid #E2E8F0', borderRadius: 16, padding: 40 }}>
           <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: '1.3rem', fontWeight: 700, marginBottom: 12 }}>Empieza a ganar con St4rtup</h2>
           <p style={{ color: '#64748B', marginBottom: 20, fontSize: '.9rem' }}>Sin coste de entrada. Sin límite de ganancias.</p>
-          <Link to="/contact" style={{ display: 'inline-block', background: '#1E6FD9', color: 'white', padding: '12px 32px', borderRadius: 8, textDecoration: 'none', fontWeight: 700, boxShadow: '0 4px 14px rgba(30,111,217,0.3)' }}>Unirme al programa →</Link>
+          <Link to="/contact-sales" style={{ display: 'inline-block', background: '#1E6FD9', color: 'white', padding: '12px 32px', borderRadius: 8, textDecoration: 'none', fontWeight: 700, boxShadow: '0 4px 14px rgba(30,111,217,0.3)' }}>Unirme al programa →</Link>
         </div>
       </section>
 

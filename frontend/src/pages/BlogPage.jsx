@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 import { ArrowRight, Search } from 'lucide-react'
+import { Helmet } from 'react-helmet-async'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
@@ -34,6 +35,15 @@ export default function BlogPage() {
 
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E', minHeight: '100vh' }}>
+      <Helmet>
+        <title>Blog para founders | st4rtup</title>
+        <meta name="description" content="Guías, recursos y artículos para founders de startups: financiación, MVP, growth, ventas y herramientas. Aprende a construir tu startup desde cero." />
+        <link rel="canonical" href="https://st4rtup.com/blog" />
+        <meta property="og:title" content="Blog para founders | st4rtup" />
+        <meta property="og:description" content="Guías y recursos para founders de startups en España." />
+        <meta property="og:url" content="https://st4rtup.com/blog" />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
 
       {/* Nav */}
