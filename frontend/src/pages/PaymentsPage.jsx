@@ -280,11 +280,11 @@ function PagosTab() {
           <div className="flex items-center justify-between px-4 py-3" style={{ borderTop: `1px solid ${T.border}`, backgroundColor: T.muted }}>
             <span className="text-xs" style={{ color: T.fgMuted }}>P\ágina {page} de {totalPages}</span>
             <div className="flex gap-2">
-              <button onClick={() => setPage(Math.max(1, page - 1))} disabled={page <= 1}
+              <button aria-label="Anterior" onClick={() => setPage(Math.max(1, page - 1))} disabled={page <= 1}
                 className="p-1.5 rounded-lg disabled:opacity-30" style={{ color: T.fgMuted, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <button onClick={() => setPage(Math.min(totalPages, page + 1))} disabled={page >= totalPages}
+              <button aria-label="Siguiente" onClick={() => setPage(Math.min(totalPages, page + 1))} disabled={page >= totalPages}
                 className="p-1.5 rounded-lg disabled:opacity-30" style={{ color: T.fgMuted, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
                 <ChevronRight className="w-4 h-4" />
               </button>

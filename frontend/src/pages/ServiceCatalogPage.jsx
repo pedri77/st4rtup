@@ -158,8 +158,8 @@ export default function ServiceCatalogPage() {
                   <span style={{ padding: '2px 10px', borderRadius: 20, fontSize: '.75rem', fontWeight: 600, background: item.is_active ? T.success + '15' : T.fgMuted + '15', color: item.is_active ? T.success : T.fgMuted }}>{item.is_active ? 'Activo' : 'Inactivo'}</span>
                 </td>
                 <td style={{ padding: '12px 16px', display: 'flex', gap: 4 }}>
-                  <button onClick={() => startEdit(item)} style={{ padding: 6, borderRadius: 6, border: `1px solid ${T.border}`, background: T.card, cursor: 'pointer', color: T.fgMuted }}><Edit2 size={14} /></button>
-                  <button onClick={() => { if (confirm('Eliminar?')) deleteMut.mutate(item.id) }} style={{ padding: 6, borderRadius: 6, border: `1px solid ${T.border}`, background: T.card, cursor: 'pointer', color: T.destructive }}><Trash2 size={14} /></button>
+                  <button aria-label="Editar" onClick={() => startEdit(item)} style={{ padding: 6, borderRadius: 6, border: `1px solid ${T.border}`, background: T.card, cursor: 'pointer', color: T.fgMuted }}><Edit2 size={14} /></button>
+                  <button aria-label="Eliminar" onClick={() => { if (confirm('Eliminar?')) deleteMut.mutate(item.id) }} style={{ padding: 6, borderRadius: 6, border: `1px solid ${T.border}`, background: T.card, cursor: 'pointer', color: T.destructive }}><Trash2 size={14} /></button>
                 </td>
               </tr>
             ))}

@@ -355,13 +355,13 @@ export default function LLMVisibilityPage() {
                       >
                         {runOneMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
                       </button>
-                      <button
+                      <button aria-label="Editar"
                         onClick={() => openEdit(q)}
                         style={{ padding: 6, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
-                      <button
+                      <button aria-label="Eliminar"
                         onClick={async () => { if (await confirm({ title: '¿Eliminar?', description: '¿Eliminar query y resultados?', confirmText: 'Eliminar' })) deleteMutation.mutate(q.id) }}
                         style={{ padding: 6, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}
                       >
@@ -588,7 +588,7 @@ export default function LLMVisibilityPage() {
               <h2 style={{ fontSize: 18, fontWeight: 600, color: T.fg, fontFamily: fontDisplay }}>
                 {editingQuery ? 'Editar Query' : 'Nueva Query'}
               </h2>
-              <button onClick={closeModal} style={{ padding: 4, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
+              <button aria-label="Cerrar" onClick={closeModal} style={{ padding: 4, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
                 <X className="w-5 h-5" />
               </button>
             </div>

@@ -182,7 +182,7 @@ function KeywordsTab() {
               placeholder="Ubicación" style={inputStyle} />
           </div>
           <div className="flex gap-2">
-            <button type="submit" disabled={createMutation.isPending}
+            <button aria-label="Guardar" type="submit" disabled={createMutation.isPending}
               style={{ padding: '8px 16px', backgroundColor: T.cyan, color: T.bg, fontSize: 14, borderRadius: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
               <Save className="w-4 h-4" /> {editId ? 'Actualizar' : 'Crear'}
             </button>
@@ -232,10 +232,10 @@ function KeywordsTab() {
                     </span>
                   </td>
                   <td style={{ padding: '8px' }} className="flex gap-1">
-                    <button onClick={() => startEdit(kw)} className="p-1" style={{ color: T.fgMuted }}>
+                    <button aria-label="Editar" onClick={() => startEdit(kw)} className="p-1" style={{ color: T.fgMuted }}>
                       <Edit3 className="w-4 h-4" />
                     </button>
-                    <button onClick={() => deleteMutation.mutate(kw.id)} className="p-1" style={{ color: T.fgMuted }}>
+                    <button aria-label="Eliminar" onClick={() => deleteMutation.mutate(kw.id)} className="p-1" style={{ color: T.fgMuted }}>
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </td>
@@ -421,7 +421,7 @@ function GeoPagesTab() {
                   <span style={{ padding: '2px 8px', borderRadius: 4, fontSize: 12, backgroundColor: p.status === 'active' ? 'hsla(142,71%,45%,0.15)' : T.muted, color: p.status === 'active' ? T.success : T.fgMuted }}>
                     {p.status}
                   </span>
-                  <button onClick={() => deleteMutation.mutate(p.id)} className="p-1" style={{ color: T.fgMuted }}>
+                  <button aria-label="Eliminar" onClick={() => deleteMutation.mutate(p.id)} className="p-1" style={{ color: T.fgMuted }}>
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -561,7 +561,7 @@ function NAPTab() {
                     {a.is_consistent === null && <span style={{ color: T.fgMuted, fontSize: 12 }}>-</span>}
                   </td>
                   <td style={{ padding: '8px' }}>
-                    <button onClick={() => deleteMutation.mutate(a.id)} className="p-1" style={{ color: T.fgMuted }}>
+                    <button aria-label="Eliminar" onClick={() => deleteMutation.mutate(a.id)} className="p-1" style={{ color: T.fgMuted }}>
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </td>

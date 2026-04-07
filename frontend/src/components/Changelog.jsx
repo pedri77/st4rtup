@@ -59,7 +59,7 @@ export default function Changelog() {
         <span className="text-sm font-semibold text-cyan-400 flex items-center gap-1.5">
           <Sparkles className="w-4 h-4" /> Novedades v{latest.version}
         </span>
-        <button onClick={dismiss} className="text-gray-500 hover:text-gray-800"><X className="w-4 h-4" /></button>
+        <button aria-label="Cerrar" onClick={dismiss} className="text-gray-500 hover:text-gray-800"><X className="w-4 h-4" /></button>
       </div>
       <div className="p-4 max-h-48 overflow-y-auto">
         <p className="text-[10px] text-gray-600 mb-2">{latest.date}</p>

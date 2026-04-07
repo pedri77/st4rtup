@@ -192,7 +192,7 @@ export default function AssetsPage() {
       <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen space-y-6" style={{ backgroundColor: T.bg }}>
         <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
         <div className="flex items-center gap-3">
-          <button onClick={() => setViewingAsset(null)} className="p-2 rounded-lg" style={{ backgroundColor: T.card, color: T.fgMuted }}>
+          <button aria-label="Volver" onClick={() => setViewingAsset(null)} className="p-2 rounded-lg" style={{ backgroundColor: T.card, color: T.fgMuted }}>
             <ArrowLeft size={18} />
           </button>
           <div className="flex-1">
@@ -215,7 +215,7 @@ export default function AssetsPage() {
                 </a>
               </>
             )}
-            <button onClick={() => openEdit(a)} className="p-2 rounded-lg" style={{ backgroundColor: 'hsla(185,72%,48%,0.12)', color: T.cyan }}>
+            <button aria-label="Editar" onClick={() => openEdit(a)} className="p-2 rounded-lg" style={{ backgroundColor: 'hsla(185,72%,48%,0.12)', color: T.cyan }}>
               <Edit3 size={16} />
             </button>
           </div>
@@ -440,12 +440,12 @@ export default function AssetsPage() {
         <div className="flex items-center justify-between">
           <p style={{ fontSize: 14, color: T.fgMuted }}>{total} resultados</p>
           <div className="flex items-center gap-2">
-            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+            <button aria-label="Anterior" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
               className="p-2 rounded-lg disabled:opacity-50" style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, color: T.fgMuted }}>
               <ChevronLeft size={16} />
             </button>
             <span style={{ fontSize: 14, color: T.fgMuted }}>Página {page} de {pages}</span>
-            <button onClick={() => setPage(p => Math.min(pages, p + 1))} disabled={page === pages}
+            <button aria-label="Siguiente" onClick={() => setPage(p => Math.min(pages, p + 1))} disabled={page === pages}
               className="p-2 rounded-lg disabled:opacity-50" style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, color: T.fgMuted }}>
               <ChevronRight size={16} />
             </button>
@@ -461,7 +461,7 @@ export default function AssetsPage() {
               <h2 style={{ fontFamily: fontDisplay, fontSize: 20, fontWeight: 600, color: T.fg }}>
                 {editingAsset ? 'Editar Asset' : 'Nuevo Asset'}
               </h2>
-              <button onClick={closeModal} className="p-1 rounded" style={{ color: T.fgMuted }}>
+              <button aria-label="Cerrar" onClick={closeModal} className="p-1 rounded" style={{ color: T.fgMuted }}>
                 <X size={18} />
               </button>
             </div>

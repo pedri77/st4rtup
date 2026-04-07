@@ -352,10 +352,10 @@ export default function SocialMediaPage() {
                       color: rec.is_active ? T.success : T.fgMuted,
                       backgroundColor: rec.is_active ? 'hsla(142,71%,45%,0.1)' : T.muted,
                     }}>{rec.is_active ? 'Activa' : 'Pausada'}</span>
-                  <button onClick={() => generateNowMut.mutate(rec.id)} disabled={generateNowMut.isPending} className="text-xs" style={{ color: T.cyan }}>
+                  <button aria-label="Recargar" onClick={() => generateNowMut.mutate(rec.id)} disabled={generateNowMut.isPending} className="text-xs" style={{ color: T.cyan }}>
                     <RefreshCw className="w-4 h-4" />
                   </button>
-                  <button onClick={() => { if (confirm('Eliminar?')) deleteRecMut.mutate(rec.id) }} className="text-xs" style={{ color: T.destructive }}>
+                  <button aria-label="Eliminar" onClick={() => { if (confirm('Eliminar?')) deleteRecMut.mutate(rec.id) }} className="text-xs" style={{ color: T.destructive }}>
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
@@ -435,7 +435,7 @@ export default function SocialMediaPage() {
           <div className="rounded-xl p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto" style={{ backgroundColor: T.bg, border: `1px solid ${T.border}` }} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between mb-4">
               <h3 className="text-lg font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>Nuevo Post</h3>
-              <button onClick={() => setShowCreate(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button>
+              <button aria-label="Cerrar" onClick={() => setShowCreate(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button>
             </div>
             <div className="space-y-3">
               <select id="socialmedia-select-4" aria-label="Selector" value={form.platform} onChange={e => setForm(f => ({ ...f, platform: e.target.value }))} className="input text-sm">

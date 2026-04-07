@@ -83,8 +83,8 @@ export default function CustomerHealthPage() {
                 <p className="text-xs" style={{ color: T.fgMuted }}>{client.contact_name} &middot; {client.company_sector || 'Sin sector'} &middot; {client.company_country || 'ES'}</p>
               </div>
               <div className="flex gap-2">
-                <Link to={`/leads/${client.id}/abm`} className="btn-secondary text-xs">ABM View</Link>
-                <Link to={`/leads/${client.id}`} className="btn-secondary text-xs">Ficha</Link>
+                <Link to={`/app/leads/${client.id}/abm`} className="btn-secondary text-xs">ABM View</Link>
+                <Link to={`/app/leads/${client.id}`} className="btn-secondary text-xs">Ficha</Link>
               </div>
             </div>
           )

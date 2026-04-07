@@ -49,7 +49,7 @@ export default function InstallPrompt() {
       <button onClick={handleInstall} style={{ padding: '6px 14px', backgroundColor: '#1E6FD9', color: '#F8FAFC', border: 'none', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
         Instalar
       </button>
-      <button onClick={handleDismiss} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
+      <button aria-label="Cerrar" onClick={handleDismiss} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
         <X size={16} color="#64748B" />
       </button>
     </div>

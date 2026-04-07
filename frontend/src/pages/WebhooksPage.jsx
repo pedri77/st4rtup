@@ -97,7 +97,7 @@ export default function WebhooksPage() {
           <code style={{ fontFamily: fontMono, fontSize: '0.8rem', color: T.cyan, backgroundColor: T.muted, padding: '0.5rem 0.75rem', borderRadius: '0.5rem', flex: 1 }}>
             POST {inboundUrl}
           </code>
-          <button onClick={() => { navigator.clipboard.writeText(inboundUrl); toast.success('URL copiada') }} style={{ ...btnStyle(T.fgMuted), padding: '0.5rem' }}>
+          <button aria-label="Copiar" onClick={() => { navigator.clipboard.writeText(inboundUrl); toast.success('URL copiada') }} style={{ ...btnStyle(T.fgMuted), padding: '0.5rem' }}>
             <Copy size={14} />
           </button>
         </div>
@@ -190,7 +190,7 @@ export default function WebhooksPage() {
             <button onClick={() => handleTest(sub.id)} disabled={testingId === sub.id} style={{ ...btnStyle(T.purple), padding: '0.375rem 0.75rem' }}>
               {testingId === sub.id ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
             </button>
-            <button onClick={() => { if (confirm('Eliminar?')) deleteMut.mutate(sub.id) }} style={{ ...btnStyle(T.destructive), padding: '0.375rem 0.75rem' }}>
+            <button aria-label="Eliminar" onClick={() => { if (confirm('Eliminar?')) deleteMut.mutate(sub.id) }} style={{ ...btnStyle(T.destructive), padding: '0.375rem 0.75rem' }}>
               <Trash2 size={14} />
             </button>
           </div>

@@ -126,10 +126,10 @@ export default function CalendarPage() {
             <div className="flex items-center gap-2">
               <button onClick={goToToday} className="px-3 py-1.5 text-sm rounded-lg transition-colors"
                 style={{ color: T.fgMuted }}>Hoy</button>
-              <button onClick={goToPrev} className="p-1.5 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
+              <button aria-label="Anterior" onClick={goToPrev} className="p-1.5 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <button onClick={goToNext} className="p-1.5 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
+              <button aria-label="Siguiente" onClick={goToNext} className="p-1.5 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>

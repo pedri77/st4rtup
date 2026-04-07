@@ -279,7 +279,7 @@ export default function MyDayPage() {
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {hotLeads?.length > 0 ? (
               hotLeads.map(l => (
-                <Link key={l.id} to={`/leads/${l.id}`}
+                <Link key={l.id} to={`/app/leads/${l.id}`}
                   className="rounded-lg p-3 flex items-center gap-3 transition-colors hover:brightness-110 block"
                   style={{ backgroundColor: T.muted, borderLeft: `3px solid ${T.warning}` }}>
                   <div className="flex-1 min-w-0">

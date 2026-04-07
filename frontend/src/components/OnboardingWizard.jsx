@@ -44,7 +44,7 @@ export default function OnboardingWizard() {
           <span style={{ fontSize: 13, fontWeight: 600, color: '#0F172A' }}>Primeros pasos</span>
           <span style={{ fontSize: 11, color: '#1E6FD9', backgroundColor: '#EBF4FF', padding: '2px 8px', borderRadius: 10, fontWeight: 600 }}>{done}/{total}</span>
         </div>
-        <button onClick={() => { setHidden(true); localStorage.setItem('st4rtup_checklist_hidden', 'true') }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
+        <button aria-label="Cerrar" onClick={() => { setHidden(true); localStorage.setItem('st4rtup_checklist_hidden', 'true') }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
           <X size={14} color="#94A3B8" />
         </button>
       </div>

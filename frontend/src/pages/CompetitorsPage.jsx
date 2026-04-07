@@ -117,7 +117,7 @@ function CompetitorDrawer({ comp, onClose }) {
               </a>
             )}
           </div>
-          <button onClick={onClose} className="hover:opacity-80" style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
+          <button aria-label="Cerrar" onClick={onClose} className="hover:opacity-80" style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
         </div>
 
         {/* Tabs */}
@@ -410,7 +410,7 @@ export default function CompetitorsPage() {
           <div className="rounded-xl p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto" style={{ backgroundColor: T.bg, border: `1px solid ${T.border}` }} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between mb-4">
               <h3 className="text-lg font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>Nuevo competidor</h3>
-              <button onClick={() => setShowAddForm(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button>
+              <button aria-label="Cerrar" onClick={() => setShowAddForm(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button>
             </div>
             <div className="space-y-3">
               <input type="text" value={addForm.name} onChange={e => setAddForm(f => ({ ...f, name: e.target.value }))} placeholder="Nombre *" className="input text-sm" />

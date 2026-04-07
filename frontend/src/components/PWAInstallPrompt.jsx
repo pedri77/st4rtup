@@ -48,7 +48,7 @@ export default function PWAInstallPrompt() {
             <p className="text-sm font-semibold text-gray-800">Instalar St4rtup</p>
             <p className="text-xs text-gray-500 mt-0.5">Accede al CRM desde tu escritorio, sin navegador.</p>
           </div>
-          <button onClick={handleDismiss} className="text-gray-400 hover:text-gray-600 shrink-0">
+          <button aria-label="Cerrar" onClick={handleDismiss} className="text-gray-400 hover:text-gray-600 shrink-0">
             <X className="w-4 h-4" />
           </button>
         </div>

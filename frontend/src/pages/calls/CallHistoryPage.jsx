@@ -197,7 +197,7 @@ export default function CallHistoryPage() {
                     onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
                     <td className="px-4 py-3 text-sm" style={{ color: T.fg }}>{formatDate(call.fecha_inicio)}</td>
                     <td className="px-4 py-3">
-                      <Link to={`/leads/${call.lead_id}`} className="text-sm" style={{ color: T.cyan }}
+                      <Link to={`/app/leads/${call.lead_id}`} className="text-sm" style={{ color: T.cyan }}
                         onClick={e => e.stopPropagation()}>
                         {call.lead_id?.slice(0, 8)}...
                       </Link>

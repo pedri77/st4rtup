@@ -264,7 +264,7 @@ export default function ProfilePage() {
               <input id="profile-role" type="text" value={roleLabels[userProfile?.role || 'viewer']} disabled style={{ ...inputStyle, opacity: 0.6, cursor: 'not-allowed' }} />
               <p className="text-xs mt-1" style={{ color: T.fgMuted }}>Solo un administrador puede cambiar roles</p>
             </div>
-            <button type="submit" disabled={updateProfile.isPending}
+            <button aria-label="Guardar" type="submit" disabled={updateProfile.isPending}
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all disabled:opacity-50"
               style={{ fontFamily: fontDisplay, backgroundColor: T.cyan, color: T.bg }}>
               <Save className="w-4 h-4" />{updateProfile.isPending ? 'Guardando...' : 'Guardar Cambios'}
@@ -281,12 +281,12 @@ export default function ProfilePage() {
             <div>
               <label className="block text-sm font-medium mb-3" style={{ color: T.fg }}>Tema</label>
               <div className="grid grid-cols-2 gap-3">
-                <button onClick={() => setPreferences({ ...preferences, theme: 'light' })}
+                <button aria-label="Modo claro" onClick={() => setPreferences({ ...preferences, theme: 'light' })}
                   className="p-3 rounded-lg flex items-center gap-2 transition-colors"
                   style={{ border: `2px solid ${preferences.theme === 'light' ? T.cyan : T.border}`, backgroundColor: preferences.theme === 'light' ? `${T.cyan}10` : 'transparent', color: T.fg }}>
                   <Sun className="w-5 h-5" /><span className="text-sm font-medium">Claro</span>
                 </button>
-                <button disabled className="p-3 rounded-lg flex items-center gap-2 opacity-50"
+                <button aria-label="Modo oscuro" disabled className="p-3 rounded-lg flex items-center gap-2 opacity-50"
                   style={{ border: `2px solid ${T.border}`, color: T.fgMuted }}>
                   <Moon className="w-5 h-5" /><span className="text-sm font-medium">Oscuro</span>
                   <span className="text-xs" style={{ color: T.fgMuted }}>(Prox.)</span>

@@ -186,7 +186,7 @@ export default function Layout() {
             </div>
             <span style={{ fontFamily: fontDisplay, color: T.fg }} className="font-semibold text-lg">St4rtup CRM</span>
           </div>
-          <button onClick={() => setSidebarOpen(false)}
+          <button aria-label="Cerrar" onClick={() => setSidebarOpen(false)}
             className="lg:hidden p-2 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
             <X className="w-5 h-5" />
           </button>
@@ -277,14 +277,14 @@ export default function Layout() {
         <header className="h-16 flex items-center justify-between px-4 md:px-6"
           style={{ backgroundColor: T.card, borderBottom: `1px solid ${T.border}` }}>
           <div className="flex items-center gap-3 flex-1">
-            <button onClick={() => setSidebarOpen(true)}
+            <button aria-label="Abrir menú" onClick={() => setSidebarOpen(true)}
               className="lg:hidden p-2 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
               <Menu className="w-5 h-5" />
             </button>
 
             {/* Search bar */}
             <div className="hidden md:block flex-1 max-w-2xl">
-              <button
+              <button aria-label="Buscar"
                 onClick={() => setSearchOpen(true)}
                 className="w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors text-left"
                 style={{ backgroundColor: T.muted, border: `1px solid ${T.border}` }}
@@ -297,7 +297,7 @@ export default function Layout() {
               </button>
             </div>
 
-            <button onClick={() => setSearchOpen(true)}
+            <button aria-label="Buscar" onClick={() => setSearchOpen(true)}
               className="md:hidden p-2 rounded-lg transition-colors ml-auto" style={{ color: T.fgMuted }}>
               <Search className="w-5 h-5" />
             </button>
@@ -308,7 +308,7 @@ export default function Layout() {
             <Link to="/app/docs" title="Documentación" style={{ width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${T.border}`, color: T.fgMuted, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>?</Link>
             {/* Notifications */}
             <div className="relative">
-              <button onClick={() => setNotificationsOpen(true)}
+              <button aria-label="Notificaciones" onClick={() => setNotificationsOpen(true)}
                 className="p-2 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
                 <Bell className="w-5 h-5" />
               </button>

@@ -163,7 +163,7 @@ function FunnelFlowView({ funnel, onBack, onEdit }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button
+          <button aria-label="Volver"
             onClick={fullscreen ? () => setFullscreen(false) : onBack}
             className="transition-colors"
             style={{ color: T.fgMuted }}
@@ -446,14 +446,14 @@ export default function FunnelsPage() {
                     </span>
                   </div>
                   <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
-                    <button
+                    <button aria-label="Editar"
                       onClick={() => openEdit(funnel)}
                       className="p-1.5 rounded-lg transition-colors"
                       style={{ color: T.fgMuted }}
                     >
                       <Edit3 className="w-4 h-4" />
                     </button>
-                    <button
+                    <button aria-label="Eliminar"
                       onClick={async () => {
                         if (await confirm({ title: '¿Eliminar?', description: `¿Eliminar "${funnel.name}"?`, confirmText: 'Eliminar' })) deleteMutation.mutate(funnel.id)
                       }}
@@ -505,7 +505,7 @@ export default function FunnelsPage() {
               <h2 style={{ fontFamily: fontDisplay, fontSize: 20, fontWeight: 600, color: T.fg }}>
                 {editingFunnel ? 'Editar Funnel' : 'Nuevo Funnel'}
               </h2>
-              <button onClick={closeModal} className="p-1 rounded-lg transition-colors">
+              <button aria-label="Cerrar" onClick={closeModal} className="p-1 rounded-lg transition-colors">
                 <X className="w-5 h-5" style={{ color: T.fgMuted }} />
               </button>
             </div>
@@ -581,7 +581,7 @@ export default function FunnelsPage() {
                           Etapa {idx + 1}
                         </span>
                         {form.stages.length > 1 && (
-                          <button
+                          <button aria-label="Eliminar"
                             type="button"
                             onClick={() => removeStage(idx)}
                             className="transition-colors"

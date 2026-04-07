@@ -40,7 +40,7 @@ export default function InAppPrompts() {
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: 12 }}>
         <p style={{ fontSize: 14, color: '#334155', lineHeight: 1.5, margin: 0 }}>{active.message}</p>
-        <button onClick={dismiss} style={{ background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}><X size={16} color="#94A3B8" /></button>
+        <button aria-label="Cerrar" onClick={dismiss} style={{ background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}><X size={16} color="#94A3B8" /></button>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
         <Link to={active.link} onClick={dismiss} style={{

@@ -65,7 +65,7 @@ function TacticCard({ tactic, onStatusChange }) {
         <div className="flex items-center gap-1.5">
           {tactic.channel && <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ backgroundColor: T.muted, color: T.fgMuted }}>{tactic.channel}</span>}
         </div>
-        <Link to={`/gtm/playbook/${tactic.id}`}
+        <Link to={`/app/gtm/playbook/${tactic.id}`}
           className="text-[10px] flex items-center gap-0.5 hover:opacity-80" style={{ color: T.cyan }}>
           Abrir <ChevronRight className="w-3 h-3" />
         </Link>

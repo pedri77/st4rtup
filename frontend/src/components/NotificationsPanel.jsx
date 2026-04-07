@@ -137,7 +137,7 @@ export default function NotificationsPanel({ isOpen, onClose }) {
                 <CheckCheck className="w-4 h-4" />
               </button>
             )}
-            <button onClick={onClose} className="p-2 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
+            <button aria-label="Cerrar" onClick={onClose} className="p-2 rounded-lg transition-colors" style={{ color: T.fgMuted }}>
               <X className="w-5 h-5" />
             </button>
           </div>

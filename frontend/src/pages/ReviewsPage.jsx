@@ -367,7 +367,7 @@ function CreateReviewModal({ onClose, onSubmit, isLoading }) {
               {step === 1 ? 'Elige el tipo de seguimiento para precargar acciones sugeridas' : 'Completa los detalles del review mensual'}
             </p>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg" style={{ color: T.fgMuted }}>
+          <button aria-label="Cerrar" onClick={onClose} className="p-2 rounded-lg" style={{ color: T.fgMuted }}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -462,13 +462,13 @@ function CreateReviewModal({ onClose, onSubmit, isLoading }) {
                   <div key={idx} className="flex items-center gap-2 rounded px-3 py-1.5 text-sm" style={{ backgroundColor: T.muted }}>
                     <Target className="w-3.5 h-3.5 flex-shrink-0" style={{ color: T.purple }} />
                     <span className="flex-1" style={{ color: T.fg }}>{action.description}</span>
-                    <button type="button" onClick={() => removeAction(idx)} style={{ color: T.fgMuted }}><X className="w-3.5 h-3.5" /></button>
+                    <button aria-label="Cerrar" type="button" onClick={() => removeAction(idx)} style={{ color: T.fgMuted }}><X className="w-3.5 h-3.5" /></button>
                   </div>
                 ))}
               </div>
               <div className="flex gap-2">
                 <input id="review-new-action" type="text" value={newAction} onChange={(e) => setNewAction(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addAction() } }} style={inputStyle} placeholder="Agregar accion..." />
-                <button type="button" onClick={addAction} className="px-3 py-1.5 rounded-lg" style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}><Plus className="w-4 h-4" /></button>
+                <button aria-label="Añadir" type="button" onClick={addAction} className="px-3 py-1.5 rounded-lg" style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}><Plus className="w-4 h-4" /></button>
               </div>
             </div>
 
@@ -480,13 +480,13 @@ function CreateReviewModal({ onClose, onSubmit, isLoading }) {
                   <div key={idx} className="flex items-center gap-2 rounded px-3 py-1.5 text-sm" style={{ backgroundColor: 'hsl(25,80%,50%,0.08)' }}>
                     <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'hsl(25,80%,50%)' }} />
                     <span className="flex-1" style={{ color: T.fg }}>{item.title}</span>
-                    <button type="button" onClick={() => removeImprovement(idx)} style={{ color: T.fgMuted }}><X className="w-3.5 h-3.5" /></button>
+                    <button aria-label="Cerrar" type="button" onClick={() => removeImprovement(idx)} style={{ color: T.fgMuted }}><X className="w-3.5 h-3.5" /></button>
                   </div>
                 ))}
               </div>
               <div className="flex gap-2">
                 <input id="review-new-improvement" type="text" value={newImprovement} onChange={(e) => setNewImprovement(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addImprovement() } }} style={inputStyle} placeholder="Agregar mejora o issue..." />
-                <button type="button" onClick={addImprovement} className="px-3 py-1.5 rounded-lg" style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}><Plus className="w-4 h-4" /></button>
+                <button aria-label="Añadir" type="button" onClick={addImprovement} className="px-3 py-1.5 rounded-lg" style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}><Plus className="w-4 h-4" /></button>
               </div>
             </div>
 
@@ -507,7 +507,7 @@ function CreateReviewModal({ onClose, onSubmit, isLoading }) {
               <button type="button" onClick={() => setStep(1)} className="text-sm px-3 py-1.5 rounded-lg" style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}>Cambiar tipo</button>
               <div className="flex gap-3">
                 <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm" style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}>Cancelar</button>
-                <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50" style={{ backgroundColor: T.cyan, color: T.bg }} disabled={isLoading}>
+                <button aria-label="Añadir" type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50" style={{ backgroundColor: T.cyan, color: T.bg }} disabled={isLoading}>
                   <Plus className="w-4 h-4" />{isLoading ? 'Creando...' : 'Crear Review'}
                 </button>
               </div>

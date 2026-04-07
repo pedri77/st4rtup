@@ -174,7 +174,7 @@ export default function DataTable({
             >
               Primera
             </button>
-            <button
+            <button aria-label="Anterior"
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="p-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
@@ -212,7 +212,7 @@ export default function DataTable({
               })}
             </div>
 
-            <button
+            <button aria-label="Siguiente"
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
               className="p-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"

@@ -242,7 +242,7 @@ export default function CampaignsPage() {
               </div>
             </div>
             <div className="flex gap-2">
-              <button
+              <button aria-label="Editar"
                 onClick={() => { setViewingCampaign(null); openEdit(viewingCampaign) }}
                 style={{ padding: '6px 12px', backgroundColor: T.muted, color: T.fg, borderRadius: 8, fontSize: 14 }}
                 className="transition-colors"
@@ -522,7 +522,7 @@ export default function CampaignsPage() {
               Página {page} de {totalPages} ({data?.total} resultados)
             </span>
             <div className="flex items-center gap-1">
-              <button
+              <button aria-label="Anterior"
                 disabled={page <= 1}
                 onClick={() => setPage(p => p - 1)}
                 className="p-1.5 rounded-lg transition-colors disabled:opacity-30"
@@ -530,7 +530,7 @@ export default function CampaignsPage() {
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <button
+              <button aria-label="Siguiente"
                 disabled={page >= totalPages}
                 onClick={() => setPage(p => p + 1)}
                 className="p-1.5 rounded-lg transition-colors disabled:opacity-30"
@@ -551,7 +551,7 @@ export default function CampaignsPage() {
               <h2 style={{ fontFamily: fontDisplay, fontSize: 20, fontWeight: 600, color: T.fg }}>
                 {editingCampaign ? 'Editar Campaña' : 'Nueva Campaña'}
               </h2>
-              <button onClick={closeModal} className="p-1 rounded-lg transition-colors">
+              <button aria-label="Cerrar" onClick={closeModal} className="p-1 rounded-lg transition-colors">
                 <X className="w-5 h-5" style={{ color: T.fgMuted }} />
               </button>
             </div>
@@ -723,7 +723,7 @@ export default function CampaignsPage() {
                     {form.geo_target.map(tag => (
                       <span key={tag} className="flex items-center gap-1" style={{ padding: '2px 8px', backgroundColor: T.muted, color: T.fg, borderRadius: 4, fontSize: 12 }}>
                         {tag}
-                        <button type="button" onClick={() => removeGeoTag(tag)} style={{ color: T.destructive }}>
+                        <button aria-label="Cerrar" type="button" onClick={() => removeGeoTag(tag)} style={{ color: T.destructive }}>
                           <X className="w-3 h-3" />
                         </button>
                       </span>

@@ -191,7 +191,7 @@ export default function MediaTrifectaPage() {
       {showAddAd && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" onClick={() => setShowAddAd(false)}>
           <div className="rounded-xl p-6 w-full max-w-md" style={{ backgroundColor: T.bg, border: `1px solid ${T.border}` }} onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between mb-4"><h3 className="text-lg font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>Nueva campaña</h3><button onClick={() => setShowAddAd(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button></div>
+            <div className="flex justify-between mb-4"><h3 className="text-lg font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>Nueva campaña</h3><button aria-label="Cerrar" onClick={() => setShowAddAd(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button></div>
             <div className="space-y-3 max-h-[60vh] overflow-y-auto">
               <input type="text" value={adForm.name} onChange={e => setAdForm(f => ({ ...f, name: e.target.value }))} placeholder="Nombre de la campaña" className="input text-sm" />
               <div className="grid grid-cols-2 gap-2">
@@ -223,7 +223,7 @@ export default function MediaTrifectaPage() {
       {showAddMention && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" onClick={() => setShowAddMention(false)}>
           <div className="rounded-xl p-6 w-full max-w-md" style={{ backgroundColor: T.bg, border: `1px solid ${T.border}` }} onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between mb-4"><h3 className="text-lg font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>Registrar mención</h3><button onClick={() => setShowAddMention(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button></div>
+            <div className="flex justify-between mb-4"><h3 className="text-lg font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>Registrar mención</h3><button aria-label="Cerrar" onClick={() => setShowAddMention(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button></div>
             <div className="space-y-3">
               <select id="mediatrifecta-select-3" aria-label="Selector" value={mentionForm.type} onChange={e => setMentionForm(f => ({ ...f, type: e.target.value }))} className="input text-sm">
                 <option value="review">Review</option><option value="press">Nota de prensa</option>

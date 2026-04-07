@@ -101,7 +101,7 @@ export default function GlobalSearch({ isOpen, onClose }) {
             aria-label="Buscar leads, emails, acciones, oportunidades"
           />
           {query && (
-            <button onClick={() => setQuery('')} style={{ color: T.fgMuted }}>
+            <button aria-label="Cerrar" onClick={() => setQuery('')} style={{ color: T.fgMuted }}>
               <X className="w-5 h-5" />
             </button>
           )}

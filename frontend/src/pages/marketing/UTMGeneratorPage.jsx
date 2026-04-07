@@ -250,14 +250,14 @@ export default function UTMGeneratorPage() {
             Página {page} de {totalPages} ({data?.total} resultados)
           </span>
           <div className="flex items-center gap-1">
-            <button
+            <button aria-label="Anterior"
               disabled={page <= 1}
               onClick={() => setPage(p => p - 1)}
               style={{ padding: 6, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted, opacity: page <= 1 ? 0.3 : 1 }}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <button
+            <button aria-label="Siguiente"
               disabled={page >= totalPages}
               onClick={() => setPage(p => p + 1)}
               style={{ padding: 6, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted, opacity: page >= totalPages ? 0.3 : 1 }}
@@ -274,7 +274,7 @@ export default function UTMGeneratorPage() {
           <div style={{ backgroundColor: T.bg, border: `1px solid ${T.border}`, borderRadius: 12, width: '100%', maxWidth: 576, maxHeight: '90vh', overflowY: 'auto' }}>
             <div className="flex items-center justify-between p-5" style={{ borderBottom: `1px solid ${T.border}` }}>
               <h2 style={{ fontSize: 18, fontWeight: 600, color: T.fg, fontFamily: fontDisplay }}>Nuevo Código UTM</h2>
-              <button onClick={() => setShowModal(false)} style={{ padding: 4, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
+              <button aria-label="Cerrar" onClick={() => setShowModal(false)} style={{ padding: 4, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
                 <X className="w-5 h-5" />
               </button>
             </div>

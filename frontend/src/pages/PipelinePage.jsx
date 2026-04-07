@@ -548,7 +548,7 @@ function OpportunityCard({ opportunity, lead, isDragging, onDragStart, onDragEnd
                 >
                   <Download className="w-3.5 h-3.5" /> PDF
                 </button>
-                <button onClick={() => setProposal(null)} className="text-gray-500 hover:text-gray-800"><X className="w-5 h-5" /></button>
+                <button aria-label="Cerrar" onClick={() => setProposal(null)} className="text-gray-500 hover:text-gray-800"><X className="w-5 h-5" /></button>
               </div>
             </div>
             <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">{proposal}</pre>
@@ -602,7 +602,7 @@ function CreateOpportunityModal({ onClose, onSubmit, isLoading }) {
             <h2 className="text-xl font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Nueva Operacion</h2>
             <div className="w-12 h-0.5 mt-1" style={{ backgroundColor: T.cyan }} />
           </div>
-          <button onClick={onClose} style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
+          <button aria-label="Cerrar" onClick={onClose} style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -669,7 +669,7 @@ function CreateOpportunityModal({ onClose, onSubmit, isLoading }) {
                 <span key={index} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs"
                   style={{ fontFamily: fontMono, color: T.cyan, border: `1px solid ${T.cyan}30` }}>
                   {product}
-                  <button type="button" onClick={() => removeProduct(index)}><X className="w-3 h-3" /></button>
+                  <button aria-label="Cerrar" type="button" onClick={() => removeProduct(index)}><X className="w-3 h-3" /></button>
                 </span>
               ))}
             </div>

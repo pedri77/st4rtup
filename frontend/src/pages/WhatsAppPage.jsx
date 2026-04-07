@@ -276,7 +276,7 @@ export default function WhatsAppPage() {
           <>
             {/* Header */}
             <div className="flex items-center gap-3 px-4 py-3" style={{ borderBottom: `1px solid ${T.border}`, backgroundColor: T.card }}>
-              <button
+              <button aria-label="Anterior"
                 onClick={() => setMobileShowMessages(false)}
                 className="md:hidden p-1 rounded"
                 style={{ color: T.fgMuted }}

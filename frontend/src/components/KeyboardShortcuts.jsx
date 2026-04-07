@@ -119,7 +119,7 @@ export default function KeyboardShortcuts() {
               Atajos de teclado
             </h2>
           </div>
-          <button onClick={() => setHelpOpen(false)}
+          <button aria-label="Cerrar" onClick={() => setHelpOpen(false)}
             className="p-1.5 rounded-lg transition-colors hover:opacity-80"
             style={{ color: T.fgMuted }}>
             <X className="w-5 h-5" />

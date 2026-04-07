@@ -241,7 +241,7 @@ export default function FormsManagerPage() {
                   <Link size={14} />
                 </button>
                 {token.is_active && (
-                  <button onClick={() => { if (confirm('Revocar?')) revokeMut.mutate(token.id) }}
+                  <button aria-label="Eliminar" onClick={() => { if (confirm('Revocar?')) revokeMut.mutate(token.id) }}
                     style={{ background: 'none', border: 'none', color: T.destructive, cursor: 'pointer', padding: 4 }}>
                     <Trash2 size={14} />
                   </button>
@@ -332,7 +332,7 @@ export default function FormsManagerPage() {
             onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 style={{ fontFamily: fontDisplay, fontSize: '1.1rem', fontWeight: 700, color: T.fg, margin: 0 }}>Enviar formulario</h3>
-              <button onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', color: T.fgMuted, cursor: 'pointer' }}><X size={18} /></button>
+              <button aria-label="Cerrar" onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', color: T.fgMuted, cursor: 'pointer' }}><X size={18} /></button>
             </div>
 
             <div style={{ marginBottom: '1rem' }}>

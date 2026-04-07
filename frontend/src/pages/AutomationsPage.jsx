@@ -355,7 +355,7 @@ function AutomationDetail({ automation, onClose, onToggle }) {
                 {sm.label}
               </span>
               {canExecute && (
-                <button
+                <button aria-label="Reproducir"
                   onClick={() => executeAC01Mutation.mutate()}
                   disabled={executeAC01Mutation.isPending}
                   className="px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -702,7 +702,7 @@ export default function AutomationsPage() {
             <Database className="w-4 h-4" />
             Seed 22 Automations
           </button>
-          <button
+          <button aria-label="Recargar"
             onClick={() => queryClient.invalidateQueries({ queryKey: ['automations'] })}
             className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg transition-colors"
             style={{ backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fgMuted }}

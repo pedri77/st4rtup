@@ -164,14 +164,14 @@ export default function ChatWidget() {
                 <p className="p-3 text-xs text-center" style={{ color: T.fgMuted }}>Sin conversaciones</p>
               ) : (
                 conversations.map((conv) => (
-                  <button key={conv.id}
+                  <button aria-label="Mensaje" key={conv.id}
                     onClick={() => { setConversationId(conv.id); setShowHistory(false) }}
                     className="w-full text-left px-3 py-2 transition-colors flex items-center gap-2 group"
                     style={{ backgroundColor: conversationId === conv.id ? `${T.cyan}10` : 'transparent' }}>
                     <MessageSquare className="w-3.5 h-3.5 flex-shrink-0" style={{ color: T.fgMuted }} />
                     <span className="text-xs truncate flex-1" style={{ color: T.fg }}>{conv.title}</span>
                     <span className="text-[10px]" style={{ color: T.fgMuted }}>{conv.message_count}</span>
-                    <button
+                    <button aria-label="Eliminar"
                       onClick={(e) => { e.stopPropagation(); if (confirm('Eliminar esta conversacion?')) deleteConv.mutate(conv.id) }}
                       className="opacity-0 group-hover:opacity-100" style={{ color: T.fgMuted }}>
                       <Trash2 className="w-3 h-3" />

@@ -446,7 +446,7 @@ function ActionCard({ action, isDragging, onDragStart, onDragEnd, onStatusChange
           </span>
         </div>
         {showActions && (
-          <button
+          <button aria-label="Cerrar"
             onClick={() => onDelete(action.id)}
             className="transition-colors"
             style={{ color: T.fgMuted }}
@@ -609,7 +609,7 @@ function CreateActionModal({ onClose, onSubmit, isLoading }) {
             </h2>
             <div className="w-12 h-0.5 mt-1" style={{ backgroundColor: T.cyan }} />
           </div>
-          <button
+          <button aria-label="Cerrar"
             onClick={onClose}
             className="p-1 rounded transition-colors"
             style={{ color: T.fgMuted }}

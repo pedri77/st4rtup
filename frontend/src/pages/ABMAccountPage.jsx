@@ -71,7 +71,7 @@ export default function ABMAccountPage() {
             )}
           </div>
         </div>
-        <Link to={`/leads/${leadId}`} className="btn-secondary text-xs">Ver ficha completa</Link>
+        <Link to={`/app/leads/${leadId}`} className="btn-secondary text-xs">Ver ficha completa</Link>
       </div>
 
       {/* Stats */}

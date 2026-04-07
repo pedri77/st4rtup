@@ -42,7 +42,7 @@ export default function FeedbackWidget() {
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', borderBottom: '1px solid #E2E8F0' }}>
         <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: '#1A1A2E' }}>¿Qué mejorarías?</h4>
-        <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={18} color="#94A3B8" /></button>
+        <button aria-label="Cerrar" onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={18} color="#94A3B8" /></button>
       </div>
 
       {sent ? (

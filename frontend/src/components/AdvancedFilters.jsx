@@ -23,7 +23,7 @@ export function MultiSelectDropdown({ label, options, value = [], onChange, clas
 
   return (
     <div className={`relative ${className}`}>
-      <button
+      <button aria-label="Desplegar"
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
           "w-full flex items-center justify-between px-3 py-2 rounded-lg border transition-all text-sm",
@@ -120,7 +120,7 @@ export function TagFilter({ tags = [], onRemove }) {
         >
           <Tag className="w-3 h-3" />
           {tag.label}
-          <button
+          <button aria-label="Cerrar"
             onClick={() => onRemove(tag)}
             className="hover:text-brand-dark transition-colors"
           >
@@ -161,7 +161,7 @@ export function SearchWithFilters({
             className="input pl-10 pr-4"
           />
           {searchValue && (
-            <button
+            <button aria-label="Cerrar"
               onClick={() => onSearchChange('')}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             >

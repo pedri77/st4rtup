@@ -209,7 +209,7 @@ export default function SurveyPublicPage() {
                 </label>
                 <div className="flex justify-center gap-3">
                   {[1, 2, 3, 4, 5].map(n => (
-                    <button
+                    <button aria-label="Favorito"
                       key={n}
                       type="button"
                       onClick={() => setCsatScore(n)}

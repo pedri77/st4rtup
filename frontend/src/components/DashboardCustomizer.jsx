@@ -138,7 +138,7 @@ export default function DashboardCustomizer({ widgets, onToggle, onReset, onMove
           <div className="w-80 bg-gray-50 border-l border-gray-200 h-full overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="p-4 border-b border-gray-200 flex items-center justify-between">
               <h3 className="text-sm font-semibold text-gray-800">Personalizar Dashboard</h3>
-              <button onClick={() => setOpen(false)}><X className="w-4 h-4 text-gray-500" /></button>
+              <button aria-label="Cerrar" onClick={() => setOpen(false)}><X className="w-4 h-4 text-gray-500" /></button>
             </div>
 
             <div className="p-4 space-y-2">
@@ -147,10 +147,10 @@ export default function DashboardCustomizer({ widgets, onToggle, onReset, onMove
                   w.visible ? 'bg-white' : 'bg-gray-50 opacity-50')}>
                   <div className="flex items-center gap-2">
                     <div className="flex flex-col gap-0.5">
-                      <button onClick={() => onMoveUp(w.id)} disabled={i === 0} className="text-gray-600 hover:text-gray-400 disabled:opacity-20">
+                      <button aria-label="Mover" onClick={() => onMoveUp(w.id)} disabled={i === 0} className="text-gray-600 hover:text-gray-400 disabled:opacity-20">
                         <GripVertical className="w-3 h-3 rotate-180" />
                       </button>
-                      <button onClick={() => onMoveDown(w.id)} disabled={i === widgets.length - 1} className="text-gray-600 hover:text-gray-400 disabled:opacity-20">
+                      <button aria-label="Mover" onClick={() => onMoveDown(w.id)} disabled={i === widgets.length - 1} className="text-gray-600 hover:text-gray-400 disabled:opacity-20">
                         <GripVertical className="w-3 h-3" />
                       </button>
                     </div>

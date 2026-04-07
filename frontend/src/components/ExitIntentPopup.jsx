@@ -41,7 +41,7 @@ export default function ExitIntentPopup() {
         maxWidth: 420, width: '100%', position: 'relative', textAlign: 'center',
         boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
       }}>
-        <button onClick={() => setShow(false)} style={{
+        <button aria-label="Cerrar" onClick={() => setShow(false)} style={{
           position: 'absolute', top: 16, right: 16, background: 'none',
           border: 'none', cursor: 'pointer',
         }}><X size={20} color="#94A3B8" /></button>

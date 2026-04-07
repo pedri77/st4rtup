@@ -204,7 +204,7 @@ export default function LeadsImport({ isOpen, onClose }) {
               Paso {step} de 4
             </p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button aria-label="Cerrar" onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X className="w-6 h-6" />
           </button>
         </div>

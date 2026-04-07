@@ -103,10 +103,10 @@ export default function InlineEdit({
             outline: 'none', width: Math.max(60, (draft?.toString().length || 5) * 9),
           }}
         />
-        <button onClick={save} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.success, padding: 2 }}>
+        <button aria-label="Confirmar" onClick={save} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.success, padding: 2 }}>
           <Check size={14} />
         </button>
-        <button onClick={cancel} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.destructive, padding: 2 }}>
+        <button aria-label="Cerrar" onClick={cancel} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.destructive, padding: 2 }}>
           <X size={14} />
         </button>
       </div>

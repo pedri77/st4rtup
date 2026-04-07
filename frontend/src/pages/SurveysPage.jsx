@@ -723,7 +723,7 @@ function SurveyFormModal({ survey, onClose, onSubmit, isLoading }) {
       <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} className="rounded-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-1">
           <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-xl font-bold">{isEdit ? 'Editar Encuesta' : 'Nueva Encuesta'}</h2>
-          <button onClick={onClose} style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
+          <button aria-label="Cerrar" onClick={onClose} style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
         </div>
         <div style={{ borderBottom: `2px solid ${T.cyan}` }} className="mb-4" />
 
@@ -840,7 +840,7 @@ function RespondModal({ survey, onClose, onSubmit, isLoading }) {
       <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} className="rounded-xl max-w-md w-full p-6">
         <div className="flex items-center justify-between mb-1">
           <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-xl font-bold">Registrar Respuesta</h2>
-          <button onClick={onClose} style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
+          <button aria-label="Cerrar" onClick={onClose} style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
         </div>
         <div style={{ borderBottom: `2px solid ${T.cyan}` }} className="mb-4" />
 
@@ -868,7 +868,7 @@ function RespondModal({ survey, onClose, onSubmit, isLoading }) {
               <label style={{ color: T.fg }} className="block text-sm font-medium mb-2">Satisfaccion (1-5)</label>
               <div className="flex gap-1">
                 {[1, 2, 3, 4, 5].map(n => (
-                  <button key={n} type="button" onClick={() => setScore(n)}>
+                  <button aria-label="Favorito" key={n} type="button" onClick={() => setScore(n)}>
                     <Star className="w-8 h-8 cursor-pointer transition-colors" style={{
                       color: n <= score ? T.warning : T.fgMuted,
                       fill: n <= score ? T.warning : 'none',
@@ -930,7 +930,7 @@ function DetailModal({ survey, onClose }) {
       <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} className="rounded-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-1">
           <h2 style={{ fontFamily: fontDisplay, color: T.fg }} className="text-xl font-bold">Detalle de Encuesta</h2>
-          <button onClick={onClose} style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
+          <button aria-label="Cerrar" onClick={onClose} style={{ color: T.fgMuted }}><X className="w-5 h-5" /></button>
         </div>
         <div style={{ borderBottom: `2px solid ${T.cyan}` }} className="mb-4" />
 

@@ -599,7 +599,7 @@ function ContactFormModal({ contact, leads, onClose, onSubmit, isLoading }) {
           <h2 className="text-lg font-semibold" style={{ color: T.fg, fontFamily: fontDisplay }}>
             {contact ? 'Editar Contacto' : 'Nuevo Contacto'}
           </h2>
-          <button onClick={onClose} className="p-2 rounded-lg" style={{ color: T.fgMuted }}>
+          <button aria-label="Cerrar" onClick={onClose} className="p-2 rounded-lg" style={{ color: T.fgMuted }}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -742,7 +742,7 @@ function ContactDetailModal({ contact, leads, onClose, onEdit }) {
             <button onClick={onEdit} className="p-2 rounded-lg" style={{ color: T.fgMuted }} title="Editar">
               <Edit2 className="w-4 h-4" />
             </button>
-            <button onClick={onClose} className="p-2 rounded-lg" style={{ color: T.fgMuted }}>
+            <button aria-label="Cerrar" onClick={onClose} className="p-2 rounded-lg" style={{ color: T.fgMuted }}>
               <X className="w-5 h-5" />
             </button>
           </div>

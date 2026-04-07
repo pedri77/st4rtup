@@ -73,7 +73,7 @@ export default function WebChatWidget() {
             <p style={{ fontSize: 11, color: T.fgMuted, margin: 0 }}>Asistente</p>
           </div>
         </div>
-        <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
+        <button aria-label="Cerrar" onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
           <X size={18} color={T.fgMuted} />
         </button>
       </div>
@@ -107,7 +107,7 @@ export default function WebChatWidget() {
           onKeyDown={e => e.key === 'Enter' && handleSend()}
           placeholder="Escribe tu pregunta..."
           style={{ flex: 1, backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: 8, padding: '8px 12px', fontSize: 13, outline: 'none' }} />
-        <button onClick={handleSend} disabled={loading}
+        <button aria-label="Enviar" onClick={handleSend} disabled={loading}
           style={{ backgroundColor: T.cyan, border: 'none', borderRadius: 8, padding: '8px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Send size={16} color={T.bg} />
         </button>

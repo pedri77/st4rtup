@@ -5,7 +5,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, desc
+from sqlalchemy import select, func, desc, or_
 
 from app.core.database import get_db
 from app.core.security import get_current_user
@@ -40,7 +40,8 @@ async def list_prompts(
 ):
     """Lista prompts de llamadas con filtros y paginación."""
     query = select(CallPrompt)
-    query = query.where(CallPrompt.org_id == org_id)
+    # Tolerate legacy rows with NULL org_id (pre-migration)
+    query = query.where(or_(CallPrompt.org_id == org_id, CallPrompt.org_id.is_(None)))
 
     if objetivo:
         query = query.where(CallPrompt.objetivo == objetivo)
@@ -90,11 +91,13 @@ async def create_prompt(
     data: CallPromptCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Crea un nuevo prompt de llamada."""
     prompt = CallPrompt(
         **data.model_dump(),
         created_by=UUID(current_user["user_id"]),
+        org_id=UUID(org_id) if org_id else None,
         version=1,
     )
     db.add(prompt)
@@ -347,10 +350,12 @@ async def list_calls(
     resultado: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Lista registros de llamadas con filtros y paginación."""
     query = select(CallRecord)
-    query = query.where(CallRecord.org_id == org_id)
+    # Tolerate legacy rows with NULL org_id (pre-migration)
+    query = query.where(or_(CallRecord.org_id == org_id, CallRecord.org_id.is_(None)))
 
     if lead_id:
         query = query.where(CallRecord.lead_id == lead_id)

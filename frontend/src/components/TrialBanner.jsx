@@ -51,7 +51,7 @@ export default function TrialBanner() {
       }}>
         {expired ? 'Mejorar plan' : 'Elegir plan'} <ArrowRight size={12} />
       </Link>
-      <button onClick={() => setDismissed(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
+      <button aria-label="Cerrar" onClick={() => setDismissed(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
         <X size={14} color="#94A3B8" />
       </button>
     </div>

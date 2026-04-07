@@ -303,11 +303,11 @@ export default function MarketingCalendarPage() {
 
       {/* Month navigation */}
       <div className="flex items-center justify-between">
-        <button onClick={prevMonth} style={{ padding: 8, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
+        <button aria-label="Anterior" onClick={prevMonth} style={{ padding: 8, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
           <ChevronLeft className="w-5 h-5" />
         </button>
         <h2 style={{ fontSize: 18, fontWeight: 600, color: T.fg, textTransform: 'capitalize', fontFamily: fontDisplay }}>{monthName}</h2>
-        <button onClick={nextMonth} style={{ padding: 8, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
+        <button aria-label="Siguiente" onClick={nextMonth} style={{ padding: 8, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>
@@ -426,13 +426,13 @@ export default function MarketingCalendarPage() {
                       {ev.description && <p style={{ fontSize: 12, color: T.fgMuted, marginTop: 2 }}>{ev.description}</p>}
                     </div>
                     <div className="flex gap-1">
-                      <button
+                      <button aria-label="Editar"
                         onClick={() => openEdit(ev)}
                         style={{ padding: 4, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}
                       >
                         <Edit3 className="w-3.5 h-3.5" />
                       </button>
-                      <button
+                      <button aria-label="Eliminar"
                         onClick={async () => {
                           if (await confirm({ title: '¿Eliminar?', description: `¿Eliminar "${ev.title}"?`, confirmText: 'Eliminar' })) deleteMutation.mutate(ev.id)
                         }}
@@ -457,7 +457,7 @@ export default function MarketingCalendarPage() {
               <h2 style={{ fontSize: 18, fontWeight: 600, color: T.fg, fontFamily: fontDisplay }}>
                 {editingEvent ? 'Editar Evento' : 'Nuevo Evento'}
               </h2>
-              <button onClick={closeModal} style={{ padding: 4, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
+              <button aria-label="Cerrar" onClick={closeModal} style={{ padding: 4, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
                 <X className="w-5 h-5" />
               </button>
             </div>

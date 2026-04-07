@@ -297,7 +297,7 @@ export default function AlertsPage() {
             Página {page} de {totalPages} ({data?.total} resultados)
           </span>
           <div className="flex items-center gap-1">
-            <button
+            <button aria-label="Anterior"
               disabled={page <= 1}
               onClick={() => setPage(p => p - 1)}
               className="p-1.5 rounded-lg transition-colors disabled:opacity-30"
@@ -305,7 +305,7 @@ export default function AlertsPage() {
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <button
+            <button aria-label="Siguiente"
               disabled={page >= totalPages}
               onClick={() => setPage(p => p + 1)}
               className="p-1.5 rounded-lg transition-colors disabled:opacity-30"

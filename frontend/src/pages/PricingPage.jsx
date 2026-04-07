@@ -227,7 +227,7 @@ export default function PricingPage() {
           <div className="rounded-xl p-6 w-full max-w-md border" style={{ backgroundColor: T.bg, borderColor: T.border }} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between mb-4">
               <h3 className="text-lg font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Nuevo Tier / Producto</h3>
-              <button onClick={() => setShowAdd(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button>
+              <button aria-label="Cerrar" onClick={() => setShowAdd(false)}><X className="w-5 h-5" style={{ color: T.fgMuted }} /></button>
             </div>
             <div className="space-y-3">
               <input type="text" value={addForm.name} onChange={e => setAddForm(f => ({ ...f, name: e.target.value }))} placeholder="Nombre (ej: Scale Plus)" className="input text-sm" />

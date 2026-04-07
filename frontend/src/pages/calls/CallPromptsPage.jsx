@@ -293,11 +293,11 @@ export default function CallPromptsPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button type="button" onClick={() => setEditingId(prompt.id)} className="p-1.5 rounded-lg"
+                      <button aria-label="Editar" type="button" onClick={() => setEditingId(prompt.id)} className="p-1.5 rounded-lg"
                         style={{ color: T.fgMuted }}>
                         <Pencil className="w-4 h-4" />
                       </button>
-                      <button type="button" onClick={() => { if (confirm('Eliminar prompt?')) deleteMutation.mutate(prompt.id) }}
+                      <button aria-label="Eliminar" type="button" onClick={() => { if (confirm('Eliminar prompt?')) deleteMutation.mutate(prompt.id) }}
                         className="p-1.5 rounded-lg" style={{ color: T.fgMuted }}>
                         <Trash2 className="w-4 h-4" />
                       </button>

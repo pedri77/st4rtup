@@ -851,7 +851,7 @@ function RepurposeTab() {
                     <Icon className="w-4 h-4" style={{ color: T.cyan }} />
                     <span className="text-sm font-medium" style={{ color: T.fg }}>{fmt}</span>
                   </div>
-                  <button onClick={() => { navigator.clipboard.writeText(content); toast.success('Copiado') }} className="p-1" style={{ color: T.fgMuted }}><Copy className="w-4 h-4" /></button>
+                  <button aria-label="Copiar" onClick={() => { navigator.clipboard.writeText(content); toast.success('Copiado') }} className="p-1" style={{ color: T.fgMuted }}><Copy className="w-4 h-4" /></button>
                 </div>
                 <pre className="text-xs whitespace-pre-wrap max-h-48 overflow-auto" style={{ fontFamily: fontMono, color: T.fgMuted }}>{content}</pre>
               </div>
@@ -914,7 +914,7 @@ function HealthTab() {
                   </div>
                 )}
               </div>
-              <button onClick={() => auditMut.mutate(a.id)} disabled={auditMut.isPending} className="p-1.5 rounded" style={{ color: T.cyan }}>
+              <button aria-label="Recargar" onClick={() => auditMut.mutate(a.id)} disabled={auditMut.isPending} className="p-1.5 rounded" style={{ color: T.cyan }}>
                 <RefreshCw className="w-4 h-4" />
               </button>
             </div>
@@ -1133,7 +1133,7 @@ function KeywordStudioTab() {
             <h3 className="text-sm font-semibold" style={{ color: T.fg }}>Resultado del research</h3>
             <div className="flex gap-2">
               {result.saved_keywords > 0 && <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ backgroundColor: `${T.success}15`, color: T.success }}>{result.saved_keywords} guardadas</span>}
-              <button onClick={() => { navigator.clipboard.writeText(result.output); toast.success('Copiado') }} className="p-1" style={{ color: T.fgMuted }}><Copy className="w-4 h-4" /></button>
+              <button aria-label="Copiar" onClick={() => { navigator.clipboard.writeText(result.output); toast.success('Copiado') }} className="p-1" style={{ color: T.fgMuted }}><Copy className="w-4 h-4" /></button>
             </div>
           </div>
           <pre className="text-xs whitespace-pre-wrap max-h-96 overflow-auto p-3 rounded-lg" style={{ backgroundColor: T.muted, fontFamily: fontMono, color: T.fg }}>
@@ -1354,7 +1354,7 @@ function BacklinksTab() {
                   <td className="px-3 py-2" style={{ fontFamily: fontMono, color: T.fg }}>{bl.domain_authority || '-'}</td>
                   <td className="px-3 py-2"><span className="px-1.5 py-0.5 rounded text-[10px]" style={{ color: STATUS_COLORS[bl.status] || T.fgMuted, backgroundColor: `${STATUS_COLORS[bl.status] || T.fgMuted}15` }}>{bl.status}</span></td>
                   <td className="px-3 py-2 text-[10px]" style={{ color: T.fgMuted }}>{bl.category || '-'}</td>
-                  <td className="px-3 py-2"><button onClick={() => deleteMut.mutate(bl.id)} className="p-1" style={{ color: T.fgMuted }}><Trash2 className="w-3.5 h-3.5" /></button></td>
+                  <td className="px-3 py-2"><button aria-label="Eliminar" onClick={() => deleteMut.mutate(bl.id)} className="p-1" style={{ color: T.fgMuted }}><Trash2 className="w-3.5 h-3.5" /></button></td>
                 </tr>
               ))}
             </tbody>

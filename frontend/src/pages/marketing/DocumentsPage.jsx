@@ -235,7 +235,7 @@ export default function DocumentsPage() {
                 style={{ padding: '8px 12px', backgroundColor: T.muted, color: T.fg, borderRadius: 8, fontSize: 14, border: `1px solid ${T.border}`, cursor: 'pointer' }}>
                 Editar
               </button>
-              <button onClick={() => { if (confirm('Eliminar este documento?')) deleteMutation.mutate(doc.id) }}
+              <button aria-label="Eliminar" onClick={() => { if (confirm('Eliminar este documento?')) deleteMutation.mutate(doc.id) }}
                 style={{ padding: '8px 12px', backgroundColor: 'rgba(239,68,68,0.1)', color: T.destructive, borderRadius: 8, fontSize: 14, border: 'none', cursor: 'pointer' }}>
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -514,11 +514,11 @@ export default function DocumentsPage() {
                             <ExternalLink className="w-4 h-4" />
                           </a>
                         )}
-                        <button onClick={() => setEditDoc(doc)}
+                        <button aria-label="Ver" onClick={() => setEditDoc(doc)}
                           style={{ padding: 6, color: T.fgMuted, border: 'none', cursor: 'pointer', backgroundColor: 'transparent' }}>
                           <Eye className="w-4 h-4" />
                         </button>
-                        <button onClick={() => { if (confirm('Eliminar?')) deleteMutation.mutate(doc.id) }}
+                        <button aria-label="Eliminar" onClick={() => { if (confirm('Eliminar?')) deleteMutation.mutate(doc.id) }}
                           style={{ padding: 6, color: T.fgMuted, border: 'none', cursor: 'pointer', backgroundColor: 'transparent' }}>
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -599,7 +599,7 @@ function UploadModal({ campaigns, onClose, onSubmit, loading }) {
           <h2 className="flex items-center gap-2" style={{ fontSize: 18, fontWeight: 600, color: T.fg, fontFamily: fontDisplay }}>
             <Upload className="w-5 h-5" style={{ color: tealAccent }} /> Subir documento
           </h2>
-          <button onClick={onClose} style={{ color: T.fgMuted, border: 'none', cursor: 'pointer', backgroundColor: 'transparent' }}><X className="w-5 h-5" /></button>
+          <button aria-label="Cerrar" onClick={onClose} style={{ color: T.fgMuted, border: 'none', cursor: 'pointer', backgroundColor: 'transparent' }}><X className="w-5 h-5" /></button>
         </div>
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
@@ -722,7 +722,7 @@ function DocumentFormModal({ doc, campaigns, onClose, onSubmit, loading }) {
           <h2 style={{ fontSize: 18, fontWeight: 600, color: T.fg, fontFamily: fontDisplay }}>
             {isEdit ? 'Editar documento' : 'Crear registro'}
           </h2>
-          <button onClick={onClose} style={{ color: T.fgMuted, border: 'none', cursor: 'pointer', backgroundColor: 'transparent' }}><X className="w-5 h-5" /></button>
+          <button aria-label="Cerrar" onClick={onClose} style={{ color: T.fgMuted, border: 'none', cursor: 'pointer', backgroundColor: 'transparent' }}><X className="w-5 h-5" /></button>
         </div>
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
@@ -834,7 +834,7 @@ function UploadVersionModal({ docId, onClose, onSubmit, loading }) {
           <h2 className="flex items-center gap-2" style={{ fontSize: 18, fontWeight: 600, color: T.fg, fontFamily: fontDisplay }}>
             <History className="w-5 h-5" style={{ color: T.cyan }} /> Nueva versión
           </h2>
-          <button onClick={onClose} style={{ color: T.fgMuted, border: 'none', cursor: 'pointer', backgroundColor: 'transparent' }}><X className="w-5 h-5" /></button>
+          <button aria-label="Cerrar" onClick={onClose} style={{ color: T.fgMuted, border: 'none', cursor: 'pointer', backgroundColor: 'transparent' }}><X className="w-5 h-5" /></button>
         </div>
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
