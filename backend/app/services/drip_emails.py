@@ -41,25 +41,12 @@ DRIP_SEQUENCES = {
     "day_30_nps": {
         "day": 30,
         "subject": "¿Qué tal tu experiencia con St4rtup? (1 minuto)",
-        "body": "Hola {name},
-
-Llevas 30 días usando St4rtup. En una escala del 0 al 10, ¿recomendarías St4rtup a otro founder?
-
-Responde directamente a este email.
-
-— El equipo de St4rtup"
+        "body": "Hola {name},\n\nLlevas 30 días usando St4rtup. En una escala del 0 al 10, ¿recomendarías St4rtup a otro founder?\n\nResponde directamente a este email.\n\n— El equipo de St4rtup"
     },
     "day_90_nps": {
         "day": 90,
         "subject": "3 meses con St4rtup — ¿cómo lo estamos haciendo?",
-        "body": "Hola {name},
-
-¡3 meses juntos! ¿Recomendarías St4rtup a un amigo? (0-10)
-¿Qué mejorarías?
-
-Responde a este email — leemos todo.
-
-— El equipo de St4rtup"
+        "body": "Hola {name},\n\n¡3 meses juntos! ¿Recomendarías St4rtup a un amigo? (0-10)\n¿Qué mejorarías?\n\nResponde a este email — leemos todo.\n\n— El equipo de St4rtup"
     },
     "day_30_reactivation": {
         "day": 30,

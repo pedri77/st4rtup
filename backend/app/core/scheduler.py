@@ -546,7 +546,7 @@ async def run_ld02_sync_external():
     """LD-02: Sync Apollo.io — every 4h
     Busca prospectos en Apollo (España, >50 empleados, sectores clave) → deduplica por company_name → crea leads nuevos.
     """
-    from app.services import apollo_service
+    import app.services.apollo_service as apollo_service
     from app.models import Lead
     if not apollo_service.is_configured():
         return
@@ -600,7 +600,7 @@ async def run_ld03_enrichment():
     Leads sin sector/datos mínimos → apollo_service.enrich_lead() para obtener sector, tamaño, contactos.
     Fallback: marca como 'Por clasificar' si Apollo no está configurado.
     """
-    from app.services import apollo_service
+    import app.services.apollo_service as apollo_service
     from app.models import Lead
     try:
         async with AsyncSessionLocal() as db:
@@ -676,7 +676,7 @@ async def run_vi03_calendar_sync():
     """VI-03: Google Calendar sync — every 30 min
     Bidireccional: visitas sin evento GCal → crear evento. Eventos GCal sin visita → crear visita.
     """
-    from app.services import gcalendar_service
+    import app.services.gcalendar_service as gcalendar_service
     from app.models.crm import Visit
     from app.models import Lead
     try:
@@ -831,6 +831,7 @@ async def run_platform_metrics_snapshot():
         async with AsyncSessionLocal() as db:
             from app.models.organization import Organization
             from app.models import Lead, Opportunity
+            from app.models.user import User
             total_users = (await db.execute(select(func.count()).select_from(User))).scalar() or 0
             total_orgs = (await db.execute(select(func.count(Organization.id)))).scalar() or 0
             total_leads = (await db.execute(select(func.count(Lead.id)))).scalar() or 0
@@ -853,10 +854,11 @@ async def run_rs054b_brevo_nurturing():
     from app.models import Lead
     try:
         async with AsyncSessionLocal() as db:
+            from sqlalchemy import cast, String
             result = await db.execute(select(Lead).where(
                 Lead.score < 40,
                 Lead.status.notin_(["won", "lost"]),
-                (Lead.tags.is_(None)) | (~Lead.tags.contains(["brevo_nurturing"])),
+                (Lead.tags.is_(None)) | (~cast(Lead.tags, String).contains("brevo_nurturing")),
             ).limit(20))
             leads = result.scalars().all()
             added = 0
@@ -918,7 +920,7 @@ async def run_rs093_lemlist_sync():
     """RS-093: Lemlist activity sync — diario 12:00
     Sincroniza actividad de campañas Lemlist → actualiza score de leads según opens/clicks/replies.
     """
-    from app.services import lemlist_service
+    import app.services.lemlist_service as lemlist_service
     from app.models import Lead
     try:
         async with AsyncSessionLocal() as db:

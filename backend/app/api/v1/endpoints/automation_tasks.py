@@ -110,6 +110,9 @@ async def send_welcome_sequence_email(
     if not lead:
         return {"success": False, "error": "Lead not found"}
 
+    if not lead.contact_email:
+        return {"success": False, "error": f"Lead {lead_id} has no contact_email"}
+
     # Prepare lead data for template
     lead_data = {
         "company": lead.company_name,
