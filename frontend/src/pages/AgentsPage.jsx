@@ -8,6 +8,11 @@ import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
 import { agentsApi, leadsApi } from '@/services/api'
+
+// Mark agents as tried for setup checklist
+if (typeof window !== 'undefined') {
+  localStorage.setItem('st4rtup_agents_tried', 'true')
+}
 import { useQuery as useReactQuery } from '@tanstack/react-query'
 
 const T = {

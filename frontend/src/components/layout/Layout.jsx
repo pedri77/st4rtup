@@ -23,8 +23,10 @@ import QuickActions from '@/components/QuickActions'
 import InstallPrompt from '@/components/InstallPrompt'
 import FeedbackWidget from '@/components/FeedbackWidget'
 import InAppPrompts from '@/components/InAppPrompts'
+import SetupChecklist from '@/components/SetupChecklist'
 import TrialBanner from '@/components/TrialBanner'
 import { useNotificationStream } from '@/hooks/useNotificationStream'
+import { useSetupProgress } from '@/hooks/useSetupProgress'
 import { useTranslation } from '@/i18n/useTranslation'
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
@@ -135,6 +137,7 @@ export default function Layout() {
   const { t } = useTranslation()
 
   useNotificationStream()
+  useSetupProgress()
 
   const navigationGroups = getNavigationGroups(t)
   const visibleGroups = navigationGroups.map(group => ({
@@ -380,6 +383,8 @@ export default function Layout() {
       <ChatWidget />
       <QuickActions />
       <InstallPrompt />
+      <InAppPrompts />
+      <SetupChecklist />
       <KeyboardShortcuts />
       <Changelog />
     </div>

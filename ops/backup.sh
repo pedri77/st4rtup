@@ -20,6 +20,35 @@ source /opt/st4rtup/backup.env
 # Load GPG passphrase and Sentry DSN from the main .env (single source of secrets)
 BACKUP_GPG_PASSPHRASE=$(grep '^BACKUP_GPG_PASSPHRASE=' /opt/st4rtup/.env | cut -d= -f2-)
 SENTRY_DSN=$(grep '^SENTRY_DSN=' /opt/st4rtup/.env | cut -d= -f2-)
+TELEGRAM_BOT_TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' /opt/st4rtup/.env | cut -d= -f2-)
+TELEGRAM_CHAT_ID=$(grep '^TELEGRAM_CHAT_ID=' /opt/st4rtup/.env | cut -d= -f2-)
+
+# ─── Failure handler: send a message to Telegram via Bot API ───
+_alert_telegram() {
+    local message="$1"
+    if [ -z "${TELEGRAM_BOT_TOKEN:-}" ] || [ -z "${TELEGRAM_CHAT_ID:-}" ]; then
+        return 0
+    fi
+    local text="🚨 *st4rtup backup FAILED*%0A%0A${message}%0A%0AHost: $(hostname)%0ATime: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+    curl -sS --max-time 10 \
+         -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+         -d "chat_id=${TELEGRAM_CHAT_ID}" \
+         -d "text=${text}" \
+         -d "parse_mode=Markdown" >/dev/null 2>&1 || true
+}
+
+# ─── Success notification to Telegram ───
+_notify_telegram_success() {
+    if [ -z "${TELEGRAM_BOT_TOKEN:-}" ] || [ -z "${TELEGRAM_CHAT_ID:-}" ]; then
+        return 0
+    fi
+    local text="✅ *st4rtup backup OK*%0A%0AFile: ${1}%0ASize: ${2}%0ADaily: ${3} | Monthly: ${4}%0ATime: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+    curl -sS --max-time 10 \
+         -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+         -d "chat_id=${TELEGRAM_CHAT_ID}" \
+         -d "text=${text}" \
+         -d "parse_mode=Markdown" >/dev/null 2>&1 || true
+}
 
 # ─── Failure handler: send an event to Sentry via its Store API ───
 # Uses curl so there are no Python dependencies in the backup pipeline.
@@ -57,11 +86,12 @@ PAYLOAD
 # Explicit error paths below set _ALERTED=1 before `exit` to prevent
 # double-posting to Sentry.
 _ALERTED=0
-trap '_rc=$?; if [ $_rc -ne 0 ] && [ "$_ALERTED" = "0" ]; then _alert_sentry "script exited with code $_rc"; fi' EXIT
+trap '_rc=$?; if [ $_rc -ne 0 ] && [ "$_ALERTED" = "0" ]; then _alert_sentry "script exited with code $_rc"; _alert_telegram "script exited with code $_rc"; fi' EXIT
 
 if [ -z "${BACKUP_GPG_PASSPHRASE:-}" ]; then
     echo "[$(date)] ERROR: BACKUP_GPG_PASSPHRASE not set in /opt/st4rtup/.env"
     _alert_sentry "BACKUP_GPG_PASSPHRASE missing from .env"
+    _alert_telegram "BACKUP_GPG_PASSPHRASE missing from .env"
     _ALERTED=1; exit 1
 fi
 
@@ -89,6 +119,7 @@ PGPASSWORD=$SUPABASE_DB_PASSWORD pg_dump \
 if [ $? -ne 0 ] || [ ! -f "$DUMP_FILE" ]; then
     echo "[$(date)] Backup FAILED at pg_dump stage"
     _alert_sentry "pg_dump failed — check Supabase connectivity or credentials"
+    _alert_telegram "pg_dump failed — check Supabase connectivity or credentials"
     _ALERTED=1; exit 2
 fi
 
@@ -107,6 +138,7 @@ if [ $? -ne 0 ] || [ ! -f "$ENCRYPTED_FILE" ]; then
     echo "[$(date)] Encryption FAILED"
     rm -f "$DUMP_FILE"
     _alert_sentry "GPG encryption failed — check BACKUP_GPG_PASSPHRASE or disk space"
+    _alert_telegram "GPG encryption failed — check BACKUP_GPG_PASSPHRASE or disk space"
     _ALERTED=1; exit 3
 fi
 
@@ -145,4 +177,5 @@ fi
 find "$BACKUP_ROOT" -maxdepth 1 -name '*.dump' -not -name '*.gpg' -mtime +1 -delete 2>/dev/null
 
 echo "[$(date)] Backup complete. Daily: $DAILY_COUNT, Monthly: $MONTHLY_COUNT"
+_notify_telegram_success "$(basename $ENCRYPTED_FILE)" "$SIZE_ENC" "$DAILY_COUNT" "$MONTHLY_COUNT"
 exit 0
