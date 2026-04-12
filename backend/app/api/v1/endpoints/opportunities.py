@@ -157,6 +157,14 @@ async def update_opportunity(
     except Exception:
         logger.warning("Failed to send opportunity update notifications", exc_info=True)
 
+    # Execute pipeline automation rules
+    try:
+        if "stage" in update_data and old_stage != opp.stage:
+            from app.api.v1.endpoints.pipeline_rules import execute_rules_for_stage_change
+            await execute_rules_for_stage_change(db, opp.id, opp.stage, old_stage)
+    except Exception:
+        logger.debug("Pipeline rules execution failed", exc_info=True)
+
     # Dispatch to workflow engine
     try:
         from app.core.workflow_engine import dispatch_event

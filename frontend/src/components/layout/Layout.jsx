@@ -50,6 +50,7 @@ function getNavigationGroups(t) {
         { name: t('nav.leads'), href: '/app/leads', icon: Users },
         { name: t('nav.pipeline'), href: '/app/pipeline', icon: GitBranch },
         { name: t('nav.kanban'), href: '/app/pipeline/kanban', icon: Columns3 },
+        { name: 'Pipeline Rules', href: '/app/pipeline/rules', icon: Zap },
         { name: t('nav.offers'), href: '/app/offers', icon: FileText },
         { name: t('nav.calendar'), href: '/app/calendar', icon: Calendar },
       ],

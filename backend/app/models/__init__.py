@@ -58,6 +58,7 @@ from app.models.service_catalog import ServiceCatalogItem
 from app.models.organization import Organization, OrgMember
 from app.models.affiliate import AffiliateLink, AffiliateClick
 from app.models.rss_feed import RssFeed
+from app.models.pipeline_rule import PipelineRule
 
 __all__ = [
     "Base", "BaseModel",

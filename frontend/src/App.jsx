@@ -100,6 +100,7 @@ const SocialMediaPage = lazy(() => import('./pages/SocialMediaPage'))
 const LinkedInStudioPage = lazy(() => import('./pages/LinkedInStudioPage'))
 const YouTubePage = lazy(() => import('./pages/marketing/YouTubePage'))
 const PipelineFunnelPage = lazy(() => import('./pages/PipelineFunnelPage'))
+const PipelineRulesPage = lazy(() => import('./pages/PipelineRulesPage'))
 const AlertChannelsPage = lazy(() => import('./pages/AlertChannelsPage'))
 const WebhooksPage = lazy(() => import('./pages/WebhooksPage'))
 const ReportBuilderPage = lazy(() => import('./pages/ReportBuilderPage'))
@@ -183,6 +184,7 @@ function App() {
           <Route path="emails" element={<Suspense fallback={<PageLoader />}><EmailsPage /></Suspense>} />
           <Route path="pipeline" element={<Suspense fallback={<PageLoader />}><PipelinePage /></Suspense>} />
           <Route path="pipeline/kanban" element={<Suspense fallback={<PageLoader />}><PipelineKanbanPage /></Suspense>} />
+          <Route path="pipeline/rules" element={<Suspense fallback={<PageLoader />}><PipelineRulesPage /></Suspense>} />
           <Route path="offers" element={<Suspense fallback={<PageLoader />}><OffersPage /></Suspense>} />
           <Route path="offers/catalog" element={<Suspense fallback={<PageLoader />}><ServiceCatalogPage /></Suspense>} />
           <Route path="actions" element={<Suspense fallback={<PageLoader />}><ActionsPage /></Suspense>} />
