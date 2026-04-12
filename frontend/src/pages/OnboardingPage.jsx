@@ -186,8 +186,8 @@ export default function OnboardingPage() {
           <>
             <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>Conecta tu email</h2>
             <p style={{ color: '#64748B', marginBottom: 24, fontSize: 15 }}>Envía y recibe emails directamente desde el CRM con tracking de apertura y clics.</p>
-            <button onClick={next} style={{ ...btn, backgroundColor: 'white', color: '#1A1A2E', width: '100%', justifyContent: 'center', border: '1px solid #E2E8F0', marginBottom: 12 }}>
-              <img src="https://www.google.com/favicon.ico" alt="" style={{ width: 18, height: 18 }} /> Conectar Gmail
+            <button onClick={() => { window.open('/app/integrations?tab=email', '_blank'); next() }} style={{ ...btn, backgroundColor: 'white', color: '#1A1A2E', width: '100%', justifyContent: 'center', border: '1px solid #E2E8F0', marginBottom: 12 }}>
+              <img src="https://www.google.com/favicon.ico" alt="" style={{ width: 18, height: 18 }} /> Configurar email
             </button>
             <button onClick={skip} style={skipBtn}>Lo haré después</button>
           </>
