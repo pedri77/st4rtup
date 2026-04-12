@@ -93,6 +93,7 @@ function getNavigationGroups(t) {
         { name: t('nav.mcp_gateway'), href: '/app/integrations?tab=airtable', icon: BrainCircuit },
         { name: t('nav.whatsapp'), href: '/app/whatsapp', icon: MessageSquare },
         { name: t('nav.payments'), href: '/app/payments', icon: CreditCard },
+        { name: 'Pricing', href: '/app/billing', icon: CreditCard },
         { name: 'Docs', href: '/app/docs', icon: BookOpen },
         { name: 'Marketplace', href: '/app/marketplace', icon: ShoppingBag },
         { name: t('nav.chat'), href: '/app/chat', icon: Sparkles },

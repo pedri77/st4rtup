@@ -1,5 +1,6 @@
 """Endpoint de reportes avanzados para el CRM."""
 from datetime import datetime, timezone, timedelta
+from uuid import UUID
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, case
