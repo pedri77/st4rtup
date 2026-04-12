@@ -6,8 +6,6 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import LinkedInPreview from '@/components/LinkedInPreview'
-import api from '@/services/api'
-
 import { linkedinApi } from '@/services/api'
 
 const TONES = [

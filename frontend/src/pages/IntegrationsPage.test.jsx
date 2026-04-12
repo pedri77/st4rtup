@@ -23,7 +23,17 @@ vi.mock('@/components/RoleGuard', () => ({
 
 // Mock toast to capture messages
 const toastMock = { success: vi.fn(), error: vi.fn() }
-vi.mock('react-hot-toast', () => ({ default: toastMock, toast: toastMock }))
+vi.mock('react-hot-toast', () => ({
+  default: { success: vi.fn(), error: vi.fn() },
+  toast: { success: vi.fn(), error: vi.fn() },
+}))
+
+// Re-import to get hoisted mock references
+beforeEach(async () => {
+  const mod = await import('react-hot-toast')
+  toastMock.success = mod.default.success
+  toastMock.error = mod.default.error
+})
 
 function renderPage(initialUrl = '/') {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } })
