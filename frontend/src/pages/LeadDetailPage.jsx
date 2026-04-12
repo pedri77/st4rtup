@@ -1,6 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { leadsApi, automationTasksApi, contactsApi, visitsApi, emailsApi, callsApi } from '@/services/api';
+import { leadsApi, automationTasksApi, contactsApi, visitsApi, emailsApi, callsApi, reportsApi } from '@/services/api';
+import DealScoreCard from '@/components/DealScoreCard';
+import ActivityFeed from '@/components/ActivityFeed';
 import { ArrowLeft, Mail, Building2, User, Phone, MapPin, Globe, FileText, Tag, TrendingUp, Users, Star, Crown, Linkedin, Calendar, Clock, Video, Send, Sparkles, Loader2, CheckCircle2, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -285,6 +287,14 @@ export default function LeadDetailPage() {
               }
             </div>
           </div>
+
+          {/* Deal Score Cards (for each opportunity of this lead) */}
+          {lead.opportunities?.length > 0 && lead.opportunities.map(opp => (
+            <DealScoreCard key={opp.id} opportunityId={opp.id} />
+          ))}
+
+          {/* Activity Feed Timeline */}
+          <ActivityFeed leadId={id} />
 
           {/* Contacts / Stakeholders */}
           {contacts.length > 0 &&

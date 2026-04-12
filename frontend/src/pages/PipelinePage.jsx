@@ -10,6 +10,7 @@ import { Plus, X, FileText, Loader2, Download } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { mockOpportunities, mockDelay, USE_MOCK_DATA } from '@/mocks/mockData'
 import ExportButton from '@/components/ExportButton'
+import { DealScoreBadge as DealScoreCardInline } from '@/components/DealScoreCard'
 import { formatDateForExport } from '@/utils/export'
 import { ListItemSkeleton } from '@/components/LoadingStates'
 
@@ -492,6 +493,11 @@ function OpportunityCard({ opportunity, lead, isDragging, onDragStart, onDragEnd
           }}
           className="flex-1 text-[10px] bg-gray-50/50 border border-gray-200 rounded px-1.5 py-1 text-gray-400"
         />
+      </div>
+
+      {/* Deal Score */}
+      <div className="mt-2" onClick={e => e.stopPropagation()}>
+        <DealScoreCardInline opportunityId={opportunity.id} />
       </div>
 
       {/* Generate Proposal Button */}
