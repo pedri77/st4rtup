@@ -108,7 +108,7 @@ class TestWelcomeSequenceEmail:
             company_name="No Email Corp",
             contact_name="Ghost",
             contact_email=None,
-            source="test",
+            source="OTHER",
             status="new",
         )
         db_session.add(lead)

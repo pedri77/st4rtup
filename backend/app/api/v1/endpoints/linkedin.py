@@ -33,7 +33,7 @@ router = APIRouter()
 # ═══════════════════════════════════════════════════════════════
 
 
-@router.post("/generate", response_model=LinkedInGenerateResponse)
+@router.post("/generate")
 async def generate_post(
     data: LinkedInGenerateRequest,
     _current_user: dict = Depends(require_write_access),
