@@ -312,6 +312,42 @@ async def root():
     }
 
 
+@app.websocket("/ws/notifications")
+async def websocket_notifications(websocket: WebSocket):
+    """WebSocket for real-time user notifications (new lead, stage change, etc.)."""
+    import asyncio
+    token = websocket.query_params.get("token", "")
+    if not token:
+        await websocket.close(code=4001, reason="Token required")
+        return
+
+    from app.core.security import get_current_user
+    from fastapi.security import HTTPAuthorizationCredentials
+    from app.services.ws_manager import ws_manager
+
+    try:
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
+        user = await get_current_user(creds)
+        user_id = user["user_id"]
+    except Exception:
+        await websocket.close(code=4001, reason="Invalid token")
+        return
+
+    await ws_manager.connect(websocket, user_id)
+    try:
+        while True:
+            # Keep connection alive, listen for client pings
+            data = await asyncio.wait_for(websocket.receive_text(), timeout=30)
+            if data == "ping":
+                await websocket.send_text('{"type":"pong"}')
+    except (WebSocketDisconnect, asyncio.TimeoutError):
+        pass
+    except Exception:
+        pass
+    finally:
+        ws_manager.disconnect(websocket, user_id)
+
+
 @app.websocket("/ws/logs")
 async def websocket_logs(websocket: WebSocket):
     """WebSocket endpoint for real-time admin log streaming."""

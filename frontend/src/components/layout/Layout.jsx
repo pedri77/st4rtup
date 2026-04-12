@@ -26,6 +26,7 @@ import InAppPrompts from '@/components/InAppPrompts'
 import SetupChecklist from '@/components/SetupChecklist'
 import TrialBanner from '@/components/TrialBanner'
 import { useNotificationStream } from '@/hooks/useNotificationStream'
+import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications'
 import { useSetupProgress } from '@/hooks/useSetupProgress'
 import { useTranslation } from '@/i18n/useTranslation'
 
@@ -138,6 +139,7 @@ export default function Layout() {
   const { t } = useTranslation()
 
   useNotificationStream()
+  useRealtimeNotifications()
   useSetupProgress()
 
   const navigationGroups = getNavigationGroups(t)
