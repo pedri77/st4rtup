@@ -206,6 +206,9 @@ export const reportsApi = {
   pipelineVelocity: () => api.get('/reports/pipeline-velocity'),
   leadCohorts: (months) => api.get('/reports/lead-cohorts', { params: { months } }),
   exportCSV: () => api.get('/reports/export-csv', { responseType: 'blob' }),
+  pipelinePDF: () => api.get('/reports/pipeline/pdf', { responseType: 'blob' }),
+  activityPDF: (period) => api.get('/reports/activity/pdf', { params: { period }, responseType: 'blob' }),
+  activityFeed: (leadId, limit) => api.get(`/reports/lead/${leadId}/activity-feed`, { params: { limit } }),
 }
 
 export const reportBuilderApi = {

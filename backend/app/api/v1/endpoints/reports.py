@@ -465,3 +465,257 @@ def _get_date_range(period: str, now: datetime) -> tuple:
         start = now - timedelta(days=30)
 
     return start, now
+
+
+# ═══════════════════════════════════════════════════════════════
+# PDF Report Downloads
+# ═══════════════════════════════════════════════════════════════
+
+
+@router.get("/pipeline/pdf")
+async def download_pipeline_pdf(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Descarga reporte de pipeline en PDF."""
+    from fastapi.responses import Response as FastResponse
+    from app.services.pdf_report_generator import generate_pipeline_report
+
+    # Gather data
+    open_q = select(
+        func.count(Opportunity.id),
+        func.coalesce(func.sum(Opportunity.value), 0),
+    ).where(Opportunity.stage.notin_(["closed_won", "closed_lost"]))
+    open_row = (await db.execute(open_q)).one()
+
+    weighted_q = select(
+        func.coalesce(func.sum(Opportunity.value * Opportunity.probability / 100), 0),
+    ).where(Opportunity.stage.notin_(["closed_won", "closed_lost"]))
+    weighted = (await db.execute(weighted_q)).scalar() or 0
+
+    won_count = (await db.execute(
+        select(func.count(Opportunity.id)).where(Opportunity.stage == "closed_won")
+    )).scalar() or 0
+    lost_count = (await db.execute(
+        select(func.count(Opportunity.id)).where(Opportunity.stage == "closed_lost")
+    )).scalar() or 0
+    total_closed = won_count + lost_count
+    win_rate = (won_count / total_closed * 100) if total_closed > 0 else 0
+
+    avg_deal = float(open_row[1]) / max(open_row[0], 1)
+
+    # By stage
+    stage_q = select(
+        Opportunity.stage,
+        func.count(Opportunity.id),
+        func.coalesce(func.sum(Opportunity.value), 0),
+        func.coalesce(func.avg(Opportunity.probability), 0),
+    ).where(
+        Opportunity.stage.notin_(["closed_won", "closed_lost"]),
+    ).group_by(Opportunity.stage)
+    stage_rows = (await db.execute(stage_q)).all()
+
+    # Top deals
+    top_q = select(Opportunity, Lead.company_name).outerjoin(
+        Lead, Opportunity.lead_id == Lead.id
+    ).where(
+        Opportunity.stage.notin_(["closed_won", "closed_lost"]),
+    ).order_by(Opportunity.value.desc()).limit(10)
+    top_rows = (await db.execute(top_q)).all()
+
+    report_data = {
+        "open_deals": open_row[0],
+        "total_value": float(open_row[1]),
+        "weighted_value": float(weighted),
+        "win_rate": win_rate,
+        "avg_deal_size": avg_deal,
+        "by_stage": [
+            {"stage": r[0], "count": r[1], "value": float(r[2]), "avg_probability": float(r[3])}
+            for r in stage_rows
+        ],
+        "top_deals": [
+            {"company": r[1] or "?", "value": float(r[0].value or 0), "stage": r[0].stage, "probability": r[0].probability or 0}
+            for r in top_rows
+        ],
+    }
+
+    pdf_bytes = generate_pipeline_report(report_data)
+    filename = f"pipeline_report_{datetime.now(timezone.utc).strftime('%Y%m%d')}.pdf"
+
+    return FastResponse(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+@router.get("/activity/pdf")
+async def download_activity_pdf(
+    period: str = Query("last_30", pattern="^(last_7|last_30|last_90)$"),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Descarga reporte de actividad en PDF."""
+    from fastapi.responses import Response as FastResponse
+    from app.services.pdf_report_generator import generate_activity_report
+
+    now = datetime.now(timezone.utc)
+    start, end = _get_date_range(period, now)
+
+    new_leads = (await db.execute(
+        select(func.count(Lead.id)).where(Lead.created_at >= start, Lead.created_at <= end)
+    )).scalar() or 0
+
+    visits_count = (await db.execute(
+        select(func.count(Visit.id)).where(Visit.created_at >= start, Visit.created_at <= end)
+    )).scalar() or 0
+
+    emails_count = (await db.execute(
+        select(func.count(Email.id)).where(Email.created_at >= start, Email.created_at <= end)
+    )).scalar() or 0
+
+    actions_done = (await db.execute(
+        select(func.count(Action.id)).where(
+            Action.status == ActionStatus.COMPLETED,
+            Action.created_at >= start, Action.created_at <= end,
+        )
+    )).scalar() or 0
+
+    deals_won = (await db.execute(
+        select(func.count(Opportunity.id)).where(
+            Opportunity.stage == "closed_won",
+            Opportunity.updated_at >= start, Opportunity.updated_at <= end,
+        )
+    )).scalar() or 0
+
+    revenue = (await db.execute(
+        select(func.coalesce(func.sum(Opportunity.value), 0)).where(
+            Opportunity.stage == "closed_won",
+            Opportunity.updated_at >= start, Opportunity.updated_at <= end,
+        )
+    )).scalar() or 0
+
+    period_labels = {"last_7": "Últimos 7 días", "last_30": "Últimos 30 días", "last_90": "Últimos 90 días"}
+
+    report_data = {
+        "period": period_labels.get(period, period),
+        "new_leads": new_leads,
+        "visits": visits_count,
+        "emails_sent": emails_count,
+        "actions_completed": actions_done,
+        "deals_won": deals_won,
+        "revenue": float(revenue),
+    }
+
+    pdf_bytes = generate_activity_report(report_data)
+    filename = f"activity_report_{period}_{datetime.now(timezone.utc).strftime('%Y%m%d')}.pdf"
+
+    return FastResponse(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+# ═══════════════════════════════════════════════════════════════
+# Activity Feed (timeline de un lead)
+# ═══════════════════════════════════════════════════════════════
+
+
+@router.get("/lead/{lead_id}/activity-feed")
+async def lead_activity_feed(
+    lead_id: UUID,
+    limit: int = Query(50, ge=1, le=200),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Timeline unificado de toda la actividad de un lead."""
+    from sqlalchemy import union_all, literal_column, cast, String
+    from uuid import UUID as PyUUID
+
+    events = []
+
+    # Emails
+    email_rows = (await db.execute(
+        select(Email.id, Email.subject, Email.status, Email.created_at)
+        .where(Email.lead_id == lead_id)
+        .order_by(Email.created_at.desc()).limit(limit)
+    )).all()
+    for e in email_rows:
+        events.append({
+            "type": "email", "id": str(e[0]),
+            "title": e[1] or "(sin asunto)",
+            "detail": e[2],
+            "timestamp": e[3].isoformat() if e[3] else None,
+            "icon": "mail",
+        })
+
+    # Visits
+    visit_rows = (await db.execute(
+        select(Visit.id, Visit.visit_type, Visit.result, Visit.notes, Visit.created_at)
+        .where(Visit.lead_id == lead_id)
+        .order_by(Visit.created_at.desc()).limit(limit)
+    )).all()
+    for v in visit_rows:
+        events.append({
+            "type": "visit", "id": str(v[0]),
+            "title": f"Visita: {v[1]}",
+            "detail": v[2] or "",
+            "notes": (v[3] or "")[:200],
+            "timestamp": v[4].isoformat() if v[4] else None,
+            "icon": "calendar",
+        })
+
+    # Actions
+    action_rows = (await db.execute(
+        select(Action.id, Action.description, Action.status, Action.priority, Action.created_at)
+        .where(Action.lead_id == lead_id)
+        .order_by(Action.created_at.desc()).limit(limit)
+    )).all()
+    for a in action_rows:
+        events.append({
+            "type": "action", "id": str(a[0]),
+            "title": (a[1] or "")[:100],
+            "detail": f"{a[2]} · {a[3]}",
+            "timestamp": a[4].isoformat() if a[4] else None,
+            "icon": "check",
+        })
+
+    # Opportunities
+    opp_rows = (await db.execute(
+        select(Opportunity.id, Opportunity.stage, Opportunity.value, Opportunity.probability, Opportunity.created_at)
+        .where(Opportunity.lead_id == lead_id)
+        .order_by(Opportunity.created_at.desc()).limit(limit)
+    )).all()
+    for o in opp_rows:
+        events.append({
+            "type": "opportunity", "id": str(o[0]),
+            "title": f"Oportunidad: {float(o[2] or 0):,.0f} EUR",
+            "detail": f"{o[1]} · {o[3] or 0}% prob",
+            "timestamp": o[4].isoformat() if o[4] else None,
+            "icon": "trending-up",
+        })
+
+    # Offers
+    offer_rows = (await db.execute(
+        select(Offer.id, Offer.title, Offer.status, Offer.total_amount, Offer.created_at)
+        .where(Offer.lead_id == lead_id)
+        .order_by(Offer.created_at.desc()).limit(limit)
+    )).all()
+    for of in offer_rows:
+        events.append({
+            "type": "offer", "id": str(of[0]),
+            "title": of[1] or "Oferta",
+            "detail": f"{of[2]} · {float(of[3] or 0):,.0f} EUR",
+            "timestamp": of[4].isoformat() if of[4] else None,
+            "icon": "file-text",
+        })
+
+    # Sort all by timestamp desc
+    events.sort(key=lambda x: x.get("timestamp") or "", reverse=True)
+
+    return {
+        "lead_id": str(lead_id),
+        "events": events[:limit],
+        "total": len(events),
+    }
