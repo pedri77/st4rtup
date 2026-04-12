@@ -427,3 +427,125 @@ async def sync_metrics(
         await db.commit()
 
     return {"synced": synced, "total": len(posts)}
+
+
+# ═══════════════════════════════════════════════════════════════
+# Telegram: send post preview to Telegram for review/approval
+# ═══════════════════════════════════════════════════════════════
+
+
+@router.post("/send-to-telegram")
+async def send_to_telegram(
+    post_id: str,
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Envia un post de LinkedIn a Telegram para revision antes de publicar."""
+    import html as html_lib
+    from app.services.telegram_service import send_message
+
+    result = await db.execute(select(SocialPost).where(SocialPost.id == post_id))
+    post = result.scalar_one_or_none()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post no encontrado")
+
+    meta = post.metadata_ or {}
+    framework = meta.get("framework", "—")
+    hashtags = " ".join(meta.get("hashtags", []))
+
+    telegram_text = (
+        f"<b>📝 LinkedIn Studio — Post para revisar</b>\n\n"
+        f"<b>Framework:</b> {html_lib.escape(framework)}\n"
+        f"<b>Estado:</b> {html_lib.escape(post.status)}\n\n"
+        f"<pre>{html_lib.escape(post.content[:1500])}</pre>\n\n"
+        f"{html_lib.escape(hashtags)}\n\n"
+        f"<i>Responde con ✅ para aprobar o ❌ para descartar.</i>"
+    )
+
+    try:
+        result = await send_message(telegram_text, db=db)
+        return {"sent": True, "message_id": result.get("message_id")}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error enviando a Telegram: {e}")
+
+
+# ═══════════════════════════════════════════════════════════════
+# Seed: LinkedIn posts de ejemplo
+# ═══════════════════════════════════════════════════════════════
+
+
+@router.post("/seed")
+async def seed_linkedin_posts(
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Precarga posts LinkedIn de ejemplo para poblar analytics."""
+    from datetime import timedelta
+
+    existing = (await db.execute(
+        select(func.count(SocialPost.id)).where(SocialPost.platform == "linkedin")
+    )).scalar() or 0
+
+    if existing >= 10:
+        return {"seeded": 0, "message": "Ya hay suficientes posts LinkedIn"}
+
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+
+    seeds = [
+        {
+            "content": "El 90% de los founders que conozco cometen el mismo error.\n\nPasan 6 meses construyendo el producto perfecto.\n\nSin hablar con un solo cliente.\n\nYo lo hice en 2024. Perdi 4 meses y 15K EUR.\n\nAhora mi regla es simple:\n→ Semana 1: 20 entrevistas\n→ Semana 2: MVP feo pero funcional\n→ Semana 3: Primeros pagos\n\n¿Cual fue tu error mas caro como founder?\n\n#Startup #Founder #B2B #SaaS",
+            "status": "published", "impressions": 3420, "likes": 127, "comments": 34, "shares": 28, "clicks": 89,
+            "published_at": now - timedelta(days=2),
+            "metadata_": {"framework": "hook_story_cta", "tone": "expert", "hashtags": ["#Startup", "#Founder", "#B2B"], "module": "MOD-LINKEDIN-001"},
+        },
+        {
+            "content": "Las empresas espanolas pierden 4.200M EUR al ano por ciberataques.\n\nEl 73% no tienen un plan de respuesta a incidentes.\n\nCon ENS Alto + NIS2, la multa puede ser del 2% de facturacion.\n\nEn Riskitera automatizamos el cumplimiento en 90 dias.\n\n→ DM para una demo sin compromiso.\n\n#Ciberseguridad #ENS #NIS2 #Compliance",
+            "status": "published", "impressions": 1890, "likes": 67, "comments": 12, "shares": 19, "clicks": 45,
+            "published_at": now - timedelta(days=5),
+            "metadata_": {"framework": "aida", "tone": "expert", "hashtags": ["#Ciberseguridad", "#ENS", "#NIS2"], "module": "MOD-LINKEDIN-001"},
+        },
+        {
+            "content": "Unpopular opinion: Las certificaciones ISO 27001 no te protegen.\n\nSon un checklist. Un documento. Un sello.\n\nPero un atacante no lee tu SGSI antes de entrar.\n\nLo que realmente protege:\n→ Deteccion en <15 min\n→ Respuesta automatizada\n→ Cultura de seguridad real\n\nLa certificacion es el minimo. No el objetivo.\n\n¿Estais de acuerdo?\n\n#InfoSec #ISO27001 #CISO",
+            "status": "published", "impressions": 5210, "likes": 203, "comments": 67, "shares": 42, "clicks": 134,
+            "published_at": now - timedelta(days=8),
+            "metadata_": {"framework": "contrarian", "tone": "provocative", "hashtags": ["#InfoSec", "#ISO27001", "#CISO"], "module": "MOD-LINKEDIN-001"},
+        },
+        {
+            "content": "7 herramientas que uso a diario como founder:\n\n1. Claude Code → desarrollo con IA\n2. Linear → gestion de producto\n3. Supabase → backend + auth\n4. Hetzner → infra soberana EU\n5. n8n → automatizaciones\n6. Figma → diseno\n7. Notion → documentacion\n\nCoste total: <200 EUR/mes.\n\n¿Cual anadiriais?\n\n#Startup #Tools #Productividad",
+            "status": "published", "impressions": 4150, "likes": 156, "comments": 89, "shares": 51, "clicks": 78,
+            "published_at": now - timedelta(days=12),
+            "metadata_": {"framework": "listicle", "tone": "casual", "hashtags": ["#Startup", "#Tools", "#Productividad"], "module": "MOD-LINKEDIN-001"},
+        },
+        {
+            "content": "En marzo de 2025 nos quedamos sin runway.\n\n2 meses de caja. 3 personas dependiendo del proyecto.\n\nHabia dos opciones:\nA) Buscar inversion (3-6 meses)\nB) Vender antes de estar listos\n\nElegimos B.\n\nPrimera demo: un desastre. Se cayo el backend en directo.\n\nPero el cliente dijo: \"Me gusta la vision. ¿Cuando empezamos?\"\n\nLeccion: Tu MVP nunca estara listo. Pero tu mercado no espera.\n\n#Founder #Startup #Emprendimiento",
+            "status": "published", "impressions": 6780, "likes": 289, "comments": 73, "shares": 65, "clicks": 201,
+            "published_at": now - timedelta(days=15),
+            "metadata_": {"framework": "personal_story", "tone": "inspirational", "hashtags": ["#Founder", "#Startup", "#Emprendimiento"], "module": "MOD-LINKEDIN-001"},
+        },
+        {
+            "content": "El mercado de ciberseguridad en Espana crecera un 12.4% en 2026 (IDC).\n\nPero aqui esta el dato que nadie comenta:\n\n→ El 67% de ese gasto ira a compliance, no a proteccion real\n→ Solo el 23% de las pymes tienen un CISO (INCIBE)\n→ El coste medio de un breach en Espana: 3.6M EUR (IBM)\n\nTraduccion: Las empresas gastan en papeles, no en defensas.\n\n¿Vuestras empresas invierten en cumplir o en proteger?\n\n#Ciberseguridad #B2B #CISO",
+            "status": "published", "impressions": 2340, "likes": 98, "comments": 23, "shares": 31, "clicks": 56,
+            "published_at": now - timedelta(days=20),
+            "metadata_": {"framework": "data_driven", "tone": "expert", "hashtags": ["#Ciberseguridad", "#B2B", "#CISO"], "module": "MOD-LINKEDIN-001"},
+        },
+        {
+            "content": "NIS2 entra en vigor en octubre 2026.\n\n¿Tu empresa esta preparada?\n\n3 acciones inmediatas:\n1️⃣ Identifica si tu sector esta afectado\n2️⃣ Evalua tu nivel de madurez actual\n3️⃣ Implementa un plan de cumplimiento\n\n→ Guia gratuita en comentarios.\n\n#NIS2 #Compliance #DORA",
+            "status": "draft",
+            "metadata_": {"framework": "listicle", "tone": "expert", "hashtags": ["#NIS2", "#Compliance", "#DORA"], "module": "MOD-LINKEDIN-001"},
+        },
+        {
+            "content": "Pregunta seria para founders B2B:\n\n¿Cual es vuestro canal de captacion principal?\n\nA) LinkedIn outbound\nB) Referidos/boca a boca\nC) SEO/contenido\nD) Cold email\n\nYo: 80% referidos. El mejor marketing es un cliente contento.\n\n¿Y vosotros?\n\n#B2B #Sales #Founder",
+            "status": "scheduled",
+            "metadata_": {"framework": "poll", "tone": "casual", "hashtags": ["#B2B", "#Sales", "#Founder"], "module": "MOD-LINKEDIN-001"},
+        },
+    ]
+
+    created = 0
+    for s in seeds:
+        post = SocialPost(platform="linkedin", **s)
+        db.add(post)
+        created += 1
+
+    await db.commit()
+    return {"seeded": created}

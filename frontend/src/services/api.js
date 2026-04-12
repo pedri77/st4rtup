@@ -128,6 +128,8 @@ export const linkedinApi = {
   oauthUrl: () => api.get('/linkedin/oauth/url'),
   oauthCallback: (data) => api.post('/linkedin/oauth/callback', data),
   syncMetrics: () => api.post('/linkedin/sync-metrics'),
+  sendToTelegram: (postId) => api.post('/linkedin/send-to-telegram', null, { params: { post_id: postId } }),
+  seed: () => api.post('/linkedin/seed'),
 }
 
 export const contentPipelineApi = {

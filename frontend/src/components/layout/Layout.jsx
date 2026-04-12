@@ -76,6 +76,7 @@ function getNavigationGroups(t) {
         { name: t('nav.reports'), href: '/app/reports', icon: FileText },
         { name: t('nav.report_builder'), href: '/app/report-builder', icon: BarChart3 },
         { name: t('nav.social_media'), href: '/app/marketing/social', icon: Megaphone },
+        { name: 'LinkedIn Studio', href: '/app/marketing/linkedin', icon: Activity },
         { name: t('nav.customer_health'), href: '/app/customer-health', icon: Heart },
       ],
     },

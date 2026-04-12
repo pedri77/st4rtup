@@ -8,15 +8,7 @@ import { toast } from 'react-hot-toast'
 import LinkedInPreview from '@/components/LinkedInPreview'
 import api from '@/services/api'
 
-const linkedinApi = {
-  generate: (data) => api.post('/linkedin/generate', data),
-  generateAndSave: (data) => api.post('/linkedin/generate-and-save', data),
-  templates: () => api.get('/linkedin/templates'),
-  bestTimes: () => api.get('/linkedin/best-times'),
-  analytics: (days) => api.get('/linkedin/analytics', { params: { days } }),
-  publish: (postId) => api.post('/linkedin/publish', { post_id: postId }),
-  oauthStatus: () => api.get('/linkedin/oauth/status'),
-}
+import { linkedinApi } from '@/services/api'
 
 const TONES = [
   { value: 'expert', label: 'Experto', icon: '🎓' },
@@ -122,11 +114,26 @@ export default function LinkedInStudioPage() {
             Genera, programa y analiza tu contenido de LinkedIn
           </p>
         </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              try {
+                const { data } = await linkedinApi.seed()
+                toast.success(`${data.seeded} posts de ejemplo creados`)
+              } catch (e) {
+                toast.error(e.response?.data?.detail || e.message)
+              }
+            }}
+            className="px-3 py-1.5 rounded-lg text-xs font-medium border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+          >
+            Seed datos
+          </button>
         {oauthStatus && (
           <div className={`px-3 py-1.5 rounded-full text-xs font-medium ${oauthStatus.connected ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'}`}>
             {oauthStatus.connected ? `Conectado: ${oauthStatus.name}` : 'No conectado'}
           </div>
         )}
+        </div>
       </div>
 
       {/* Tabs */}
@@ -273,6 +280,37 @@ export default function LinkedInStudioPage() {
                 Generar y guardar
               </button>
             </div>
+
+            {/* Secondary actions */}
+            {generatedContent && (
+              <div className="flex gap-2">
+                <button
+                  onClick={async () => {
+                    try {
+                      const { data } = await linkedinApi.generateAndSave({
+                        topic, framework, tone, language, max_words: maxWords,
+                        include_hashtags: includeHashtags, include_emoji: includeEmoji,
+                      })
+                      if (data.created) {
+                        await linkedinApi.sendToTelegram(data.post_id)
+                        toast.success('Enviado a Telegram para revision')
+                      }
+                    } catch (e) {
+                      toast.error('Error: ' + (e.response?.data?.detail || e.message))
+                    }
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                >
+                  📱 Enviar a Telegram
+                </button>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(generatedContent); toast.success('Copiado') }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  📋 Copiar
+                </button>
+              </div>
+            )}
 
             {/* Editable generated content */}
             {generatedContent && (
