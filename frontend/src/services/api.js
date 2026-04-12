@@ -130,6 +130,14 @@ export const linkedinApi = {
   syncMetrics: () => api.post('/linkedin/sync-metrics'),
   sendToTelegram: (postId) => api.post('/linkedin/send-to-telegram', null, { params: { post_id: postId } }),
   seed: () => api.post('/linkedin/seed'),
+  scheduleToCalendar: (postId, scheduledAt) => api.post('/linkedin/schedule-to-calendar', null, { params: { post_id: postId, scheduled_at: scheduledAt } }),
+  generateCarousel: (params) => api.post('/linkedin/generate-carousel', null, { params }),
+  chartEngagement: (days = 30) => api.get('/linkedin/charts/engagement-over-time', { params: { days } }),
+  chartFrameworks: () => api.get('/linkedin/charts/framework-performance'),
+  chartHeatmap: () => api.get('/linkedin/charts/posting-heatmap'),
+  rssFeeds: () => api.get('/linkedin/rss/feeds'),
+  rssFetch: (feedId, max) => api.post('/linkedin/rss/fetch', null, { params: { feed_id: feedId, max_per_feed: max } }),
+  rssInspire: (params) => api.post('/linkedin/rss/inspire', null, { params }),
 }
 
 export const contentPipelineApi = {

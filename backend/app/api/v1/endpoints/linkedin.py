@@ -549,3 +549,400 @@ async def seed_linkedin_posts(
 
     await db.commit()
     return {"seeded": created}
+
+
+# ═══════════════════════════════════════════════════════════════
+# Fase 2: Schedule to Google Calendar
+# ═══════════════════════════════════════════════════════════════
+
+
+@router.post("/schedule-to-calendar")
+async def schedule_to_calendar(
+    post_id: str,
+    scheduled_at: str = Query(..., description="ISO datetime para publicar (Europe/Madrid)"),
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Programa un post y crea un recordatorio en Google Calendar."""
+    from datetime import datetime, timezone, timedelta
+
+    result = await db.execute(select(SocialPost).where(SocialPost.id == post_id))
+    post = result.scalar_one_or_none()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post no encontrado")
+
+    # Parse and set scheduled_at
+    try:
+        dt = datetime.fromisoformat(scheduled_at)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Formato de fecha invalido. Usar ISO 8601.")
+
+    post.scheduled_at = dt
+    post.status = "scheduled"
+
+    # Try to create calendar event (non-blocking)
+    calendar_result = None
+    try:
+        from app.services.gcalendar_service import create_calendar_event
+        meta = post.metadata_ or {}
+        framework = meta.get("framework", "")
+        calendar_result = await create_calendar_event(
+            db=db,
+            summary=f"LinkedIn: Publicar post ({framework})",
+            description=f"Post programado via LinkedIn Studio:\n\n{post.content[:500]}",
+            start_dt=dt,
+            end_dt=dt + timedelta(minutes=15),
+        )
+        # Store calendar event ID in metadata
+        meta["calendar_event_id"] = calendar_result.get("id")
+        post.metadata_ = meta
+    except Exception as e:
+        calendar_result = {"error": str(e)}
+
+    await db.commit()
+    return {
+        "scheduled": True,
+        "post_id": str(post.id),
+        "scheduled_at": dt.isoformat(),
+        "calendar": calendar_result,
+    }
+
+
+# ═══════════════════════════════════════════════════════════════
+# Fase 3: Carousel outline to structured slides
+# ═══════════════════════════════════════════════════════════════
+
+
+@router.post("/generate-carousel")
+async def generate_carousel(
+    topic: str = Query(..., min_length=3),
+    slides: int = Query(8, ge=4, le=15),
+    language: str = Query("es"),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Genera un guion de carousel estructurado slide por slide."""
+    from app.services.linkedin_content_service import FRAMEWORKS
+
+    system_prompt = (
+        "Eres un experto en carousels de LinkedIn que generan alto engagement. "
+        "Genera el contenido slide por slide en formato JSON."
+    )
+
+    lang_note = "Escribe en espanol de Espana." if language == "es" else "Write in English."
+
+    user_prompt = (
+        f"Genera un carousel de LinkedIn sobre: {topic}\n\n"
+        f"Numero de slides: {slides}\n"
+        f"{lang_note}\n\n"
+        f"Responde SOLO con JSON valido, sin explicaciones. Formato:\n"
+        f'{{"title": "Titulo del carousel", "slides": ['
+        f'{{"slide": 1, "type": "cover", "headline": "...", "subheadline": "..."}}, '
+        f'{{"slide": 2, "type": "content", "headline": "...", "body": "...", "icon": "emoji"}}, '
+        f'..., '
+        f'{{"slide": {slides}, "type": "cta", "headline": "...", "body": "...", "profile": "@davidmoya"}}'
+        f"]}}\n\n"
+        f"Types validos: cover, content, stat, quote, cta\n"
+        f"Cada slide debe tener headline (max 8 palabras) y body (max 20 palabras)."
+    )
+
+    try:
+        from app.agents.lead_intelligence import _call_llm
+        result = await _call_llm(system_prompt, user_prompt)
+        content = result.get("content", "")
+
+        # Try to parse JSON from response
+        import json as json_lib
+        import re
+        json_match = re.search(r'\{[\s\S]*\}', content)
+        if json_match:
+            carousel_data = json_lib.loads(json_match.group())
+            return {
+                "generated": True,
+                "carousel": carousel_data,
+                "slides_count": len(carousel_data.get("slides", [])),
+                "model": result.get("model"),
+            }
+        # Fallback: return raw content
+        return {
+            "generated": True,
+            "carousel": {"title": topic, "raw_content": content},
+            "slides_count": 0,
+            "model": result.get("model"),
+        }
+    except Exception as e:
+        return {"generated": False, "error": str(e)}
+
+
+# ═══════════════════════════════════════════════════════════════
+# Fase 4: Performance charts data
+# ═══════════════════════════════════════════════════════════════
+
+
+@router.get("/charts/engagement-over-time")
+async def chart_engagement_over_time(
+    days: int = Query(30, ge=7, le=180),
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(get_current_user),
+):
+    """Datos para grafico de engagement a lo largo del tiempo."""
+    from datetime import datetime, timedelta, timezone
+    from sqlalchemy import cast, Date
+
+    since = datetime.now(timezone.utc) - timedelta(days=days)
+
+    q = select(
+        cast(SocialPost.published_at, Date).label("date"),
+        func.count(SocialPost.id).label("posts"),
+        func.coalesce(func.sum(SocialPost.impressions), 0).label("impressions"),
+        func.coalesce(func.sum(SocialPost.likes), 0).label("likes"),
+        func.coalesce(func.sum(SocialPost.comments), 0).label("comments"),
+        func.coalesce(func.sum(SocialPost.shares), 0).label("shares"),
+    ).where(
+        SocialPost.platform == "linkedin",
+        SocialPost.published_at.isnot(None),
+        SocialPost.published_at >= since,
+    ).group_by("date").order_by("date")
+
+    rows = (await db.execute(q)).all()
+
+    return {
+        "period_days": days,
+        "data": [
+            {
+                "date": str(r.date),
+                "posts": r.posts,
+                "impressions": int(r.impressions),
+                "likes": int(r.likes),
+                "comments": int(r.comments),
+                "shares": int(r.shares),
+                "engagement": int(r.likes) + int(r.comments) + int(r.shares),
+            }
+            for r in rows
+        ],
+    }
+
+
+@router.get("/charts/framework-performance")
+async def chart_framework_performance(
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(get_current_user),
+):
+    """Rendimiento por framework de escritura."""
+    result = await db.execute(
+        select(SocialPost).where(
+            SocialPost.platform == "linkedin",
+            SocialPost.metadata_.isnot(None),
+        )
+    )
+    posts = result.scalars().all()
+
+    framework_stats: dict = {}
+    for post in posts:
+        meta = post.metadata_ or {}
+        fw = meta.get("framework", "unknown")
+        if fw not in framework_stats:
+            framework_stats[fw] = {"posts": 0, "impressions": 0, "likes": 0, "comments": 0, "shares": 0}
+        s = framework_stats[fw]
+        s["posts"] += 1
+        s["impressions"] += post.impressions or 0
+        s["likes"] += post.likes or 0
+        s["comments"] += post.comments or 0
+        s["shares"] += post.shares or 0
+
+    return {
+        "frameworks": [
+            {
+                "framework": fw,
+                "posts": s["posts"],
+                "impressions": s["impressions"],
+                "likes": s["likes"],
+                "comments": s["comments"],
+                "shares": s["shares"],
+                "engagement": s["likes"] + s["comments"] + s["shares"],
+                "avg_engagement": round((s["likes"] + s["comments"] + s["shares"]) / max(s["posts"], 1), 1),
+            }
+            for fw, s in sorted(framework_stats.items(), key=lambda x: x[1]["likes"] + x[1]["comments"] + x[1]["shares"], reverse=True)
+        ]
+    }
+
+
+@router.get("/charts/posting-heatmap")
+async def chart_posting_heatmap(
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(get_current_user),
+):
+    """Heatmap de engagement por dia/hora para optimizar publicacion."""
+    result = await db.execute(
+        select(SocialPost).where(
+            SocialPost.platform == "linkedin",
+            SocialPost.published_at.isnot(None),
+        )
+    )
+    posts = result.scalars().all()
+
+    heatmap: dict = {}
+    for post in posts:
+        if not post.published_at:
+            continue
+        dow = post.published_at.weekday()  # 0=Mon
+        hour = post.published_at.hour
+        key = f"{dow}_{hour}"
+        if key not in heatmap:
+            heatmap[key] = {"count": 0, "engagement": 0}
+        heatmap[key]["count"] += 1
+        heatmap[key]["engagement"] += (post.likes or 0) + (post.comments or 0) + (post.shares or 0)
+
+    days = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"]
+    return {
+        "heatmap": [
+            {
+                "day": days[int(k.split("_")[0])],
+                "day_index": int(k.split("_")[0]),
+                "hour": int(k.split("_")[1]),
+                "posts": v["count"],
+                "total_engagement": v["engagement"],
+                "avg_engagement": round(v["engagement"] / max(v["count"], 1), 1),
+            }
+            for k, v in sorted(heatmap.items())
+        ]
+    }
+
+
+# ═══════════════════════════════════════════════════════════════
+# Fase 5: RSS watchers — content inspiration from feeds
+# ═══════════════════════════════════════════════════════════════
+
+
+@router.get("/rss/feeds")
+async def list_rss_feeds(
+    _current_user: dict = Depends(get_current_user),
+):
+    """Lista los feeds RSS monitorizados para inspiracion de contenido."""
+    feeds = _get_rss_feeds()
+    return {"feeds": feeds, "total": len(feeds)}
+
+
+@router.post("/rss/fetch")
+async def fetch_rss_articles(
+    feed_id: Optional[str] = Query(None, description="ID del feed. Si no se pasa, fetches todos."),
+    max_per_feed: int = Query(5, ge=1, le=20),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Fetches articulos recientes de los feeds RSS configurados."""
+    import httpx as httpx_lib
+
+    feeds = _get_rss_feeds()
+    if feed_id:
+        feeds = [f for f in feeds if f["id"] == feed_id]
+        if not feeds:
+            raise HTTPException(status_code=404, detail=f"Feed '{feed_id}' no encontrado")
+
+    all_articles = []
+    for feed in feeds:
+        try:
+            async with httpx_lib.AsyncClient(timeout=10.0) as client:
+                resp = await client.get(feed["url"], headers={"User-Agent": "St4rtup-LinkedIn-Studio/1.0"})
+                if resp.status_code != 200:
+                    continue
+
+            articles = _parse_rss(resp.text, max_per_feed)
+            for a in articles:
+                a["feed_id"] = feed["id"]
+                a["feed_name"] = feed["name"]
+                a["category"] = feed["category"]
+            all_articles.extend(articles)
+        except Exception as e:
+            logger.warning("RSS fetch error for %s: %s", feed["id"], e)
+
+    return {
+        "articles": all_articles,
+        "total": len(all_articles),
+        "feeds_checked": len(feeds),
+    }
+
+
+@router.post("/rss/inspire")
+async def inspire_from_article(
+    title: str = Query(..., min_length=5),
+    summary: str = Query(""),
+    framework: str = Query("hook_story_cta"),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Genera un post de LinkedIn inspirado en un articulo RSS."""
+    from app.services.linkedin_content_service import generate_linkedin_post
+
+    context = f"Inspirado en este articulo: '{title}'"
+    if summary:
+        context += f"\n\nResumen: {summary[:500]}"
+
+    result = await generate_linkedin_post(
+        topic=title,
+        framework=framework,
+        tone="expert",
+        language="es",
+        context=context,
+    )
+    return result
+
+
+def _get_rss_feeds() -> list[dict]:
+    """Feeds RSS configurados para inspiracion de contenido LinkedIn."""
+    return [
+        {"id": "incibe", "name": "INCIBE Avisos", "url": "https://www.incibe.es/incibe-cert/alerta-temprana/avisos/feed", "category": "ciberseguridad"},
+        {"id": "ccn_cert", "name": "CCN-CERT", "url": "https://www.ccn-cert.cni.es/component/obrss/rss-noticias.feed", "category": "ciberseguridad"},
+        {"id": "boe", "name": "BOE Disposiciones", "url": "https://www.boe.es/rss/boe.php?s=1", "category": "regulacion"},
+        {"id": "enisa", "name": "ENISA News", "url": "https://www.enisa.europa.eu/rss.xml", "category": "eu_cyber"},
+        {"id": "krebs", "name": "Krebs on Security", "url": "https://krebsonsecurity.com/feed/", "category": "infosec"},
+        {"id": "schneier", "name": "Schneier on Security", "url": "https://www.schneier.com/feed/", "category": "infosec"},
+        {"id": "techcrunch_sec", "name": "TechCrunch Security", "url": "https://techcrunch.com/category/security/feed/", "category": "tech"},
+        {"id": "hacker_news", "name": "Hacker News Best", "url": "https://hnrss.org/best", "category": "tech"},
+        {"id": "eu_ai_act", "name": "EU AI Act News", "url": "https://artificialintelligenceact.eu/feed/", "category": "regulacion"},
+        {"id": "dark_reading", "name": "Dark Reading", "url": "https://www.darkreading.com/rss.xml", "category": "infosec"},
+    ]
+
+
+def _parse_rss(xml_text: str, max_items: int = 5) -> list[dict]:
+    """Parser RSS/Atom ligero sin dependencias externas."""
+    import re
+    articles = []
+
+    # Try RSS <item> format
+    items = re.findall(r'<item>(.*?)</item>', xml_text, re.DOTALL)
+    if not items:
+        # Try Atom <entry> format
+        items = re.findall(r'<entry>(.*?)</entry>', xml_text, re.DOTALL)
+
+    for item in items[:max_items]:
+        title = _extract_tag(item, "title")
+        link = _extract_tag(item, "link")
+        if not link:
+            # Atom uses <link href="..."/>
+            link_match = re.search(r'<link[^>]+href=["\']([^"\']+)', item)
+            link = link_match.group(1) if link_match else ""
+        pub_date = _extract_tag(item, "pubDate") or _extract_tag(item, "published") or _extract_tag(item, "updated")
+        description = _extract_tag(item, "description") or _extract_tag(item, "summary") or ""
+        # Strip HTML tags from description
+        description = re.sub(r'<[^>]+>', '', description)[:300]
+
+        if title:
+            articles.append({
+                "title": title,
+                "link": link,
+                "published": pub_date,
+                "summary": description,
+            })
+
+    return articles
+
+
+def _extract_tag(xml: str, tag: str) -> str:
+    """Extrae contenido de un tag XML."""
+    import re
+    # Handle CDATA
+    match = re.search(rf'<{tag}[^>]*>\s*<!\[CDATA\[(.*?)\]\]>\s*</{tag}>', xml, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    match = re.search(rf'<{tag}[^>]*>(.*?)</{tag}>', xml, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return ""
