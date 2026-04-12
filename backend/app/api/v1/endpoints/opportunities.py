@@ -227,3 +227,33 @@ async def forecast_opportunity(
         }
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Error generando forecast: {str(e)}")
+
+
+# ═══════════════════════════════════════════════════════════════
+# Deal Scoring (AGENT-DEAL-001)
+# ═══════════════════════════════════════════════════════════════
+
+
+@router.get("/{opportunity_id}/score")
+async def get_deal_score(
+    opportunity_id: UUID,
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(get_current_user),
+):
+    """Calcula el deal score de una oportunidad."""
+    from app.agents.deal_scorer import score_deal
+    result = await score_deal(db, opportunity_id)
+    if "error" in result:
+        raise HTTPException(status_code=404, detail=result["error"])
+    return result
+
+
+@router.post("/score-all")
+async def score_all_deals(
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Calcula deal score de todas las oportunidades abiertas."""
+    from app.agents.deal_scorer import score_all_open_deals
+    results = await score_all_open_deals(db)
+    return {"scored": len(results), "results": results}

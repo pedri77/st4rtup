@@ -17,6 +17,7 @@ import app.agents.lead_intelligence  # noqa: register AGENT-LEAD-001
 import app.agents.bant_qualifier  # noqa: register AGENT-QUALIFY-001
 import app.agents.proposal_generator  # noqa: register AGENT-PROPOSAL-001
 import app.agents.customer_success  # noqa: register AGENT-CS-001
+import app.agents.deal_scorer  # noqa: register AGENT-DEAL-001
 
 logger = logging.getLogger(__name__)
 

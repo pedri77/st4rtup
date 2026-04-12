@@ -273,6 +273,15 @@ async def send_message(
     for msg in history[-50:]:
         chat_messages.append({"role": msg.role, "content": msg.content})
 
+    # Business context: inject real CRM data into system prompt
+    try:
+        from app.services.chat_context_builder import build_business_context
+        biz_context = await build_business_context(db, user_id)
+        if biz_context:
+            system_prompt = f"{system_prompt}{biz_context}"
+    except Exception as biz_err:
+        logger.debug(f"Business context skipped: {biz_err}")
+
     # RAG: retrieve relevant context from Qdrant
     try:
         from app.services.rag_service import search_context
