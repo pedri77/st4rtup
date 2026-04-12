@@ -117,6 +117,19 @@ export const socialApi = {
   listeningCompetitors: () => api.get('/social/listening/competitors'),
 }
 
+export const linkedinApi = {
+  generate: (data) => api.post('/linkedin/generate', data),
+  generateAndSave: (data) => api.post('/linkedin/generate-and-save', data),
+  templates: () => api.get('/linkedin/templates'),
+  bestTimes: () => api.get('/linkedin/best-times'),
+  analytics: (days = 30) => api.get('/linkedin/analytics', { params: { days } }),
+  publish: (postId) => api.post('/linkedin/publish', { post_id: postId }),
+  oauthStatus: () => api.get('/linkedin/oauth/status'),
+  oauthUrl: () => api.get('/linkedin/oauth/url'),
+  oauthCallback: (data) => api.post('/linkedin/oauth/callback', data),
+  syncMetrics: () => api.post('/linkedin/sync-metrics'),
+}
+
 export const contentPipelineApi = {
   run: (params) => api.post('/content-pipeline/run', null, { params }),
   keywords: (params) => api.post('/content-pipeline/keywords', null, { params }),

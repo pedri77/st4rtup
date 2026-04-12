@@ -18,6 +18,7 @@ from app.api.v1.endpoints import (
     organizations,
     admin,
     affiliates,
+    linkedin,
 )
 api_router = APIRouter()
 
@@ -88,6 +89,7 @@ api_router.include_router(gtm_dashboard.router, prefix="/gtm", tags=["GTM Dashbo
 api_router.include_router(media.router, prefix="/media", tags=["Media Trifecta"])
 api_router.include_router(okr.router, prefix="/okr", tags=["OKR"])
 api_router.include_router(social.router, prefix="/social", tags=["Social Media"])
+api_router.include_router(linkedin.router, prefix="/linkedin", tags=["LinkedIn Studio"])
 api_router.include_router(audit_global.router, prefix="/audit-global", tags=["Audit Global"])
 api_router.include_router(support.router, prefix="/support", tags=["Support"])
 api_router.include_router(landings.router, prefix="/landings", tags=["Landing Pages"])

@@ -97,6 +97,7 @@ const ActionsKanbanPage = lazy(() => import('./pages/ActionsKanbanPage'))
 const CustomerHealthPage = lazy(() => import('./pages/CustomerHealthPage'))
 const ProposalViewPage = lazy(() => import('./pages/ProposalViewPage'))
 const SocialMediaPage = lazy(() => import('./pages/SocialMediaPage'))
+const LinkedInStudioPage = lazy(() => import('./pages/LinkedInStudioPage'))
 const YouTubePage = lazy(() => import('./pages/marketing/YouTubePage'))
 const PipelineFunnelPage = lazy(() => import('./pages/PipelineFunnelPage'))
 const AlertChannelsPage = lazy(() => import('./pages/AlertChannelsPage'))
@@ -189,6 +190,7 @@ function App() {
           <Route path="customer-health" element={<Suspense fallback={<PageLoader />}><CustomerHealthPage /></Suspense>} />
           <Route path="social" element={<Navigate to="/app/marketing/social" replace />} />
           <Route path="marketing/social" element={<Suspense fallback={<PageLoader />}><SocialMediaPage /></Suspense>} />
+          <Route path="marketing/linkedin" element={<Suspense fallback={<PageLoader />}><LinkedInStudioPage /></Suspense>} />
           <Route path="gtm/funnel" element={<Suspense fallback={<PageLoader />}><PipelineFunnelPage /></Suspense>} />
           <Route path="reviews" element={<Suspense fallback={<PageLoader />}><ReviewsPage /></Suspense>} />
           <Route path="surveys" element={<Suspense fallback={<PageLoader />}><SurveysPage /></Suspense>} />
