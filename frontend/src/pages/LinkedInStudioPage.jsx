@@ -247,11 +247,11 @@ export default function LinkedInStudioPage() {
             {/* Options */}
             <div className="flex items-center gap-4 text-sm">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={includeHashtags} onChange={e => setIncludeHashtags(e.target.checked)} className="rounded border-gray-300" />
+                <input type="checkbox" checked={includeHashtags} onChange={e => setIncludeHashtags(e.target.checked)} className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:checked:bg-blue-600" />
                 <span className="text-gray-600 dark:text-gray-400">Hashtags</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={includeEmoji} onChange={e => setIncludeEmoji(e.target.checked)} className="rounded border-gray-300" />
+                <input type="checkbox" checked={includeEmoji} onChange={e => setIncludeEmoji(e.target.checked)} className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:checked:bg-blue-600" />
                 <span className="text-gray-600 dark:text-gray-400">Emojis</span>
               </label>
               <div className="flex items-center gap-2 ml-auto">
