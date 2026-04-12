@@ -130,7 +130,7 @@ export default function LinkedInStudioPage() {
             <span className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">in</span>
             LinkedIn Studio
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
             Genera, programa y analiza tu contenido de LinkedIn
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function LinkedInStudioPage() {
             className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               activeTab === tab.id
                 ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
             {tab.icon} {tab.label}
@@ -180,19 +180,19 @@ export default function LinkedInStudioPage() {
           <div className="space-y-4">
             {/* Topic */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tema del post</label>
+              <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Tema del post</label>
               <textarea
                 value={topic}
                 onChange={e => setTopic(e.target.value)}
                 placeholder="Ej: Los 5 errores mas comunes al implementar ENS Alto..."
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 rows={3}
               />
             </div>
 
             {/* Framework selector */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Framework</label>
+              <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Framework</label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {templates.map(t => (
                   <button
@@ -209,14 +209,14 @@ export default function LinkedInStudioPage() {
                 ))}
               </div>
               {selectedTemplate && (
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">{selectedTemplate.description}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-300 mt-2 italic">{selectedTemplate.description}</p>
               )}
             </div>
 
             {/* Tone + Language row */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tono</label>
+                <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Tono</label>
                 <div className="flex gap-1">
                   {TONES.map(t => (
                     <button
@@ -235,11 +235,11 @@ export default function LinkedInStudioPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Idioma</label>
+                <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Idioma</label>
                 <select
                   value={language}
                   onChange={e => setLanguage(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-3 py-1.5 text-sm"
                 >
                   {LANGUAGES.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
                 </select>
@@ -257,25 +257,25 @@ export default function LinkedInStudioPage() {
                 <span className="text-gray-700 dark:text-gray-200">Emojis</span>
               </label>
               <div className="flex items-center gap-2 ml-auto">
-                <span className="text-gray-500 dark:text-gray-400 text-xs">Max palabras:</span>
+                <span className="text-gray-600 dark:text-gray-300 text-xs">Max palabras:</span>
                 <input
                   type="number"
                   value={maxWords}
                   onChange={e => setMaxWords(Number(e.target.value))}
                   min={50} max={500} step={50}
-                  className="w-20 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-2 py-1 text-xs text-center"
+                  className="w-20 rounded border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-2 py-1 text-xs text-center"
                 />
               </div>
             </div>
 
             {/* Context (optional) */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contexto extra (opcional)</label>
+              <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Contexto extra (opcional)</label>
               <input
                 value={context}
                 onChange={e => setContext(e.target.value)}
                 placeholder="Ej: Enfocado en sector financiero, mencionar caso de exito reciente..."
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 text-sm"
               />
             </div>
 
@@ -295,7 +295,7 @@ export default function LinkedInStudioPage() {
               <button
                 onClick={handleSave}
                 disabled={generating || !topic.trim()}
-                className="px-4 py-2.5 rounded-lg text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="px-4 py-2.5 rounded-lg text-sm font-medium border border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 Generar y guardar
               </button>
@@ -335,11 +335,11 @@ export default function LinkedInStudioPage() {
             {/* Editable generated content */}
             {generatedContent && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contenido generado (editable)</label>
+                <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Contenido generado (editable)</label>
                 <textarea
                   value={generatedContent}
                   onChange={e => setGeneratedContent(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-mono resize-y min-h-[200px]"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 text-sm font-mono resize-y min-h-[200px]"
                   rows={10}
                 />
                 <div className="flex items-center justify-between mt-1 text-xs text-gray-500">
@@ -381,7 +381,7 @@ export default function LinkedInStudioPage() {
                   ))}
                 </div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{t.description}</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">{t.description}</p>
               <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3 text-xs text-gray-700 dark:text-gray-300 whitespace-pre-line max-h-40 overflow-y-auto">
                 {t.example}
               </div>
@@ -416,7 +416,7 @@ export default function LinkedInStudioPage() {
           {analytics.best_day && (
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
               <h3 className="font-medium text-gray-900 dark:text-white mb-2">Mejores momentos (basado en tus datos)</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 Mejor dia: <span className="font-medium text-gray-900 dark:text-white capitalize">{analytics.best_day}</span>
                 {analytics.best_hour !== null && <> · Mejor hora: <span className="font-medium text-gray-900 dark:text-white">{analytics.best_hour}:00</span></>}
               </p>
@@ -442,23 +442,23 @@ export default function LinkedInStudioPage() {
         <div className="space-y-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Generador de Carousel</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Genera un guion estructurado slide por slide para crear carousels virales.</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Genera un guion estructurado slide por slide para crear carousels virales.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tema del carousel</label>
+                <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Tema del carousel</label>
                 <input
                   value={carouselTopic}
                   onChange={e => setCarouselTopic(e.target.value)}
                   placeholder="Ej: 5 errores que matan tu startup B2B"
-                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Slides</label>
+                <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Slides</label>
                 <input
                   type="number" value={carouselSlides} onChange={e => setCarouselSlides(Number(e.target.value))}
                   min={4} max={15}
-                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 text-sm"
                 />
               </div>
             </div>
@@ -523,7 +523,7 @@ export default function LinkedInStudioPage() {
             <div className="flex gap-2">
               <button
                 onClick={() => setShowAddFeed(!showAddFeed)}
-                className="px-3 py-2 rounded-lg text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="px-3 py-2 rounded-lg text-sm font-medium border border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 + Añadir feed
               </button>
@@ -536,7 +536,7 @@ export default function LinkedInStudioPage() {
                     setRssFeeds(res.data.feeds || [])
                   } catch (e) { toast.error(e.response?.data?.detail || e.message) }
                 }}
-                className="px-3 py-2 rounded-lg text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="px-3 py-2 rounded-lg text-sm font-medium border border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 Cargar defaults
               </button>
@@ -567,10 +567,10 @@ export default function LinkedInStudioPage() {
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
               <h4 className="font-medium text-gray-900 dark:text-white mb-3">Nuevo feed RSS</h4>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                <input value={newFeedName} onChange={e => setNewFeedName(e.target.value)} placeholder="Nombre" className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm" />
-                <input value={newFeedUrl} onChange={e => setNewFeedUrl(e.target.value)} placeholder="https://example.com/feed.xml" className="md:col-span-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm" />
+                <input value={newFeedName} onChange={e => setNewFeedName(e.target.value)} placeholder="Nombre" className="rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 text-sm" />
+                <input value={newFeedUrl} onChange={e => setNewFeedUrl(e.target.value)} placeholder="https://example.com/feed.xml" className="md:col-span-2 rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 text-sm" />
                 <div className="flex gap-2">
-                  <select value={newFeedCategory} onChange={e => setNewFeedCategory(e.target.value)} className="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm">
+                  <select value={newFeedCategory} onChange={e => setNewFeedCategory(e.target.value)} className="flex-1 rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 text-sm">
                     <option value="general">General</option>
                     <option value="ciberseguridad">Ciberseguridad</option>
                     <option value="regulacion">Regulacion</option>
@@ -760,12 +760,12 @@ export default function LinkedInStudioPage() {
       {activeTab === 'schedule' && (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Mejores horarios para publicar en LinkedIn</h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Basado en datos agregados de engagement B2B en Europa (timezone: Europe/Madrid)</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Basado en datos agregados de engagement B2B en Europa (timezone: Europe/Madrid)</p>
           <div className="space-y-2">
             {bestTimes.map((t, i) => (
               <div key={i} className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
                 <div className="w-24 font-medium text-sm text-gray-900 dark:text-white capitalize">{t.day}</div>
-                <div className="w-16 text-sm text-gray-600 dark:text-gray-400">{t.hour}:00</div>
+                <div className="w-16 text-sm text-gray-700 dark:text-gray-300">{t.hour}:00</div>
                 <div className="flex-1">
                   <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div
