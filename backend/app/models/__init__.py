@@ -57,6 +57,7 @@ from app.models.deal_room_doc import DealRoom, DealRoomDocument, DealRoomPageEve
 from app.models.service_catalog import ServiceCatalogItem
 from app.models.organization import Organization, OrgMember
 from app.models.affiliate import AffiliateLink, AffiliateClick
+from app.models.rss_feed import RssFeed
 
 __all__ = [
     "Base", "BaseModel",
@@ -105,4 +106,5 @@ __all__ = [
     "WAConversation", "WAMessage",
     "PaymentPlan", "Payment", "Invoice",
     "DealRoomDocument", "DealRoomPageEvent",
+    "RssFeed",
 ]

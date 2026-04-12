@@ -136,7 +136,10 @@ export const linkedinApi = {
   chartFrameworks: () => api.get('/linkedin/charts/framework-performance'),
   chartHeatmap: () => api.get('/linkedin/charts/posting-heatmap'),
   rssFeeds: () => api.get('/linkedin/rss/feeds'),
-  rssFetch: (feedId, max) => api.post('/linkedin/rss/fetch', null, { params: { feed_id: feedId, max_per_feed: max } }),
+  rssCreateFeed: (params) => api.post('/linkedin/rss/feeds', null, { params }),
+  rssDeleteFeed: (feedId) => api.delete(`/linkedin/rss/feeds/${feedId}`),
+  rssSeedDefaults: () => api.post('/linkedin/rss/seed-defaults'),
+  rssFetch: (feedId, max) => api.post('/linkedin/rss/fetch', null, { params: { feed_id: feedId || undefined, max_per_feed: max } }),
   rssInspire: (params) => api.post('/linkedin/rss/inspire', null, { params }),
 }
 

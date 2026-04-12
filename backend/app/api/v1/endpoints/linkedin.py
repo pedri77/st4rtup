@@ -815,23 +815,101 @@ async def chart_posting_heatmap(
 
 @router.get("/rss/feeds")
 async def list_rss_feeds(
+    db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
 ):
-    """Lista los feeds RSS monitorizados para inspiracion de contenido."""
-    feeds = _get_rss_feeds()
+    """Lista los feeds RSS (BD + defaults si no hay ninguno)."""
+    from app.models.rss_feed import RssFeed
+
+    result = await db.execute(select(RssFeed).order_by(RssFeed.name))
+    db_feeds = result.scalars().all()
+
+    if db_feeds:
+        feeds = [
+            {"id": str(f.id), "name": f.name, "url": f.url, "category": f.category, "is_active": f.is_active}
+            for f in db_feeds
+        ]
+    else:
+        feeds = _get_default_rss_feeds()
+
     return {"feeds": feeds, "total": len(feeds)}
+
+
+@router.post("/rss/feeds", status_code=201)
+async def create_rss_feed(
+    name: str = Query(..., min_length=2),
+    url: str = Query(..., min_length=10),
+    category: str = Query("general"),
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Crea un feed RSS personalizado."""
+    from app.models.rss_feed import RssFeed
+
+    feed = RssFeed(name=name, url=url, category=category)
+    db.add(feed)
+    await db.commit()
+    return {"created": True, "id": str(feed.id), "name": name}
+
+
+@router.delete("/rss/feeds/{feed_id}", status_code=204)
+async def delete_rss_feed(
+    feed_id: str,
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Elimina un feed RSS."""
+    from app.models.rss_feed import RssFeed
+
+    result = await db.execute(select(RssFeed).where(RssFeed.id == feed_id))
+    feed = result.scalar_one_or_none()
+    if not feed:
+        raise HTTPException(status_code=404, detail="Feed no encontrado")
+    await db.delete(feed)
+    await db.commit()
+
+
+@router.post("/rss/seed-defaults")
+async def seed_default_feeds(
+    db: AsyncSession = Depends(get_db),
+    _current_user: dict = Depends(require_write_access),
+):
+    """Carga los 10 feeds RSS por defecto en la BD."""
+    from app.models.rss_feed import RssFeed
+
+    existing = (await db.execute(select(func.count(RssFeed.id)))).scalar() or 0
+    if existing > 0:
+        return {"seeded": 0, "message": f"Ya hay {existing} feeds. Borralos primero si quieres re-seedear."}
+
+    defaults = _get_default_rss_feeds()
+    for d in defaults:
+        feed = RssFeed(name=d["name"], url=d["url"], category=d["category"])
+        db.add(feed)
+    await db.commit()
+    return {"seeded": len(defaults)}
 
 
 @router.post("/rss/fetch")
 async def fetch_rss_articles(
     feed_id: Optional[str] = Query(None, description="ID del feed. Si no se pasa, fetches todos."),
     max_per_feed: int = Query(5, ge=1, le=20),
+    db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
 ):
-    """Fetches articulos recientes de los feeds RSS configurados."""
+    """Fetches articulos recientes de los feeds RSS."""
     import httpx as httpx_lib
+    from app.models.rss_feed import RssFeed
+    from datetime import datetime, timezone
 
-    feeds = _get_rss_feeds()
+    # Get feeds from DB or defaults
+    result = await db.execute(select(RssFeed).where(RssFeed.is_active == True))
+    db_feeds = result.scalars().all()
+
+    if db_feeds:
+        feeds = [{"id": str(f.id), "name": f.name, "url": f.url, "category": f.category, "_model": f} for f in db_feeds]
+    else:
+        feeds = [{**f, "_model": None} for f in _get_default_rss_feeds()]
+
     if feed_id:
         feeds = [f for f in feeds if f["id"] == feed_id]
         if not feeds:
@@ -851,8 +929,16 @@ async def fetch_rss_articles(
                 a["feed_name"] = feed["name"]
                 a["category"] = feed["category"]
             all_articles.extend(articles)
+
+            # Update last_fetched if from DB
+            if feed.get("_model"):
+                feed["_model"].last_fetched = datetime.now(timezone.utc)
+                feed["_model"].total_articles = (feed["_model"].total_articles or 0) + len(articles)
         except Exception as e:
             logger.warning("RSS fetch error for %s: %s", feed["id"], e)
+
+    if db_feeds:
+        await db.commit()
 
     return {
         "articles": all_articles,
@@ -885,7 +971,7 @@ async def inspire_from_article(
     return result
 
 
-def _get_rss_feeds() -> list[dict]:
+def _get_default_rss_feeds() -> list[dict]:
     """Feeds RSS configurados para inspiracion de contenido LinkedIn."""
     return [
         {"id": "incibe", "name": "INCIBE Avisos", "url": "https://www.incibe.es/incibe-cert/alerta-temprana/avisos/feed", "category": "ciberseguridad"},
