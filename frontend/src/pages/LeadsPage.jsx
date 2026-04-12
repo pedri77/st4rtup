@@ -90,6 +90,8 @@ export default function LeadsPage() {
   const [showImportModal, setShowImportModal] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [filters, setFilters] = useState({ status: '', source: '', min_score: '' });
+  const [selectedIds, setSelectedIds] = useState(new Set());
+  const [bulkAction, setBulkAction] = useState('');
   const pageSize = 20;
   const queryClient = useQueryClient();
 
@@ -167,6 +169,44 @@ export default function LeadsPage() {
     { key, direction: 'asc' }
     );
   };
+
+  const toggleSelect = (id) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === sortedItems.length) {
+      setSelectedIds(new Set())
+    } else {
+      setSelectedIds(new Set(sortedItems.map(l => l.id)))
+    }
+  }
+
+  const handleBulkAction = async (action) => {
+    if (selectedIds.size === 0) { toast.error('Selecciona al menos un lead'); return }
+    const ids = Array.from(selectedIds).join(',')
+    try {
+      if (action === 'delete') {
+        if (!window.confirm(`¿Eliminar ${selectedIds.size} leads?`)) return
+      }
+      const params = { action, lead_ids: ids }
+      if (action === 'assign_status') {
+        const status = prompt('Nuevo status (new, contacted, qualified, proposal, negotiation, won, lost, dormant):')
+        if (!status) return
+        params.value = status
+      }
+      await leadsApi.bulkAction(params)
+      toast.success(`${action}: ${selectedIds.size} leads procesados`)
+      setSelectedIds(new Set())
+      queryClient.invalidateQueries({ queryKey: ['leads'] })
+    } catch (e) {
+      toast.error(e.response?.data?.detail || 'Error en accion masiva')
+    }
+  }
 
   const SortIcon = ({ col }) => {
     if (sortConfig.key !== col) return <ChevronsUpDown className="w-3 h-3" style={{ color: T.fgMuted }} />;
@@ -304,12 +344,36 @@ export default function LeadsPage() {
 
 
       <>
+          {/* Bulk action bar */}
+          {selectedIds.size > 0 && (
+            <div className="flex items-center gap-3 p-3 rounded-lg mb-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">{selectedIds.size} seleccionados</span>
+              <div className="flex gap-2 ml-auto">
+                <button onClick={() => handleBulkAction('assign_status')} className="px-3 py-1.5 text-xs font-medium rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50">
+                  Cambiar status
+                </button>
+                <button onClick={() => handleBulkAction('score')} className="px-3 py-1.5 text-xs font-medium rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50">
+                  Scoring IA
+                </button>
+                <button onClick={() => handleBulkAction('delete')} className="px-3 py-1.5 text-xs font-medium rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-100">
+                  Eliminar
+                </button>
+                <button onClick={() => setSelectedIds(new Set())} className="px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-gray-700">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${T.border}` }}>
             <table className="w-full">
               <thead>
                 <tr style={{ backgroundColor: T.card, borderBottom: `2px solid ${T.border}` }}>
+                  <th className="px-2 py-3 w-8">
+                    <input type="checkbox" checked={selectedIds.size === sortedItems.length && sortedItems.length > 0} onChange={toggleSelectAll} className="h-4 w-4 rounded accent-blue-600" />
+                  </th>
                   {[
-                { key: 'company_name', label: 'Empresa', w: '28%' },
+                { key: 'company_name', label: 'Empresa', w: '26%' },
                 { key: 'contact_name', label: 'Contacto', w: '22%' },
                 { key: 'status', label: 'Est.', w: '6%' },
                 { key: 'score', label: 'Score', w: '14%' },
@@ -340,6 +404,9 @@ export default function LeadsPage() {
               onMouseEnter={(e) => {e.currentTarget.style.backgroundColor = `${T.cyan}06`;e.currentTarget.style.boxShadow = `inset 3px 0 0 ${T.cyan}`;}}
               onMouseLeave={(e) => {e.currentTarget.style.backgroundColor = idx % 2 === 0 ? T.bg : T.card;e.currentTarget.style.boxShadow = 'none';}}
               onClick={() => navigate(`/app/leads/${lead.id}`)}>
+                    <td className="px-2 py-3" onClick={e => e.stopPropagation()}>
+                      <input type="checkbox" checked={selectedIds.has(lead.id)} onChange={() => toggleSelect(lead.id)} className="h-4 w-4 rounded accent-blue-600" />
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold"
