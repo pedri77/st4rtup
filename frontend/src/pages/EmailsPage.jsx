@@ -163,7 +163,11 @@ export default function EmailsPage() {
       sortedEmails.length === 0 ?
       <div className="rounded-lg py-16 text-center" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
           <Mail className="w-12 h-12 mx-auto mb-3" style={{ color: T.fgMuted }} />
-          <p className="text-sm" style={{ color: T.fgMuted }}>Sin emails</p>
+          <p className="text-sm font-medium" style={{ color: T.fg }}>Sin emails todavia</p>
+          <p className="text-xs mt-1 mb-4" style={{ color: T.fgMuted }}>Envia tu primer email o conecta tu proveedor de correo</p>
+          <button onClick={() => setShowCompose(true)} className="px-4 py-2 rounded-lg text-sm font-medium text-white" style={{ backgroundColor: T.cyan, border: 'none', cursor: 'pointer' }}>
+            Redactar email
+          </button>
         </div> :
 
       <div className="space-y-2">

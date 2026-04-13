@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { X, Check, ArrowRight } from 'lucide-react'
+import confetti from 'canvas-confetti'
 
 const TASKS = [
   { id: 'lead', label: 'Crea tu primer lead', href: '/app/leads', check: () => false },
@@ -16,13 +17,18 @@ export default function OnboardingWizard() {
   })
   const [hidden, setHidden] = useState(() => localStorage.getItem('st4rtup_checklist_hidden') === 'true')
 
+  const firedConfetti = useRef(false)
   useEffect(() => {
     localStorage.setItem('st4rtup_checklist', JSON.stringify(completed))
     if (completed.length >= TASKS.length) {
+      if (!firedConfetti.current) {
+        firedConfetti.current = true
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 }, colors: ['#10B981', '#1E6FD9', '#F5820B'] })
+      }
       setTimeout(() => {
         setHidden(true)
         localStorage.setItem('st4rtup_checklist_hidden', 'true')
-      }, 2000)
+      }, 3000)
     }
   }, [completed])
 

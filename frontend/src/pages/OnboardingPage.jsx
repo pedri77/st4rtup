@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Upload, Mail, BarChart3, Rocket, Check, Building2, Target } from 'lucide-react'
+import confetti from 'canvas-confetti'
 import { useOrganization } from '@/hooks/useOrganization'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
@@ -44,8 +45,26 @@ export default function OnboardingPage() {
   const nav = useNavigate()
   const { plan } = useOrganization()
 
-  function next() { setStep(s => Math.min(s + 1, STEPS.length - 1)) }
+  const [transitioning, setTransitioning] = useState(false)
+  const firedConfetti = useRef(false)
+
+  function next() {
+    setTransitioning(true)
+    setTimeout(() => {
+      setStep(s => Math.min(s + 1, STEPS.length - 1))
+      setTransitioning(false)
+    }, 200)
+  }
   function skip() { next() }
+
+  // Fire confetti on final step
+  useEffect(() => {
+    if (step === STEPS.length - 1 && !firedConfetti.current) {
+      firedConfetti.current = true
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#1E6FD9', '#F5820B', '#10B981', '#8B5CF6'] })
+      setTimeout(() => confetti({ particleCount: 60, spread: 120, origin: { y: 0.4 } }), 300)
+    }
+  }, [step])
 
   async function seedSampleData() {
     try {
@@ -127,7 +146,7 @@ export default function OnboardingPage() {
 
       <p style={{ fontSize: 12, color: '#94A3B8', marginBottom: 20 }}>Paso {step + 1} de {STEPS.length}: {STEPS[step].title}</p>
 
-      <div style={card}>
+      <div style={{ ...card, transition: 'opacity 0.2s ease, transform 0.2s ease', opacity: transitioning ? 0 : 1, transform: transitioning ? 'translateY(8px)' : 'translateY(0)' }}>
         {/* Step 0: Welcome */}
         {step === 0 && (
           <>

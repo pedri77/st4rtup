@@ -177,7 +177,11 @@ export default function VisitsPage() {
       sortedVisits.length === 0 ?
       <div className="rounded-lg py-16 text-center" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
           <Calendar className="w-12 h-12 mx-auto mb-3" style={{ color: T.fgMuted }} />
-          <p className="text-sm" style={{ color: T.fgMuted }}>Sin visitas registradas</p>
+          <p className="text-sm font-medium" style={{ color: T.fg }}>Sin visitas registradas</p>
+          <p className="text-xs mt-1 mb-4" style={{ color: T.fgMuted }}>Registra tu primera visita comercial para hacer seguimiento</p>
+          <button onClick={() => setShowCreate(true)} className="px-4 py-2 rounded-lg text-sm font-medium text-white" style={{ backgroundColor: T.cyan, border: 'none', cursor: 'pointer' }}>
+            Nueva visita
+          </button>
         </div> :
 
       <div className="space-y-2">
