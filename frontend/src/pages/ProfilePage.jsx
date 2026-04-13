@@ -121,13 +121,13 @@ function ActiveSessionsSection() {
 
   const { data: sessionsData, refetch } = useQuery({
     queryKey: ['active-sessions'],
-    queryFn: () => api.get('/api/v1/security/sessions').then(r => r.data),
+    queryFn: () => api.get('/security/sessions').then(r => r.data),
     staleTime: 30_000,
   })
 
   const revokeSession = async (sessionId) => {
     try {
-      await api.delete(`/api/v1/security/sessions/${sessionId}`)
+      await api.delete(`/security/sessions/${sessionId}`)
       toast.success('Sesion revocada')
       refetch()
     } catch { toast.error('Error al revocar sesion') }
@@ -136,7 +136,7 @@ function ActiveSessionsSection() {
   const revokeAll = async () => {
     if (!confirm('¿Cerrar todas las sesiones excepto la actual?')) return
     try {
-      await api.post('/api/v1/security/sessions/revoke-all')
+      await api.post('/security/sessions/revoke-all')
       toast.success('Sesiones revocadas')
       refetch()
     } catch { toast.error('Error') }

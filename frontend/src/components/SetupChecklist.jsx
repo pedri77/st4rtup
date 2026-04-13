@@ -19,7 +19,7 @@ export default function SetupChecklist() {
   // Server state
   const { data: checklist, isLoading } = useQuery({
     queryKey: ['setup-checklist'],
-    queryFn: () => api.get('/api/v1/users/me/setup-checklist').then(r => r.data),
+    queryFn: () => api.get('/users/me/setup-checklist').then(r => r.data),
     staleTime: 30_000,
   })
 
@@ -40,7 +40,7 @@ export default function SetupChecklist() {
 
   // Sync auto-detected completions to server
   const updateMutation = useMutation({
-    mutationFn: (payload) => api.put('/api/v1/users/me/setup-checklist', payload),
+    mutationFn: (payload) => api.put('/users/me/setup-checklist', payload),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['setup-checklist'] }),
   })
 
@@ -54,7 +54,7 @@ export default function SetupChecklist() {
   // Check onboarding state
   const { data: onboarding } = useQuery({
     queryKey: ['onboarding'],
-    queryFn: () => api.get('/api/v1/users/me/onboarding').then(r => r.data),
+    queryFn: () => api.get('/users/me/onboarding').then(r => r.data),
     staleTime: 120_000,
   })
 
