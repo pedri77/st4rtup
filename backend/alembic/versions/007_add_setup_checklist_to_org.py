@@ -1,7 +1,7 @@
 """add setup_checklist JSON column to organizations
 
 Revision ID: 007_setup_checklist
-Revises: 006_call_org_id_not_null
+Revises: 006_call_not_null
 Create Date: 2026-04-13
 """
 from alembic import op
@@ -9,7 +9,7 @@ import sqlalchemy as sa
 
 
 revision = "007_setup_checklist"
-down_revision = "006_call_org_id_not_null"
+down_revision = "006_call_not_null"
 branch_labels = None
 depends_on = None
 
