@@ -124,7 +124,7 @@ export default function SocialMediaPage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       <Breadcrumbs items={[{ label: 'Marketing', href: '/app/marketing' }, { label: 'Social Media' }]} />
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold flex items-center gap-2" style={{ color: T.fg, fontFamily: fontDisplay }}>
           <Globe className="w-7 h-7" style={{ color: T.cyan }} /> Social Media
         </h1>
@@ -311,7 +311,7 @@ export default function SocialMediaPage() {
               </div>
               <textarea id="socialmedia-textarea-5" aria-label="Texto" value={recForm.content_template} onChange={e => setRecForm(f => ({ ...f, content_template: e.target.value }))}
                 placeholder="Template del post. Variables: {date}, {week}, {month}" rows={4} className="input text-sm" />
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <select id="socialmedia-select-2" aria-label="Selector" value={recForm.frequency} onChange={e => setRecForm(f => ({ ...f, frequency: e.target.value }))} className="input text-sm">
                   <option value="daily">Diario</option>
                   <option value="weekly">Semanal</option>

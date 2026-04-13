@@ -512,7 +512,7 @@ export default function CampaignsPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between" style={{ padding: '12px 16px', borderTop: `1px solid ${T.border}` }}>
+          <div className="flex flex-wrap items-center justify-between gap-3" style={{ padding: '12px 16px', borderTop: `1px solid ${T.border}` }}>
             <span style={{ fontSize: 14, color: T.fgMuted }}>
               Página {page} de {totalPages} ({data?.total} resultados)
             </span>
@@ -542,7 +542,7 @@ export default function CampaignsPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}>
           <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto" style={{ backgroundColor: T.bg, border: `1px solid ${T.border}`, borderRadius: 12 }}>
-            <div className="flex items-center justify-between" style={{ padding: 20, borderBottom: `1px solid ${T.border}` }}>
+            <div className="flex flex-wrap items-center justify-between gap-3" style={{ padding: 20, borderBottom: `1px solid ${T.border}` }}>
               <h2 style={{ fontFamily: fontDisplay, fontSize: 20, fontWeight: 600, color: T.fg }}>
                 {editingCampaign ? 'Editar Campaña' : 'Nueva Campaña'}
               </h2>

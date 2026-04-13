@@ -96,7 +96,7 @@ function PromptForm({ initial, onSubmit, onCancel, loading }) {
           placeholder="Hola {{lead_nombre}}, soy de St4rtup..." style={inputStyle} />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label htmlFor="prompt-obj-llamada" className="block text-sm font-medium mb-1" style={{ color: T.fgMuted }}>Objetivo llamada</label>
           <input id="prompt-obj-llamada" name="objetivo_llamada" type="text"
@@ -191,7 +191,7 @@ export default function CallPromptsPage() {
 
   return (
     <div className="-m-4 md:-m-8 p-4 md:p-8 space-y-6" style={{ backgroundColor: T.bg, minHeight: '100vh' }}>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2"
             style={{ fontFamily: fontDisplay, color: T.fg }}>

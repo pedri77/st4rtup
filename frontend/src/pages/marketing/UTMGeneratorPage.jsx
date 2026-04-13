@@ -240,7 +240,7 @@ export default function UTMGeneratorPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <span style={{ fontSize: 14, color: T.fgMuted }}>
             Página {page} de {totalPages} ({data?.total} resultados)
           </span>

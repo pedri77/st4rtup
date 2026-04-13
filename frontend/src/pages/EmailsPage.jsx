@@ -260,7 +260,7 @@ function EmailCard({ email, onSend }) {
       <div className="px-4 pb-4 pt-2" style={{ borderTop: `1px solid ${T.border}` }}>
           <div className="ml-14">
             {/* Metadata */}
-            <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 text-sm">
               <div><span style={{ color: T.fgMuted }}>De: </span><span style={{ color: T.fg }}>{email.from_email || 'sistema'}</span></div>
               <div><span style={{ color: T.fgMuted }}>Para: </span><span style={{ color: T.fg }}>{email.to_email}</span></div>
               <div><span style={{ color: T.fgMuted }}>Estado: </span><span style={{ color: status.color }}>{status.label}</span></div>

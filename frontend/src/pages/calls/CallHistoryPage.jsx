@@ -123,7 +123,7 @@ export default function CallHistoryPage() {
   return (
     <div className="-m-4 md:-m-8 p-4 md:p-8 space-y-6" style={{ backgroundColor: T.bg, minHeight: '100vh' }}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2"
             style={{ fontFamily: fontDisplay, color: T.fg }}>
@@ -175,7 +175,7 @@ export default function CallHistoryPage() {
         </div>
       ) : (
         <div className="rounded-xl overflow-hidden" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
-          <table className="w-full">
+          <table className="w-full min-w-[640px]">
             <thead style={{ backgroundColor: T.muted, borderBottom: `1px solid ${T.border}` }}>
               <tr>
                 {['Fecha', 'Lead', 'Estado', 'Resultado', 'Duracion', 'Score', 'Coste', ''].map((h, i) => (

@@ -46,7 +46,7 @@ export default function CustomerHealthPage() {
       </h1>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-xl border p-4 text-center" style={{ backgroundColor: 'rgba(34,197,94,0.05)', borderColor: 'rgba(34,197,94,0.2)' }}>
           <p className="text-3xl font-bold" style={{ color: T.success, fontFamily: fontMono }}>{healthy}</p>
           <p className="text-xs" style={{ color: T.fgMuted }}>Saludables</p>

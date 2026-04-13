@@ -557,7 +557,7 @@ export default function DashboardPage() {
                   onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = T.muted; e.currentTarget.style.borderLeftColor = `${T.cyan}60` }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderLeftColor = 'transparent' }}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="text-sm font-medium truncate" style={{ color: T.fg }}>{deal.name}</p>
                     <span className="text-sm tabular-nums ml-2" style={{ fontFamily: fontMono, color: T.warning }}>€{(deal.value / 1000).toFixed(0)}K</span>
                   </div>

@@ -281,7 +281,7 @@ export default function LeadsPage() {
         </div>
 
         {showFilters &&
-        <div className="grid grid-cols-3 gap-3 p-4 rounded-lg" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-lg" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
             <div>
               <label className="block text-xs uppercase tracking-[0.15em] mb-1" style={{ fontFamily: fontDisplay, color: T.fgMuted }} htmlFor="leads-field-1">Estado</label>
               <select id="leads-field-1" value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })} style={selectStyle}>
@@ -353,8 +353,8 @@ export default function LeadsPage() {
             </div>
           )}
 
-          <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${T.border}` }}>
-            <table className="w-full">
+          <div className="rounded-lg overflow-hidden overflow-x-auto" style={{ border: `1px solid ${T.border}` }}>
+            <table className="w-full min-w-[800px]">
               <thead>
                 <tr style={{ backgroundColor: T.card, borderBottom: `2px solid ${T.border}` }}>
                   <th className="px-2 py-3 w-8">
@@ -626,7 +626,7 @@ function CreateLeadModal({ onClose, onSubmit, isLoading }) {
             <div className="text-xs uppercase tracking-[0.15em] font-bold mb-3 pb-1" style={{ fontFamily: fontDisplay, color: T.cyan, borderBottom: `1px solid ${T.border}` }}>
               Clasificacion
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label style={labelStyle} htmlFor="leads-field-15">Origen</label>
                 <select id="leads-field-15" value={formData.source}

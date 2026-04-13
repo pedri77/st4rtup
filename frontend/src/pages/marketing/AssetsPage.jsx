@@ -432,7 +432,7 @@ export default function AssetsPage() {
 
       {/* Pagination */}
       {pages > 1 && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <p style={{ fontSize: 14, color: T.fgMuted }}>{total} resultados</p>
           <div className="flex items-center gap-2">
             <button aria-label="Anterior" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
@@ -452,7 +452,7 @@ export default function AssetsPage() {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}>
           <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto" style={{ backgroundColor: T.card, borderRadius: 12, border: `1px solid ${T.border}` }}>
-            <div className="flex items-center justify-between" style={{ padding: 16, borderBottom: `1px solid ${T.border}` }}>
+            <div className="flex flex-wrap items-center justify-between gap-3" style={{ padding: 16, borderBottom: `1px solid ${T.border}` }}>
               <h2 style={{ fontFamily: fontDisplay, fontSize: 20, fontWeight: 600, color: T.fg }}>
                 {editingAsset ? 'Editar Asset' : 'Nuevo Asset'}
               </h2>

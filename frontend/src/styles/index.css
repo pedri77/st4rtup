@@ -102,6 +102,27 @@
   .slide-up {
     animation: slideUp 0.25s ease-out both;
   }
+
+  /* Mobile responsive utilities */
+  .responsive-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3;
+  }
+
+  .responsive-grid-2 {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  .responsive-padding {
+    @apply px-4 py-4 md:px-6 md:py-6 lg:px-8 lg:py-8;
+  }
+
+  .mobile-stack {
+    @apply flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4;
+  }
+
+  .mobile-full-btn {
+    @apply w-full sm:w-auto;
+  }
 }
 
 @keyframes fadeIn {

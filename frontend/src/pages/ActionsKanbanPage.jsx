@@ -84,7 +84,7 @@ export default function ActionsKanbanPage() {
   return (
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen space-y-4" style={{ backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Acciones — Kanban</h1>
         <Link to="/app/actions" className="btn-secondary text-xs flex items-center gap-1">
           <List className="w-3.5 h-3.5" /> Vista lista

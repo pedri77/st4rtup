@@ -112,7 +112,7 @@ export default function InvestorViewPage() {
           </div>
 
           {/* Hero metrics */}
-          <div className="grid grid-cols-3 gap-6 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
             {[arr, nrr, ltvCac].filter(Boolean).map(kpi => (
               <div key={kpi.id} className="text-center">
                 <p className="text-sm mb-1" style={{ color: T.fgMuted }}>{kpi.name}</p>

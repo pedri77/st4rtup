@@ -544,7 +544,7 @@ function EmailProviderTab({ settings, onSave, saving, isAdmin }) {
                     <ProvIcon className="w-5 h-5" style={{ color: isSelected ? T.cyan : accent }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <h3 style={{ fontFamily: fontDisplay, color: T.fg }} className="font-semibold text-sm">{provider.name}</h3>
                       {isSelected && (
                         <span className="flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${T.cyan}15`, color: T.cyan }}>

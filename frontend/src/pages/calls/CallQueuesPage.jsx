@@ -167,7 +167,7 @@ export default function CallQueuesPage() {
   return (
     <div className="space-y-6 p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight" style={{ fontFamily: fontDisplay, color: T.fg }}>
             <ListOrdered className="w-6 h-6 inline mr-2" style={{ color: T.cyan }} />

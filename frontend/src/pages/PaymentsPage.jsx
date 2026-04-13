@@ -184,7 +184,7 @@ function PagosTab() {
       </div>
 
       {/* New payment form toggle */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-lg font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Historial de pagos</h3>
         <Btn onClick={() => setShowForm(!showForm)}>
           {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -334,7 +334,7 @@ function PlanesTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-lg font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Planes de precio</h3>
         <Btn onClick={() => setShowForm(!showForm)}>
           {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -387,7 +387,7 @@ function PlanesTab() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {plansList.map((plan, i) => (
             <div key={plan.id || i} className="rounded-xl p-5 space-y-3" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <h4 className="text-base font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>{plan.name}</h4>
                 <Badge color={plan.active !== false ? T.success : T.fgMuted}>
                   {plan.active !== false ? 'Activo' : 'Inactivo'}
@@ -462,7 +462,7 @@ function FacturasTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-lg font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Facturas</h3>
         <Btn onClick={() => setShowForm(!showForm)}>
           {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}

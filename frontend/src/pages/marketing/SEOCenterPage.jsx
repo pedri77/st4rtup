@@ -410,7 +410,7 @@ function ContentHubTab() {
           className="rounded-xl p-5 space-y-3" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
           <h3 className="text-sm font-semibold" style={{ color: T.fg }}>Nuevo artículo</h3>
           <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Título" required style={inputStyle} />
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <select value={articleType} onChange={e => setArticleType(e.target.value)} style={inputStyle}>
               {Object.entries(TYPE_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
@@ -881,7 +881,7 @@ function HealthTab() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-xs" style={{ color: T.fgMuted }}>Audita cada artículo: meta tags, estructura, keywords, contenido</p>
         <button onClick={() => articles.forEach(a => auditMut.mutate(a.id))} disabled={auditMut.isPending}
           className="px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5" style={{ backgroundColor: T.cyan, color: T.bg }}>
@@ -1084,7 +1084,7 @@ function KeywordStudioTab() {
         <div className="space-y-3">
           <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="Tema: ej. cumplimiento SaaS para empresas sanitarias" style={inputStyle} />
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <select value={provider} onChange={e => { setProvider(e.target.value); setModel('') }} style={inputStyle}>
               <option value="">Motor IA: Auto</option>
               {providers.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -1193,7 +1193,7 @@ function KeywordRankingsOverview() {
       <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: T.fg }}>
         <BarChart3 className="w-4 h-4" style={{ color: T.cyan }} /> Ranking de Keywords
       </h3>
-      <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${T.border}` }}>
+      <div className="rounded-lg overflow-hidden overflow-x-auto" style={{ border: `1px solid ${T.border}` }}>
         <table className="w-full text-xs">
           <thead>
             <tr style={{ backgroundColor: T.muted }}>
@@ -1306,7 +1306,7 @@ function BacklinksTab() {
             <input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} placeholder="URL origen" required style={inputStyle} />
             <input value={targetUrl} onChange={e => setTargetUrl(e.target.value)} placeholder="URL destino" style={inputStyle} />
           </div>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <input value={anchorText} onChange={e => setAnchorText(e.target.value)} placeholder="Anchor text" style={inputStyle} />
             <select value={linkType} onChange={e => setLinkType(e.target.value)} style={inputStyle}>
               <option value="dofollow">Dofollow</option><option value="nofollow">Nofollow</option><option value="ugc">UGC</option><option value="sponsored">Sponsored</option>

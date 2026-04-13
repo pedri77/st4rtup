@@ -136,7 +136,7 @@ function EmailTab() {
       {/* Provider selector */}
       <div className="rounded-lg p-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
         <h2 className="text-base font-semibold mb-4" style={{ fontFamily: fontDisplay, color: T.fg }}>Proveedor de Email</h2>
-        <div className="grid grid-cols-3 gap-2 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
           {EMAIL_PROVIDERS.map(p => (
             <button key={p.id} onClick={() => setProvider(p.id)}
               className="p-3 rounded-lg text-left transition-all"
@@ -560,7 +560,7 @@ function AppearanceTab() {
       <div className="space-y-6">
         <div>
           <label className="block text-xs uppercase tracking-widest mb-3" style={{ fontFamily: fontDisplay, color: T.fgMuted }}>Tema</label>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <button onClick={() => setPreferences({ theme: 'light' })}
               className="p-4 rounded-lg transition-all"
               style={{ border: `2px solid ${theme === 'light' ? T.cyan : T.border}`, backgroundColor: theme === 'light' ? `${T.cyan}10` : 'transparent' }}>

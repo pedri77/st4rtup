@@ -55,7 +55,7 @@ function TacticCard({ tactic, onStatusChange }) {
           <span style={{ fontFamily: fontMono, color: T.fgMuted }}>{tactic.metrics_actual?.leads_month || 0}/{tactic.metrics_target?.leads_month || '—'} leads/mes</span>
         )}
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-1.5">
           {tactic.channel && <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ backgroundColor: T.muted, color: T.fgMuted }}>{tactic.channel}</span>}
         </div>
@@ -101,7 +101,7 @@ export default function PlaybookPage() {
   return (
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen space-y-6" style={{ backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <Breadcrumbs items={[{ label: "GTM", href: "/app/gtm" }, { label: "Sales Playbook" }]} />
           <h1 className="text-2xl font-bold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>

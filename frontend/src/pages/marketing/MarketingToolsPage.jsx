@@ -547,8 +547,8 @@ function CompetitorTracker() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="grid grid-cols-4 gap-3 flex-1">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 flex-1">
           {[
             { key: 'all', label: 'Total', value: mapped.length, color: T.fg },
             { key: 'high', label: 'Crítica/Alta', value: byThreat.high, color: T.destructive },
@@ -568,7 +568,7 @@ function CompetitorTracker() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <p style={{ fontSize: 12, color: T.fgMuted }}>
           Datos compartidos con <Link to="/app/gtm/competitors" style={{ color: T.cyan }}>GTM → Competitive Intelligence</Link>
         </p>

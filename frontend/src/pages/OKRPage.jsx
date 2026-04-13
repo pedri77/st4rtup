@@ -126,7 +126,7 @@ export default function OKRPage() {
 
       <Breadcrumbs items={[{ label: 'GTM', href: '/app/gtm' }, { label: 'OKRs' }]} />
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>
           <Target className="w-7 h-7" style={{ color: T.cyan }} /> OKRs
         </h1>

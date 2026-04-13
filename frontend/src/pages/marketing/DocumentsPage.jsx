@@ -284,7 +284,7 @@ export default function DocumentsPage() {
           {versionsData?.length > 0 ? (
             <div className="space-y-3">
               {versionsData.map((v) => (
-                <div key={v.id} className="flex items-center justify-between" style={{ backgroundColor: T.bg, borderRadius: 8, padding: 12 }}>
+                <div key={v.id} className="flex flex-wrap items-center justify-between gap-3" style={{ backgroundColor: T.bg, borderRadius: 8, padding: 12 }}>
                   <div className="flex items-center gap-3">
                     <span style={{ fontSize: 14, fontWeight: 500, color: T.cyan, fontFamily: fontMono }}>v{v.version}</span>
                     <span style={{ fontSize: 14, color: T.fgMuted }}>{formatSize(v.file_size)}</span>
@@ -339,7 +339,7 @@ export default function DocumentsPage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-4">
           <Link to="/app/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }}>
             <ArrowLeft className="w-5 h-5" />
@@ -453,7 +453,7 @@ export default function DocumentsPage() {
         </div>
       ) : (
         <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 12, overflow: 'hidden' }}>
-          <table className="w-full">
+          <table className="w-full min-w-[640px]">
             <thead>
               <tr style={{ borderBottom: `1px solid ${T.border}` }}>
                 {['Documento', 'Carpeta', 'Tipo', 'Estado', 'Idioma', 'Versión', 'Tamaño', 'Fecha', ''].map((h, i) => (
@@ -722,7 +722,7 @@ function DocumentFormModal({ doc, campaigns, onClose, onSubmit, loading }) {
             <label style={labelStyle} htmlFor="documents-field-10">Nombre *</label>
             <input id="documents-field-10" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required style={inputStyle} />
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label style={labelStyle} htmlFor="documents-field-11">Carpeta</label>
               <select id="documents-field-11" value={form.folder} onChange={(e) => setForm({ ...form, folder: e.target.value })} style={selectStyle}>
@@ -741,7 +741,7 @@ function DocumentFormModal({ doc, campaigns, onClose, onSubmit, loading }) {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label style={labelStyle} htmlFor="documents-field-14">Idioma</label>
               <select id="documents-field-14" value={form.language} onChange={(e) => setForm({ ...form, language: e.target.value })} style={selectStyle}>

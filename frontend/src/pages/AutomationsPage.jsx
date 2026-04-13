@@ -330,7 +330,7 @@ function AutomationDetail({ automation, onClose, onToggle }) {
       <div className="rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }} onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="px-6 py-4" style={{ backgroundColor: `${catMeta.color}10`, borderBottom: `1px solid ${T.border}` }}>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <span className="text-xs font-bold px-2 py-1 rounded" style={{ backgroundColor: T.muted, color: T.fg, fontFamily: fontMono }}>{automation.code}</span>
               <h2 className="text-lg font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>{automation.name}</h2>
@@ -470,7 +470,7 @@ function AutomationDetail({ automation, onClose, onToggle }) {
             {!executions || executions.length === 0 ? (
               <p className="text-xs rounded-lg p-4 text-center" style={{ color: T.fgMuted, backgroundColor: T.muted }}>Sin ejecuciones registradas</p>
             ) : (
-              <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${T.border}` }}>
+              <div className="rounded-lg overflow-hidden overflow-x-auto" style={{ border: `1px solid ${T.border}` }}>
                 <table className="w-full text-xs">
                   <thead style={{ backgroundColor: T.muted }}>
                     <tr>

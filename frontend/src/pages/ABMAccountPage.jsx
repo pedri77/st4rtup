@@ -139,7 +139,7 @@ export default function ABMAccountPage() {
           <div className="space-y-2">
             {opportunities.map(o => (
               <div key={o.id} className="rounded-lg p-2.5" style={{ backgroundColor: T.bg }}>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   <p className="text-sm" style={{ color: T.fg }}>{o.name}</p>
                   <span className="text-xs font-medium" style={{ color: stageColor(o.stage) }}>{o.stage}</span>
                 </div>
@@ -157,7 +157,7 @@ export default function ABMAccountPage() {
       </div>
 
       {/* Activity counts */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="rounded-xl border p-3 flex items-center gap-3" style={{ backgroundColor: T.card, borderColor: T.border }}>
           <Mail className="w-5 h-5" style={{ color: 'hsl(217,91%,60%)' }} />
           <div><p className="text-lg font-bold" style={{ color: T.fg, fontFamily: fontMono }}>{activity.emails}</p><p className="text-[10px]" style={{ color: T.fgMuted }}>Emails</p></div>

@@ -487,7 +487,7 @@ export default function AdminDashboardPage() {
           </h1>
 
           {/* KPIs */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <div className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
               <p style={{ fontSize: 10, color: T.fgMuted, textTransform: 'uppercase', fontFamily: fontMono }}>Coste mensual</p>
               <p style={{ fontSize: 24, fontWeight: 700, color: T.destructive, fontFamily: fontMono }}>€{costs?.estimated_monthly_eur || 0}</p>
@@ -762,7 +762,7 @@ export default function AdminDashboardPage() {
           </h1>
 
           {/* Summary cards */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
             {[
               { label: 'Orgs totales', value: integrationHealth?.summary?.total_orgs || 0, color: T.cyan },
               { label: 'Orgs con OAuth', value: integrationHealth?.summary?.orgs_with_oauth || 0, color: T.success },

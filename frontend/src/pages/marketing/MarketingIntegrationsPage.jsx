@@ -552,7 +552,7 @@ function IntegrationCard({ integration, settings, isAdmin, onSave }) {
 
           {integration.oauthProvider && isAdmin && (
             <div style={{ backgroundColor: T.bg, borderRadius: 8, padding: 12 }} className="space-y-2">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <ExternalLink className="w-3.5 h-3.5" style={{ color: T.cyan }} />
                   <span style={{ fontSize: 12, fontWeight: 500, color: T.fg }}>OAuth 2.0</span>
@@ -693,7 +693,7 @@ export default function MarketingIntegrationsPage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-3 mb-1">
             <Link to="/app/marketing" style={{ color: T.fgMuted, transition: 'color .2s' }}>

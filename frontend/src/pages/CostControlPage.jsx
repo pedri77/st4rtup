@@ -76,7 +76,7 @@ export default function CostControlPage() {
       </div>
 
       {/* Guardrail levels */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="rounded-xl p-3 text-center border" style={{ backgroundColor: `${T.success}08`, borderColor: `${T.success}33` }}>
           <p className="font-bold" style={{ color: T.success }}>OK</p>
           <p className="text-xs" style={{ color: T.fgMuted }}>&lt; Aviso · Pipeline normal</p>

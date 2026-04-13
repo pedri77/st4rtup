@@ -133,7 +133,7 @@ export default function CallsConsolePage() {
   return (
     <div className="-m-4 md:-m-8 p-4 md:p-8 space-y-6" style={{ backgroundColor: T.bg, minHeight: '100vh' }}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2"
             style={{ fontFamily: fontDisplay, color: T.fg }}>
@@ -151,7 +151,7 @@ export default function CallsConsolePage() {
 
       {/* Stats cards */}
       {stats && (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: 'Total llamadas', value: stats.total, color: T.fg },
             { label: 'Finalizadas', value: stats.finalizadas, color: T.success },

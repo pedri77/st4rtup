@@ -270,7 +270,7 @@ export default function CalendarPage() {
                   if (count === 0 && filterType !== 'all' && filterType !== type) return null
                   const colors = EVENT_COLORS[type]
                   return (
-                    <div key={type} className="flex items-center justify-between">
+                    <div key={type} className="flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.color }} />
                         <span className="text-xs" style={{ color: T.fgMuted }}>{EVENT_LABELS[type]}s</span>

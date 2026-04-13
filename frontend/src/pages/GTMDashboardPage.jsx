@@ -190,7 +190,7 @@ export default function GTMDashboardPage() {
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen space-y-6" style={{ backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-3 mb-1">
             <Link to="/app/dashboard" className="transition-colors hover:opacity-80" style={{ color: T.fgMuted }}><ArrowLeft className="w-5 h-5" /></Link>

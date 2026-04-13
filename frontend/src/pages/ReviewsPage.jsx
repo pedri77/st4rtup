@@ -435,7 +435,7 @@ function CreateReviewModal({ onClose, onSubmit, isLoading }) {
             </div>
 
             {/* Activity counters */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div><label htmlFor="review-meetings" className="block text-xs font-medium mb-1" style={{ color: T.fgMuted }}>Reuniones</label><input id="review-meetings" type="number" min="0" value={formData.meetings_held} onChange={(e) => setFormData({ ...formData, meetings_held: parseInt(e.target.value) || 0 })} style={inputStyle} /></div>
               <div><label htmlFor="review-emails-sent" className="block text-xs font-medium mb-1" style={{ color: T.fgMuted }}>Emails enviados</label><input id="review-emails-sent" type="number" min="0" value={formData.emails_sent} onChange={(e) => setFormData({ ...formData, emails_sent: parseInt(e.target.value) || 0 })} style={inputStyle} /></div>
               <div><label htmlFor="review-emails-received" className="block text-xs font-medium mb-1" style={{ color: T.fgMuted }}>Emails recibidos</label><input id="review-emails-received" type="number" min="0" value={formData.emails_received} onChange={(e) => setFormData({ ...formData, emails_received: parseInt(e.target.value) || 0 })} style={inputStyle} /></div>

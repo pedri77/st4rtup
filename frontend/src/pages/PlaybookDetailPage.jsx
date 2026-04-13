@@ -173,7 +173,7 @@ export default function PlaybookDetailPage() {
 
       <div className="max-w-4xl space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-3 mb-1">
               <Link to="/app/gtm/playbook" className="transition-colors" style={{ color: T.fgMuted }}

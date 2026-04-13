@@ -297,7 +297,7 @@ export default function MarketingCalendarPage() {
       </div>
 
       {/* Month navigation */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <button aria-label="Anterior" onClick={prevMonth} style={{ padding: 8, borderRadius: 8, border: 'none', cursor: 'pointer', backgroundColor: 'transparent', color: T.fgMuted }}>
           <ChevronLeft className="w-5 h-5" />
         </button>

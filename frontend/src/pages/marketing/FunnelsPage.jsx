@@ -155,7 +155,7 @@ function FunnelFlowView({ funnel, onBack, onEdit }) {
       fullscreen && 'fixed inset-0 z-50 p-4'
     )} style={fullscreen ? { backgroundColor: T.bg } : {}}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button aria-label="Volver"
             onClick={fullscreen ? () => setFullscreen(false) : onBack}
@@ -496,7 +496,7 @@ export default function FunnelsPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}>
           <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto" style={{ backgroundColor: T.bg, border: `1px solid ${T.border}`, borderRadius: 12 }}>
-            <div className="flex items-center justify-between" style={{ padding: 20, borderBottom: `1px solid ${T.border}` }}>
+            <div className="flex flex-wrap items-center justify-between gap-3" style={{ padding: 20, borderBottom: `1px solid ${T.border}` }}>
               <h2 style={{ fontFamily: fontDisplay, fontSize: 20, fontWeight: 600, color: T.fg }}>
                 {editingFunnel ? 'Editar Funnel' : 'Nuevo Funnel'}
               </h2>
