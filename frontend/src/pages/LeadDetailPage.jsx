@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { leadsApi, automationTasksApi, contactsApi, visitsApi, emailsApi, callsApi, reportsApi } from '@/services/api';
+import { leadsApi, automationTasksApi, contactsApi, visitsApi, emailsApi, callsApi, reportsApi, agentsApi } from '@/services/api';
 import DealScoreCard from '@/components/DealScoreCard';
 import ActivityFeed from '@/components/ActivityFeed';
 import { ArrowLeft, Mail, Building2, User, Phone, MapPin, Globe, FileText, Tag, TrendingUp, Users, Star, Crown, Linkedin, Calendar, Clock, Video, Send, Sparkles, Loader2, CheckCircle2, ShieldCheck } from 'lucide-react';
@@ -39,6 +39,31 @@ const emailStatusStyle = {
   opened: { color: T.cyan, bg: `${T.cyan}15` },
   failed: { color: T.destructive, bg: `${T.destructive}15` }
 };
+
+function ScoreButton({ leadId }) {
+  const T = useThemeColors()
+  const scoreMutation = useMutation({
+    mutationFn: () => agentsApi.scoreLeadICP(leadId).then(r => r.data),
+    onSuccess: (data) => {
+      if (data.error) { toast.error(data.error); return }
+      toast.success(`Score ICP: ${data.icp_score}/100 (Tier ${data.plan})`)
+      window.location.reload()
+    },
+    onError: () => toast.error('Error ejecutando scoring'),
+  })
+
+  return (
+    <div className="rounded-lg p-5 mb-6 text-center" style={{ backgroundColor: T.card, border: `1px dashed ${T.border}` }}>
+      <Sparkles className="w-8 h-8 mx-auto mb-2" style={{ color: T.cyan }} />
+      <p className="text-sm font-medium mb-1" style={{ color: T.fg }}>Sin scoring ICP</p>
+      <p className="text-xs mb-3" style={{ color: T.fgMuted }}>Ejecuta el agente AGENT-LEAD-001 para analizar este lead</p>
+      <button onClick={() => scoreMutation.mutate()} disabled={scoreMutation.isPending}
+        className="px-4 py-2 rounded-lg text-sm font-medium text-white btn-interactive" style={{ backgroundColor: T.cyan, border: 'none', cursor: 'pointer' }}>
+        {scoreMutation.isPending ? <><Loader2 className="w-4 h-4 animate-spin inline mr-1" /> Analizando...</> : <><Sparkles className="w-4 h-4 inline mr-1" /> Ejecutar scoring ICP</>}
+      </button>
+    </div>
+  )
+}
 
 export default function LeadDetailPage() {
   const T = useThemeColors()
@@ -176,6 +201,9 @@ export default function LeadDetailPage() {
       </div>
 
       {/* Agent Scoring ICP */}
+      {!lead.enrichment_data?.agent_scoring && (
+        <ScoreButton leadId={id} />
+      )}
       {lead.enrichment_data?.agent_scoring &&
       <div className="rounded-lg p-5 mb-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
           <h2 className="text-base font-semibold mb-4 flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>

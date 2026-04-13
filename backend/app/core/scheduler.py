@@ -68,8 +68,8 @@ async def _log_execution(code: str, status: str, items_processed: int = 0,
 # ═══════════════════════════════════════════════════════════════
 
 async def run_ac01_daily_summary():
-    """AC-01: Resumen diario de acciones pendientes — 08:30"""
-    from app.models import Action, ActionStatus
+    """AC-01: Resumen diario de acciones pendientes — 08:30. Envía Telegram + notificación in-app."""
+    from app.models import Action, ActionStatus, Notification
     try:
         async with AsyncSessionLocal() as db:
             today = datetime.now(timezone.utc).date()
@@ -79,13 +79,29 @@ async def run_ac01_daily_summary():
             due_today = (await db.execute(select(func.count(Action.id)).where(
                 Action.due_date == today, Action.status.in_([ActionStatus.PENDING, ActionStatus.IN_PROGRESS])
             ))).scalar() or 0
+
+            if overdue > 0 or due_today > 0:
+                title = f"📋 Resumen: {due_today} para hoy, {overdue} vencidas"
+                message = f"Tienes {due_today} acciones para hoy y {overdue} vencidas."
+
+                # In-app notification
+                db.add(Notification(title=title, message=message, type="info", priority="high"))
+                await db.commit()
+
+                # Telegram
+                try:
+                    from app.services.telegram_service import send_message
+                    await send_message(f"<b>{title}</b>\n{message}", db)
+                except Exception:
+                    pass
+
             logger.info(f"AC-01: {overdue} vencidas, {due_today} para hoy")
     except Exception as e:
         logger.error(f"AC-01 error: {e}")
 
 
 async def run_ac02_escalation():
-    """AC-02: Escalado — acciones vencidas >3 días — 09:30"""
+    """AC-02: Escalado — acciones vencidas >3 días — 09:30. Telegram + in-app."""
     from app.models import Action, ActionStatus, Notification
     try:
         async with AsyncSessionLocal() as db:
@@ -96,8 +112,23 @@ async def run_ac02_escalation():
             ))
             overdue = result.scalars().all()
             for a in overdue:
-                db.add(Notification(title=f"Acción escalada: {a.title}", message=f"Vencida hace {(datetime.now(timezone.utc).date() - a.due_date).days} días", type="warning"))
+                days = (datetime.now(timezone.utc).date() - a.due_date).days if a.due_date else 0
+                db.add(Notification(title=f"⚠️ Acción escalada: {a.title}", message=f"Vencida hace {days} días", type="warning", priority="high"))
             await db.commit()
+
+            if overdue:
+                try:
+                    from app.services.telegram_service import send_message
+                    lines = [f"⚠️ <b>{len(overdue)} acciones escaladas (>3 días vencidas):</b>"]
+                    for a in overdue[:5]:
+                        days = (datetime.now(timezone.utc).date() - a.due_date).days if a.due_date else 0
+                        lines.append(f"  • {a.title} ({days}d)")
+                    if len(overdue) > 5:
+                        lines.append(f"  ... y {len(overdue) - 5} más")
+                    await send_message("\n".join(lines), db)
+                except Exception:
+                    pass
+
             logger.info(f"AC-02: {len(overdue)} acciones escaladas")
     except Exception as e:
         logger.error(f"AC-02 error: {e}")

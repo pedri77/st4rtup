@@ -206,10 +206,12 @@ export default function ChatPage() {
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    'Redacta un email de seguimiento para un lead interesado en Growth',
-                    'Compara SaaS Best Practices vs SaaS para una empresa mediana',
-                    'Dame argumentos de venta para B2B en banca',
-                    'Crea un plan de cuenta para una empresa del IBEX 35',
+                    '¿Qué deals están estancados más de 14 días?',
+                    'Resume la actividad comercial de esta semana',
+                    '¿Cuáles son mis 5 mejores oportunidades ahora?',
+                    'Redacta un email de follow-up para un lead que no responde',
+                    '¿Cuál es mi tasa de conversión y cómo mejorarla?',
+                    'Genera argumentos de venta para una empresa del sector fintech',
                   ].map((suggestion, i) => (
                     <button key={i} onClick={() => setInputMessage(suggestion)}
                       className="text-left p-3 rounded-lg text-xs transition-colors"
