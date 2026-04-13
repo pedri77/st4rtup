@@ -653,7 +653,7 @@ async def lead_activity_feed(
 
     # Visits
     visit_rows = (await db.execute(
-        select(Visit.id, Visit.visit_type, Visit.result, Visit.notes, Visit.created_at)
+        select(Visit.id, Visit.visit_type, Visit.result, Visit.summary, Visit.created_at)
         .where(Visit.lead_id == lead_id)
         .order_by(Visit.created_at.desc()).limit(limit)
     )).all()

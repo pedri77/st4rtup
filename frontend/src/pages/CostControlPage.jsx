@@ -11,7 +11,7 @@ import {
 } from 'recharts'
 import Sparkline from '@/components/Sparkline'
 import { costControlApi } from '@/services/api'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
 
 const fontDisplay = "'Rajdhani', sans-serif"

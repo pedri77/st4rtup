@@ -18,10 +18,14 @@ async def test_deal_score_nonexistent(client):
 @pytest.mark.asyncio
 async def test_deal_score_with_opportunity(client, db_session):
     """Score an existing opportunity returns breakdown."""
+    from app.models.lead import Lead
     from app.models.pipeline import Opportunity
+    lead = Lead(id=uuid.uuid4(), company_name="Test Co", contact_name="Test", contact_email="test@test.com")
+    db_session.add(lead)
+    await db_session.flush()
     opp = Opportunity(
         id=uuid.uuid4(), name="Test Deal", stage="qualification",
-        value=25000, probability=60,
+        value=25000, probability=60, lead_id=lead.id,
     )
     db_session.add(opp)
     await db_session.commit()
@@ -40,11 +44,15 @@ async def test_deal_score_with_opportunity(client, db_session):
 @pytest.mark.asyncio
 async def test_score_all_deals(client, db_session):
     """Score-all returns results for open deals."""
+    from app.models.lead import Lead
     from app.models.pipeline import Opportunity
+    lead = Lead(id=uuid.uuid4(), company_name="Score Co", contact_name="Test", contact_email="score@test.com")
+    db_session.add(lead)
+    await db_session.flush()
     for i in range(3):
         opp = Opportunity(
             id=uuid.uuid4(), name=f"Deal {i}", stage="proposal",
-            value=10000 * (i + 1), probability=50,
+            value=10000 * (i + 1), probability=50, lead_id=lead.id,
         )
         db_session.add(opp)
     await db_session.commit()
@@ -78,8 +86,8 @@ async def test_activity_feed_with_data(client, db_session):
     db_session.add(lead)
     await db_session.flush()
 
-    email = Email(id=uuid.uuid4(), lead_id=lead.id, subject="Hello", status="sent")
-    visit = Visit(id=uuid.uuid4(), lead_id=lead.id, visit_type="presencial", result="positive")
+    email = Email(id=uuid.uuid4(), lead_id=lead.id, subject="Hello", status="sent", to_email="test@test.com")
+    visit = Visit(id=uuid.uuid4(), lead_id=lead.id, visit_type="presencial", result="positive", visit_date="2026-04-13")
     db_session.add_all([email, visit])
     await db_session.commit()
 
