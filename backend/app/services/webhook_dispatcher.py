@@ -36,12 +36,42 @@ def _sign_payload(payload: str, secret: str) -> str:
     return hmac.new(secret.encode(), payload.encode(), hashlib.sha256).hexdigest()
 
 
+def validate_webhook_url(url: str) -> None:
+    """Block SSRF: reject internal/private/metadata URLs."""
+    from urllib.parse import urlparse
+    import ipaddress
+
+    parsed = urlparse(url)
+    if not parsed.scheme or parsed.scheme not in ("http", "https"):
+        raise ValueError("Only http/https URLs allowed")
+    hostname = parsed.hostname or ""
+
+    # Block known dangerous hostnames
+    blocked = {"localhost", "127.0.0.1", "0.0.0.0", "::1", "169.254.169.254", "metadata.google.internal"}
+    if hostname in blocked:
+        raise ValueError(f"Blocked webhook URL: {hostname}")
+
+    # Block private IP ranges
+    try:
+        ip = ipaddress.ip_address(hostname)
+        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved:
+            raise ValueError(f"Blocked private IP in webhook URL: {hostname}")
+    except ValueError:
+        pass  # hostname is a domain name, not an IP — OK
+
+    # Block internal TLDs
+    if hostname.endswith((".local", ".internal", ".localhost")):
+        raise ValueError(f"Blocked internal hostname: {hostname}")
+
+
 async def dispatch_webhook_with_retry(url: str, payload: str, headers: dict, max_retries: int = MAX_RETRIES) -> dict:
     """Dispatch a single webhook with exponential backoff retry.
 
     Retries up to *max_retries* times with backoff delays of 1 s, 4 s, 16 s (4^attempt).
     After all attempts are exhausted the result is flagged as dead_letter.
     """
+    validate_webhook_url(url)
+
     for attempt in range(max_retries):
         try:
             async with httpx.AsyncClient(timeout=TIMEOUT) as client:

@@ -98,16 +98,17 @@ async def get_contacts_by_lead(
     lead_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Obtener todos los contactos de un lead (sin paginación, para power map)."""
-    lead_result = await db.execute(select(Lead).where(Lead.id == lead_id))
+    lead_result = await db.execute(select(Lead).where(Lead.id == lead_id, Lead.org_id == org_id))
     if not lead_result.scalar_one_or_none():
         raise HTTPException(status_code=404, detail="Lead no encontrado")
 
     result = await db.execute(
         select(Contact)
         .options(selectinload(Contact.lead))
-        .where(Contact.lead_id == lead_id)
+        .where(Contact.lead_id == lead_id, Contact.org_id == org_id)
         .order_by(Contact.is_primary.desc(), Contact.influence_level, Contact.full_name)
     )
     contacts = result.scalars().all()
@@ -119,9 +120,10 @@ async def get_contacts_stats(
     lead_id: Optional[UUID] = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Estadísticas de contactos (global o por lead)."""
-    base = select(func.count(Contact.id))
+    base = select(func.count(Contact.id)).where(Contact.org_id == org_id)
     if lead_id:
         base = base.where(Contact.lead_id == lead_id)
 
@@ -129,21 +131,21 @@ async def get_contacts_stats(
     total = total_result.scalar()
 
     # By role_type
-    role_query = select(Contact.role_type, func.count(Contact.id)).group_by(Contact.role_type)
+    role_query = select(Contact.role_type, func.count(Contact.id)).where(Contact.org_id == org_id).group_by(Contact.role_type)
     if lead_id:
         role_query = role_query.where(Contact.lead_id == lead_id)
     role_result = await db.execute(role_query)
     by_role = {str(r[0].value) if r[0] else "unknown": r[1] for r in role_result.all()}
 
     # By influence_level
-    inf_query = select(Contact.influence_level, func.count(Contact.id)).group_by(Contact.influence_level)
+    inf_query = select(Contact.influence_level, func.count(Contact.id)).where(Contact.org_id == org_id).group_by(Contact.influence_level)
     if lead_id:
         inf_query = inf_query.where(Contact.lead_id == lead_id)
     inf_result = await db.execute(inf_query)
     by_influence = {str(r[0].value) if r[0] else "unknown": r[1] for r in inf_result.all()}
 
     # By relationship
-    rel_query = select(Contact.relationship_status, func.count(Contact.id)).group_by(Contact.relationship_status)
+    rel_query = select(Contact.relationship_status, func.count(Contact.id)).where(Contact.org_id == org_id).group_by(Contact.relationship_status)
     if lead_id:
         rel_query = rel_query.where(Contact.lead_id == lead_id)
     rel_result = await db.execute(rel_query)
@@ -162,10 +164,11 @@ async def get_contact(
     contact_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Obtener un contacto por ID."""
     result = await db.execute(
-        select(Contact).options(selectinload(Contact.lead)).where(Contact.id == contact_id)
+        select(Contact).options(selectinload(Contact.lead)).where(Contact.id == contact_id, Contact.org_id == org_id)
     )
     contact = result.scalar_one_or_none()
     if not contact:
@@ -214,9 +217,10 @@ async def update_contact(
     data: ContactUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Actualizar un contacto existente."""
-    result = await db.execute(select(Contact).where(Contact.id == contact_id))
+    result = await db.execute(select(Contact).where(Contact.id == contact_id, Contact.org_id == org_id))
     contact = result.scalar_one_or_none()
     if not contact:
         raise HTTPException(status_code=404, detail="Contacto no encontrado")
@@ -253,9 +257,10 @@ async def delete_contact(
     contact_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Eliminar un contacto."""
-    result = await db.execute(select(Contact).where(Contact.id == contact_id))
+    result = await db.execute(select(Contact).where(Contact.id == contact_id, Contact.org_id == org_id))
     contact = result.scalar_one_or_none()
     if not contact:
         raise HTTPException(status_code=404, detail="Contacto no encontrado")

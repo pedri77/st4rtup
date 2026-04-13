@@ -524,6 +524,12 @@ async def create_subscription(
     current_user: dict = Depends(get_current_user),
 ):
     """Crea una nueva suscripcion de webhook saliente."""
+    from app.services.webhook_dispatcher import validate_webhook_url
+    try:
+        validate_webhook_url(data.url)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"URL no permitida: {e}")
+
     sub = WebhookSubscription(
         name=data.name, url=data.url, secret=data.secret,
         events=data.events, headers=data.headers,

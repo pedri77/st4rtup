@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import DOMPurify from 'dompurify'
 import WebChatWidget from "@/components/WebChatWidget"
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
@@ -10,7 +11,7 @@ const CAT_COLORS = { Ecosistema: '#1E6FD9', Financiación: '#10B981', 'Crear & L
 
 function renderMarkdown(md) {
   if (!md) return ''
-  return md
+  const html = md
     .replace(/^### (.*$)/gm, '<h3 style="font-family:\'Plus Jakarta Sans\',sans-serif;font-size:18px;font-weight:700;margin:28px 0 12px;color:#1A1A2E">$1</h3>')
     .replace(/^## (.*$)/gm, '<h2 style="font-family:\'Plus Jakarta Sans\',sans-serif;font-size:22px;font-weight:700;margin:36px 0 16px;color:#1A1A2E">$1</h2>')
     .replace(/^# (.*$)/gm, '<h1 style="font-family:\'Plus Jakarta Sans\',sans-serif;font-size:28px;font-weight:800;margin:0 0 20px;color:#1A1A2E">$1</h1>')
@@ -28,6 +29,10 @@ function renderMarkdown(md) {
     })
     .replace(/\n{2,}/g, '</p><p style="margin:0 0 16px;line-height:1.8;color:#334155">')
     .replace(/^(?!<[hubloia])(.+)$/gm, '<p style="margin:0 0 16px;line-height:1.8;color:#334155">$1</p>')
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['h1','h2','h3','p','strong','em','a','ul','ol','li','blockquote','img','code','pre','br'],
+    ALLOWED_ATTR: ['style','href','src','alt','target','rel'],
+  })
 }
 
 export default function BlogArticlePage() {

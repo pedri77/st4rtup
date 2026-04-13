@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { FileText, Download, Loader2, Share2, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { agentsApi } from '@/services/api'
+import DOMPurify from 'dompurify'
 import { useThemeColors } from '@/utils/theme'
 
 
@@ -195,8 +196,9 @@ function ProposalRenderer({ markdown }) {
 }
 
 function inline(text) {
-  return text
+  const html = text
     .replace(/\*\*(.+?)\*\*/g, `<strong style="color:${T.fg};font-weight:600">$1</strong>`)
     .replace(/\*(.+?)\*/g, `<em style="color:${T.fg}">$1</em>`)
     .replace(/`(.+?)`/g, `<code style="background:${T.muted};color:${T.cyan};padding:2px 4px;border-radius:4px;font-size:12px;font-family:${fontMono}">$1</code>`)
+  return DOMPurify.sanitize(html, { ALLOWED_TAGS: ['strong', 'em', 'code'], ALLOWED_ATTR: ['style'] })
 }

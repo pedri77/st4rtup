@@ -85,8 +85,9 @@ async def get_opportunity(
     opportunity_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
-    result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id))
+    result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id, Opportunity.org_id == org_id))
     opp = result.scalar_one_or_none()
     if not opp:
         raise HTTPException(status_code=404, detail="Opportunity not found")
@@ -100,7 +101,7 @@ async def delete_opportunity(
     current_user: dict = Depends(require_write_access),
     org_id: str = Depends(get_org_id),
 ):
-    result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id))
+    result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id, Opportunity.org_id == org_id))
     opp = result.scalar_one_or_none()
     if not opp:
         raise HTTPException(status_code=404, detail="Opportunity not found")
@@ -117,7 +118,7 @@ async def update_opportunity(
     org_id: str = Depends(get_org_id),
 ):
     """Update an opportunity."""
-    result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id))
+    result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id, Opportunity.org_id == org_id))
     opp = result.scalar_one_or_none()
     if not opp:
         raise HTTPException(status_code=404, detail="Opportunity not found")

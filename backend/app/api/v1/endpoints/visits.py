@@ -94,8 +94,9 @@ async def get_visit(
     visit_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
-    result = await db.execute(select(Visit).where(Visit.id == visit_id))
+    result = await db.execute(select(Visit).where(Visit.id == visit_id, Visit.org_id == org_id))
     visit = result.scalar_one_or_none()
     if not visit:
         raise HTTPException(status_code=404, detail="Visit not found")

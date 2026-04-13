@@ -7,6 +7,7 @@ import {
   Link as LinkIcon, ExternalLink, Save, Play, Tag
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import DOMPurify from 'dompurify'
 import toast from 'react-hot-toast'
 import { seoCenterApi, contentPipelineApi } from '@/services/api'
 import { useConfirm } from '@/components/common/ConfirmDialog'
@@ -103,7 +104,10 @@ function renderMarkdown(md) {
   html = html.replace(/^- (.+)$/gm, '<li style="margin-left:16px;color:#64748B">$1</li>')
   html = html.replace(/^> (.+)$/gm, '<blockquote style="border-left:3px solid #1E6FD9;padding-left:12px;margin:8px 0;color:#64748B;font-style:italic">$1</blockquote>')
   html = html.replace(/\n\n/g, '<br/><br/>')
-  return html
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['h1','h2','h3','strong','li','blockquote','br','p','em','a','ul','ol'],
+    ALLOWED_ATTR: ['style'],
+  })
 }
 
 // ─── Block Editor (Notion-style) ────────────────────────────

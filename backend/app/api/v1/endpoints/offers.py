@@ -116,9 +116,10 @@ async def get_offer(
     offer_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Obtener detalle de una oferta."""
-    result = await db.execute(select(Offer).where(Offer.id == offer_id))
+    result = await db.execute(select(Offer).where(Offer.id == offer_id, Offer.org_id == org_id))
     offer = result.scalar_one_or_none()
     if not offer:
         raise HTTPException(status_code=404, detail="Offer not found")
@@ -138,7 +139,7 @@ async def update_offer(
     org_id: str = Depends(get_org_id),
 ):
     """Actualizar una oferta existente."""
-    result = await db.execute(select(Offer).where(Offer.id == offer_id))
+    result = await db.execute(select(Offer).where(Offer.id == offer_id, Offer.org_id == org_id))
     offer = result.scalar_one_or_none()
     if not offer:
         raise HTTPException(status_code=404, detail="Offer not found")
