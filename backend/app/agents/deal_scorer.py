@@ -191,16 +191,20 @@ async def score_deal(db: AsyncSession, opportunity_id: UUID) -> dict:
     }
 
     # Audit trail
-    audit_trail.log(
-        agent_id="AGENT-DEAL-001",
-        action="score_deal",
-        input_data={"opportunity_id": str(opportunity_id)},
-        output_data=result,
-        tokens_input=0,
-        tokens_output=0,
-        duration_ms=duration_ms,
-        cost=0,
-    )
+    try:
+        await audit_trail.log(
+            db=db,
+            agent_id="AGENT-DEAL-001",
+            model="deal-scorer-v1",
+            input_data={"opportunity_id": str(opportunity_id)},
+            output_data=result,
+            tokens_in=0,
+            tokens_out=0,
+            duration_ms=duration_ms,
+            cost_estimate=0,
+        )
+    except Exception:
+        pass
 
     return result
 

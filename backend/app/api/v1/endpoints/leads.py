@@ -176,35 +176,25 @@ async def create_lead(
     await db.commit()
     await db.refresh(lead)
 
-    # Notificaciones (no bloquean la operación principal)
+    # Notificaciones en background (no bloquean la respuesta)
+    from app.services.notification_service import fire_and_forget_bg
     user_id = UUID(current_user["user_id"])
-    try:
-        await notification_service.notify_lead_created(
-            db=db,
-            user_id=user_id,
-            lead_id=lead.id,
-            company_name=lead.company_name,
-            source=lead.source,
-        )
+    lead_id, company, source, score = lead.id, lead.company_name, lead.source, lead.score
+    fire_and_forget_bg(lambda db: notification_service.notify_lead_created(
+        db=db, user_id=user_id, lead_id=lead_id, company_name=company, source=source,
+    ))
+    if score and score >= 80:
+        fire_and_forget_bg(lambda db: notification_service.notify_high_score_lead(
+            db=db, user_id=user_id, lead_id=lead_id, company_name=company, score=score,
+        ))
 
-        if lead.score and lead.score >= 80:
-            await notification_service.notify_high_score_lead(
-                db=db,
-                user_id=user_id,
-                lead_id=lead.id,
-                company_name=lead.company_name,
-                score=lead.score,
-            )
-    except Exception:
-        logger.warning("Failed to send lead creation notifications", exc_info=True)
-
-    # Dispatch to workflow engine
+    # Dispatch to workflow engine (background)
     try:
         from app.core.workflow_engine import dispatch_event
-        await dispatch_event("lead.created", {
-            "lead_id": str(lead.id), "company_name": lead.company_name,
-            "title": f"Nuevo lead: {lead.company_name}", "message": f"Fuente: {lead.source}",
-        }, db)
+        fire_and_forget_bg(lambda db: dispatch_event("lead.created", {
+            "lead_id": str(lead_id), "company_name": company,
+            "title": f"Nuevo lead: {company}", "message": f"Fuente: {source}",
+        }, db))
     except Exception:
         pass
 

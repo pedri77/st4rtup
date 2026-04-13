@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 from typing import Optional
 from uuid import UUID
 
+from app.core.rate_limit import limiter
+
 import stripe
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -623,7 +625,9 @@ PLAN_PRICES = {
 }
 
 @router.post("/public/checkout")
+@limiter.limit("10/minute")
 async def public_checkout(
+    request: Request,
     plan: str = Query(..., description="Plan or add-on ID"),
     email: str = Query("", description="Email del cliente"),
     org_id: str = Query("", description="Organization ID (for add-on activation)"),
@@ -671,7 +675,9 @@ async def public_checkout(
 
 
 @router.post("/public/paypal-order")
+@limiter.limit("10/minute")
 async def public_paypal_order(
+    request: Request,
     plan: str = Query(..., description="Plan: growth_monthly, growth_annual, scale_monthly, scale_annual"),
 ):
     """Crea orden PayPal SIN login."""

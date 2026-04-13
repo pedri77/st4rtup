@@ -255,6 +255,14 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+# API Versioning
+from app.core.versioning import APIVersionMiddleware
+app.add_middleware(APIVersionMiddleware)
+
+# Observability
+from app.core.observability import ObservabilityMiddleware, get_metrics
+app.add_middleware(ObservabilityMiddleware)
+
 # CORS
 app.add_middleware(
     CORSMiddleware,
@@ -438,3 +446,15 @@ async def health_check():
     if healthy:
         return {"status": "healthy", "checks": checks}
     return JSONResponse(status_code=503, content={"status": "unhealthy", "checks": checks})
+
+
+@app.get("/ready")
+async def readiness():
+    """Lightweight readiness probe — no DB check, just confirms ASGI is accepting requests."""
+    return {"status": "ok"}
+
+
+@app.get("/metrics")
+async def metrics():
+    """Request latency metrics — p50/p95/p99 per endpoint."""
+    return get_metrics()

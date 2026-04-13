@@ -699,7 +699,7 @@ async def lead_activity_feed(
 
     # Offers
     offer_rows = (await db.execute(
-        select(Offer.id, Offer.title, Offer.status, Offer.total_amount, Offer.created_at)
+        select(Offer.id, Offer.title, Offer.status, Offer.total, Offer.created_at)
         .where(Offer.lead_id == lead_id)
         .order_by(Offer.created_at.desc()).limit(limit)
     )).all()

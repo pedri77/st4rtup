@@ -2,12 +2,58 @@
 Servicio para crear notificaciones automáticas del sistema.
 Se llama desde los endpoints cuando ocurren eventos importantes.
 """
+import asyncio
+import logging
 from uuid import UUID
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.notification import Notification, NotificationType, NotificationPriority
 import json
+
+logger = logging.getLogger(__name__)
+
+
+def fire_and_forget(coro):
+    """Schedule a coroutine to run in the background with its own DB session.
+
+    Usage in endpoints:
+        fire_and_forget(notification_service.notify_lead_created(db, ...))
+    becomes:
+        fire_and_forget_bg(lambda db: notification_service.notify_lead_created(db, ...))
+    """
+    async def _wrapper():
+        try:
+            await coro
+        except Exception:
+            logger.debug("Background notification failed", exc_info=True)
+
+    try:
+        loop = asyncio.get_running_loop()
+        loop.create_task(_wrapper())
+    except RuntimeError:
+        pass
+
+
+def fire_and_forget_bg(coro_factory):
+    """Schedule a coroutine factory that receives a fresh DB session.
+
+    Usage:
+        fire_and_forget_bg(lambda db: notification_service.notify_lead_created(db, user_id=..., ...))
+    """
+    async def _wrapper():
+        from app.core.database import AsyncSessionLocal
+        try:
+            async with AsyncSessionLocal() as db:
+                await coro_factory(db)
+        except Exception:
+            logger.debug("Background notification failed", exc_info=True)
+
+    try:
+        loop = asyncio.get_running_loop()
+        loop.create_task(_wrapper())
+    except RuntimeError:
+        pass
 
 
 class NotificationService:

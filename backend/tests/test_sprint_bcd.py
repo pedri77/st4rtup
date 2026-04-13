@@ -1,6 +1,7 @@
 """Tests for Sprint B, C, D features — deal scoring, activity feed, PDF, pipeline rules."""
 import pytest
 import uuid
+from datetime import datetime, timezone
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -87,7 +88,7 @@ async def test_activity_feed_with_data(client, db_session):
     await db_session.flush()
 
     email = Email(id=uuid.uuid4(), lead_id=lead.id, subject="Hello", status="sent", to_email="test@test.com")
-    visit = Visit(id=uuid.uuid4(), lead_id=lead.id, visit_type="presencial", result="positive", visit_date="2026-04-13")
+    visit = Visit(id=uuid.uuid4(), lead_id=lead.id, visit_type="presencial", result="positive", visit_date=datetime.now(timezone.utc))
     db_session.add_all([email, visit])
     await db_session.commit()
 

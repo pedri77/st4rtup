@@ -64,18 +64,13 @@ async def create_opportunity(
     await db.commit()
     await db.refresh(opportunity)
 
-    # Notificación (no bloquea la operación principal)
-    try:
-        user_id = UUID(current_user["user_id"])
-        await notification_service.notify_opportunity_created(
-            db=db,
-            user_id=user_id,
-            opportunity_id=opportunity.id,
-            name=opportunity.name,
-            amount=opportunity.value,
-        )
-    except Exception:
-        logger.warning("Failed to send opportunity creation notification", exc_info=True)
+    # Notificación en background
+    from app.services.notification_service import fire_and_forget_bg
+    user_id = UUID(current_user["user_id"])
+    opp_id, opp_name, opp_value = opportunity.id, opportunity.name, opportunity.value
+    fire_and_forget_bg(lambda db: notification_service.notify_opportunity_created(
+        db=db, user_id=user_id, opportunity_id=opp_id, name=opp_name, amount=opp_value,
+    ))
 
     return OpportunityResponse.model_validate(opportunity)
 
@@ -133,30 +128,20 @@ async def update_opportunity(
     await db.commit()
     await db.refresh(opp)
 
-    # Notificaciones (no bloquean la operación principal)
-    try:
-        user_id = UUID(current_user["user_id"])
+    # Notificaciones en background
+    from app.services.notification_service import fire_and_forget_bg
+    user_id = UUID(current_user["user_id"])
+    opp_id, opp_name, opp_value, new_stage = opp.id, opp.name, opp.value or 0, opp.stage
 
-        if "stage" in update_data and old_stage != opp.stage:
-            if opp.stage == "closed_won":
-                await notification_service.notify_opportunity_won(
-                    db=db,
-                    user_id=user_id,
-                    opportunity_id=opp.id,
-                    name=opp.name,
-                    amount=opp.value or 0,
-                )
-            else:
-                await notification_service.notify_opportunity_stage_changed(
-                    db=db,
-                    user_id=user_id,
-                    opportunity_id=opp.id,
-                    name=opp.name,
-                    old_stage=old_stage,
-                    new_stage=opp.stage,
-                )
-    except Exception:
-        logger.warning("Failed to send opportunity update notifications", exc_info=True)
+    if "stage" in update_data and old_stage != new_stage:
+        if new_stage == "closed_won":
+            fire_and_forget_bg(lambda db: notification_service.notify_opportunity_won(
+                db=db, user_id=user_id, opportunity_id=opp_id, name=opp_name, amount=opp_value,
+            ))
+        else:
+            fire_and_forget_bg(lambda db: notification_service.notify_opportunity_stage_changed(
+                db=db, user_id=user_id, opportunity_id=opp_id, name=opp_name, old_stage=old_stage, new_stage=new_stage,
+            ))
 
     # Execute pipeline automation rules
     try:
