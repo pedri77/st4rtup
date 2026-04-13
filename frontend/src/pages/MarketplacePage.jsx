@@ -46,6 +46,28 @@ const FEATURE_ICONS = {
 }
 
 // ─── Addon icon + accent mapping ────────────────────────────────────
+// ─── Feature → route mapping ────────────────────────────────────
+const FEATURE_ROUTES = {
+  leads: '/app/leads', pipeline: '/app/pipeline', offers: '/app/offers', visits: '/app/visits',
+  emails: '/app/emails', actions: '/app/actions', contacts: '/app/leads', calendar: '/app/calendar',
+  surveys: '/app/surveys', reviews: '/app/reviews',
+  campaigns: '/app/marketing/campaigns', seo_center: '/app/marketing/seo-center',
+  funnels: '/app/marketing/funnels', assets: '/app/marketing/assets',
+  utm: '/app/marketing/utm', marketing_calendar: '/app/marketing/calendar',
+  analytics: '/app/marketing/analytics', social: '/app/social',
+  agent_scoring: '/app/agents', agent_qualify: '/app/agents', agent_proposal: '/app/agents',
+  agent_cs: '/app/agents', content_pipeline: '/app/content-pipeline',
+  auto_tagging: '/app/agents', ai_summary: '/app/agents', chat_ai: '/app/chat',
+  calls_console: '/app/calls/console', calls_prompts: '/app/calls/prompts',
+  calls_queue: '/app/calls/queues', calls_ab: '/app/calls', calls_rgpd: '/app/calls',
+  gmail: '/app/integrations', google_calendar: '/app/integrations', google_drive: '/app/integrations',
+  stripe_int: '/app/payments', whatsapp: '/app/whatsapp', youtube: '/app/marketing/youtube',
+  airtable: '/app/integrations', slack: '/app/integrations', webhooks: '/app/webhooks',
+  deal_room: '/app/dealroom', nda_digital: '/app/offers', public_api: '/app/integrations',
+  widgets: '/app/dashboard', graphs: '/app/reports', automations: '/app/automations',
+  export_pdf: '/app/reports', dashboard_config: '/app/dashboard', i18n: '/app/settings',
+}
+
 const ADDON_META = {
   extra_users: { icon: Users, accent: T.cyan },
   ai_advanced: { icon: BrainCircuit, accent: T.warning },
@@ -181,7 +203,15 @@ export default function MarketplacePage() {
                     <p className="text-xs mt-1 leading-relaxed" style={{ color: T.fgMuted }}>{f.desc}</p>
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-[10px]" style={{ fontFamily: fontMono, color: T.fgMuted, opacity: 0.7 }}>{f.category}</span>
-                      <Link to="/app/docs" className="text-[10px]" style={{ color: T.cyan, textDecoration: 'none' }}>Docs</Link>
+                      {status !== 'locked' && FEATURE_ROUTES[f.id] ? (
+                        <Link to={FEATURE_ROUTES[f.id]} className="flex items-center gap-1 text-[10px] font-medium" style={{ color: T.cyan, textDecoration: 'none' }}>
+                          Abrir <ArrowRight size={10} />
+                        </Link>
+                      ) : (
+                        <Link to="/app/pricing" className="text-[10px]" style={{ color: T.fgMuted, textDecoration: 'none' }}>
+                          Ver planes
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>
