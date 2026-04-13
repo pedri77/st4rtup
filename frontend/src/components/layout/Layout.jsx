@@ -4,7 +4,8 @@ import {
   LayoutDashboard, Users, CalendarCheck, Mail, GitBranch,
   CheckSquare, BarChart3, MessageSquare, Settings, Zap, Search, Bell, FileText, Shield, Menu, X,
   Plug, Sparkles, Contact, Calendar, Megaphone, Phone, Bot, DollarSign, Target, Heart, Columns3, BrainCircuit,
-  CalendarDays, CreditCard, BookOpen, ShoppingBag, ChevronLeft, ChevronRight, LogOut, Activity
+  CalendarDays, CreditCard, BookOpen, ShoppingBag, ChevronLeft, ChevronRight, LogOut, Activity,
+  Star, Clock
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import GlobalSearch from '@/components/GlobalSearch'
@@ -148,6 +149,21 @@ export default function Layout() {
     items: group.items.filter(item => !item.adminOnly || hasRole('admin')),
   })).filter(group => group.items.length > 0)
 
+  // Favorites + Recents
+  const { favorites, recents, addFavorite, removeFavorite, addRecent } = useUserPreferencesStore()
+  const allNavItems = navigationGroups.flatMap(g => g.items)
+
+  // Track recent pages on navigation
+  useEffect(() => {
+    const match = allNavItems.find(item => location.pathname === item.href || location.pathname.startsWith(item.href + '/'))
+    if (match) addRecent({ href: match.href, name: match.name })
+  }, [location.pathname])
+
+  const toggleFavorite = (item) => {
+    if (favorites.some(f => f.href === item.href)) removeFavorite(item.href)
+    else addFavorite({ href: item.href, name: item.name })
+  }
+
   const { data: notificationStats } = useQuery({
     queryKey: ['notifications', 'stats'],
     queryFn: async () => {
@@ -200,6 +216,63 @@ export default function Layout() {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
+          {/* Favorites */}
+          {!collapsed && favorites.length > 0 && (
+            <div>
+              <p className="px-3 mb-1 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1" style={{ color: T.warning, opacity: 0.8 }}>
+                <Star className="w-3 h-3" /> Favoritos
+              </p>
+              <div className="space-y-0.5">
+                {favorites.map(fav => {
+                  const navItem = allNavItems.find(n => n.href === fav.href)
+                  const Icon = navItem?.icon || Star
+                  return (
+                    <NavLink key={fav.href} to={fav.href}
+                      className="flex items-center gap-3 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors group"
+                      style={({ isActive }) => ({ fontFamily: fontDisplay, letterSpacing: '0.02em', backgroundColor: isActive ? `${T.cyan}15` : 'transparent', color: isActive ? T.cyan : T.fgMuted, borderLeft: isActive ? `3px solid ${T.cyan}` : '3px solid transparent' })}>
+                      <Icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="flex-1 truncate">{fav.name}</span>
+                      <button onClick={e => { e.preventDefault(); e.stopPropagation(); removeFavorite(fav.href) }}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                        <X className="w-3 h-3" style={{ color: T.fgMuted }} />
+                      </button>
+                    </NavLink>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Recents */}
+          {!collapsed && recents.length > 0 && (
+            <div>
+              <p className="px-3 mb-1 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1" style={{ color: T.fgMuted, opacity: 0.6 }}>
+                <Clock className="w-3 h-3" /> Recientes
+              </p>
+              <div className="space-y-0.5">
+                {recents.slice(0, 5).map(recent => {
+                  const navItem = allNavItems.find(n => n.href === recent.href)
+                  const Icon = navItem?.icon || FileText
+                  return (
+                    <div key={recent.href} className="flex items-center group">
+                      <NavLink to={recent.href}
+                        className="flex-1 flex items-center gap-3 px-3 py-1 rounded-lg text-xs transition-colors"
+                        style={({ isActive }) => ({ color: isActive ? T.cyan : T.fgMuted, backgroundColor: isActive ? `${T.cyan}08` : 'transparent' })}>
+                        <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span className="truncate">{recent.name}</span>
+                      </NavLink>
+                      <button onClick={() => toggleFavorite({ href: recent.href, name: recent.name })}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5" style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                        title={favorites.some(f => f.href === recent.href) ? 'Quitar de favoritos' : 'Añadir a favoritos'}>
+                        <Star className="w-3 h-3" style={{ color: favorites.some(f => f.href === recent.href) ? T.warning : T.fgMuted, fill: favorites.some(f => f.href === recent.href) ? T.warning : 'none' }} />
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
           {visibleGroups.map((group) => (
             <div key={group.label}>
               <p className="px-3 mb-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: T.fgMuted, opacity: 0.6 }}>
@@ -207,21 +280,28 @@ export default function Layout() {
               </p>
               <div className="space-y-0.5">
                 {group.items.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.href}
-                    className="flex items-center gap-3 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors"
-                    style={({ isActive }) => ({
-                      fontFamily: fontDisplay,
-                      letterSpacing: '0.02em',
-                      backgroundColor: isActive ? `${T.cyan}15` : 'transparent',
-                      color: isActive ? T.cyan : T.fgMuted,
-                      borderLeft: isActive ? `3px solid ${T.cyan}` : '3px solid transparent',
-                    })}
-                  >
-                    <item.icon className="w-4 h-4 flex-shrink-0" />
-                    {!collapsed && item.name}
-                  </NavLink>
+                  <div key={item.name} className="flex items-center group">
+                    <NavLink
+                      to={item.href}
+                      className="flex-1 flex items-center gap-3 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors"
+                      style={({ isActive }) => ({
+                        fontFamily: fontDisplay,
+                        letterSpacing: '0.02em',
+                        backgroundColor: isActive ? `${T.cyan}15` : 'transparent',
+                        color: isActive ? T.cyan : T.fgMuted,
+                        borderLeft: isActive ? `3px solid ${T.cyan}` : '3px solid transparent',
+                      })}
+                    >
+                      <item.icon className="w-4 h-4 flex-shrink-0" />
+                      {!collapsed && item.name}
+                    </NavLink>
+                    {!collapsed && (
+                      <button onClick={() => toggleFavorite(item)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 mr-1" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                        <Star className="w-3 h-3" style={{ color: favorites.some(f => f.href === item.href) ? T.warning : T.fgMuted, fill: favorites.some(f => f.href === item.href) ? T.warning : 'none' }} />
+                      </button>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>

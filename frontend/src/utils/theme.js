@@ -43,3 +43,7 @@ export function useThemeColors() {
 }
 
 export { LIGHT, DARK }
+
+// Typography tokens — import these instead of redefining per page
+export const fontDisplay = "'Rajdhani', sans-serif"  // Headers, KPIs, nav labels
+export const fontMono = "'IBM Plex Mono', monospace"  // Code, stats, technical data

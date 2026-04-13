@@ -15,6 +15,22 @@ export const useUserPreferencesStore = create(
       date_format: 'DD/MM/YYYY',
       currency: 'EUR',
       week_start: 'monday',
+      // Navigation
+      favorites: [],     // [{href, name, icon}] — max 5
+      recents: [],       // [{href, name, ts}] — max 8, auto-tracked
+
+      addFavorite: (item) => set((state) => {
+        if (state.favorites.some(f => f.href === item.href)) return state
+        return { favorites: [...state.favorites, item].slice(0, 5) }
+      }),
+      removeFavorite: (href) => set((state) => ({
+        favorites: state.favorites.filter(f => f.href !== href),
+      })),
+      addRecent: (item) => set((state) => {
+        const filtered = state.recents.filter(r => r.href !== item.href)
+        return { recents: [{ ...item, ts: Date.now() }, ...filtered].slice(0, 8) }
+      }),
+
       // Notificaciones
       emailNotifications: true,
       desktopNotifications: false,
