@@ -21,11 +21,8 @@ import { DashboardSkeleton, ErrorState } from '@/components/LoadingStates'
 import OnboardingWizard from '@/components/OnboardingWizard'
 import DashboardCustomizer, { useDashboardWidgets } from '@/components/DashboardCustomizer'
 import { exportToPDF } from '@/utils/exportPdf'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
-
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const chartTooltipStyle = {
   backgroundColor: T.card,

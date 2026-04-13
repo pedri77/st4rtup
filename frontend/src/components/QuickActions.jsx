@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Users, CheckSquare, Mail, CalendarCheck, GitBranch, X } from 'lucide-react'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
 
-const fontDisplay = "'Rajdhani', sans-serif"
 
 const quickActions = [
   { label: 'Nuevo Lead', icon: Users, href: '/app/leads?new=1', color: T.cyan },

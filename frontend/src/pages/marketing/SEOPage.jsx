@@ -8,11 +8,9 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const TABS = [
   { id: 'keywords', label: 'Keywords', icon: Hash },

@@ -7,11 +7,9 @@ import {
 import toast from 'react-hot-toast'
 import { whatsappApi } from '@/services/api'
 import { useTranslation } from '@/i18n/useTranslation'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 function formatTime(dateStr) {
   if (!dateStr) return ''

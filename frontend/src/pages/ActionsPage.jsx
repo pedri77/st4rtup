@@ -8,13 +8,11 @@ import { mockActions, mockDelay, USE_MOCK_DATA } from '@/mocks/mockData'
 import ExportButton from '@/components/ExportButton'
 import { formatDateForExport } from '@/utils/export'
 import { ListItemSkeleton } from '@/components/LoadingStates'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
 /* ── St4rtup Design Tokens ── */
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const priorityConfig = {
   low: { label: 'LOW', color: T.fgMuted, dot: T.fgMuted },

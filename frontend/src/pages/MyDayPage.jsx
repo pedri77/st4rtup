@@ -6,13 +6,11 @@ import {
 } from 'lucide-react'
 import { actionsApi, visitsApi, leadsApi, opportunitiesApi, dashboardApi } from '@/services/api'
 import { useAuth } from '@/contexts/AuthContext'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const priorityColors = {
   high: T.destructive,

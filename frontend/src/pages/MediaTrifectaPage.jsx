@@ -9,11 +9,9 @@ import clsx from 'clsx'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import toast from 'react-hot-toast'
 import { mediaApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const MEDIA_COLORS = {
   owned: { text: T.success, bg: 'hsla(142,71%,45%,0.1)', border: 'hsla(142,71%,45%,0.3)' },

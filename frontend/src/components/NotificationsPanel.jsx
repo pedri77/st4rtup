@@ -7,10 +7,9 @@ import { es } from 'date-fns/locale'
 import toast from 'react-hot-toast'
 import api from '@/services/api'
 import { mockNotifications, mockNotificationStats, mockDelay, USE_MOCK_DATA } from '@/mocks/mockData'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
 const inputStyle = {
   backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg,
   borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem',

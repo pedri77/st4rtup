@@ -4,11 +4,9 @@ import { FileText, Download, Loader2, Share2, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { agentsApi } from '@/services/api'
 import DOMPurify from 'dompurify'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 export default function ProposalViewPage() {
   const T = useThemeColors()

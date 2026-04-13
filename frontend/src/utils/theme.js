@@ -47,3 +47,36 @@ export { LIGHT, DARK }
 // Typography tokens — import these instead of redefining per page
 export const fontDisplay = "'Rajdhani', sans-serif"  // Headers, KPIs, nav labels
 export const fontMono = "'IBM Plex Mono', monospace"  // Code, stats, technical data
+
+/**
+ * Theme-aware constants for common inline styles.
+ * Use this hook to get input styles, chart tooltip styles, etc.
+ * that automatically adapt to the current theme.
+ */
+export function useThemeStyles() {
+  const T = useThemeColors()
+  return {
+    inputStyle: {
+      backgroundColor: T.muted,
+      border: `1px solid ${T.border}`,
+      color: T.fg,
+      borderRadius: '0.5rem',
+      padding: '0.5rem 0.75rem',
+      fontSize: '0.875rem',
+      width: '100%',
+      outline: 'none',
+    },
+    chartTooltipStyle: {
+      backgroundColor: T.card,
+      border: `1px solid ${T.border}`,
+      borderRadius: '6px',
+      color: T.fg,
+      fontSize: '12px',
+    },
+    cardStyle: {
+      backgroundColor: T.card,
+      border: `1px solid ${T.border}`,
+      borderRadius: '12px',
+    },
+  }
+}

@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom'
 import { CreditCard, ExternalLink, Receipt, Zap, ArrowRight } from 'lucide-react'
 import api from '@/services/api'
 import { useOrganization } from '@/hooks/useOrganization'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const PLAN_INFO = {
   starter: { name: 'Starter', price: '€0', color: '#94A3B8', features: ['1 usuario', '100 leads', 'Pipeline básico'] },

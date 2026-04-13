@@ -1,10 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { dashboardApi } from '@/services/api'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontMono = "'IBM Plex Mono', monospace"
-const fontDisplay = "'Rajdhani', sans-serif"
 
 const CELL_SIZE = 12
 const CELL_GAP = 3

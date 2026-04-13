@@ -11,11 +11,9 @@ import {
 } from 'recharts'
 import Sparkline from '@/components/Sparkline'
 import { costControlApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 export default function CostControlPage() {
   const T = useThemeColors()

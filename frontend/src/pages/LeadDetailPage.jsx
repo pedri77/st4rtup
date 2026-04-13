@@ -5,12 +5,10 @@ import DealScoreCard from '@/components/DealScoreCard';
 import ActivityFeed from '@/components/ActivityFeed';
 import { ArrowLeft, Mail, Building2, User, Phone, MapPin, Globe, FileText, Tag, TrendingUp, Users, Star, Crown, Linkedin, Calendar, Clock, Video, Send, Sparkles, Loader2, CheckCircle2, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
 ;
-const fontDisplay = "'Rajdhani', sans-serif";
-const fontMono = "'IBM Plex Mono', monospace";
 
 const statusStyle = {
   new: { color: T.cyan, bg: `${T.cyan}15` },

@@ -9,11 +9,9 @@ import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { utmCodesApi, campaignsApi } from '@/services/api'
 import { useConfirm } from '@/components/common/ConfirmDialog'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const COMMON_SOURCES = ['google', 'linkedin', 'twitter', 'facebook', 'email', 'newsletter', 'youtube']
 const COMMON_MEDIUMS = ['cpc', 'cpm', 'social', 'email', 'organic', 'referral', 'display', 'video']

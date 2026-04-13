@@ -11,11 +11,9 @@ import clsx from 'clsx'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts'
 import { llmVisibilityApi } from '@/services/api'
 import { useConfirm } from '@/components/common/ConfirmDialog'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const CATEGORY_CONFIG = {
   brand: { label: 'Marca', bgColor: 'rgba(0,188,212,0.1)', textColor: T.cyan },

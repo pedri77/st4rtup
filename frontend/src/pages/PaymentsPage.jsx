@@ -7,13 +7,11 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { paymentsApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 const fmt = (n) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(n ?? 0)

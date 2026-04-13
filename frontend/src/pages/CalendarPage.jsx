@@ -12,11 +12,9 @@ import {
 import { es } from 'date-fns/locale'
 import { dashboardApi } from '@/services/api'
 import { ListItemSkeleton } from '@/components/LoadingStates'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const EVENT_COLORS = {
   visit: { color: T.cyan, bg: `${T.cyan}15`, border: `${T.cyan}40` },

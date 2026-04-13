@@ -6,11 +6,9 @@ import clsx from 'clsx'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import toast from 'react-hot-toast'
 import { pricingApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const TIER_ICONS = { pilot_poc: Zap, enterprise: Building, smb: Users }
 const TIER_COLORS = { pilot_poc: T.cyan, enterprise: T.purple, smb: T.success }

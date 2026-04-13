@@ -9,11 +9,9 @@ import clsx from 'clsx'
 import toast from 'react-hot-toast'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { socialApi, youtubeApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const TABS = [
   { id: 'posts', label: 'Posts' },

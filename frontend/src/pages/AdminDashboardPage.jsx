@@ -5,11 +5,9 @@ import { Shield, Users, DollarSign, TrendingUp, Building2, Activity, UserPlus, Z
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import api from '@/services/api'
 import toast from 'react-hot-toast'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const PLAN_COLORS = { starter: '#94A3B8', growth: '#1E6FD9', scale: '#8B5CF6', enterprise: '#F59E0B' }
 

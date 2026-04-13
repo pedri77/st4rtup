@@ -5,11 +5,9 @@ import {
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { campaignsApi, marketingAlertsApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const modules = [
   { name: 'SEO Command Center', description: 'Content Hub, auditoría, repurposer, brand monitor y dashboard SEO unificado. Genera artículos con IA.', href: '/app/marketing/seo-center', icon: Search, accent: T.cyan },

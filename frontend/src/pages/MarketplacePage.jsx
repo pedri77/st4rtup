@@ -7,11 +7,9 @@ import {
 } from 'lucide-react'
 import featuresMatrix from '@/data/features-matrix.json'
 import { useOrganization } from '@/hooks/useOrganization'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const PLAN_RANK = { starter: 0, growth: 1, scale: 2, enterprise: 3 }
 

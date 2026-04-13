@@ -9,11 +9,9 @@ import {
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
 import { dealroomApi, dealRoomDocsApi, opportunitiesApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const SUBFOLDERS = ['Propuestas', 'Contratos', 'Presentaciones', 'Documentacion']
 const MAIN_TABS = ['SharePoint', 'Documentos', 'Analytics', 'NDA']

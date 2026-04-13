@@ -9,11 +9,9 @@ import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { marketingCalendarApi, campaignsApi } from '@/services/api'
 import { useConfirm } from '@/components/common/ConfirmDialog'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const EVENT_TYPE_CONFIG = {
   seo_article: { label: 'Artículo SEO', color: T.warning },

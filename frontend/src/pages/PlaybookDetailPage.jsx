@@ -9,11 +9,9 @@ import {
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
 import { playbookApi, leadsApi, externalAnalyticsApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 // Map each tactic channel to quick actions
 const CHANNEL_ACTIONS = {

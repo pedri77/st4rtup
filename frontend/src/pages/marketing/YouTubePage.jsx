@@ -3,11 +3,9 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { Youtube, ArrowLeft, Users, Eye, Film, Clock, ThumbsUp, UserPlus, Search, ExternalLink, MessageSquare } from 'lucide-react'
 import { youtubeApi } from '@/services/api'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 function fmt(n) {
   if (n == null) return '—'

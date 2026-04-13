@@ -9,11 +9,9 @@ import clsx from 'clsx'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { auditLogApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const ACTION_CONFIG = {
   create: { label: 'Crear', bg: 'hsla(142,71%,45%,0.1)', color: T.success, icon: Plus },

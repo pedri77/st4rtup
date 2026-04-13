@@ -7,10 +7,8 @@ import {
   Settings, Lock, Globe, Mail, Hash, ClipboardList, Eye,
   ArrowRight, ExternalLink, Copy, Check
 } from 'lucide-react'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 // ─── Documentation content ──────────────────────────────────────────
 

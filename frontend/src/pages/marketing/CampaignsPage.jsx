@@ -14,11 +14,9 @@ import {
 } from 'recharts'
 import { campaignsApi, dashboardApi } from '@/services/api'
 import { useConfirm } from '@/components/common/ConfirmDialog'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const STATUS_CONFIG = {
   draft: { label: 'Borrador', bg: T.muted, color: T.fgMuted },

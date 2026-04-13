@@ -6,11 +6,9 @@ import clsx from 'clsx'
 import toast from 'react-hot-toast'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { okrApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 function categoryColor(cat) {
   const map = { pipeline: 'hsl(217,91%,60%)', revenue: T.success, marketing: T.purple, product: T.cyan }

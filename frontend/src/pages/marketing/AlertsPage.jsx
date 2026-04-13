@@ -9,11 +9,9 @@ import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { marketingAlertsApi } from '@/services/api'
 import { useConfirm } from '@/components/common/ConfirmDialog'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const SEVERITY_CONFIG = {
   info: { label: 'Info', icon: Info, bg: 'hsla(210,70%,55%,0.15)', color: 'hsl(210,70%,55%)', dot: 'hsl(210,70%,55%)' },

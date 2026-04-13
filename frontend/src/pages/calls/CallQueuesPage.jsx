@@ -4,10 +4,9 @@ import { ListOrdered, Play, Pause, XCircle, RotateCcw, Plus, Trash2, Loader2, Ch
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { callQueuesApi, callPromptsApi, leadsApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
 const inputStyle = {
   backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg,
   borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem',

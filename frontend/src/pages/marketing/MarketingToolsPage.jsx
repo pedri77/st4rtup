@@ -10,11 +10,9 @@ import {
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
 import { chatApi, competitorsApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 // ═══════════════════════════════════════════════════════════════════
 // TAB 1: ROI CALCULATOR

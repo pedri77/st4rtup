@@ -11,11 +11,9 @@ import {
 import toast from 'react-hot-toast'
 import { reportsApi } from '@/services/api'
 import { exportToPDF } from '@/utils/exportPdf'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const REPORT_TYPES = [
   { id: 'sales', name: 'Rendimiento de Ventas', icon: DollarSign, color: T.success },

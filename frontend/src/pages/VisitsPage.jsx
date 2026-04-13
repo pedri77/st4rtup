@@ -11,12 +11,10 @@ import { usePersistedFilterSearch } from '@/hooks/usePersistedFilters';
 import ExportButton from '@/components/ExportButton';
 import { formatDateForExport } from '@/utils/export';
 import { ListItemSkeleton } from '@/components/LoadingStates';
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
 ;
-const fontDisplay = "'Rajdhani', sans-serif";
-const fontMono = "'IBM Plex Mono', monospace";
 const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' };
 
 const VISIT_TYPES = {

@@ -30,13 +30,11 @@ import { useNotificationStream } from '@/hooks/useNotificationStream'
 import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications'
 import { useSetupProgress } from '@/hooks/useSetupProgress'
 import { useTranslation } from '@/i18n/useTranslation'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 function getNavigationGroups(t) {
   return [

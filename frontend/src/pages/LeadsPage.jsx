@@ -11,12 +11,10 @@ import { formatDateForExport } from '@/utils/export';
 import { mockLeads, mockDelay, USE_MOCK_DATA } from '@/mocks/mockData';
 import { useSavedFilterPresets } from '@/hooks/useSavedFilterPresets';
 import SavedFilterPresets from '@/components/SavedFilterPresets';
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
 ;
-const fontDisplay = "'Rajdhani', sans-serif";
-const fontMono = "'IBM Plex Mono', monospace";
 
 const STATUS_MAP = {
   new: { code: 'N', label: 'Nuevo', color: T.fgMuted },

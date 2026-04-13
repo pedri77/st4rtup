@@ -3,11 +3,9 @@ import { TrendingUp, Loader2, ArrowRight } from 'lucide-react'
 import clsx from 'clsx'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { gtmApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const STAGE_COLORS = {
   discovery: 'hsl(217,91%,60%)', qualification: T.purple,

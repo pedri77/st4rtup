@@ -15,11 +15,9 @@ import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { funnelsApi, campaignsApi } from '@/services/api'
 import { useConfirm } from '@/components/common/ConfirmDialog'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const STATUS_CONFIG = {
   draft: { label: 'Borrador', bg: T.muted, color: T.fgMuted },

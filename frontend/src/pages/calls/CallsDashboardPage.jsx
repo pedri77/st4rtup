@@ -3,10 +3,9 @@ import { BarChart3, Phone, Clock, DollarSign, TrendingUp, Loader2 } from 'lucide
 import { Link } from 'react-router-dom'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { callsApi } from '@/services/api'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
 
 const RESULTADO_COLORS = {
   demo_agendada: '#22c55e',

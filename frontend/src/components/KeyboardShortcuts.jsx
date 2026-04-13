@@ -2,12 +2,11 @@ import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { X, Keyboard } from 'lucide-react'
 import { useUIStore } from '@/store/useUIStore'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
 
-const fontDisplay = "'Rajdhani', sans-serif"
 
 const SHORTCUTS = [
   { keys: ['Ctrl', 'K'], description: 'Abrir busqueda global', category: 'General' },

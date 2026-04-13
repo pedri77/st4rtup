@@ -14,11 +14,9 @@ if (typeof window !== 'undefined') {
   localStorage.setItem('st4rtup_agents_tried', 'true')
 }
 import { useQuery as useReactQuery } from '@tanstack/react-query'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const AGENT_ICONS = {
   'AGENT-LEAD-001': Brain,

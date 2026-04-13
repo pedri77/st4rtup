@@ -12,11 +12,9 @@ import clsx from 'clsx'
 import toast from 'react-hot-toast'
 import { settingsApi } from '@/services/api'
 import { useHasRole } from '@/components/RoleGuard'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 // ─── Marketing Integration Definitions ─────────────────────────────
 

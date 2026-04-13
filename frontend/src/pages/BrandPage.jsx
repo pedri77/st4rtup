@@ -5,11 +5,9 @@ import { Link } from 'react-router-dom'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import toast from 'react-hot-toast'
 import { brandApi } from '@/services/api'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const FRAMEWORKS = ['Scale', 'SaaS Best Practices', 'EU AI Act', 'SOC 2', 'GDPR']
 

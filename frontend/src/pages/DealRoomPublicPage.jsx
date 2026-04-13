@@ -6,11 +6,9 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { dealRoomDocsApi } from '@/services/api'
-import { useThemeColors } from '@/utils/theme'
+import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const STAGES = { IDENTIFY: 'identify', NDA_GATE: 'nda_gate', ACTIVE: 'active' }
 

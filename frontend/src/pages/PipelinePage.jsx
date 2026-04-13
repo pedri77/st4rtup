@@ -13,11 +13,9 @@ import ExportButton from '@/components/ExportButton'
 import { DealScoreBadge as DealScoreCardInline } from '@/components/DealScoreCard'
 import { formatDateForExport } from '@/utils/export'
 import { ListItemSkeleton } from '@/components/LoadingStates'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const STAGES = {
   discovery:     { label: 'DISCOVERY',     color: T.cyan },

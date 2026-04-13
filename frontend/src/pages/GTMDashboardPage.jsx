@@ -10,11 +10,9 @@ import toast from 'react-hot-toast'
 import { gtmApi } from '@/services/api'
 import { SkeletonPage } from '@/components/SkeletonLoader'
 import Sparkline from '@/components/Sparkline'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const STATUS_COLORS = {
   green: { label: 'On Track' },

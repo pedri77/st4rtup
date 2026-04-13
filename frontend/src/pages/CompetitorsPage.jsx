@@ -9,11 +9,9 @@ import clsx from 'clsx'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import toast from 'react-hot-toast'
 import { competitorsApi } from '@/services/api'
-import { useThemeColors, LIGHT as T } from '@/utils/theme'
+import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const fontDisplay = "'Rajdhani', sans-serif"
-const fontMono = "'IBM Plex Mono', monospace"
 
 const TIER_CONFIG = {
   critical: { label: 'Critica', color: T.destructive, bg: 'hsla(0,72%,51%,0.1)', border: 'hsla(0,72%,51%,0.3)' },
