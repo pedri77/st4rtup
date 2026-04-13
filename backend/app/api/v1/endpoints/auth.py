@@ -109,9 +109,6 @@ class ImpersonateExchangeRequest(BaseModel):
     token: str
 
 
-_used_impersonate_jti: set[str] = set()  # In-memory single-use tracking (reset on restart)
-
-
 @router.post("/verify-impersonate")
 @limiter.limit(RATE_AUTH)
 async def verify_impersonate(
@@ -123,7 +120,7 @@ async def verify_impersonate(
 
     The token is a short-lived JWT (15 min) signed with the app SECRET_KEY,
     issued by an admin via /admin/impersonate/{org_id}/login.
-    Each token can only be exchanged once (in-memory tracking).
+    Each token can only be exchanged once (persisted in DB for audit trail).
     """
     try:
         payload = jwt.decode(
@@ -142,16 +139,25 @@ async def verify_impersonate(
     if not user_id or not impersonated_by or not org_id:
         raise HTTPException(status_code=400, detail="Malformed impersonation token")
 
-    # Single-use enforcement (jti = hash of token)
+    # Single-use enforcement — persist JTI in DB (survives restarts)
     import hashlib
+    from sqlalchemy import text
     jti = hashlib.sha256(body.token.encode()).hexdigest()
-    if jti in _used_impersonate_jti:
+
+    existing = await db.execute(
+        text("SELECT 1 FROM used_impersonation_tokens WHERE jti = :jti"),
+        {"jti": jti},
+    )
+    if existing.scalar_one_or_none():
         logger.warning(f"Replay attempt on impersonation token by {request.client.host if request.client else '?'}")
         raise HTTPException(status_code=401, detail="Impersonation token already used")
-    _used_impersonate_jti.add(jti)
-    # Cap memory growth — drop oldest entries if set gets too large
-    if len(_used_impersonate_jti) > 1000:
-        _used_impersonate_jti.clear()
+
+    await db.execute(
+        text("INSERT INTO used_impersonation_tokens (jti, admin_email, target_user_id, org_id, ip_address) VALUES (:jti, :admin, :user_id, :org_id, :ip)"),
+        {"jti": jti, "admin": impersonated_by, "user_id": user_id, "org_id": org_id,
+         "ip": request.client.host if request.client else ""},
+    )
+    await db.commit()
 
     # Verify user still exists
     user = await db.get(User, UUID(user_id))
@@ -163,10 +169,6 @@ async def verify_impersonate(
         f"ip={request.client.host if request.client else '?'}"
     )
 
-    # Return a session-shaped response. The frontend passes this to supabase.auth.setSession().
-    # Note: this is a backend-issued token, not a Supabase token. The session works because
-    # supabase-js will accept it as the access_token for subsequent calls (the backend
-    # validates it via get_current_user, not Supabase).
     return {
         "access_token": body.token,
         "refresh_token": "",

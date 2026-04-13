@@ -1352,21 +1352,34 @@ def init_scheduler():
     import functools
 
     def _wrap_with_logging(fn, automation_name):
-        """Wrap a scheduler job to log execution to automation_executions table."""
-        # Extract automation code from name (e.g. "EM-04: Follow-up" -> "EM-04")
+        """Wrap a scheduler job to log execution and run per active org (multi-tenant)."""
         code = automation_name.split(":")[0].strip() if ":" in automation_name else ""
 
         @functools.wraps(fn)
         async def wrapper():
             start = datetime.now(timezone.utc)
-            try:
-                await fn()
-                if code:
-                    await _log_execution(code, "success", started_at=start)
-            except Exception as e:
-                logger.error(f"Job {automation_name} failed: {e}")
-                if code:
-                    await _log_execution(code, "error", error_message=str(e), started_at=start)
+            org_ids = await _get_active_org_ids()
+            total_ok, total_err = 0, 0
+            for org_id in (org_ids or [None]):
+                try:
+                    # Pass org_id if the function accepts it
+                    import inspect
+                    sig = inspect.signature(fn)
+                    if 'org_id' in sig.parameters:
+                        await fn(org_id=org_id)
+                    else:
+                        await fn()
+                    total_ok += 1
+                except Exception as e:
+                    total_err += 1
+                    logger.error(f"Job {automation_name} failed for org {org_id}: {e}")
+                # If function doesn't accept org_id, only run once
+                if 'org_id' not in inspect.signature(fn).parameters:
+                    break
+            if code:
+                status = "success" if total_err == 0 else ("partial" if total_ok > 0 else "error")
+                await _log_execution(code, status, items_processed=total_ok + total_err,
+                                     items_succeeded=total_ok, items_failed=total_err, started_at=start)
         return wrapper
 
     for fn, trigger, job_id, name in JOBS:

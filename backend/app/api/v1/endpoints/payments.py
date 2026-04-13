@@ -458,8 +458,20 @@ async def stripe_webhook(
         event = json.loads(payload)
 
     event_type = event.get("type", "") if isinstance(event, dict) else event.type
+    event_id = event.get("id", "") if isinstance(event, dict) else event.id
     data_obj = (event.get("data", {}).get("object", {}) if isinstance(event, dict)
                 else event.data.object)
+
+    # Idempotency: skip if this event was already processed
+    if event_id:
+        from sqlalchemy import text
+        existing = await db.execute(
+            text("SELECT 1 FROM processed_webhook_events WHERE event_id = :eid"),
+            {"eid": event_id},
+        )
+        if existing.scalar_one_or_none():
+            logger.info(f"Stripe webhook {event_id} already processed, skipping")
+            return {"received": True, "duplicate": True}
 
     logger.info(f"Stripe webhook: {event_type}")
 
@@ -580,6 +592,18 @@ async def stripe_webhook(
                     await db.commit()
                     logger.info(f"Addon {plan} activated for org {org_id}")
 
+    # Mark event as processed for idempotency
+    if event_id:
+        from sqlalchemy import text
+        try:
+            await db.execute(
+                text("INSERT INTO processed_webhook_events (event_id, event_type) VALUES (:eid, :etype) ON CONFLICT DO NOTHING"),
+                {"eid": event_id, "etype": event_type},
+            )
+            await db.commit()
+        except Exception:
+            pass  # Non-critical — duplicate check is best-effort
+
     return {"received": True}
 
 
@@ -591,11 +615,11 @@ PLAN_PRICES = {
     "scale_monthly": {"price_id_env": "STRIPE_PRICE_SCALE_MONTHLY", "amount": 49, "interval": "month"},
     "scale_annual": {"price_id_env": "STRIPE_PRICE_SCALE_ANNUAL", "amount": 490, "interval": "year"},
     # Add-ons
-    "extra_users": {"price_id": "price_1TFAkwE4TtFzXFZ4kJRpMexq", "amount": 9, "interval": "month"},
-    "ai_advanced": {"price_id": "price_1TFAkxE4TtFzXFZ47KyGxlK9", "amount": 15, "interval": "month"},
-    "deal_room_addon": {"price_id": "price_1TFAktE4TtFzXFZ4LkcMvzt3", "amount": 12, "interval": "month"},
-    "whatsapp_addon": {"price_id": "price_1TFAkuE4TtFzXFZ4gdGUC1sQ", "amount": 9, "interval": "month"},
-    "api_access": {"price_id": "price_1TFAkvE4TtFzXFZ49d403iAZ", "amount": 15, "interval": "month"},
+    "extra_users": {"price_id_env": "STRIPE_PRICE_EXTRA_USERS", "amount": 9, "interval": "month"},
+    "ai_advanced": {"price_id_env": "STRIPE_PRICE_AI_ADVANCED", "amount": 15, "interval": "month"},
+    "deal_room_addon": {"price_id_env": "STRIPE_PRICE_DEAL_ROOM", "amount": 12, "interval": "month"},
+    "whatsapp_addon": {"price_id_env": "STRIPE_PRICE_WHATSAPP", "amount": 9, "interval": "month"},
+    "api_access": {"price_id_env": "STRIPE_PRICE_API_ACCESS", "amount": 15, "interval": "month"},
 }
 
 @router.post("/public/checkout")

@@ -186,9 +186,22 @@ export default function OnboardingPage() {
           <>
             <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>Conecta tu email</h2>
             <p style={{ color: '#64748B', marginBottom: 24, fontSize: 15 }}>Envía y recibe emails directamente desde el CRM con tracking de apertura y clics.</p>
-            <button onClick={() => { window.open('/app/integrations?tab=email', '_blank'); next() }} style={{ ...btn, backgroundColor: 'white', color: '#1A1A2E', width: '100%', justifyContent: 'center', border: '1px solid #E2E8F0', marginBottom: 12 }}>
-              <img src="https://www.google.com/favicon.ico" alt="" style={{ width: 18, height: 18 }} /> Configurar email
-            </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
+              {[
+                { name: 'Gmail / Google Workspace', icon: 'https://www.google.com/favicon.ico', desc: 'OAuth seguro, sin contraseñas' },
+                { name: 'Outlook / Office 365', icon: 'https://www.microsoft.com/favicon.ico', desc: 'Microsoft Graph API' },
+                { name: 'SMTP personalizado', icon: null, desc: 'Cualquier proveedor (Brevo, SES, Mailgun...)' },
+              ].map(provider => (
+                <button key={provider.name} onClick={() => { window.location.href = '/app/integrations?tab=email'; next() }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', borderRadius: 12, border: '1px solid #E2E8F0', backgroundColor: 'white', cursor: 'pointer', textAlign: 'left', width: '100%' }}>
+                  {provider.icon ? <img src={provider.icon} alt="" style={{ width: 20, height: 20 }} /> : <span style={{ width: 20, height: 20, borderRadius: 4, backgroundColor: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>@</span>}
+                  <div style={{ flex: 1 }}>
+                    <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: '#1A1A2E' }}>{provider.name}</p>
+                    <p style={{ margin: 0, fontSize: 12, color: '#94A3B8' }}>{provider.desc}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
             <button onClick={skip} style={skipBtn}>Lo haré después</button>
           </>
         )}

@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.core.database import get_db
 from app.core.security import get_current_user, get_current_admin_user
@@ -52,6 +52,10 @@ async def get_my_profile(
         db.add(user)
         await db.commit()
         await db.refresh(user)
+
+    # Update last_login_at
+    user.last_login_at = datetime.now(timezone.utc)
+    await db.commit()
 
     return UserResponse.model_validate(user)
 

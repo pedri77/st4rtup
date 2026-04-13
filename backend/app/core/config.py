@@ -300,6 +300,11 @@ class Settings(BaseSettings):
     STRIPE_PRICE_GROWTH_ANNUAL: str = ""
     STRIPE_PRICE_SCALE_MONTHLY: str = ""
     STRIPE_PRICE_SCALE_ANNUAL: str = ""
+    STRIPE_PRICE_EXTRA_USERS: str = ""
+    STRIPE_PRICE_AI_ADVANCED: str = ""
+    STRIPE_PRICE_DEAL_ROOM: str = ""
+    STRIPE_PRICE_WHATSAPP: str = ""
+    STRIPE_PRICE_API_ACCESS: str = ""
     TRIAL_DAYS: int = 7
     PAYPAL_CLIENT_ID: str = ""
     PAYPAL_CLIENT_SECRET: str = ""
