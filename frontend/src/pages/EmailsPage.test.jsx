@@ -78,7 +78,7 @@ describe('EmailsPage', () => {
       </QueryClientProvider>
     )
     await waitFor(() => {
-      expect(screen.getByText('Sin emails')).toBeInTheDocument()
+      expect(screen.getByText('Sin emails todavia')).toBeInTheDocument()
     })
   })
 })
