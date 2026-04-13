@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-hot-toast'
 import { supabase } from '@/lib/supabase'
 
-const WS_BASE = (import.meta.env.VITE_API_URL || '').replace(/^http/, 'ws').replace(/\/api\/v1\/?$/, '')
+const WS_BASE = (import.meta.env.VITE_API_URL || '').replace(/^http/, 'ws').replace(/\/api\/v\d+\/?.*$/, '')
 
 const EVENT_HANDLERS = {
   'lead.created': (data) => ({
