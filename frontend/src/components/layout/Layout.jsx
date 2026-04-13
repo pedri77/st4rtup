@@ -29,14 +29,11 @@ import { useNotificationStream } from '@/hooks/useNotificationStream'
 import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications'
 import { useSetupProgress } from '@/hooks/useSetupProgress'
 import { useTranslation } from '@/i18n/useTranslation'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
+
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
@@ -129,6 +126,7 @@ function ApiCostWidget() {
 }
 
 export default function Layout() {
+  const T = useThemeColors()
   const { searchOpen, setSearchOpen, notificationsOpen, setNotificationsOpen } = useUIStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('st4rtup_sidebar_collapsed') === 'true')

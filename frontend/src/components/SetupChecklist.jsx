@@ -1,76 +1,72 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Check, X, ChevronDown, ChevronUp, Mail, BarChart3, Users, Zap, Bot } from 'lucide-react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import api from '@/services/api'
 
 const CHECKLIST_ITEMS = [
-  {
-    id: 'leads',
-    label: 'Importar o crear leads',
-    link: '/app/leads',
-    icon: Users,
-    check: () => parseInt(localStorage.getItem('st4rtup_lead_count') || '0') > 0,
-  },
-  {
-    id: 'email',
-    label: 'Conectar proveedor de email',
-    link: '/app/integrations',
-    icon: Mail,
-    check: () => localStorage.getItem('st4rtup_email_connected') === 'true',
-  },
-  {
-    id: 'pipeline',
-    label: 'Crear primera oportunidad',
-    link: '/app/pipeline',
-    icon: BarChart3,
-    check: () => localStorage.getItem('st4rtup_first_opportunity') === 'true',
-  },
-  {
-    id: 'automations',
-    label: 'Activar automatizaciones',
-    link: '/app/automations',
-    icon: Zap,
-    check: () => localStorage.getItem('st4rtup_automations_active') === 'true',
-  },
-  {
-    id: 'agents',
-    label: 'Probar los agentes IA',
-    link: '/app/agents',
-    icon: Bot,
-    check: () => localStorage.getItem('st4rtup_agents_tried') === 'true',
-  },
+  { id: 'leads', label: 'Importar o crear leads', link: '/app/leads', icon: Users },
+  { id: 'email', label: 'Conectar proveedor de email', link: '/app/integrations', icon: Mail },
+  { id: 'pipeline', label: 'Crear primera oportunidad', link: '/app/pipeline', icon: BarChart3 },
+  { id: 'automations', label: 'Activar automatizaciones', link: '/app/automations', icon: Zap },
+  { id: 'agents', label: 'Probar los agentes IA', link: '/app/agents', icon: Bot },
 ]
 
 export default function SetupChecklist() {
   const [open, setOpen] = useState(true)
-  const [items, setItems] = useState([])
-  const [dismissed, setDismissed] = useState(false)
+  const queryClient = useQueryClient()
+
+  // Server state
+  const { data: checklist, isLoading } = useQuery({
+    queryKey: ['setup-checklist'],
+    queryFn: () => api.get('/api/v1/users/me/setup-checklist').then(r => r.data),
+    staleTime: 30_000,
+  })
+
+  // Auto-detected progress from useSetupProgress hook (synced via query cache)
+  const { data: leadsData } = useQuery({ queryKey: ['leads', { page: 1, page_size: 1 }], enabled: false })
+  const { data: oppsData } = useQuery({ queryKey: ['opportunities', { page: 1, page_size: 1 }], enabled: false })
+  const { data: settingsData } = useQuery({ queryKey: ['settings'], enabled: false })
+  const { data: autoData } = useQuery({ queryKey: ['automations', { page: 1, page_size: 1, status: 'active' }], enabled: false })
+
+  const autoCompleted = []
+  if ((leadsData?.data?.total ?? 0) > 0) autoCompleted.push('leads')
+  if ((oppsData?.data?.total ?? 0) > 0) autoCompleted.push('pipeline')
+  if (settingsData?.data?.email_provider && settingsData.data.email_provider !== 'none') autoCompleted.push('email')
+  if ((autoData?.data?.total ?? 0) > 0) autoCompleted.push('automations')
+
+  const serverCompleted = checklist?.completed || []
+  const allCompleted = [...new Set([...serverCompleted, ...autoCompleted])]
+
+  // Sync auto-detected completions to server
+  const updateMutation = useMutation({
+    mutationFn: (payload) => api.put('/api/v1/users/me/setup-checklist', payload),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['setup-checklist'] }),
+  })
 
   useEffect(() => {
-    if (localStorage.getItem('st4rtup_checklist_dismissed') === 'true') {
-      setDismissed(true)
-      return
+    const newItems = autoCompleted.filter(id => !serverCompleted.includes(id))
+    if (newItems.length > 0) {
+      updateMutation.mutate({ completed: newItems })
     }
-    // Only show after onboarding is done
-    if (localStorage.getItem('st4rtup_onboarding_done') !== 'true') {
-      setDismissed(true)
-      return
-    }
-    setItems(CHECKLIST_ITEMS.map(item => ({ ...item, done: item.check() })))
-  }, [])
+  }, [autoCompleted.join(','), serverCompleted.join(',')])
 
-  // Re-check on focus (user may have completed an action in another tab)
-  useEffect(() => {
-    const recheck = () => {
-      setItems(prev => prev.map(item => {
-        const found = CHECKLIST_ITEMS.find(c => c.id === item.id)
-        return { ...item, done: found ? found.check() : item.done }
-      }))
-    }
-    window.addEventListener('focus', recheck)
-    return () => window.removeEventListener('focus', recheck)
-  }, [])
+  // Check onboarding state
+  const { data: onboarding } = useQuery({
+    queryKey: ['onboarding'],
+    queryFn: () => api.get('/api/v1/users/me/onboarding').then(r => r.data),
+    staleTime: 120_000,
+  })
 
-  if (dismissed || items.length === 0) return null
+  const dismissed = checklist?.dismissed === true
+  const onboardingDone = onboarding?.completed === true
+
+  if (isLoading || dismissed || !onboardingDone) return null
+
+  const items = CHECKLIST_ITEMS.map(item => ({
+    ...item,
+    done: allCompleted.includes(item.id),
+  }))
 
   const completed = items.filter(i => i.done).length
   const total = items.length
@@ -78,8 +74,7 @@ export default function SetupChecklist() {
   const progress = Math.round((completed / total) * 100)
 
   function dismiss() {
-    localStorage.setItem('st4rtup_checklist_dismissed', 'true')
-    setDismissed(true)
+    updateMutation.mutate({ dismissed: true })
   }
 
   return (

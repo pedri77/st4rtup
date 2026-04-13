@@ -10,20 +10,8 @@ import {
   TrendingUp, Timer, ToggleLeft, ToggleRight,
   ExternalLink
 } from 'lucide-react'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC',
-  card: '#FFFFFF',
-  muted: '#F1F5F9',
-  border: '#E2E8F0',
-  fg: '#0F172A',
-  fgMuted: '#64748B',
-  cyan: '#1E6FD9',
-  purple: '#F5820B',
-  destructive: 'hsl(0,70%,50%)',
-  success: 'hsl(150,60%,40%)',
-  warning: 'hsl(40,90%,50%)',
-}
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' }
@@ -531,6 +519,7 @@ function AutomationDetail({ automation, onClose, onToggle }) {
 // ─── Main Page ───────────────────────────────────────────────────
 
 export default function AutomationsPage() {
+  const T = useThemeColors()
   const [search, setSearch] = useState('')
   const [filterPriority, setFilterPriority] = useState('')
   const [filterImplStatus, setFilterImplStatus] = useState('')

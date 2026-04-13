@@ -11,13 +11,9 @@ import {
 import toast from 'react-hot-toast'
 import { reportsApi } from '@/services/api'
 import { exportToPDF } from '@/utils/exportPdf'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#F5820B', destructive: '#EF4444',
-  success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
@@ -59,6 +55,7 @@ function downloadCSV(rows, filename) {
 }
 
 export default function ReportsPage() {
+  const T = useThemeColors()
   const [selectedReport, setSelectedReport] = useState('sales')
   const [period, setPeriod] = useState('last_30')
 
@@ -219,7 +216,6 @@ export default function ReportsPage() {
   )
 }
 
-
 function SalesReport({ data }) {
   if (!data) return null
   const { offers, pipeline, leads } = data
@@ -286,7 +282,6 @@ function SalesReport({ data }) {
   )
 }
 
-
 function ConversionReport({ data }) {
   if (!data?.funnel) return null
 
@@ -333,7 +328,6 @@ function ConversionReport({ data }) {
     </div>
   )
 }
-
 
 function PipelineReport({ data, sourcesData }) {
   const pipelineStages = data?.pipeline?.by_stage || []
@@ -385,7 +379,6 @@ function PipelineReport({ data, sourcesData }) {
     </div>
   )
 }
-
 
 function ActivityReport({ data }) {
   if (!data) return null
@@ -455,7 +448,6 @@ function ActivityReport({ data }) {
     </div>
   )
 }
-
 
 function LeaderboardReport({ data }) {
   if (!data?.accounts) return null

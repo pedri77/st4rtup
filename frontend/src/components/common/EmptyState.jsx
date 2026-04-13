@@ -1,8 +1,5 @@
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-}
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
+
 const fontDisplay = "'Rajdhani', sans-serif"
 
 const ILLUSTRATIONS = {
@@ -70,6 +67,7 @@ export default function EmptyState({
   actionLabel,
   onAction,
 }) {
+  const T = useThemeColors()
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',

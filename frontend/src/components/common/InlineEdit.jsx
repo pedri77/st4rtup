@@ -1,11 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Check, X, Pencil } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
-const T = {
-  muted: '#F1F5F9', border: '#E2E8F0', fg: '#0F172A',
-  fgMuted: '#64748B', cyan: '#1E6FD9', success: '#10B981',
-  destructive: '#EF4444',
-}
 
 export default function InlineEdit({
   value,
@@ -18,6 +14,7 @@ export default function InlineEdit({
   renderDisplay,
   validate,
 }) {
+  const T = useThemeColors()
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(value ?? '')
   const [error, setError] = useState(null)

@@ -11,20 +11,10 @@ import { formatDateForExport } from '@/utils/export';
 import { mockLeads, mockDelay, USE_MOCK_DATA } from '@/mocks/mockData';
 import { useSavedFilterPresets } from '@/hooks/useSavedFilterPresets';
 import SavedFilterPresets from '@/components/SavedFilterPresets';
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC',
-  card: '#FFFFFF',
-  muted: '#F1F5F9',
-  border: '#E2E8F0',
-  fg: '#0F172A',
-  fgMuted: '#64748B',
-  cyan: '#1E6FD9',
-  purple: '#F5820B',
-  destructive: '#EF4444',
-  success: '#10B981',
-  warning: '#F59E0B'
-};
+
+;
 const fontDisplay = "'Rajdhani', sans-serif";
 const fontMono = "'IBM Plex Mono', monospace";
 
@@ -82,6 +72,7 @@ const inputStyle = {
 const selectStyle = { ...inputStyle };
 
 export default function LeadsPage() {
+  const T = useThemeColors()
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -341,7 +332,6 @@ export default function LeadsPage() {
         description="No hay leads que coincidan con tus filtros. Crea el primero o ajusta los criterios de busqueda."
         actionLabel="Crear Lead"
         onAction={() => setShowCreateModal(true)} /> :
-
 
       <>
           {/* Bulk action bar */}

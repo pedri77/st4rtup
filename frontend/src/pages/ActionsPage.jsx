@@ -8,21 +8,10 @@ import { mockActions, mockDelay, USE_MOCK_DATA } from '@/mocks/mockData'
 import ExportButton from '@/components/ExportButton'
 import { formatDateForExport } from '@/utils/export'
 import { ListItemSkeleton } from '@/components/LoadingStates'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
+
 
 /* ── St4rtup Design Tokens ── */
-const T = {
-  bg: '#F8FAFC',
-  card: '#FFFFFF',
-  muted: '#F1F5F9',
-  border: '#E2E8F0',
-  fg: '#0F172A',
-  fgMuted: '#64748B',
-  cyan: '#1E6FD9',
-  purple: '#F5820B',
-  destructive: '#EF4444',
-  success: '#10B981',
-  warning: '#F59E0B',
-}
 
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
@@ -43,6 +32,7 @@ const columnConfig = {
 }
 
 export default function ActionsPage() {
+  const T = useThemeColors()
   const [showModal, setShowModal] = useState(false)
   const [editingAction, setEditingAction] = useState(null)
   const [draggedAction, setDraggedAction] = useState(null)

@@ -98,6 +98,52 @@ async def set_my_onboarding(
     return {"completed": organization.onboarding_completed, "data": organization.onboarding_data}
 
 
+# ─── Setup checklist (post-onboarding) ────────────────────────────
+
+@router.get("/me/setup-checklist")
+async def get_setup_checklist(
+    db: AsyncSession = Depends(get_db),
+    org: dict = Depends(get_current_org),
+):
+    """Devuelve el estado del setup checklist de la org."""
+    from app.models.organization import Organization
+
+    result = await db.execute(select(Organization).where(Organization.id == UUID(org["org_id"])))
+    organization = result.scalar_one_or_none()
+    if not organization:
+        return {"dismissed": False, "completed": []}
+
+    checklist = getattr(organization, "setup_checklist", None) or {"dismissed": False, "completed": []}
+    return checklist
+
+
+@router.put("/me/setup-checklist")
+async def update_setup_checklist(
+    payload: dict,
+    db: AsyncSession = Depends(get_db),
+    org: dict = Depends(get_current_org),
+):
+    """Actualiza el estado del setup checklist."""
+    from app.models.organization import Organization
+
+    result = await db.execute(select(Organization).where(Organization.id == UUID(org["org_id"])))
+    organization = result.scalar_one_or_none()
+    if not organization:
+        raise HTTPException(status_code=404, detail="Organization not found")
+
+    current = getattr(organization, "setup_checklist", None) or {"dismissed": False, "completed": []}
+
+    if "dismissed" in payload:
+        current["dismissed"] = bool(payload["dismissed"])
+    if "completed" in payload:
+        current["completed"] = list(set(current.get("completed", []) + payload["completed"]))
+
+    organization.setup_checklist = current
+    await db.commit()
+
+    return current
+
+
 @router.get("", response_model=PaginatedResponse)
 async def list_users(
     page: int = Query(1, ge=1),

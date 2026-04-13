@@ -2,14 +2,11 @@ import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { X, Keyboard } from 'lucide-react'
 import { useUIStore } from '@/store/useUIStore'
+import { useThemeColors } from '@/utils/theme'
+
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 
 const SHORTCUTS = [
@@ -24,6 +21,7 @@ const SHORTCUTS = [
 ]
 
 export default function KeyboardShortcuts() {
+  const T = useThemeColors()
   const [helpOpen, setHelpOpen] = useState(false)
   const navigate = useNavigate()
   const { setSearchOpen, setNotificationsOpen } = useUIStore()

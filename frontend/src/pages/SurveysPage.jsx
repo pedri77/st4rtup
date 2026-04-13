@@ -16,14 +16,11 @@ import { SearchWithFilters, FilterSummary } from '@/components/AdvancedFilters'
 import { usePersistedFilterSearch } from '@/hooks/usePersistedFilters'
 import ExportButton from '@/components/ExportButton'
 import { ListItemSkeleton } from '@/components/LoadingStates'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
+
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 const inputStyle = {
@@ -101,6 +98,7 @@ function KpiCard({ icon: Icon, iconColor, value, label }) {
 
 /* ── Main Page ─────────────────────────────────────────────────────── */
 export default function SurveysPage() {
+  const T = useThemeColors()
   const queryClient = useQueryClient()
   const [showModal, setShowModal] = useState(false)
   const [editingSurvey, setEditingSurvey] = useState(null)
@@ -358,7 +356,6 @@ export default function SurveysPage() {
   )
 }
 
-
 /* ── Analytics Dashboard ───────────────────────────────────────────── */
 
 function AnalyticsDashboard({ analytics, loading }) {
@@ -542,7 +539,6 @@ function AnalyticsDashboard({ analytics, loading }) {
   )
 }
 
-
 /* ── Survey Card ───────────────────────────────────────────────────── */
 
 function SurveyCard({ survey, onEdit, onDelete, onSend, onRespond, onDetail, sending }) {
@@ -645,7 +641,6 @@ function SurveyCard({ survey, onEdit, onDelete, onSend, onRespond, onDetail, sen
   )
 }
 
-
 /* ── Score Displays ────────────────────────────────────────────────── */
 
 function NPSScoreDisplay({ score }) {
@@ -684,7 +679,6 @@ function CSATScoreDisplay({ score }) {
     </div>
   )
 }
-
 
 /* ── Create/Edit Modal ─────────────────────────────────────────────── */
 
@@ -816,7 +810,6 @@ function SurveyFormModal({ survey, onClose, onSubmit, isLoading }) {
   )
 }
 
-
 /* ── Respond Modal ─────────────────────────────────────────────────── */
 
 function RespondModal({ survey, onClose, onSubmit, isLoading }) {
@@ -915,7 +908,6 @@ function RespondModal({ survey, onClose, onSubmit, isLoading }) {
     </div>
   )
 }
-
 
 /* ── Detail Modal ──────────────────────────────────────────────────── */
 

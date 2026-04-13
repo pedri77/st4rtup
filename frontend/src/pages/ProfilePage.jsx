@@ -3,18 +3,14 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useUserRole } from '@/hooks/useUserRole'
 import { usersApi } from '@/services/api'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { User, Mail, Shield, Calendar, Save, LogOut, Bell, Globe, Moon, Sun } from 'lucide-react'
+import { User, Mail, Shield, Calendar, Save, LogOut, Bell, Globe, Moon, Sun, Monitor, Smartphone, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { USE_MOCK_DATA } from '@/mocks/mockData'
 import { useUserPreferencesStore } from '@/store/useUserPreferencesStore'
 import { supabase } from '@/lib/supabase'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#F5820B', destructive: '#EF4444',
-  success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
@@ -121,7 +117,84 @@ function TwoFactorSection() {
   )
 }
 
+function ActiveSessionsSection() {
+  const T = useThemeColors()
+  const fontDisplay = "'Rajdhani', sans-serif"
+
+  const { data: sessionsData, refetch } = useQuery({
+    queryKey: ['active-sessions'],
+    queryFn: () => api.get('/api/v1/security/sessions').then(r => r.data),
+    staleTime: 30_000,
+  })
+
+  const revokeSession = async (sessionId) => {
+    try {
+      await api.delete(`/api/v1/security/sessions/${sessionId}`)
+      toast.success('Sesion revocada')
+      refetch()
+    } catch { toast.error('Error al revocar sesion') }
+  }
+
+  const revokeAll = async () => {
+    if (!confirm('¿Cerrar todas las sesiones excepto la actual?')) return
+    try {
+      await api.post('/api/v1/security/sessions/revoke-all')
+      toast.success('Sesiones revocadas')
+      refetch()
+    } catch { toast.error('Error') }
+  }
+
+  const sessions = sessionsData?.sessions || []
+  const deviceIcon = (label) => label === 'Mobile' ? Smartphone : Monitor
+
+  return (
+    <div className="rounded-lg p-6 mt-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold flex items-center gap-2" style={{ fontFamily: fontDisplay, color: T.fg }}>
+          <Monitor className="w-5 h-5" style={{ color: T.cyan }} /> Sesiones activas
+        </h3>
+        {sessions.length > 1 && (
+          <button onClick={revokeAll} className="text-xs px-3 py-1.5 rounded-lg" style={{ backgroundColor: `${T.destructive}10`, color: T.destructive, border: `1px solid ${T.destructive}30` }}>
+            Cerrar todas
+          </button>
+        )}
+      </div>
+      {sessions.length === 0 ? (
+        <p className="text-sm" style={{ color: T.fgMuted }}>No hay sesiones registradas</p>
+      ) : (
+        <div className="space-y-3">
+          {sessions.map(session => {
+            const DeviceIcon = deviceIcon(session.device_label)
+            return (
+              <div key={session.id} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: T.muted }}>
+                <DeviceIcon className="w-5 h-5 flex-shrink-0" style={{ color: session.is_current ? T.success : T.fgMuted }} />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium" style={{ color: T.fg }}>{session.device_label}</span>
+                    {session.is_current && <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold" style={{ backgroundColor: `${T.success}15`, color: T.success }}>Actual</span>}
+                  </div>
+                  <div className="flex items-center gap-2 text-xs" style={{ color: T.fgMuted }}>
+                    <span>{session.ip_address}</span>
+                    <span>·</span>
+                    <span>{session.last_active_at ? new Date(session.last_active_at).toLocaleString('es-ES') : '—'}</span>
+                  </div>
+                </div>
+                {!session.is_current && (
+                  <button onClick={() => revokeSession(session.id)} className="p-1.5 rounded hover:bg-white/50" title="Revocar sesion">
+                    <Trash2 className="w-4 h-4" style={{ color: T.fgMuted }} />
+                  </button>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function ProfilePage() {
+  const T = useThemeColors()
   const { user, signOut } = useAuth()
   const { role, loading: roleLoading } = useUserRole()
   const queryClient = useQueryClient()
@@ -286,10 +359,10 @@ export default function ProfilePage() {
                   style={{ border: `2px solid ${preferences.theme === 'light' ? T.cyan : T.border}`, backgroundColor: preferences.theme === 'light' ? `${T.cyan}10` : 'transparent', color: T.fg }}>
                   <Sun className="w-5 h-5" /><span className="text-sm font-medium">Claro</span>
                 </button>
-                <button aria-label="Modo oscuro" disabled className="p-3 rounded-lg flex items-center gap-2 opacity-50"
-                  style={{ border: `2px solid ${T.border}`, color: T.fgMuted }}>
+                <button aria-label="Modo oscuro" onClick={() => setPreferences({ ...preferences, theme: 'dark' })}
+                  className="p-3 rounded-lg flex items-center gap-2 transition-colors"
+                  style={{ border: `2px solid ${preferences.theme === 'dark' ? T.cyan : T.border}`, backgroundColor: preferences.theme === 'dark' ? `${T.cyan}10` : 'transparent', color: T.fg }}>
                   <Moon className="w-5 h-5" /><span className="text-sm font-medium">Oscuro</span>
-                  <span className="text-xs" style={{ color: T.fgMuted }}>(Prox.)</span>
                 </button>
               </div>
             </div>
@@ -335,6 +408,9 @@ export default function ProfilePage() {
 
       {/* 2FA */}
       <TwoFactorSection />
+
+      {/* Active Sessions */}
+      <ActiveSessionsSection />
 
       {/* Stats */}
       <div className="rounded-lg p-6 mt-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>

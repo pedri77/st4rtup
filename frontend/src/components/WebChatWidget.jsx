@@ -1,13 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9',
-}
 
 export default function WebChatWidget() {
+  const T = useThemeColors()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([
     { role: 'assistant', content: '¡Hola! Soy el asistente de St4rtup. ¿En qué puedo ayudarte?' }

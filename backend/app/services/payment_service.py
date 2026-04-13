@@ -1,30 +1,21 @@
 """Servicio de pagos — Stripe + PayPal."""
 import logging
 from typing import Optional
-from datetime import datetime, timezone
 
 import httpx
+import stripe
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
+# Configure Stripe SDK
+stripe.api_key = settings.STRIPE_SECRET_KEY or ""
+
 
 # ─── STRIPE ──────────────────────────────────────────────────
 
-STRIPE_API = "https://api.stripe.com/v1"
-
 def stripe_configured() -> bool:
     return bool(settings.STRIPE_SECRET_KEY)
-
-async def _stripe_request(method: str, path: str, data: dict = None) -> dict:
-    async with httpx.AsyncClient(timeout=15.0) as client:
-        resp = await client.request(
-            method, f"{STRIPE_API}/{path}",
-            headers={"Authorization": f"Bearer {settings.STRIPE_SECRET_KEY}"},
-            data=data,
-        )
-        resp.raise_for_status()
-        return resp.json()
 
 
 async def stripe_create_checkout(
@@ -35,23 +26,27 @@ async def stripe_create_checkout(
     metadata: dict = None,
 ) -> dict:
     """Crea una sesion de Stripe Checkout."""
-    data = {
+    params = {
         "mode": "payment",
-        "payment_method_types[]": "card",
-        "line_items[0][price_data][currency]": currency,
-        "line_items[0][price_data][unit_amount]": str(amount_cents),
-        "line_items[0][price_data][product_data][name]": description or "St4rtup growth",
-        "line_items[0][quantity]": "1",
+        "payment_method_types": ["card"],
+        "line_items": [{
+            "price_data": {
+                "currency": currency,
+                "unit_amount": amount_cents,
+                "product_data": {"name": description or "St4rtup growth"},
+            },
+            "quantity": 1,
+        }],
         "success_url": success_url,
         "cancel_url": cancel_url,
     }
     if customer_email:
-        data["customer_email"] = customer_email
+        params["customer_email"] = customer_email
     if metadata:
-        for k, v in metadata.items():
-            data[f"metadata[{k}]"] = str(v)
+        params["metadata"] = metadata
 
-    return await _stripe_request("POST", "checkout/sessions", data)
+    session = stripe.checkout.Session.create(**params)
+    return session
 
 
 async def stripe_create_subscription(
@@ -59,17 +54,16 @@ async def stripe_create_subscription(
     trial_days: int = 0,
 ) -> dict:
     """Crea suscripcion Stripe."""
-    # Create customer first
-    customer = await _stripe_request("POST", "customers", {"email": customer_email})
+    customer = stripe.Customer.create(email=customer_email)
 
-    sub_data = {
+    sub_params = {
         "customer": customer["id"],
-        "items[0][price]": price_id,
+        "items": [{"price": price_id}],
     }
     if trial_days > 0:
-        sub_data["trial_period_days"] = str(trial_days)
+        sub_params["trial_period_days"] = trial_days
 
-    return await _stripe_request("POST", "subscriptions", sub_data)
+    return stripe.Subscription.create(**sub_params)
 
 
 async def stripe_create_invoice(
@@ -77,30 +71,72 @@ async def stripe_create_invoice(
     due_days: int = 30, tax_rate: float = 21.0,
 ) -> dict:
     """Crea factura Stripe."""
-    customer = await _stripe_request("POST", "customers", {"email": customer_email})
+    customer = stripe.Customer.create(email=customer_email)
 
-    # Create invoice item
-    await _stripe_request("POST", "invoiceitems", {
-        "customer": customer["id"],
-        "amount": str(amount_cents),
-        "currency": "eur",
-        "description": description or "St4rtup growth Platform",
-    })
+    stripe.InvoiceItem.create(
+        customer=customer["id"],
+        amount=amount_cents,
+        currency="eur",
+        description=description or "St4rtup growth Platform",
+    )
 
-    # Create and finalize invoice
-    invoice = await _stripe_request("POST", "invoices", {
-        "customer": customer["id"],
-        "collection_method": "send_invoice",
-        "days_until_due": str(due_days),
-    })
+    invoice = stripe.Invoice.create(
+        customer=customer["id"],
+        collection_method="send_invoice",
+        days_until_due=due_days,
+    )
 
-    # Finalize
-    finalized = await _stripe_request("POST", f"invoices/{invoice['id']}/finalize")
+    finalized = stripe.Invoice.finalize_invoice(invoice["id"])
     return finalized
 
 
 async def stripe_list_payments(limit: int = 20) -> dict:
-    return await _stripe_request("GET", f"payment_intents?limit={limit}")
+    return stripe.PaymentIntent.list(limit=limit)
+
+
+def stripe_construct_webhook_event(payload: bytes, sig_header: str) -> dict:
+    """Construye y verifica un evento de webhook de Stripe."""
+    return stripe.Webhook.construct_event(
+        payload, sig_header, settings.STRIPE_WEBHOOK_SECRET,
+    )
+
+
+def stripe_get_subscription(subscription_id: str) -> dict:
+    """Recupera una suscripcion de Stripe."""
+    return stripe.Subscription.retrieve(subscription_id)
+
+
+def stripe_create_portal_session(customer_id: str, return_url: str) -> dict:
+    """Crea sesion de Customer Portal."""
+    return stripe.billing_portal.Session.create(
+        customer=customer_id,
+        return_url=return_url,
+    )
+
+
+def stripe_create_checkout_subscription(
+    price_id: str, email: str = "", metadata: dict = None,
+    success_url: str = "", cancel_url: str = "",
+    trial_days: int = 0,
+) -> dict:
+    """Crea Checkout Session para suscripcion con price_id."""
+    params = {
+        "mode": "subscription",
+        "line_items": [{"price": price_id, "quantity": 1}],
+        "success_url": success_url,
+        "cancel_url": cancel_url,
+    }
+    if email:
+        params["customer_email"] = email
+    if metadata:
+        params["metadata"] = metadata
+        params["subscription_data"] = {"metadata": metadata}
+    if trial_days > 0:
+        params["subscription_data"] = {
+            **(params.get("subscription_data") or {}),
+            "trial_period_days": trial_days,
+        }
+    return stripe.checkout.Session.create(**params)
 
 
 # ─── PAYPAL ──────────────────────────────────────────────────

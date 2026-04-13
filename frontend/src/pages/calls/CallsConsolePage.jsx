@@ -4,13 +4,9 @@ import { Phone, PhoneCall, PhoneOff, Play, CheckCircle2, Loader2, AlertCircle, S
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { callsApi, callPromptsApi, leadsApi } from '@/services/api'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const inputStyle = {
   backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg,
@@ -49,6 +45,7 @@ function EstadoBadge({ estado }) {
 }
 
 export default function CallsConsolePage() {
+  const T = useThemeColors()
   const queryClient = useQueryClient()
   const [selectedLeadId, setSelectedLeadId] = useState('')
   const [selectedPromptId, setSelectedPromptId] = useState('')

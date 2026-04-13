@@ -11,13 +11,10 @@ import { usePersistedFilterSearch } from '@/hooks/usePersistedFilters';
 import ExportButton from '@/components/ExportButton';
 import { formatDateForExport } from '@/utils/export';
 import { ListItemSkeleton } from '@/components/LoadingStates';
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#F5820B', destructive: '#EF4444',
-  success: '#10B981', warning: '#F59E0B'
-};
+
+;
 const fontDisplay = "'Rajdhani', sans-serif";
 const fontMono = "'IBM Plex Mono', monospace";
 const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' };
@@ -48,6 +45,7 @@ function shortDate(dateStr) {
 }
 
 export default function VisitsPage() {
+  const T = useThemeColors()
   const [showCreateModal, setShowCreateModal] = useState(false);
   const queryClient = useQueryClient();
 
@@ -117,7 +115,6 @@ export default function VisitsPage() {
   { label: 'Pendientes', value: upcomingCount },
   { label: 'Positivas', value: positiveCount },
   { label: 'Tiempo Total', value: `${Math.floor(totalDurationMin / 60)}h ${totalDurationMin % 60}m` }];
-
 
   return (
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen" style={{ backgroundColor: T.bg }}>

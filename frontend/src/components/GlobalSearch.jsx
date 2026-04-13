@@ -4,12 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Search, X, TrendingUp, Mail, Calendar, Target, FileText, Award } from 'lucide-react'
 import { leadsApi, emailsApi, actionsApi, opportunitiesApi, visitsApi } from '@/services/api'
 import { mockLeads, USE_MOCK_DATA } from '@/mocks/mockData'
+import { useThemeColors } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-}
 
 const categoryIcons = {
   leads: TrendingUp, emails: Mail, actions: Calendar,
@@ -17,6 +13,7 @@ const categoryIcons = {
 }
 
 export default function GlobalSearch({ isOpen, onClose }) {
+  const T = useThemeColors()
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef(null)

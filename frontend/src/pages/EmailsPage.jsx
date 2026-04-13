@@ -12,13 +12,10 @@ import { formatDateForExport } from '@/utils/export';
 import { ListItemSkeleton } from '@/components/LoadingStates';
 import { SearchWithFilters, FilterSummary } from '@/components/AdvancedFilters';
 import { usePersistedFilterSearch } from '@/hooks/usePersistedFilters';
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#F5820B', destructive: '#EF4444',
-  success: '#10B981', warning: '#F59E0B'
-};
+
+;
 const fontDisplay = "'Rajdhani', sans-serif";
 const fontMono = "'IBM Plex Mono', monospace";
 const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' };
@@ -39,6 +36,7 @@ function formatEmailDate(dateStr) {
 }
 
 export default function EmailsPage() {
+  const T = useThemeColors()
   const [showCreateModal, setShowCreateModal] = useState(false);
   const queryClient = useQueryClient();
 
@@ -111,7 +109,6 @@ export default function EmailsPage() {
   { label: 'Abiertos', value: openedCount, color: T.cyan },
   { label: 'Tasa Apertura', value: `${openRate}%`, color: T.success },
   { label: 'Borradores', value: draftCount, color: T.fgMuted }];
-
 
   return (
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen" style={{ backgroundColor: T.bg }}>

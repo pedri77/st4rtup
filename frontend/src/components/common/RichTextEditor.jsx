@@ -1,12 +1,8 @@
 import { useRef, useCallback } from 'react'
 import DOMPurify from 'dompurify'
 import { Bold, Italic, Underline, List, ListOrdered, Link, Image, AlignLeft, AlignCenter, Type } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9',
-}
 
 const TOOLBAR_BUTTONS = [
   { cmd: 'bold', icon: Bold, title: 'Negrita' },
@@ -23,6 +19,7 @@ const TOOLBAR_BUTTONS = [
 ]
 
 export default function RichTextEditor({ value = '', onChange, placeholder = 'Escribe tu email...', minHeight = 300 }) {
+  const T = useThemeColors()
   const editorRef = useRef(null)
 
   const execCmd = useCallback((cmd) => {

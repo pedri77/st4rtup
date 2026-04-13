@@ -14,13 +14,9 @@ if (typeof window !== 'undefined') {
   localStorage.setItem('st4rtup_agents_tried', 'true')
 }
 import { useQuery as useReactQuery } from '@tanstack/react-query'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
@@ -293,6 +289,7 @@ function CustomerSuccessPanel() {
 }
 
 export default function AgentsPage() {
+  const T = useThemeColors()
   const { data: agents, isLoading } = useQuery({
     queryKey: ['agents'],
     queryFn: () => agentsApi.list().then(r => r.data.agents),

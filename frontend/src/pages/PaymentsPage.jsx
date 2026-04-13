@@ -7,14 +7,11 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { paymentsApi } from '@/services/api'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
+
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
@@ -560,6 +557,7 @@ const TABS = [
 ]
 
 export default function PaymentsPage() {
+  const T = useThemeColors()
   const [activeTab, setActiveTab] = useState('pagos')
 
   return (

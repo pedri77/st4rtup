@@ -13,14 +13,11 @@ import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import api, { settingsApi, airtableApi, mcpApi } from '@/services/api'
 import { useHasRole } from '@/components/RoleGuard'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
+
 
 /* ── Design tokens ─────────────────────────────────────────────────── */
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 const inputStyle = {
@@ -300,6 +297,7 @@ function StatusBadge({ configured }) {
 // ─── Main Page Component ────────────────────────────────────────────
 
 export default function IntegrationsPage() {
+  const T = useThemeColors()
   const location = typeof window !== 'undefined' ? window.location : {}
   const params = new URLSearchParams(location.search || '')
   const [activeTab, setActiveTab] = useState(params.get('tab') || 'email')
@@ -1173,7 +1171,6 @@ function GeneralTab({ settings, onSave, saving, isAdmin }) {
     </div>
   )
 }
-
 
 // ─── Airtable & MCP Tab ─────────────────────────────────────────────
 

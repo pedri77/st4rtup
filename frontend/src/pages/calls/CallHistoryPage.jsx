@@ -3,13 +3,9 @@ import { useQuery } from '@tanstack/react-query'
 import { History, Phone, Clock, Loader2, ChevronDown, ChevronUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { callsApi } from '@/services/api'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const inputStyle = {
   backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg,
@@ -101,6 +97,7 @@ function formatDate(dateStr) {
 }
 
 export default function CallHistoryPage() {
+  const T = useThemeColors()
   const [page, setPage] = useState(1)
   const [filterEstado, setFilterEstado] = useState('')
   const [filterResultado, setFilterResultado] = useState('')

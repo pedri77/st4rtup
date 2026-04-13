@@ -2,13 +2,8 @@ import { useState, useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { Send, Loader2, CheckCircle, AlertTriangle, Lock } from 'lucide-react'
 import api from '@/services/api'
+import { useThemeColors } from '@/utils/theme'
 
-const T = {
-  bg: '#0a0e1a', card: '#111827', muted: '#1f2937',
-  border: '#374151', fg: '#f3f4f6', fgMuted: '#9ca3af',
-  cyan: '#0cd5e8', purple: '#7c3aed',
-  success: '#22c55e', destructive: '#ef4444',
-}
 
 const publicFormApi = {
   getConfig: (formId, token) => api.get(`/public-forms/config/${formId}`, { params: token ? { token } : {} }),
@@ -16,6 +11,7 @@ const publicFormApi = {
 }
 
 export default function PublicFormPage() {
+  const T = useThemeColors()
   const { formId } = useParams()
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')

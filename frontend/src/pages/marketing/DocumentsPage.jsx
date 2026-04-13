@@ -9,13 +9,9 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { marketingDocumentsApi, campaignsApi } from '@/services/api'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
@@ -76,6 +72,7 @@ const selectStyle = { ...inputStyle }
 const labelStyle = { display: 'block', fontSize: 14, color: T.fgMuted, marginBottom: 4 }
 
 export default function DocumentsPage() {
+  const T = useThemeColors()
   const queryClient = useQueryClient()
   const [filters, setFilters] = useState({ folder: '', status: '', language: '', search: '' })
   const [selectedDoc, setSelectedDoc] = useState(null)
@@ -566,7 +563,6 @@ export default function DocumentsPage() {
   )
 }
 
-
 // ─── Upload Modal ────────────────────────────────────────────
 
 function UploadModal({ campaigns, onClose, onSubmit, loading }) {
@@ -680,7 +676,6 @@ function UploadModal({ campaigns, onClose, onSubmit, loading }) {
     </div>
   )
 }
-
 
 // ─── Document Form Modal (Create / Edit) ─────────────────────
 
@@ -810,7 +805,6 @@ function DocumentFormModal({ doc, campaigns, onClose, onSubmit, loading }) {
     </div>
   )
 }
-
 
 // ─── Upload Version Modal ────────────────────────────────────
 

@@ -11,20 +11,9 @@ import toast from 'react-hot-toast'
 import ExportButton from '@/components/ExportButton'
 import { ListItemSkeleton } from '@/components/LoadingStates'
 import { useConfirm } from '@/components/common/ConfirmDialog'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC',
-  card: '#FFFFFF',
-  muted: '#F1F5F9',
-  border: '#E2E8F0',
-  fg: '#0F172A',
-  fgMuted: '#64748B',
-  cyan: '#1E6FD9',
-  purple: '#F5820B',
-  destructive: 'hsl(0,70%,50%)',
-  success: 'hsl(150,60%,40%)',
-  warning: 'hsl(40,90%,50%)',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' }
@@ -66,6 +55,7 @@ const RELATIONSHIP_COLORS = {
 }
 
 export default function ClientsPage() {
+  const T = useThemeColors()
   const confirm = useConfirm()
   const queryClient = useQueryClient()
   const { leads } = useLeadsSelect()
@@ -385,7 +375,6 @@ export default function ClientsPage() {
   )
 }
 
-
 // ─── Contact Card ────────────────────────────────────────────────
 
 function ContactCard({ contact, leads, onEdit, onDelete, onView }) {
@@ -484,7 +473,6 @@ function ContactCard({ contact, leads, onEdit, onDelete, onView }) {
   )
 }
 
-
 // ─── Power Map View ──────────────────────────────────────────────
 
 function PowerMapView({ contacts, leads, filterLead, onEdit, onView }) {
@@ -554,7 +542,6 @@ function PowerMapView({ contacts, leads, filterLead, onEdit, onView }) {
     </div>
   )
 }
-
 
 // ─── Contact Form Modal ──────────────────────────────────────────
 
@@ -724,7 +711,6 @@ function ContactFormModal({ contact, leads, onClose, onSubmit, isLoading }) {
     </div>
   )
 }
-
 
 // ─── Contact Detail Modal ────────────────────────────────────────
 

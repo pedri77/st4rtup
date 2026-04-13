@@ -14,20 +14,10 @@ import ExportButton from '@/components/ExportButton';
 import { formatDateForExport } from '@/utils/export';
 import { ListItemSkeleton } from '@/components/LoadingStates';
 import { useConfirm } from '@/components/common/ConfirmDialog';
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC',
-  card: '#FFFFFF',
-  muted: '#F1F5F9',
-  border: '#E2E8F0',
-  fg: '#0F172A',
-  fgMuted: '#64748B',
-  cyan: '#1E6FD9',
-  purple: '#F5820B',
-  destructive: 'hsl(0,70%,50%)',
-  success: 'hsl(150,60%,40%)',
-  warning: 'hsl(40,90%,50%)'
-};
+
+;
 const fontDisplay = "'Rajdhani', sans-serif";
 const fontMono = "'IBM Plex Mono', monospace";
 const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' };
@@ -46,6 +36,7 @@ const EMPTY_ITEM = { name: '', description: '', quantity: 1, unit_price: 0, tota
 // Catalog loaded from API (/service-catalog) — no hardcoded products
 
 export default function OffersPage() {
+  const T = useThemeColors()
   // Load catalog from API
   const { data: catalogData } = useQuery({
     queryKey: ['service-catalog'],
@@ -196,7 +187,6 @@ export default function OffersPage() {
 
 }
 
-
 function OfferCard({ offer, onView, onEdit, onDelete, onStatusChange, onSign, onInvoice }) {
   const config = STATUS_CONFIG[offer.status] || STATUS_CONFIG.draft;
   const StatusIcon = config.icon;
@@ -260,7 +250,6 @@ function OfferCard({ offer, onView, onEdit, onDelete, onStatusChange, onSign, on
     </div>);
 
 }
-
 
 function OfferModal({ offer, onClose, onSubmit, isLoading, catalog = [] }) {
   const CATALOG = catalog;
@@ -436,7 +425,6 @@ function OfferModal({ offer, onClose, onSubmit, isLoading, catalog = [] }) {
 
 }
 
-
 function OfferViewModal({ offer, onClose, onEdit, onSign, onInvoice }) {
   const config = STATUS_CONFIG[offer.status] || STATUS_CONFIG.draft;
   const StatusIcon = config.icon;
@@ -520,7 +508,6 @@ function OfferViewModal({ offer, onClose, onEdit, onSign, onInvoice }) {
 
 }
 
-
 function SignatureModal({ offer, onClose, onSuccess }) {
   const [provider, setProvider] = useState('yousign');
   const [signerEmail, setSignerEmail] = useState('');
@@ -584,7 +571,6 @@ function SignatureModal({ offer, onClose, onSuccess }) {
 
 }
 
-
 function InvoiceModal({ offer, onClose, onSuccess }) {
   const [provider, setProvider] = useState('');
   const [creating, setCreating] = useState(false);
@@ -592,7 +578,6 @@ function InvoiceModal({ offer, onClose, onSuccess }) {
   { id: 'holded', name: 'Holded', desc: 'Facturacion y contabilidad para empresas en Espana' },
   { id: 'stripe', name: 'Stripe', desc: 'Facturacion y cobros online internacionales' },
   { id: 'facturama', name: 'Facturama', desc: 'Facturacion electronica CFDI para Mexico y LATAM' }];
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();

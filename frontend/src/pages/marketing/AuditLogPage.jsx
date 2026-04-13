@@ -9,13 +9,9 @@ import clsx from 'clsx'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { auditLogApi } from '@/services/api'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  destructive: '#EF4444', success: '#10B981', warning: '#F59E0B',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
@@ -54,6 +50,7 @@ const selectStyle = {
 }
 
 export default function AuditLogPage() {
+  const T = useThemeColors()
   const [page, setPage] = useState(1)
   const [filters, setFilters] = useState({ action: '', entity_type: '', search: '' })
   const [showFilters, setShowFilters] = useState(false)

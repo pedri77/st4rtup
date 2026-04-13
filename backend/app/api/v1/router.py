@@ -20,6 +20,7 @@ from app.api.v1.endpoints import (
     affiliates,
     linkedin,
     pipeline_rules,
+    security,
 )
 api_router = APIRouter()
 
@@ -132,3 +133,6 @@ api_router.include_router(payments.router, prefix="/payments", tags=["Payments"]
 api_router.include_router(billing.router, prefix="/billing", tags=["Billing"])
 api_router.include_router(analytics_internal.router, prefix="/analytics", tags=["Analytics"])
 api_router.include_router(service_catalog.router, prefix="/service-catalog", tags=["Service Catalog"])
+
+# Security (2FA + Sessions)
+api_router.include_router(security.router, prefix="/security", tags=["Security"])

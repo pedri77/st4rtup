@@ -1,11 +1,10 @@
 """Endpoints de pagos — Stripe + PayPal (MOD-PAYMENTS-001)."""
-import hashlib
-import hmac
 import logging
 from datetime import datetime, timezone
 from typing import Optional
 from uuid import UUID
 
+import stripe
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc
@@ -445,29 +444,22 @@ async def stripe_webhook(
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature", "")
 
-    # Verify webhook signature if secret is configured
+    # Verify webhook signature using Stripe SDK
     if settings.STRIPE_WEBHOOK_SECRET:
-        # Simple signature verification (production should use stripe lib)
         try:
-            elements = dict(item.split("=", 1) for item in sig_header.split(","))
-            timestamp = elements.get("t", "")
-            signature = elements.get("v1", "")
-            signed_payload = f"{timestamp}.{payload.decode()}"
-            expected = hmac.new(
-                settings.STRIPE_WEBHOOK_SECRET.encode(),
-                signed_payload.encode(),
-                hashlib.sha256,
-            ).hexdigest()
-            if not hmac.compare_digest(expected, signature):
-                raise HTTPException(400, "Invalid signature")
-        except Exception as e:
+            event = payment_service.stripe_construct_webhook_event(payload, sig_header)
+        except stripe.SignatureVerificationError as e:
             logger.warning(f"Stripe webhook signature verification failed: {e}")
             raise HTTPException(400, "Invalid webhook signature")
+        except ValueError:
+            raise HTTPException(400, "Invalid payload")
+    else:
+        import json
+        event = json.loads(payload)
 
-    import json
-    event = json.loads(payload)
-    event_type = event.get("type", "")
-    data_obj = event.get("data", {}).get("object", {})
+    event_type = event.get("type", "") if isinstance(event, dict) else event.type
+    data_obj = (event.get("data", {}).get("object", {}) if isinstance(event, dict)
+                else event.data.object)
 
     logger.info(f"Stripe webhook: {event_type}")
 
@@ -633,30 +625,19 @@ async def public_checkout(
             metadata={"plan": plan, "org_id": org_id},
         )
     else:
-        # Use Stripe subscription checkout with price_id
-        import httpx
+        # Use Stripe subscription checkout with price_id via SDK
         is_addon = plan in ("extra_users", "ai_advanced", "deal_room_addon", "whatsapp_addon", "api_access")
         success_url = f"https://st4rtup.com/app/marketplace?activated={plan}" if is_addon else f"https://st4rtup.com/login?payment=success&plan={plan}"
-        async with httpx.AsyncClient(timeout=15.0) as client:
-            data = {
-                "mode": "subscription",
-                "line_items[0][price]": price_id,
-                "line_items[0][quantity]": "1",
-                "success_url": success_url,
-                "cancel_url": "https://st4rtup.com/pricing?cancelled=1",
-                "metadata[plan]": plan,
-                "metadata[org_id]": org_id,
-                "subscription_data[trial_period_days]": "0" if is_addon else str(settings.TRIAL_DAYS),
-            }
-            if email:
-                data["customer_email"] = email
+        trial_days = 0 if is_addon else (settings.TRIAL_DAYS or 0)
 
-            resp = await client.post(
-                "https://api.stripe.com/v1/checkout/sessions",
-                headers={"Authorization": f"Bearer {settings.STRIPE_SECRET_KEY}"},
-                data=data,
-            )
-            session = resp.json()
+        session = payment_service.stripe_create_checkout_subscription(
+            price_id=price_id,
+            email=email,
+            metadata={"plan": plan, "org_id": org_id},
+            success_url=success_url,
+            cancel_url="https://st4rtup.com/pricing?cancelled=1",
+            trial_days=trial_days,
+        )
 
     checkout_url = session.get("url", "")
     if not checkout_url:

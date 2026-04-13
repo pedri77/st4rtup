@@ -85,30 +85,16 @@ async def get_customer_portal_url(
     if not org or not org.stripe_subscription_id:
         return {"portal_url": None, "message": "No tienes suscripción activa en Stripe"}
 
-    # Create Stripe Customer Portal session
-    import httpx
+    # Create Stripe Customer Portal session via SDK
+    from app.services.payment_service import stripe_get_subscription, stripe_create_portal_session
     try:
-        # First get customer from subscription
-        async with httpx.AsyncClient(timeout=15.0) as client:
-            sub_resp = await client.get(
-                f"https://api.stripe.com/v1/subscriptions/{org.stripe_subscription_id}",
-                headers={"Authorization": f"Bearer {settings.STRIPE_SECRET_KEY}"},
-            )
-            if sub_resp.status_code != 200:
-                return {"portal_url": None, "message": "Suscripción no encontrada en Stripe"}
-            customer_id = sub_resp.json().get("customer", "")
+        sub = stripe_get_subscription(org.stripe_subscription_id)
+        customer_id = sub.get("customer", "")
+        if not customer_id:
+            return {"portal_url": None, "message": "Customer no encontrado"}
 
-            if not customer_id:
-                return {"portal_url": None, "message": "Customer no encontrado"}
-
-            # Create portal session
-            portal_resp = await client.post(
-                "https://api.stripe.com/v1/billing_portal/sessions",
-                headers={"Authorization": f"Bearer {settings.STRIPE_SECRET_KEY}"},
-                data={"customer": customer_id, "return_url": "https://st4rtup.com/app/billing"},
-            )
-            if portal_resp.status_code in (200, 201):
-                return {"portal_url": portal_resp.json().get("url", "")}
+        portal = stripe_create_portal_session(customer_id, "https://st4rtup.com/app/billing")
+        return {"portal_url": portal.get("url", "")}
     except Exception as e:
         logger.error(f"Stripe portal error: {e}")
 

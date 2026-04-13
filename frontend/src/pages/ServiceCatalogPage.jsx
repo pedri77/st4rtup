@@ -3,8 +3,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { Plus, Trash2, Edit2, Package, ArrowLeft, Sparkles } from 'lucide-react'
 import { serviceCatalogApi } from '@/services/api'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = { bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9', border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B', cyan: '#1E6FD9', purple: '#F5820B', destructive: '#EF4444', success: '#10B981', warning: '#F59E0B' }
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%' }
@@ -13,6 +14,7 @@ const BILLING_LABELS = { one_time: 'Pago único', monthly: 'Mensual', annual: 'A
 const BILLING_COLORS = { one_time: T.fgMuted, monthly: T.cyan, annual: T.success }
 
 export default function ServiceCatalogPage() {
+  const T = useThemeColors()
   const qc = useQueryClient()
   const [showForm, setShowForm] = useState(false)
   const [editId, setEditId] = useState(null)

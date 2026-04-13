@@ -6,13 +6,9 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '@/services/api'
+import { useThemeColors, LIGHT as T } from '@/utils/theme'
 
-const T = {
-  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9',
-  border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B',
-  cyan: '#1E6FD9', purple: '#6366F1',
-  success: '#10B981', warning: '#F59E0B', destructive: '#EF4444',
-}
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 const inputStyle = {
@@ -43,6 +39,7 @@ function KpiCard({ label, value, icon: Icon, color }) {
 }
 
 export default function FormsManagerPage() {
+  const T = useThemeColors()
   const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState('overview')
   const [selectedForm, setSelectedForm] = useState('')

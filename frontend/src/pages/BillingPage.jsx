@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import { CreditCard, ExternalLink, Receipt, Zap, ArrowRight } from 'lucide-react'
 import api from '@/services/api'
 import { useOrganization } from '@/hooks/useOrganization'
+import { useThemeColors } from '@/utils/theme'
 
-const T = { bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9', border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B', cyan: '#1E6FD9', success: '#10B981', warning: '#F59E0B', destructive: '#EF4444' }
+
 const fontDisplay = "'Rajdhani', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
@@ -15,6 +16,7 @@ const PLAN_INFO = {
 }
 
 export default function BillingPage() {
+  const T = useThemeColors()
   const { org, plan, limits } = useOrganization()
 
   const { data: subscription } = useQuery({

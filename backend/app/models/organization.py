@@ -22,6 +22,7 @@ class Organization(BaseModel):
     is_active = Column(Boolean, default=True)
     onboarding_completed = Column(Boolean, default=False, nullable=False)
     onboarding_data = Column(JSON, default={})
+    setup_checklist = Column(JSON, default={"dismissed": False, "completed": []})
 
 
 class OrgMember(BaseModel):
