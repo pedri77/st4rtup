@@ -29,19 +29,19 @@ const inputStyle = {
 const EMAIL_PROVIDERS = [
   {
     id: 'resend', name: 'Resend', icon: Zap, accent: T.cyan,
-    description: 'API moderna, facil setup. 3.000 emails/mes gratis.',
+    comingSoon: true, description: 'API moderna, facil setup. 3.000 emails/mes gratis.',
     url: 'https://resend.com', price: 'Gratis hasta 3K/mes, luego $20/mes',
     fields: [{ key: 'resend_api_key', label: 'API Key', type: 'password', placeholder: 're_...' }],
   },
   {
     id: 'brevo', name: 'Brevo (Sendinblue)', icon: Send, accent: T.success,
-    description: '300 emails/dia gratis. SMTP incluido, muy economico.',
+    comingSoon: true, description: '300 emails/dia gratis. SMTP incluido, muy economico.',
     url: 'https://brevo.com', price: 'Gratis 300/dia, luego $9/mes (20K)',
     fields: [{ key: 'brevo_api_key', label: 'API Key', type: 'password', placeholder: 'xkeysib-...' }],
   },
   {
     id: 'ses', name: 'Amazon SES', icon: Cloud, accent: 'hsl(25,85%,55%)',
-    description: 'El mas barato a escala. $0.10 por cada 1.000 emails.',
+    comingSoon: true, description: 'El mas barato a escala. $0.10 por cada 1.000 emails.',
     url: 'https://aws.amazon.com/ses/', price: '$0.10/1.000 emails',
     fields: [
       { key: 'ses_access_key', label: 'SMTP Username (Access Key)', type: 'password', placeholder: 'AKIA...' },
@@ -54,7 +54,7 @@ const EMAIL_PROVIDERS = [
   },
   {
     id: 'mailgun', name: 'Mailgun', icon: Mail, accent: T.purple,
-    description: 'Buen tracking y analytics. API robusta.',
+    comingSoon: true, description: 'Buen tracking y analytics. API robusta.',
     url: 'https://mailgun.com', price: '1.000/mes gratis (3 meses), luego $15/mes',
     fields: [
       { key: 'mailgun_api_key', label: 'API Key', type: 'password', placeholder: 'key-...' },
@@ -66,13 +66,13 @@ const EMAIL_PROVIDERS = [
   },
   {
     id: 'zoho', name: 'Zoho ZeptoMail', icon: Mail, accent: T.warning,
-    description: 'Si ya usas Zoho Mail corporativo, integracion directa.',
+    comingSoon: true, description: 'Si ya usas Zoho Mail corporativo, integracion directa.',
     url: 'https://www.zoho.com/zeptomail/', price: '~$2.50/1.000 emails',
     fields: [{ key: 'zoho_api_key', label: 'API Key (SendMail Token)', type: 'password', placeholder: 'Zoho-enczapikey ...' }],
   },
   {
     id: 'smtp', name: 'SMTP Generico', icon: Globe, accent: T.fgMuted,
-    description: 'Gmail, Outlook, o cualquier servidor SMTP personalizado.',
+    comingSoon: true, description: 'Gmail, Outlook, o cualquier servidor SMTP personalizado.',
     url: null, price: 'Depende del servidor',
     fields: [
       { key: 'smtp_host', label: 'Host SMTP', type: 'text', placeholder: 'smtp.gmail.com' },
@@ -84,7 +84,7 @@ const EMAIL_PROVIDERS = [
   },
   {
     id: 'gmail_oauth', name: 'Gmail OAuth2', icon: Globe, accent: 'hsl(210,70%,55%)',
-    description: 'Envia desde tu cuenta de Gmail/Google Workspace con OAuth2. No necesita contrasena de aplicacion.',
+    comingSoon: true, description: 'Envia desde tu cuenta de Gmail/Google Workspace con OAuth2. No necesita contrasena de aplicacion.',
     url: 'https://console.cloud.google.com/apis/credentials', price: 'Gratis (cuenta de Google)',
     oauth: true, fields: [],
   },
@@ -96,7 +96,7 @@ const INTEGRATION_CATEGORIES = [
   {
     id: 'automation', name: 'Automatizaciones y Notificaciones', icon: Zap,
     integrations: [
-      { id: 'telegram', name: 'Telegram', icon: Bot, configKey: 'telegram_config', description: 'Notificaciones en tiempo real via Telegram Bot.',
+      { id: 'telegram', name: 'Telegram', icon: Bot, configKey: 'telegram_config', comingSoon: true, description: 'Notificaciones en tiempo real via Telegram Bot.',
         fields: [{ key: 'bot_token', label: 'Bot Token', type: 'password', placeholder: '123456:ABC-DEF1234...' }, { key: 'chat_id', label: 'Chat ID', type: 'text', placeholder: '-1001234567890' }] },
       { id: 'n8n', name: 'n8n Automations', icon: Zap, configKey: 'n8n_config', description: 'Conexion con tu instancia n8n para automatizaciones.',
         fields: [{ key: 'base_url', label: 'URL Base', type: 'text', placeholder: 'https://n8n.tudominio.com' }, { key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }] },
@@ -109,56 +109,56 @@ const INTEGRATION_CATEGORIES = [
   {
     id: 'prospecting', name: 'Prospeccion y Enriquecimiento', icon: Search,
     integrations: [
-      { id: 'linkedin', name: 'LinkedIn Sales Navigator', icon: LinkedinIcon, configKey: 'linkedin_config', description: 'Busqueda avanzada de decisores, InMail y alertas.', url: 'https://business.linkedin.com/sales-solutions',
+      { id: 'linkedin', name: 'LinkedIn Sales Navigator', icon: LinkedinIcon, configKey: 'linkedin_config', comingSoon: true, description: 'Busqueda avanzada de decisores, InMail y alertas.', url: 'https://business.linkedin.com/sales-solutions',
         fields: [{ key: 'access_token', label: 'Access Token', type: 'password', placeholder: 'AQV...' }, { key: 'organization_id', label: 'Organization ID', type: 'text', placeholder: '12345678' }] },
-      { id: 'clearbit', name: 'Clearbit', icon: Search, configKey: 'clearbit_config', description: 'Enriquecimiento automatico de empresa/contacto por dominio.', url: 'https://clearbit.com',
+      { id: 'clearbit', name: 'Clearbit', icon: Search, configKey: 'clearbit_config', comingSoon: true, description: 'Enriquecimiento automatico de empresa/contacto por dominio.', url: 'https://clearbit.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: 'sk_...' }] },
       { id: 'hunter', name: 'Hunter.io', icon: Mail, configKey: 'hunter_config', description: 'Descubrimiento y verificacion de emails corporativos.', url: 'https://hunter.io',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }] },
-      { id: 'lusha', name: 'Lusha', icon: Phone, configKey: 'lusha_config', description: 'Telefonos directos y emails de decisores.', url: 'https://www.lusha.com',
+      { id: 'lusha', name: 'Lusha', icon: Phone, configKey: 'lusha_config', comingSoon: true, description: 'Telefonos directos y emails de decisores.', url: 'https://www.lusha.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }] },
-      { id: 'zoominfo', name: 'ZoomInfo', icon: Database, configKey: 'zoominfo_config', description: 'Base de datos B2B con datos de contacto verificados.', url: 'https://www.zoominfo.com',
+      { id: 'zoominfo', name: 'ZoomInfo', icon: Database, configKey: 'zoominfo_config', comingSoon: true, description: 'Base de datos B2B con datos de contacto verificados.', url: 'https://www.zoominfo.com',
         fields: [{ key: 'username', label: 'Username', type: 'text', placeholder: '' }, { key: 'password', label: 'Password', type: 'password', placeholder: '' }, { key: 'client_id', label: 'Client ID', type: 'text', placeholder: '' }] },
-      { id: 'phantombuster', name: 'PhantomBuster', icon: Ghost, configKey: 'phantombuster_config', description: 'Scraping automatizado de perfiles LinkedIn.', url: 'https://phantombuster.com',
+      { id: 'phantombuster', name: 'PhantomBuster', icon: Ghost, configKey: 'phantombuster_config', comingSoon: true, description: 'Scraping automatizado de perfiles LinkedIn.', url: 'https://phantombuster.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }] },
-      { id: 'waalaxy', name: 'Waalaxy', icon: LinkedinIcon, configKey: 'linkedin_config', configSubKey: 'waalaxy', description: 'Automatizacion de conexiones y mensajes LinkedIn.', url: 'https://www.waalaxy.com',
+      { id: 'waalaxy', name: 'Waalaxy', icon: LinkedinIcon, configKey: 'linkedin_config', configSubKey: 'waalaxy', comingSoon: true, description: 'Automatizacion de conexiones y mensajes LinkedIn.', url: 'https://www.waalaxy.com',
         fields: [{ key: 'waalaxy_api_key', label: 'API Key', type: 'password', placeholder: '' }] },
-      { id: 'lemlist', name: 'Lemlist', icon: Send, configKey: 'general_config', configSubKey: 'lemlist', description: 'Cold email sequences y sales automation.', url: 'https://www.lemlist.com',
+      { id: 'lemlist', name: 'Lemlist', icon: Send, configKey: 'general_config', configSubKey: 'lemlist', comingSoon: true, description: 'Cold email sequences y sales automation.', url: 'https://www.lemlist.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }] },
     ],
   },
   {
     id: 'communication', name: 'Comunicacion y Reuniones', icon: MessageCircle,
     integrations: [
-      { id: 'gcalendar', name: 'Google Calendar', icon: Calendar, configKey: 'gcalendar_config', description: 'Sync bidireccional de visitas/reuniones con Google Calendar. Conectar via OAuth2.', url: 'https://calendar.google.com',
+      { id: 'gcalendar', name: 'Google Calendar', icon: Calendar, configKey: 'gcalendar_config', comingSoon: true, description: 'Sync bidireccional de visitas/reuniones con Google Calendar. Conectar via OAuth2.', url: 'https://calendar.google.com',
         oauthProvider: 'gcalendar',
         fields: [] },
       { id: 'outlook', name: 'Microsoft Outlook 365', icon: Mail, configKey: 'outlook_config', description: 'Sync con calendario y emails de Microsoft 365.', url: 'https://outlook.office.com',
         fields: [{ key: 'client_id', label: 'Client ID', type: 'text', placeholder: '' }, { key: 'client_secret', label: 'Client Secret', type: 'password', placeholder: '' }, { key: 'tenant_id', label: 'Tenant ID', type: 'text', placeholder: '' }, { key: 'refresh_token', label: 'Refresh Token', type: 'password', placeholder: '' }] },
-      { id: 'calendly', name: 'Calendly', icon: CalendarCheck, configKey: 'calendly_config', description: 'Links de agendamiento para leads y prospectos.', url: 'https://calendly.com',
+      { id: 'calendly', name: 'Calendly', icon: CalendarCheck, configKey: 'calendly_config', comingSoon: true, description: 'Links de agendamiento para leads y prospectos.', url: 'https://calendly.com',
         fields: [{ key: 'api_key', label: 'Personal Access Token', type: 'password', placeholder: '' }, { key: 'organization_uri', label: 'Organization URI', type: 'text', placeholder: 'https://api.calendly.com/organizations/...' }] },
-      { id: 'zoom', name: 'Zoom', icon: Video, configKey: 'zoom_config', description: 'Auto-crear enlaces de videollamada en visitas.', url: 'https://marketplace.zoom.us',
+      { id: 'zoom', name: 'Zoom', icon: Video, configKey: 'zoom_config', comingSoon: true, description: 'Auto-crear enlaces de videollamada en visitas.', url: 'https://marketplace.zoom.us',
         fields: [{ key: 'client_id', label: 'Client ID', type: 'text', placeholder: '' }, { key: 'client_secret', label: 'Client Secret', type: 'password', placeholder: '' }, { key: 'account_id', label: 'Account ID', type: 'text', placeholder: '' }] },
       { id: 'whatsapp', name: 'WhatsApp Business', icon: MessageCircle, configKey: 'whatsapp_config', description: 'Comunicacion directa con leads via WhatsApp.', url: 'https://business.whatsapp.com',
         fields: [{ key: 'access_token', label: 'Access Token', type: 'password', placeholder: '' }, { key: 'phone_number_id', label: 'Phone Number ID', type: 'text', placeholder: '' }, { key: 'business_account_id', label: 'Business Account ID', type: 'text', placeholder: '' }] },
       { id: 'slack', name: 'Slack', icon: Hash, configKey: 'slack_config', description: 'Notificaciones internas del equipo comercial.', url: 'https://api.slack.com',
         fields: [{ key: 'bot_token', label: 'Bot Token', type: 'password', placeholder: 'xoxb-...' }, { key: 'default_channel', label: 'Canal por defecto', type: 'text', placeholder: '#ventas' }] },
-      { id: 'twilio', name: 'Twilio', icon: Phone, configKey: 'general_config', configSubKey: 'twilio', description: 'SMS y llamadas directas. Complementa Retell AI para follow-ups.', url: 'https://www.twilio.com',
+      { id: 'twilio', name: 'Twilio', icon: Phone, configKey: 'general_config', configSubKey: 'twilio', comingSoon: true, description: 'SMS y llamadas directas. Complementa Retell AI para follow-ups.', url: 'https://www.twilio.com',
         fields: [{ key: 'account_sid', label: 'Account SID', type: 'text', placeholder: 'AC...' }, { key: 'auth_token', label: 'Auth Token', type: 'password', placeholder: '' }, { key: 'from_number', label: 'Numero remitente', type: 'text', placeholder: '+34...' }] },
-      { id: 'sendgrid', name: 'SendGrid', icon: Send, configKey: 'general_config', configSubKey: 'sendgrid', description: 'Email a escala (>10K/mes). Alternativa a Resend.', url: 'https://sendgrid.com',
+      { id: 'sendgrid', name: 'SendGrid', icon: Send, configKey: 'general_config', configSubKey: 'sendgrid', comingSoon: true, description: 'Email a escala (>10K/mes). Alternativa a Resend.', url: 'https://sendgrid.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: 'SG...' }] },
     ],
   },
   {
     id: 'marketing', name: 'Marketing y Captacion', icon: Megaphone,
     integrations: [
-      { id: 'google_ads', name: 'Google Ads', icon: Megaphone, configKey: 'google_ads_config', description: 'Tracking de conversion lead -> oportunidad -> cierre.', url: 'https://ads.google.com',
+      { id: 'google_ads', name: 'Google Ads', icon: Megaphone, configKey: 'google_ads_config', comingSoon: true, description: 'Tracking de conversion lead -> oportunidad -> cierre.', url: 'https://ads.google.com',
         fields: [{ key: 'client_id', label: 'Client ID', type: 'text', placeholder: '' }, { key: 'client_secret', label: 'Client Secret', type: 'password', placeholder: '' }, { key: 'developer_token', label: 'Developer Token', type: 'password', placeholder: '' }, { key: 'refresh_token', label: 'Refresh Token', type: 'password', placeholder: '' }, { key: 'customer_id', label: 'Customer ID', type: 'text', placeholder: '123-456-7890' }] },
-      { id: 'linkedin_ads', name: 'LinkedIn Ads', icon: LinkedinIcon, configKey: 'linkedin_ads_config', description: 'Audiencias lookalike basadas en clientes ganados.', url: 'https://www.linkedin.com/campaignmanager',
+      { id: 'linkedin_ads', name: 'LinkedIn Ads', icon: LinkedinIcon, configKey: 'linkedin_ads_config', comingSoon: true, description: 'Audiencias lookalike basadas en clientes ganados.', url: 'https://www.linkedin.com/campaignmanager',
         fields: [{ key: 'access_token', label: 'Access Token', type: 'password', placeholder: '' }, { key: 'ad_account_id', label: 'Ad Account ID', type: 'text', placeholder: '' }] },
       { id: 'ga4', name: 'Google Analytics 4', icon: BarChart3, configKey: 'ga4_config', description: 'Atribucion de fuente de leads y tracking web.', url: 'https://analytics.google.com',
         fields: [{ key: 'client_id', label: 'Client ID', type: 'text', placeholder: '' }, { key: 'client_secret', label: 'Client Secret', type: 'password', placeholder: '' }, { key: 'refresh_token', label: 'Refresh Token', type: 'password', placeholder: '' }, { key: 'property_id', label: 'Property ID', type: 'text', placeholder: '123456789' }] },
-      { id: 'hubspot', name: 'HubSpot', icon: FormInput, configKey: 'hubspot_config', description: 'CRM, formularios, landing pages, email marketing. Webhook: /api/v1/webhooks/hubspot', url: 'https://www.hubspot.com',
+      { id: 'hubspot', name: 'HubSpot', icon: FormInput, configKey: 'hubspot_config', comingSoon: true, description: 'CRM, formularios, landing pages, email marketing. Webhook: /api/v1/webhooks/hubspot', url: 'https://www.hubspot.com',
         fields: [
           { key: 'api_key', label: 'Private App Token', type: 'password', placeholder: 'pat-eu1-...' },
           { key: 'client_secret', label: 'Client Secret', type: 'password', placeholder: '88b91b5e-...' },
@@ -168,88 +168,88 @@ const INTEGRATION_CATEGORIES = [
           { key: 'sync_deals', label: 'Sincronizar deals con pipeline', type: 'checkbox' },
           { key: 'sync_forms', label: 'Importar envios de formularios', type: 'checkbox' },
         ] },
-      { id: 'typeform', name: 'Typeform', icon: FileSpreadsheet, configKey: 'typeform_config', description: 'Formularios interactivos para captura de leads.', url: 'https://www.typeform.com',
+      { id: 'typeform', name: 'Typeform', icon: FileSpreadsheet, configKey: 'typeform_config', comingSoon: true, description: 'Formularios interactivos para captura de leads.', url: 'https://www.typeform.com',
         fields: [{ key: 'api_key', label: 'Personal Access Token', type: 'password', placeholder: 'tfp_...' }, { key: 'workspace_id', label: 'Workspace ID', type: 'text', placeholder: '' }] },
     ],
   },
   {
     id: 'documents', name: 'Documentos y Propuestas', icon: FileText,
     integrations: [
-      { id: 'pandadoc', name: 'PandaDoc', icon: FileText, configKey: 'pandadoc_config', description: 'Envio y firma digital de propuestas/contratos.', url: 'https://www.pandadoc.com',
+      { id: 'pandadoc', name: 'PandaDoc', icon: FileText, configKey: 'pandadoc_config', comingSoon: true, description: 'Envio y firma digital de propuestas/contratos.', url: 'https://www.pandadoc.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }, { key: 'workspace_id', label: 'Workspace ID', type: 'text', placeholder: '' }] },
-      { id: 'docusign', name: 'DocuSign', icon: FileSignature, configKey: 'docusign_config', description: 'Firma electronica de contratos y acuerdos.', url: 'https://www.docusign.com',
+      { id: 'docusign', name: 'DocuSign', icon: FileSignature, configKey: 'docusign_config', comingSoon: true, description: 'Firma electronica de contratos y acuerdos.', url: 'https://www.docusign.com',
         fields: [{ key: 'integration_key', label: 'Integration Key', type: 'text', placeholder: '' }, { key: 'secret_key', label: 'Secret Key', type: 'password', placeholder: '' }, { key: 'account_id', label: 'Account ID', type: 'text', placeholder: '' }] },
-      { id: 'yousign', name: 'Yousign', icon: PenTool, configKey: 'yousign_config', description: 'Firma electronica europea (eIDAS) para contratos.', url: 'https://yousign.com',
+      { id: 'yousign', name: 'Yousign', icon: PenTool, configKey: 'yousign_config', comingSoon: true, description: 'Firma electronica europea (eIDAS) para contratos.', url: 'https://yousign.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }, { key: 'environment', label: 'Entorno', type: 'select', options: [{ value: 'sandbox', label: 'Sandbox (pruebas)' }, { value: 'production', label: 'Produccion' }] }] },
       { id: 'gdrive', name: 'Google Drive', icon: HardDrive, configKey: 'gdrive_config', description: 'Adjuntar documentos a oportunidades y leads. Conectar via OAuth2.', url: 'https://drive.google.com',
         oauthProvider: 'gdrive',
         fields: [{ key: 'folder_id', label: 'Folder ID raiz (opcional)', type: 'text', placeholder: 'ID de la carpeta principal en Drive' }] },
-      { id: 'onedrive', name: 'OneDrive / SharePoint', icon: Cloud, configKey: 'onedrive_config', description: 'Adjuntar documentos desde Microsoft OneDrive.', url: 'https://onedrive.live.com',
+      { id: 'onedrive', name: 'OneDrive / SharePoint', icon: Cloud, configKey: 'onedrive_config', comingSoon: true, description: 'Adjuntar documentos desde Microsoft OneDrive.', url: 'https://onedrive.live.com',
         fields: [{ key: 'client_id', label: 'Client ID', type: 'text', placeholder: '' }, { key: 'client_secret', label: 'Client Secret', type: 'password', placeholder: '' }, { key: 'tenant_id', label: 'Tenant ID', type: 'text', placeholder: '' }, { key: 'refresh_token', label: 'Refresh Token', type: 'password', placeholder: '' }] },
-      { id: 'notion', name: 'Notion', icon: BookOpen, configKey: 'notion_config', description: 'Base de conocimiento de producto para el equipo.', url: 'https://www.notion.so',
+      { id: 'notion', name: 'Notion', icon: BookOpen, configKey: 'notion_config', comingSoon: true, description: 'Base de conocimiento de producto para el equipo.', url: 'https://www.notion.so',
         fields: [{ key: 'api_key', label: 'Internal Integration Token', type: 'password', placeholder: 'secret_...' }, { key: 'database_id', label: 'Database ID', type: 'text', placeholder: '' }] },
     ],
   },
   {
     id: 'data', name: 'Datos y Compliance', icon: Building2,
     integrations: [
-      { id: 'einforma', name: 'eInforma / Axesor', icon: Building2, configKey: 'einforma_config', description: 'Datos financieros de empresas espanolas (facturacion, empleados).', url: 'https://www.einforma.com',
+      { id: 'einforma', name: 'eInforma / Axesor', icon: Building2, configKey: 'einforma_config', comingSoon: true, description: 'Datos financieros de empresas espanolas (facturacion, empleados).', url: 'https://www.einforma.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }, { key: 'user_id', label: 'User ID', type: 'text', placeholder: '' }] },
-      { id: 'cnae', name: 'CNAE Lookup', icon: Tag, configKey: 'cnae_config', description: 'Clasificar leads por sector (CNAE) automaticamente.',
+      { id: 'cnae', name: 'CNAE Lookup', icon: Tag, configKey: 'cnae_config', comingSoon: true, description: 'Clasificar leads por sector (CNAE) automaticamente.',
         fields: [{ key: 'base_url', label: 'URL del servicio', type: 'text', placeholder: 'https://api.cnae.com.es' }] },
     ],
   },
   {
     id: 'billing', name: 'Facturacion y Post-venta', icon: CreditCard,
     integrations: [
-      { id: 'stripe', name: 'Stripe', icon: CreditCard, configKey: 'stripe_config', description: 'Sincronizar oportunidades ganadas -> facturacion.', url: 'https://stripe.com',
+      { id: 'stripe', name: 'Stripe', icon: CreditCard, configKey: 'stripe_config', comingSoon: true, description: 'Sincronizar oportunidades ganadas -> facturacion.', url: 'https://stripe.com',
         fields: [{ key: 'secret_key', label: 'Secret Key', type: 'password', placeholder: 'sk_...' }, { key: 'webhook_secret', label: 'Webhook Secret', type: 'password', placeholder: 'whsec_...' }] },
-      { id: 'holded', name: 'Holded', icon: Receipt, configKey: 'holded_config', description: 'Facturacion y contabilidad integrada (Espana).', url: 'https://www.holded.com',
+      { id: 'holded', name: 'Holded', icon: Receipt, configKey: 'holded_config', comingSoon: true, description: 'Facturacion y contabilidad integrada (Espana).', url: 'https://www.holded.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }] },
-      { id: 'facturama', name: 'Facturama', icon: FileSpreadsheet, configKey: 'facturama_config', description: 'Facturacion electronica CFDI (Mexico/LATAM).', url: 'https://www.facturama.mx',
+      { id: 'facturama', name: 'Facturama', icon: FileSpreadsheet, configKey: 'facturama_config', comingSoon: true, description: 'Facturacion electronica CFDI (Mexico/LATAM).', url: 'https://www.facturama.mx',
         fields: [{ key: 'user', label: 'Usuario', type: 'text', placeholder: '' }, { key: 'password', label: 'Contrasena', type: 'password', placeholder: '' }, { key: 'environment', label: 'Entorno', type: 'select', options: [{ value: 'sandbox', label: 'Sandbox (pruebas)' }, { value: 'production', label: 'Produccion' }] }] },
-      { id: 'intercom', name: 'Intercom', icon: Headphones, configKey: 'intercom_config', description: 'Tickets post-venta vinculados al lead.', url: 'https://www.intercom.com',
+      { id: 'intercom', name: 'Intercom', icon: Headphones, configKey: 'intercom_config', comingSoon: true, description: 'Tickets post-venta vinculados al lead.', url: 'https://www.intercom.com',
         fields: [{ key: 'access_token', label: 'Access Token', type: 'password', placeholder: '' }, { key: 'app_id', label: 'App ID', type: 'text', placeholder: '' }] },
-      { id: 'freshdesk', name: 'Freshdesk', icon: MessageSquare, configKey: 'freshdesk_config', description: 'Helpdesk y tickets de soporte post-venta.', url: 'https://freshdesk.com',
+      { id: 'freshdesk', name: 'Freshdesk', icon: MessageSquare, configKey: 'freshdesk_config', comingSoon: true, description: 'Helpdesk y tickets de soporte post-venta.', url: 'https://freshdesk.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }, { key: 'domain', label: 'Dominio', type: 'text', placeholder: 'tuempresa (sin .freshdesk.com)' }] },
     ],
   },
   {
     id: 'surveys', name: 'Encuestas y Feedback', icon: ClipboardList,
     integrations: [
-      { id: 'typeform_survey', name: 'Typeform', icon: FileSpreadsheet, configKey: 'typeform_config', description: 'Encuestas NPS/CSAT interactivas con alta tasa de respuesta.', url: 'https://www.typeform.com',
+      { id: 'typeform_survey', name: 'Typeform', icon: FileSpreadsheet, configKey: 'typeform_config', comingSoon: true, description: 'Encuestas NPS/CSAT interactivas con alta tasa de respuesta.', url: 'https://www.typeform.com',
         fields: [{ key: 'api_key', label: 'Personal Access Token', type: 'password', placeholder: 'tfp_...' }, { key: 'workspace_id', label: 'Workspace ID', type: 'text', placeholder: '' }] },
-      { id: 'google_forms', name: 'Google Forms', icon: ListChecks, configKey: 'google_forms_config', description: 'Formularios de encuesta gratuitos via Google Workspace. Conecta via OAuth2 o usa Apps Script webhook.', url: 'https://docs.google.com/forms',
+      { id: 'google_forms', name: 'Google Forms', icon: ListChecks, configKey: 'google_forms_config', comingSoon: true, description: 'Formularios de encuesta gratuitos via Google Workspace. Conecta via OAuth2 o usa Apps Script webhook.', url: 'https://docs.google.com/forms',
         oauthProvider: 'google_forms',
         fields: [{ key: 'webhook_url', label: 'Webhook URL Apps Script (alternativa)', type: 'text', placeholder: 'https://script.google.com/...' }] },
-      { id: 'surveymonkey', name: 'SurveyMonkey', icon: ClipboardList, configKey: 'surveymonkey_config', description: 'Plataforma lider de encuestas con analisis avanzado.', url: 'https://www.surveymonkey.com',
+      { id: 'surveymonkey', name: 'SurveyMonkey', icon: ClipboardList, configKey: 'surveymonkey_config', comingSoon: true, description: 'Plataforma lider de encuestas con analisis avanzado.', url: 'https://www.surveymonkey.com',
         fields: [{ key: 'access_token', label: 'Access Token', type: 'password', placeholder: '' }] },
-      { id: 'tally', name: 'Tally', icon: BarChart3, configKey: 'tally_config', description: 'Formularios de encuesta minimalistas y gratuitos.', url: 'https://tally.so',
+      { id: 'tally', name: 'Tally', icon: BarChart3, configKey: 'tally_config', comingSoon: true, description: 'Formularios de encuesta minimalistas y gratuitos.', url: 'https://tally.so',
         fields: [{ key: 'webhook_signing_secret', label: 'Webhook Signing Secret', type: 'password', placeholder: '' }] },
-      { id: 'jotform', name: 'JotForm', icon: FormInput, configKey: 'jotform_config', description: 'Constructor de formularios con +10.000 plantillas.', url: 'https://www.jotform.com',
+      { id: 'jotform', name: 'JotForm', icon: FormInput, configKey: 'jotform_config', comingSoon: true, description: 'Constructor de formularios con +10.000 plantillas.', url: 'https://www.jotform.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }] },
-      { id: 'survicate', name: 'Survicate', icon: BarChart3, configKey: 'survicate_config', description: 'Encuestas in-app y NPS para productos SaaS.', url: 'https://survicate.com',
+      { id: 'survicate', name: 'Survicate', icon: BarChart3, configKey: 'survicate_config', comingSoon: true, description: 'Encuestas in-app y NPS para productos SaaS.', url: 'https://survicate.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }, { key: 'workspace_key', label: 'Workspace Key', type: 'text', placeholder: '' }] },
-      { id: 'hotjar', name: 'Hotjar', icon: Flame, configKey: 'hotjar_config', description: 'Encuestas de feedback + heatmaps en tu web.', url: 'https://www.hotjar.com',
+      { id: 'hotjar', name: 'Hotjar', icon: Flame, configKey: 'hotjar_config', comingSoon: true, description: 'Encuestas de feedback + heatmaps en tu web.', url: 'https://www.hotjar.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }, { key: 'site_id', label: 'Site ID', type: 'text', placeholder: '' }] },
     ],
   },
   {
     id: 'ai', name: 'Inteligencia Artificial', icon: BrainCircuit,
     integrations: [
-      { id: 'openai', name: 'OpenAI (GPT-4o)', icon: Sparkles, configKey: 'ai_config', configSubKey: 'openai', description: 'ChatGPT y GPT-4o para asistente de ventas.', url: 'https://platform.openai.com',
+      { id: 'openai', name: 'OpenAI (GPT-4o)', icon: Sparkles, configKey: 'ai_config', configSubKey: 'openai', comingSoon: true, description: 'ChatGPT y GPT-4o para asistente de ventas.', url: 'https://platform.openai.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: 'sk-...' }, { key: 'model', label: 'Modelo', type: 'select', options: [{ value: 'gpt-4o', label: 'GPT-4o' }, { value: 'gpt-4o-mini', label: 'GPT-4o Mini' }, { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' }, { value: 'o1', label: 'o1' }, { value: 'o1-mini', label: 'o1 Mini' }] }, { key: 'base_url', label: 'Base URL (opcional)', type: 'text', placeholder: 'https://api.openai.com/v1' }] },
-      { id: 'anthropic', name: 'Anthropic (Claude)', icon: Sparkles, configKey: 'ai_config', configSubKey: 'anthropic', description: 'Claude para analisis y redaccion de propuestas.', url: 'https://console.anthropic.com',
+      { id: 'anthropic', name: 'Anthropic (Claude)', icon: Sparkles, configKey: 'ai_config', configSubKey: 'anthropic', comingSoon: true, description: 'Claude para analisis y redaccion de propuestas.', url: 'https://console.anthropic.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: 'sk-ant-...' }, { key: 'model', label: 'Modelo', type: 'select', options: [{ value: 'claude-sonnet-4-20250514', label: 'Claude Sonnet 4' }, { value: 'claude-opus-4-20250514', label: 'Claude Opus 4' }, { value: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5' }] }] },
-      { id: 'google', name: 'Google Gemini', icon: Sparkles, configKey: 'ai_config', configSubKey: 'google', description: 'Gemini para analisis de datos y documentos.', url: 'https://aistudio.google.com',
+      { id: 'google', name: 'Google Gemini', icon: Sparkles, configKey: 'ai_config', configSubKey: 'google', comingSoon: true, description: 'Gemini para analisis de datos y documentos.', url: 'https://aistudio.google.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }, { key: 'model', label: 'Modelo', type: 'select', options: [{ value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash' }, { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro' }, { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash' }] }] },
-      { id: 'mistral', name: 'Mistral AI', icon: Sparkles, configKey: 'ai_config', configSubKey: 'mistral', description: 'Modelos europeos de IA, cumplimiento GDPR.', url: 'https://console.mistral.ai',
+      { id: 'mistral', name: 'Mistral AI', icon: Sparkles, configKey: 'ai_config', configSubKey: 'mistral', comingSoon: true, description: 'Modelos europeos de IA, cumplimiento GDPR.', url: 'https://console.mistral.ai',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }, { key: 'model', label: 'Modelo', type: 'select', options: [{ value: 'mistral-large-latest', label: 'Mistral Large' }, { value: 'mistral-medium-latest', label: 'Mistral Medium' }, { value: 'mistral-small-latest', label: 'Mistral Small' }] }] },
-      { id: 'groq', name: 'Groq', icon: Zap, configKey: 'ai_config', configSubKey: 'groq', description: 'Inferencia ultra-rapida con modelos open-source.', url: 'https://console.groq.com',
+      { id: 'groq', name: 'Groq', icon: Zap, configKey: 'ai_config', configSubKey: 'groq', comingSoon: true, description: 'Inferencia ultra-rapida con modelos open-source.', url: 'https://console.groq.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: 'gsk_...' }, { key: 'model', label: 'Modelo', type: 'select', options: [{ value: 'llama-3.3-70b-versatile', label: 'Llama 3.3 70B' }, { value: 'llama-3.1-8b-instant', label: 'Llama 3.1 8B (rapido)' }, { value: 'mixtral-8x7b-32768', label: 'Mixtral 8x7B' }] }] },
-      { id: 'deepseek', name: 'DeepSeek', icon: Sparkles, configKey: 'ai_config', configSubKey: 'deepseek', description: 'IA avanzada con razonamiento (muy economico).', url: 'https://platform.deepseek.com',
+      { id: 'deepseek', name: 'DeepSeek', icon: Sparkles, configKey: 'ai_config', configSubKey: 'deepseek', comingSoon: true, description: 'IA avanzada con razonamiento (muy economico).', url: 'https://platform.deepseek.com',
         fields: [{ key: 'api_key', label: 'API Key', type: 'password', placeholder: '' }, { key: 'model', label: 'Modelo', type: 'select', options: [{ value: 'deepseek-chat', label: 'DeepSeek Chat' }, { value: 'deepseek-reasoner', label: 'DeepSeek Reasoner' }] }] },
-      { id: 'ollama', name: 'Ollama (Local)', icon: Database, configKey: 'ai_config', configSubKey: 'ollama', description: 'Ejecuta modelos de IA en tu propio servidor.', url: 'https://ollama.ai',
+      { id: 'ollama', name: 'Ollama (Local)', icon: Database, configKey: 'ai_config', configSubKey: 'ollama', comingSoon: true, description: 'Ejecuta modelos de IA en tu propio servidor.', url: 'https://ollama.ai',
         fields: [{ key: 'base_url', label: 'URL del servidor', type: 'text', placeholder: 'http://localhost:11434' }, { key: 'model', label: 'Modelo', type: 'text', placeholder: 'llama3' }] },
     ],
   },
@@ -528,8 +528,8 @@ function EmailProviderTab({ settings, onSave, saving, isAdmin }) {
             return (
               <button
                 key={provider.id}
-                onClick={() => isAdmin && setSelectedProvider(provider.id)}
-                disabled={!isAdmin}
+                onClick={() => isAdmin && !provider.comingSoon && setSelectedProvider(provider.id)}
+                disabled={!isAdmin || provider.comingSoon}
                 className="text-left rounded-xl p-4 transition-all group"
                 style={{
                   border: `1px solid ${isSelected ? T.cyan : T.border}`,
@@ -845,8 +845,12 @@ function IntegrationCard({ integration, settings, onSave, saving, isAdmin, getAf
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h4 style={{ color: T.fg }} className="text-sm font-medium">{integration.name}</h4>
-            <StatusBadge configured={hasConfig} />
+            <h4 style={{ color: integration.comingSoon ? T.fgMuted : T.fg }} className="text-sm font-medium">{integration.name}</h4>
+            {integration.comingSoon ? (
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${T.fgMuted}15`, color: T.fgMuted }}>Proximamente</span>
+            ) : (
+              <StatusBadge configured={hasConfig} />
+            )}
             {marketingRef && (
               <Link to="/app/marketing/integrations"
                 className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full transition-colors"
