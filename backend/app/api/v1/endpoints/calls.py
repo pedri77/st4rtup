@@ -595,7 +595,7 @@ async def create_queue(
         )
         return CallQueueResponse.model_validate(queue)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail="Invalid request")
 
 
 @router.put("/queues/{queue_id}", response_model=CallQueueResponse)
@@ -633,7 +633,7 @@ async def start_queue(
         asyncio.create_task(call_queue_service.process_queue_items(queue_id))
         return CallQueueResponse.model_validate(queue)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail="Invalid request")
 
 
 @router.post("/queues/{queue_id}/pause", response_model=CallQueueResponse)
@@ -647,7 +647,7 @@ async def pause_queue(
         queue = await call_queue_service.pause_queue(db, queue_id)
         return CallQueueResponse.model_validate(queue)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail="Invalid request")
 
 
 @router.post("/queues/{queue_id}/cancel", response_model=CallQueueResponse)
@@ -661,7 +661,7 @@ async def cancel_queue(
         queue = await call_queue_service.cancel_queue(db, queue_id)
         return CallQueueResponse.model_validate(queue)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail="Invalid request")
 
 
 @router.post("/queues/{queue_id}/retry-failed")
@@ -675,7 +675,7 @@ async def retry_failed_items(
         result = await call_queue_service.retry_failed(db, queue_id)
         return result
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail="Invalid request")
 
 
 @router.delete("/queues/{queue_id}")

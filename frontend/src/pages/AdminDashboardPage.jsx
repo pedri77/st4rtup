@@ -64,9 +64,9 @@ export default function AdminDashboardPage() {
     let accessToken = ''
     try { const parsed = JSON.parse(token || '{}'); accessToken = parsed?.access_token || parsed?.[0]?.access_token || '' } catch { accessToken = token || '' }
     if (!accessToken) return
-    const wsUrl = (import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1').replace(/^http/, 'ws').replace('/api/v1', '') + `/ws/logs?token=${accessToken}`
+    const wsUrl = (import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1').replace(/^http/, 'ws').replace('/api/v1', '') + '/ws/logs'
     try {
-      const ws = new WebSocket(wsUrl)
+      const ws = new WebSocket(wsUrl, [`bearer-${accessToken}`])
       ws.onopen = () => { setWsConnected(true); setWsLines([]) }
       ws.onmessage = (e) => { if (e.data) setWsLines(prev => [...prev.slice(-200), e.data]) }
       ws.onclose = () => setWsConnected(false)

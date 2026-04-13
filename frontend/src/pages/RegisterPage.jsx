@@ -77,7 +77,7 @@ export default function RegisterPage() {
         navigate('/app/onboarding')
       }, 2000)
     } catch (err) {
-      console.error('Register error:', err)
+      // Registration failed
       if (err.message?.includes('already registered')) {
         setError('Este email ya está registrado. ¿Quieres iniciar sesión?')
       } else {
@@ -94,7 +94,7 @@ export default function RegisterPage() {
     try {
       await signInWithGoogle()
     } catch (err) {
-      console.error('Google auth error:', err)
+      // Google auth failed
       setError('Error al conectar con Google. Inténtalo de nuevo.')
       setGoogleLoading(false)
     }

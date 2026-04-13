@@ -49,12 +49,12 @@ export default function PrivateRoute({ children }) {
       .then(({ access_token }) => {
         if (!access_token) throw new Error('No token returned from /verify-impersonate')
         // 4. Persist the token under our own key (NOT the supabase key)
-        localStorage.setItem('st4rtup_impersonate_token', access_token)
+        sessionStorage.setItem('st4rtup_impersonate_token', access_token)
         // 5. Hard reload so AuthContext re-mounts and reads the new token
         window.location.reload()
       })
       .catch((err) => {
-        console.error('Impersonation failed:', err)
+        // Impersonation exchange failed — token invalid or expired
         setImpersonating(false)
       })
   }, [searchParams, setSearchParams])

@@ -13,7 +13,7 @@ const api = axios.create({
 // Auth interceptor — prefer impersonation token if active, else Supabase session
 api.interceptors.request.use(
   (config) => {
-    const impersonateToken = localStorage.getItem('st4rtup_impersonate_token')
+    const impersonateToken = sessionStorage.getItem('st4rtup_impersonate_token')
     if (impersonateToken) {
       config.headers.Authorization = `Bearer ${impersonateToken}`
       return config

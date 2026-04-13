@@ -95,7 +95,7 @@ async def send_message(
         result = await send_text_message(phone, text, db)
         wa_msg_id = result.get("message_id", "")
     except Exception as e:
-        raise HTTPException(status_code=502, detail=str(e))
+        raise HTTPException(status_code=502, detail="WhatsApp service error")
 
     # Save message
     msg = WAMessage(

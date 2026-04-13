@@ -242,7 +242,7 @@ function ProfileTab() {
       try {
         await supabase.auth.updateUser({ data: { full_name: data.full_name, phone: data.phone, title: data.title, timezone: data.timezone } })
       } catch (e) {
-        console.warn('Supabase auth update failed, trying backend', e)
+        // Supabase auth update failed, trying backend
       }
       // Also save to backend user profile
       try {
@@ -251,7 +251,7 @@ function ProfileTab() {
           await settingsApi.update({ general_config: { user_profile: { full_name: data.full_name, phone: data.phone, title: data.title, timezone: data.timezone } } })
         }
       } catch (e) {
-        console.warn('Backend profile update failed', e)
+        // Backend profile update failed
       }
     },
     onSuccess: () => { setSaved(true); toast.success('Perfil actualizado'); setTimeout(() => setSaved(false), 3000) },

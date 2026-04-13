@@ -392,7 +392,7 @@ async def submit_form(
         return {"status": "ok", "form_id": form_id, **result}
     except Exception as e:
         logger.error("Form submission error (%s): %s", form_id, e)
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal error")
 
 
 # ═══════════════════════════════════════════════════════════════

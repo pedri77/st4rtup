@@ -287,7 +287,7 @@ app.add_middleware(SecurityHeadersMiddleware)
 async def global_exception_handler(request: Request, exc: Exception):
     origin = request.headers.get("origin", "")
     allowed = settings.cors_origins
-    cors_origin = origin if origin in allowed else (allowed[0] if allowed else "*")
+    cors_origin = origin if origin in allowed else (allowed[0] if allowed else "")
     logger.error(f"Unhandled exception on {request.url}: {exc}", exc_info=True)
     return JSONResponse(
         status_code=500,

@@ -218,7 +218,7 @@ async def sign_offer(
         )
         return {"success": True, **result}
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail="Invalid request")
     except Exception:
         raise HTTPException(status_code=500, detail="Error enviando a firma")
 
@@ -263,7 +263,7 @@ async def invoice_offer(
         result = await create_invoice(db=db, offer_id=offer_id, provider=provider)
         return {"success": True, **result}
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail="Invalid request")
     except Exception:
         raise HTTPException(status_code=500, detail="Error creando factura")
 
@@ -279,7 +279,7 @@ async def send_offer_invoice(
         result = await send_invoice(db=db, offer_id=offer_id)
         return {"success": True, **result}
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail="Invalid request")
     except Exception:
         raise HTTPException(status_code=500, detail="Error enviando factura")
 

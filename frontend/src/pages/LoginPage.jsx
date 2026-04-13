@@ -25,7 +25,7 @@ export default function LoginPage() {
       await signIn(email, password)
       navigate('/app')
     } catch (err) {
-      console.error('Login error:', err)
+      // Login failed
       setError('Credenciales inválidas. Por favor, verifica tu email y contraseña.')
     } finally {
       setLoading(false)
@@ -38,7 +38,7 @@ export default function LoginPage() {
     try {
       await signInWithGoogle()
     } catch (err) {
-      console.error('Google auth error:', err)
+      // Google auth failed
       setError('Error al conectar con Google. Inténtalo de nuevo.')
       setGoogleLoading(false)
     }

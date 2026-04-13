@@ -81,7 +81,7 @@ export default function OnboardingPage() {
         })
       }
     } catch (e) {
-      console.error('Failed to persist onboarding state', e)
+      // Onboarding state persist failed
     }
     // Cache locally too for instant loads
     localStorage.setItem('st4rtup_onboarding_done', 'true')

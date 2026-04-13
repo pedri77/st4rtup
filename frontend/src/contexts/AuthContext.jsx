@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check for an active impersonation session in localStorage first.
     // If present, build a synthetic user from the JWT claims and skip Supabase.
-    const impersonateToken = localStorage.getItem('st4rtup_impersonate_token')
+    const impersonateToken = sessionStorage.getItem('st4rtup_impersonate_token')
     if (impersonateToken) {
       const payload = _decodeJwtPayload(impersonateToken)
       const exp = payload?.exp ? payload.exp * 1000 : 0
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
           })
         }
       } catch (e) {
-        console.warn('Backend registration call failed:', e)
+        // Backend registration failed — non-blocking
       }
     }
 
