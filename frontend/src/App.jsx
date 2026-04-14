@@ -17,6 +17,7 @@ const ContactSalesPage = lazy(() => import('./pages/ContactSalesPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 import LandingPage from './pages/LandingPage'
 import PricingPublicPage from './pages/PricingPublicPage'
+const ApiDocsPage = lazy(() => import('./pages/ApiDocsPage'))
 const PrivacyPage = lazy(() => import('./pages/legal/PrivacyPage'))
 const TermsPage = lazy(() => import('./pages/legal/TermsPage'))
 const CookiesPage = lazy(() => import('./pages/legal/CookiesPage'))
@@ -69,6 +70,7 @@ const AuditLogPage = lazy(() => import('./pages/marketing/AuditLogPage'))
 const LLMVisibilityPage = lazy(() => import('./pages/marketing/LLMVisibilityPage'))
 const SEOPage = lazy(() => import('./pages/marketing/SEOPage'))
 const SEOCenterPage = lazy(() => import('./pages/marketing/SEOCenterPage'))
+const LandingsManagerPage = lazy(() => import('./pages/marketing/LandingsManagerPage'))
 const CallsConsolePage = lazy(() => import('./pages/calls/CallsConsolePage'))
 const CallPromptsPage = lazy(() => import('./pages/calls/CallPromptsPage'))
 const CallsDashboardPage = lazy(() => import('./pages/calls/CallsDashboardPage'))
@@ -149,6 +151,7 @@ function App() {
         <Route path="/vs/:competitor" element={<Suspense fallback={<PageLoader />}><ComparePage /></Suspense>} />
         <Route path="/roi" element={<Suspense fallback={<PageLoader />}><RoiCalculatorPage /></Suspense>} />
         <Route path="/help" element={<Suspense fallback={<PageLoader />}><HelpCenterPage /></Suspense>} />
+        <Route path="/api-docs" element={<Suspense fallback={<PageLoader />}><ApiDocsPage /></Suspense>} />
         <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><PrivacyPage /></Suspense>} />
         <Route path="/terms" element={<Suspense fallback={<PageLoader />}><TermsPage /></Suspense>} />
         <Route path="/cookies" element={<Suspense fallback={<PageLoader />}><CookiesPage /></Suspense>} />
@@ -240,6 +243,7 @@ function App() {
           <Route path="marketing/seo" element={<Suspense fallback={<PageLoader />}><SEOPage /></Suspense>} />
           <Route path="marketing/seo-center" element={<Suspense fallback={<PageLoader />}><SEOCenterPage /></Suspense>} />
           <Route path="marketing/youtube" element={<Suspense fallback={<PageLoader />}><YouTubePage /></Suspense>} />
+          <Route path="marketing/landings" element={<Suspense fallback={<PageLoader />}><LandingsManagerPage /></Suspense>} />
 
           {/* Llamadas IA */}
           <Route path="calls" element={<Suspense fallback={<PageLoader />}><CallsConsolePage /></Suspense>} />
