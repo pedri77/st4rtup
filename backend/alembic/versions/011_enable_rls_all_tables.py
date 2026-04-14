@@ -48,7 +48,12 @@ TABLES = [
 
 
 def upgrade():
+    from sqlalchemy import inspect
+    existing = set(inspect(op.get_bind()).get_table_names(schema="public"))
+
     for table in TABLES:
+        if table not in existing:
+            continue
         # Enable RLS (idempotent — no error if already enabled)
         op.execute(f"ALTER TABLE public.{table} ENABLE ROW LEVEL SECURITY")
         # Allow service_role full access (this is how the backend connects)
