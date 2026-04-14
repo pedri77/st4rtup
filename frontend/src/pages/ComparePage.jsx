@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import WebChatWidget from "@/components/WebChatWidget"
 import { Check, X as XIcon, ArrowRight } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
 
@@ -49,12 +50,14 @@ const DATA = {
 }
 
 function Val({ v }) {
+  const TC = useThemeColors()
   if (v === true) return <Check size={18} color="#10B981" />
   if (v === false) return <XIcon size={18} color="#EF4444" />
-  return <span style={{ fontSize: 13, color: '#475569' }}>{v}</span>
+  return <span style={{ fontSize: 13, color: TC.fgMuted }}>{v}</span>
 }
 
 export default function ComparePage() {
+  const T = useThemeColors()
   const { competitor } = useParams()
   const d = DATA[competitor]
 
@@ -66,47 +69,47 @@ export default function ComparePage() {
   )
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", color: T.fg, backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
       <title>St4rtup vs {d.name} — Comparativa CRM</title>
 
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E2E8F0' }}>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: `${T.card}F2`, backdropFilter: 'blur(12px)', borderBottom: `1px solid ${T.border}` }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
           <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
-          <Link to="/login" style={{ padding: '10px 22px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
+          <Link to="/login" style={{ padding: '10px 22px', backgroundColor: T.primary, color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
         </div>
       </nav>
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '60px 24px 100px' }}>
         {/* Hero */}
         <h1 style={{ fontFamily: fontDisplay, fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, marginBottom: 8 }}>
-          <span style={{ color: '#1E6FD9' }}>St4rtup</span> vs <span style={{ color: '#64748B' }}>{d.name}</span>
+          <span style={{ color: T.primary }}>St4rtup</span> vs <span style={{ color: T.fgMuted }}>{d.name}</span>
         </h1>
-        <p style={{ fontSize: 18, color: '#64748B', marginBottom: 40 }}>{d.tagline}</p>
+        <p style={{ fontSize: 18, color: T.fgMuted, marginBottom: 40 }}>{d.tagline}</p>
 
         {/* Price comparison */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 40 }}>
-          <div style={{ padding: 24, borderRadius: 14, border: '2px solid #1E6FD9', backgroundColor: '#EBF4FF' }}>
-            <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, color: '#1E6FD9', marginBottom: 8 }}>St4rtup</h3>
-            <p style={{ fontSize: 14, color: '#334155', margin: 0 }}>{d.price_us}</p>
+          <div style={{ padding: 24, borderRadius: 14, border: `2px solid ${T.primary}`, backgroundColor: `${T.primary}18` }}>
+            <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, color: T.primary, marginBottom: 8 }}>St4rtup</h3>
+            <p style={{ fontSize: 14, color: T.fgMuted, margin: 0 }}>{d.price_us}</p>
           </div>
-          <div style={{ padding: 24, borderRadius: 14, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC' }}>
-            <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, color: '#64748B', marginBottom: 8 }}>{d.name}</h3>
-            <p style={{ fontSize: 14, color: '#334155', margin: 0 }}>{d.price_them}</p>
+          <div style={{ padding: 24, borderRadius: 14, border: `1px solid ${T.border}`, backgroundColor: T.muted }}>
+            <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, color: T.fgMuted, marginBottom: 8 }}>{d.name}</h3>
+            <p style={{ fontSize: 14, color: T.fgMuted, margin: 0 }}>{d.price_them}</p>
           </div>
         </div>
 
         {/* Feature table */}
         <h2 style={{ fontFamily: fontDisplay, fontSize: 22, fontWeight: 700, marginBottom: 16 }}>Comparativa de funcionalidades</h2>
-        <div style={{ borderRadius: 14, border: '1px solid #E2E8F0', overflow: 'hidden', marginBottom: 40 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px', padding: '14px 20px', backgroundColor: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: '#64748B' }}>Funcionalidad</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#1E6FD9', textAlign: 'center' }}>St4rtup</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#64748B', textAlign: 'center' }}>{d.name}</span>
+        <div style={{ borderRadius: 14, border: `1px solid ${T.border}`, overflow: 'hidden', marginBottom: 40 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px', padding: '14px 20px', backgroundColor: T.muted, borderBottom: `1px solid ${T.border}` }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: T.fgMuted }}>Funcionalidad</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: T.primary, textAlign: 'center' }}>St4rtup</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: T.fgMuted, textAlign: 'center' }}>{d.name}</span>
           </div>
           {d.features.map(f => (
-            <div key={f.n} style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px', padding: '12px 20px', borderBottom: '1px solid #F1F5F9', alignItems: 'center' }}>
-              <span style={{ fontSize: 14, color: '#334155' }}>{f.n}</span>
+            <div key={f.n} style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px', padding: '12px 20px', borderBottom: `1px solid ${T.muted}`, alignItems: 'center' }}>
+              <span style={{ fontSize: 14, color: T.fgMuted }}>{f.n}</span>
               <span style={{ textAlign: 'center' }}><Val v={f.us} /></span>
               <span style={{ textAlign: 'center' }}><Val v={f.them} /></span>
             </div>
@@ -116,27 +119,27 @@ export default function ComparePage() {
         {/* Pros/Cons */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 40 }}>
           <div>
-            <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, color: '#1E6FD9', marginBottom: 12 }}>Ventajas St4rtup</h3>
-            {d.pros_us.map(p => <p key={p} style={{ fontSize: 14, color: '#334155', display: 'flex', gap: 8, marginBottom: 6 }}><Check size={16} color="#10B981" style={{ flexShrink: 0, marginTop: 2 }} /> {p}</p>)}
+            <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, color: T.primary, marginBottom: 12 }}>Ventajas St4rtup</h3>
+            {d.pros_us.map(p => <p key={p} style={{ fontSize: 14, color: T.fgMuted, display: 'flex', gap: 8, marginBottom: 6 }}><Check size={16} color="#10B981" style={{ flexShrink: 0, marginTop: 2 }} /> {p}</p>)}
           </div>
           <div>
-            <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, color: '#64748B', marginBottom: 12 }}>Limitaciones {d.name}</h3>
-            {d.cons_them.map(c => <p key={c} style={{ fontSize: 14, color: '#334155', display: 'flex', gap: 8, marginBottom: 6 }}><XIcon size={16} color="#EF4444" style={{ flexShrink: 0, marginTop: 2 }} /> {c}</p>)}
+            <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, color: T.fgMuted, marginBottom: 12 }}>Limitaciones {d.name}</h3>
+            {d.cons_them.map(c => <p key={c} style={{ fontSize: 14, color: T.fgMuted, display: 'flex', gap: 8, marginBottom: 6 }}><XIcon size={16} color="#EF4444" style={{ flexShrink: 0, marginTop: 2 }} /> {c}</p>)}
           </div>
         </div>
 
         {/* Other comparisons */}
-        <p style={{ fontSize: 13, color: '#94A3B8', marginBottom: 40 }}>
+        <p style={{ fontSize: 13, color: T.fgMuted, marginBottom: 40 }}>
           Otras comparativas: {Object.entries(DATA).filter(([k]) => k !== competitor).map(([k, v]) => (
-            <Link key={k} to={`/vs/${k}`} style={{ color: '#1E6FD9', marginRight: 12 }}>vs {v.name}</Link>
+            <Link key={k} to={`/vs/${k}`} style={{ color: T.primary, marginRight: 12 }}>vs {v.name}</Link>
           ))}
         </p>
 
         {/* CTA */}
-        <div style={{ padding: '40px 32px', borderRadius: 20, background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', textAlign: 'center' }}>
+        <div style={{ padding: '40px 32px', borderRadius: 20, background: `linear-gradient(135deg, ${T.primary}, ${T.accent})`, textAlign: 'center' }}>
           <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, color: 'white', marginBottom: 12 }}>Cambia a St4rtup</h2>
           <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: 24 }}>Sin tarjeta de crédito. Setup en 5 minutos.</p>
-          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', backgroundColor: 'white', color: '#1E6FD9', borderRadius: 10, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis <ArrowRight size={16} /></Link>
+          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', backgroundColor: 'white', color: T.primary, borderRadius: 10, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis <ArrowRight size={16} /></Link>
         </div>
       </div>
     <WebChatWidget />

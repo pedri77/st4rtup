@@ -399,7 +399,7 @@ export default function Layout() {
               </button>
               {unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center"
-                  style={{ backgroundColor: '#EF4444', color: 'white' }}>
+                  style={{ backgroundColor: T.destructive, color: 'white' }}>
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}

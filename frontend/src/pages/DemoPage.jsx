@@ -2,6 +2,7 @@ import { useState } from 'react'
 import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 import { BarChart3, Users, Megaphone, Sparkles, ArrowRight } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
 
@@ -23,33 +24,34 @@ const DEALS = [
 const STAGES = ['Nuevo', 'Demo', 'Cualificado', 'Propuesta', 'Negociación', 'Cerrado']
 
 export default function DemoPage() {
+  const T = useThemeColors()
   const [tab, setTab] = useState('dashboard')
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E', minHeight: '100vh', backgroundColor: '#F8FAFC' }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", color: T.fg, minHeight: '100vh', backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
       <meta name="robots" content="noindex" />
 
       {/* Header */}
-      <nav style={{ backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <nav style={{ backgroundColor: T.card, borderBottom: `1px solid ${T.border}`, padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 50 }} /></Link>
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <Link to="/" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>← Volver</Link>
-          <Link to="/login" style={{ padding: '8px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Registrarse gratis</Link>
+          <Link to="/" style={{ fontSize: 14, color: T.fgMuted, textDecoration: 'none' }}>← Volver</Link>
+          <Link to="/login" style={{ padding: '8px 20px', backgroundColor: T.primary, color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Registrarse gratis</Link>
         </div>
       </nav>
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 24px' }}>
         <h1 style={{ fontFamily: fontDisplay, fontSize: 28, fontWeight: 800, marginBottom: 8 }}>Demo interactiva</h1>
-        <p style={{ color: '#64748B', marginBottom: 24 }}>Explora el CRM con datos de ejemplo. Sin registro.</p>
+        <p style={{ color: T.fgMuted, marginBottom: 24 }}>Explora el CRM con datos de ejemplo. Sin registro.</p>
 
         {/* Tabs */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
           {TABS.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 10,
-              border: tab === t.id ? '2px solid #1E6FD9' : '1px solid #E2E8F0',
-              backgroundColor: tab === t.id ? '#EBF4FF' : 'white', color: tab === t.id ? '#1E6FD9' : '#64748B',
+              border: tab === t.id ? `2px solid ${T.primary}` : `1px solid ${T.border}`,
+              backgroundColor: tab === t.id ? `${T.primary}18` : T.card, color: tab === t.id ? T.primary : T.fgMuted,
               fontWeight: 600, fontSize: 13, cursor: 'pointer',
             }}><t.icon size={16} /> {t.label}</button>
           ))}
@@ -60,13 +62,13 @@ export default function DemoPage() {
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
               {[{ l: 'Ingresos', v: '€47.2K', c: '#1E6FD9' }, { l: 'Leads', v: '284', c: '#F5820B' }, { l: 'Conversión', v: '12.4%', c: '#10B981' }, { l: 'Pipeline', v: '€125K', c: '#8B5CF6' }].map(k => (
-                <div key={k.l} style={{ padding: 20, borderRadius: 14, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
-                  <p style={{ fontSize: 11, color: '#94A3B8', margin: 0, textTransform: 'uppercase', letterSpacing: 1 }}>{k.l}</p>
+                <div key={k.l} style={{ padding: 20, borderRadius: 14, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+                  <p style={{ fontSize: 11, color: T.fgMuted, margin: 0, textTransform: 'uppercase', letterSpacing: 1 }}>{k.l}</p>
                   <p style={{ fontSize: 28, fontWeight: 800, fontFamily: fontDisplay, color: k.c, margin: '4px 0 0' }}>{k.v}</p>
                 </div>
               ))}
             </div>
-            <div style={{ padding: 24, borderRadius: 14, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
+            <div style={{ padding: 24, borderRadius: 14, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
               <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Actividad semanal</h3>
               <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 100 }}>
                 {[40, 55, 35, 70, 50, 85, 65, 90, 75, 95, 80, 100].map((h, i) => (
@@ -74,7 +76,7 @@ export default function DemoPage() {
                 ))}
               </div>
             </div>
-            <p style={{ fontSize: 13, color: '#94A3B8', marginTop: 12 }}>Panel en tiempo real con 14 gráficos y KPIs</p>
+            <p style={{ fontSize: 13, color: T.fgMuted, marginTop: 12 }}>Panel en tiempo real con 14 gráficos y KPIs</p>
           </div>
         )}
 
@@ -83,18 +85,18 @@ export default function DemoPage() {
           <div>
             <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 16 }}>
               {STAGES.map(stage => (
-                <div key={stage} style={{ minWidth: 170, padding: 16, borderRadius: 14, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
-                  <h4 style={{ fontSize: 13, fontWeight: 700, color: '#64748B', marginBottom: 12, textTransform: 'uppercase' }}>{stage}</h4>
+                <div key={stage} style={{ minWidth: 170, padding: 16, borderRadius: 14, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+                  <h4 style={{ fontSize: 13, fontWeight: 700, color: T.fgMuted, marginBottom: 12, textTransform: 'uppercase' }}>{stage}</h4>
                   {DEALS.filter(d => d.stage === stage || (stage === 'Nuevo' && !STAGES.slice(1).includes(d.stage))).slice(0, 2).map(d => (
-                    <div key={d.name} style={{ padding: '10px 12px', borderRadius: 8, backgroundColor: '#F8FAFC', border: '1px solid #F1F5F9', marginBottom: 8 }}>
+                    <div key={d.name} style={{ padding: '10px 12px', borderRadius: 8, backgroundColor: T.muted, border: `1px solid ${T.border}`, marginBottom: 8 }}>
                       <p style={{ fontSize: 13, fontWeight: 600, margin: 0 }}>{d.name}</p>
-                      <p style={{ fontSize: 12, color: '#1E6FD9', margin: 0, fontWeight: 700 }}>{d.value}</p>
+                      <p style={{ fontSize: 12, color: T.primary, margin: 0, fontWeight: 700 }}>{d.value}</p>
                     </div>
                   ))}
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: 13, color: '#94A3B8', marginTop: 8 }}>Pipeline visual con arrastrar y soltar</p>
+            <p style={{ fontSize: 13, color: T.fgMuted, marginTop: 8 }}>Pipeline visual con arrastrar y soltar</p>
           </div>
         )}
 
@@ -102,13 +104,13 @@ export default function DemoPage() {
         {tab === 'marketing' && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
             {[{ l: 'Campañas activas', v: '4', c: '#1E6FD9' }, { l: 'SEO Score', v: '85/100', c: '#10B981' }, { l: 'Emails enviados', v: '1.2K', c: '#F5820B' }].map(k => (
-              <div key={k.l} style={{ padding: 24, borderRadius: 14, backgroundColor: 'white', border: '1px solid #E2E8F0', textAlign: 'center' }}>
+              <div key={k.l} style={{ padding: 24, borderRadius: 14, backgroundColor: T.card, border: `1px solid ${T.border}`, textAlign: 'center' }}>
                 <p style={{ fontSize: 32, fontWeight: 800, fontFamily: fontDisplay, color: k.c, margin: 0 }}>{k.v}</p>
-                <p style={{ fontSize: 13, color: '#64748B', margin: '4px 0 0' }}>{k.l}</p>
+                <p style={{ fontSize: 13, color: T.fgMuted, margin: '4px 0 0' }}>{k.l}</p>
               </div>
             ))}
             <div style={{ gridColumn: 'span 3' }}>
-              <p style={{ fontSize: 13, color: '#94A3B8' }}>Hub de marketing completo con SEO, campañas y analytics</p>
+              <p style={{ fontSize: 13, color: T.fgMuted }}>Hub de marketing completo con SEO, campañas y analytics</p>
             </div>
           </div>
         )}
@@ -122,14 +124,14 @@ export default function DemoPage() {
               { name: 'Propuestas', desc: 'Genera propuestas en PDF', score: '3 min/propuesta' },
               { name: 'SEO Pipeline', desc: '4 agentes encadenados', score: '8 artículos/día' },
             ].map(a => (
-              <div key={a.name} style={{ padding: 20, borderRadius: 14, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
+              <div key={a.name} style={{ padding: 20, borderRadius: 14, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
                 <h4 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>{a.name}</h4>
-                <p style={{ fontSize: 13, color: '#64748B', margin: '0 0 12px' }}>{a.desc}</p>
-                <span style={{ fontSize: 20, fontWeight: 800, fontFamily: fontDisplay, color: '#1E6FD9' }}>{a.score}</span>
+                <p style={{ fontSize: 13, color: T.fgMuted, margin: '0 0 12px' }}>{a.desc}</p>
+                <span style={{ fontSize: 20, fontWeight: 800, fontFamily: fontDisplay, color: T.primary }}>{a.score}</span>
               </div>
             ))}
             <div style={{ gridColumn: 'span 2' }}>
-              <p style={{ fontSize: 13, color: '#94A3B8' }}>4 agentes IA que trabajan para ti 24/7</p>
+              <p style={{ fontSize: 13, color: T.fgMuted }}>4 agentes IA que trabajan para ti 24/7</p>
             </div>
           </div>
         )}
@@ -139,7 +141,7 @@ export default function DemoPage() {
           <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, color: 'white', marginBottom: 12 }}>¿Te gusta lo que ves?</h2>
           <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: 24, fontSize: 15 }}>Empieza gratis hoy. Sin tarjeta de crédito.</p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-            <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', backgroundColor: 'white', color: '#1E6FD9', borderRadius: 10, fontWeight: 600, textDecoration: 'none' }}>Registrarse gratis <ArrowRight size={16} /></Link>
+            <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', backgroundColor: 'white', color: T.primary, borderRadius: 10, fontWeight: 600, textDecoration: 'none' }}>Registrarse gratis <ArrowRight size={16} /></Link>
             <Link to="/pricing" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', border: '2px solid white', color: 'white', borderRadius: 10, fontWeight: 600, textDecoration: 'none' }}>Ver precios</Link>
           </div>
         </div>

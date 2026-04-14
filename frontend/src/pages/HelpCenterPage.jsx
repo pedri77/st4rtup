@@ -2,6 +2,7 @@ import { useState } from 'react'
 import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 import { Search, ChevronDown, ChevronUp, Rocket, BarChart3, Megaphone, Sparkles, Plug, CreditCard, Mail } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
 
@@ -46,6 +47,7 @@ const CATEGORIES = [
 ]
 
 export default function HelpCenterPage() {
+  const T = useThemeColors()
   const [search, setSearch] = useState('')
   const [openCat, setOpenCat] = useState(null)
   const [openFaq, setOpenFaq] = useState(null)
@@ -55,22 +57,22 @@ export default function HelpCenterPage() {
     : CATEGORIES
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E', minHeight: '100vh', backgroundColor: '#F8FAFC' }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", color: T.fg, minHeight: '100vh', backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
-      <nav style={{ backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', padding: '0 24px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+      <nav style={{ backgroundColor: T.card, borderBottom: `1px solid ${T.border}`, padding: '0 24px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
-        <Link to="/login" style={{ padding: '10px 22px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
+        <Link to="/login" style={{ padding: '10px 22px', backgroundColor: T.primary, color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
       </nav>
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '60px 24px 100px' }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <h1 style={{ fontFamily: fontDisplay, fontSize: 36, fontWeight: 800, marginBottom: 8 }}>Centro de ayuda</h1>
-          <p style={{ color: '#64748B', fontSize: 16, marginBottom: 24 }}>¿En qué podemos ayudarte?</p>
+          <p style={{ color: T.fgMuted, fontSize: 16, marginBottom: 24 }}>¿En qué podemos ayudarte?</p>
           <div style={{ maxWidth: 500, margin: '0 auto', position: 'relative' }}>
-            <Search size={18} color="#94A3B8" style={{ position: 'absolute', left: 14, top: 13 }} />
+            <Search size={18} color={T.fgMuted} style={{ position: 'absolute', left: 14, top: 13 }} />
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar en el centro de ayuda..."
-              style={{ width: '100%', padding: '12px 14px 12px 42px', borderRadius: 12, border: '1px solid #E2E8F0', fontSize: 15, outline: 'none' }} />
+              style={{ width: '100%', padding: '12px 14px 12px 42px', borderRadius: 12, border: `1px solid ${T.border}`, fontSize: 15, outline: 'none', backgroundColor: T.card, color: T.fg }} />
           </div>
         </div>
 
@@ -79,10 +81,10 @@ export default function HelpCenterPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: 40 }}>
             {CATEGORIES.map(c => (
               <button key={c.id} onClick={() => { setOpenCat(openCat === c.id ? null : c.id); setOpenFaq(null) }}
-                style={{ padding: 20, borderRadius: 14, border: openCat === c.id ? `2px solid ${c.color}` : '1px solid #E2E8F0', backgroundColor: 'white', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s' }}>
+                style={{ padding: 20, borderRadius: 14, border: openCat === c.id ? `2px solid ${c.color}` : `1px solid ${T.border}`, backgroundColor: T.card, cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s' }}>
                 <c.icon size={22} color={c.color} />
-                <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 15, margin: '8px 0 0', color: '#1A1A2E' }}>{c.name}</p>
-                <p style={{ fontSize: 12, color: '#94A3B8', margin: '4px 0 0' }}>{c.faqs.length} artículos</p>
+                <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 15, margin: '8px 0 0', color: T.fg }}>{c.name}</p>
+                <p style={{ fontSize: 12, color: T.fgMuted, margin: '4px 0 0' }}>{c.faqs.length} artículos</p>
               </button>
             ))}
           </div>
@@ -99,13 +101,13 @@ export default function HelpCenterPage() {
               {cat.faqs.map((faq, i) => {
                 const key = `${cat.id}-${i}`
                 return (
-                  <div key={key} style={{ borderBottom: '1px solid #E2E8F0' }}>
+                  <div key={key} style={{ borderBottom: `1px solid ${T.border}` }}>
                     <button onClick={() => setOpenFaq(openFaq === key ? null : key)}
                       style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '14px 0', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', textAlign: 'left' }}>
-                      <span style={{ fontSize: 14, fontWeight: 600, color: '#1A1A2E' }}>{faq.q}</span>
-                      {openFaq === key ? <ChevronUp size={16} color="#94A3B8" /> : <ChevronDown size={16} color="#94A3B8" />}
+                      <span style={{ fontSize: 14, fontWeight: 600, color: T.fg }}>{faq.q}</span>
+                      {openFaq === key ? <ChevronUp size={16} color={T.fgMuted} /> : <ChevronDown size={16} color={T.fgMuted} />}
                     </button>
-                    {openFaq === key && <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.7, paddingBottom: 14 }}>{faq.a}</p>}
+                    {openFaq === key && <p style={{ fontSize: 14, color: T.fgMuted, lineHeight: 1.7, paddingBottom: 14 }}>{faq.a}</p>}
                   </div>
                 )
               })}
@@ -114,11 +116,11 @@ export default function HelpCenterPage() {
         })}
 
         {/* Contact */}
-        <div style={{ marginTop: 40, padding: '28px 24px', borderRadius: 16, backgroundColor: 'white', border: '1px solid #E2E8F0', textAlign: 'center' }}>
-          <Mail size={24} color="#1E6FD9" />
+        <div style={{ marginTop: 40, padding: '28px 24px', borderRadius: 16, backgroundColor: T.card, border: `1px solid ${T.border}`, textAlign: 'center' }}>
+          <Mail size={24} color={T.primary} />
           <h3 style={{ fontFamily: fontDisplay, fontSize: 18, fontWeight: 700, margin: '12px 0 8px' }}>¿No encuentras lo que buscas?</h3>
-          <p style={{ color: '#64748B', fontSize: 14, marginBottom: 16 }}>Escríbenos y te respondemos en menos de 24h.</p>
-          <a href="mailto:hello@st4rtup.com" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 22px', borderRadius: 10, backgroundColor: '#1E6FD9', color: 'white', fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
+          <p style={{ color: T.fgMuted, fontSize: 14, marginBottom: 16 }}>Escríbenos y te respondemos en menos de 24h.</p>
+          <a href="mailto:hello@st4rtup.com" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 22px', borderRadius: 10, backgroundColor: T.primary, color: 'white', fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
             hello@st4rtup.com
           </a>
         </div>

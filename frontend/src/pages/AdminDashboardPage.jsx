@@ -9,7 +9,7 @@ import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
 
 
 
-const PLAN_COLORS = { starter: '#94A3B8', growth: '#1E6FD9', scale: '#8B5CF6', enterprise: '#F59E0B' }
+const PLAN_COLORS = { starter: '#94A3B8', growth: '#3B82F6', scale: '#8B5CF6', enterprise: '#F59E0B' }
 
 const ADMIN_TABS = [
   { id: 'overview', label: 'Dashboard', icon: BarChart3 },
@@ -330,7 +330,7 @@ export default function AdminDashboardPage() {
                   <div style={{ marginTop: 12 }}>
                     <h4 style={{ fontSize: 12, fontWeight: 600, color: T.fg, marginBottom: 6 }}>Add-ons activos</h4>
                     <div className="flex flex-wrap gap-2">
-                      {impersonated.org.settings.addons.map(a => <span key={a} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 6, backgroundColor: '#10B98115', color: T.success }}>{a}</span>)}
+                      {impersonated.org.settings.addons.map(a => <span key={a} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 6, backgroundColor: `${T.success}15`, color: T.success }}>{a}</span>)}
                     </div>
                   </div>
                 )}
@@ -928,7 +928,7 @@ export default function AdminDashboardPage() {
                     <td style={{ padding: '8px 10px', fontFamily: fontMono, color: T.success }}>{l.conversions}</td>
                     <td style={{ padding: '8px 10px', fontFamily: fontMono, color: T.warning, fontWeight: 600 }}>€{(l.revenue_eur || 0).toFixed(2)}</td>
                     <td style={{ padding: '8px 10px' }}>
-                      <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, backgroundColor: l.is_active ? '#10B98115' : '#EF444415', color: l.is_active ? T.success : T.destructive }}>{l.is_active ? 'Activo' : 'Inactivo'}</span>
+                      <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, backgroundColor: l.is_active ? `${T.success}15` : `${T.destructive}15`, color: l.is_active ? T.success : T.destructive }}>{l.is_active ? 'Activo' : 'Inactivo'}</span>
                     </td>
                     <td style={{ padding: '8px 10px' }}>
                       <button onClick={async () => {

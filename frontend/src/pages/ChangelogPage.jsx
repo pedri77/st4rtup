@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
+import { useThemeColors } from '@/utils/theme'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
@@ -17,45 +18,46 @@ const ENTRIES = [
 ]
 
 export default function ChangelogPage() {
+  const T = useThemeColors()
   const [filter, setFilter] = useState(null)
   const filtered = filter ? ENTRIES.filter(e => e.type === filter) : ENTRIES
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", color: T.fg, backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E2E8F0' }}>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: `${T.card}F2`, backdropFilter: 'blur(12px)', borderBottom: `1px solid ${T.border}` }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
           <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
-          <Link to="/login" style={{ padding: '10px 22px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
+          <Link to="/login" style={{ padding: '10px 22px', backgroundColor: T.primary, color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
         </div>
       </nav>
 
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '60px 24px 100px' }}>
         <h1 style={{ fontFamily: fontDisplay, fontSize: 36, fontWeight: 800, marginBottom: 8 }}>Changelog</h1>
-        <p style={{ color: '#64748B', fontSize: 16, marginBottom: 32 }}>Todas las novedades de St4rtup</p>
+        <p style={{ color: T.fgMuted, fontSize: 16, marginBottom: 32 }}>Todas las novedades de St4rtup</p>
 
         <div style={{ display: 'flex', gap: 8, marginBottom: 40 }}>
-          <button onClick={() => setFilter(null)} style={{ padding: '6px 16px', borderRadius: 8, border: !filter ? '2px solid #1A1A2E' : '1px solid #E2E8F0', fontWeight: 600, fontSize: 13, cursor: 'pointer', backgroundColor: !filter ? '#1A1A2E' : 'white', color: !filter ? 'white' : '#64748B' }}>Todo</button>
+          <button onClick={() => setFilter(null)} style={{ padding: '6px 16px', borderRadius: 8, border: !filter ? `2px solid ${T.fg}` : `1px solid ${T.border}`, fontWeight: 600, fontSize: 13, cursor: 'pointer', backgroundColor: !filter ? T.fg : T.card, color: !filter ? T.bg : T.fgMuted }}>Todo</button>
           {Object.entries(TYPES).map(([t, c]) => (
-            <button key={t} onClick={() => setFilter(t)} style={{ padding: '6px 16px', borderRadius: 8, border: filter === t ? `2px solid ${c}` : '1px solid #E2E8F0', backgroundColor: filter === t ? `${c}12` : 'white', color: filter === t ? c : '#64748B', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>{t}</button>
+            <button key={t} onClick={() => setFilter(t)} style={{ padding: '6px 16px', borderRadius: 8, border: filter === t ? `2px solid ${c}` : `1px solid ${T.border}`, backgroundColor: filter === t ? `${c}12` : T.card, color: filter === t ? c : T.fgMuted, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>{t}</button>
           ))}
         </div>
 
         <div style={{ position: 'relative', paddingLeft: 28 }}>
-          <div style={{ position: 'absolute', left: 8, top: 0, bottom: 0, width: 2, backgroundColor: '#E2E8F0' }} />
+          <div style={{ position: 'absolute', left: 8, top: 0, bottom: 0, width: 2, backgroundColor: T.border }} />
           {filtered.map(e => (
             <div key={e.version} style={{ position: 'relative', marginBottom: 32 }}>
-              <div style={{ position: 'absolute', left: -24, width: 16, height: 16, borderRadius: '50%', backgroundColor: TYPES[e.type], border: '3px solid white', boxShadow: '0 0 0 2px #E2E8F0' }} />
-              <div style={{ padding: 24, borderRadius: 14, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
+              <div style={{ position: 'absolute', left: -24, width: 16, height: 16, borderRadius: '50%', backgroundColor: TYPES[e.type], border: `3px solid ${T.card}`, boxShadow: `0 0 0 2px ${T.border}` }} />
+              <div style={{ padding: 24, borderRadius: 14, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 10, flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: fontMono, fontSize: 13, fontWeight: 700, color: '#1A1A2E', backgroundColor: '#F1F5F9', padding: '3px 10px', borderRadius: 6 }}>{e.version}</span>
-                  <span style={{ fontSize: 12, color: '#94A3B8', fontFamily: fontMono }}>{e.date}</span>
+                  <span style={{ fontFamily: fontMono, fontSize: 13, fontWeight: 700, color: T.fg, backgroundColor: T.muted, padding: '3px 10px', borderRadius: 6 }}>{e.version}</span>
+                  <span style={{ fontSize: 12, color: T.fgMuted, fontFamily: fontMono }}>{e.date}</span>
                   <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6, backgroundColor: `${TYPES[e.type]}15`, color: TYPES[e.type], fontWeight: 600 }}>{e.type}</span>
                 </div>
                 <h3 style={{ fontFamily: fontDisplay, fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{e.title}</h3>
-                <p style={{ color: '#64748B', fontSize: 14, marginBottom: 12 }}>{e.desc}</p>
+                <p style={{ color: T.fgMuted, fontSize: 14, marginBottom: 12 }}>{e.desc}</p>
                 <ul style={{ paddingLeft: 18, margin: 0 }}>
-                  {e.changes.map(c => <li key={c} style={{ fontSize: 13, color: '#475569', lineHeight: 1.8 }}>{c}</li>)}
+                  {e.changes.map(c => <li key={c} style={{ fontSize: 13, color: T.fgMuted, lineHeight: 1.8 }}>{c}</li>)}
                 </ul>
               </div>
             </div>

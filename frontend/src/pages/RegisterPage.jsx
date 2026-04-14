@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { UserPlus, Eye, EyeOff, Building2, ArrowRight, CheckCircle, Rocket } from 'lucide-react'
 import ThemeTogglePublic from '@/components/ThemeTogglePublic'
+import { useThemeColors } from '@/utils/theme'
 import confetti from 'canvas-confetti'
 
 function SuccessScreen() {
@@ -47,6 +48,7 @@ export default function RegisterPage() {
   const [formReady, setFormReady] = useState(true)
   const { signUp, signInWithGoogle } = useAuth()
   const navigate = useNavigate()
+  const T = useThemeColors()
 
   const fireConfetti = () => {
     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#1E6FD9', '#F5820B', '#10B981', '#8B5CF6'] })
@@ -148,17 +150,17 @@ export default function RegisterPage() {
                 <div>
                   <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1.5">Nombre completo</label>
                   <input id="fullName" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)}
-                    required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }} placeholder="María García" autoComplete="name" />
+                    required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }} placeholder="María García" autoComplete="name" />
                 </div>
 
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email de trabajo</label>
                   <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }} placeholder="maria@miempresa.com" autoComplete="email" />
+                    required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }} placeholder="maria@miempresa.com" autoComplete="email" />
                 </div>
 
                 <div>
@@ -166,9 +168,9 @@ export default function RegisterPage() {
                     <Building2 className="w-4 h-4 inline mr-1 -mt-0.5" /> Nombre de la empresa
                   </label>
                   <input id="company" type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)}
-                    required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }} placeholder="Mi Startup S.L." autoComplete="organization" />
+                    required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }} placeholder="Mi Startup S.L." autoComplete="organization" />
                 </div>
 
                 <div>
@@ -176,9 +178,9 @@ export default function RegisterPage() {
                   <div className="relative">
                     <input id="password" type={showPassword ? 'text' : 'password'} value={password}
                       onChange={(e) => setPassword(e.target.value)} required disabled={loading}
-                      style={{ width: '100%', padding: '10px 14px', paddingRight: 40, borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
-                      onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                      onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }} placeholder="Mínimo 6 caracteres" autoComplete="new-password" minLength={6} />
+                      style={{ width: '100%', padding: '10px 14px', paddingRight: 40, borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
+                      onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                      onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }} placeholder="Mínimo 6 caracteres" autoComplete="new-password" minLength={6} />
                     <button type="button" onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" tabIndex={-1}>
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

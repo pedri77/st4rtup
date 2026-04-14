@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Copy, Check, Mail, MessageSquare, Linkedin, Gift } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
@@ -11,6 +12,7 @@ const MOCK_REFERRALS = [
 ]
 
 export default function ReferralPage() {
+  const T = useThemeColors()
   const [copied, setCopied] = useState(false)
   const refLink = 'https://st4rtup.com/?ref=usr_demo123'
 
@@ -20,31 +22,31 @@ export default function ReferralPage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const card = { padding: 24, borderRadius: 14, backgroundColor: 'white', border: '1px solid #E2E8F0' }
+  const card = { padding: 24, borderRadius: 14, backgroundColor: T.card, border: `1px solid ${T.border}` }
 
   return (
     <div style={{ padding: 24, maxWidth: 800, margin: '0 auto' }}>
       <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
 
       <div style={{ textAlign: 'center', marginBottom: 40 }}>
-        <div style={{ width: 56, height: 56, borderRadius: '50%', backgroundColor: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+        <div style={{ width: 56, height: 56, borderRadius: '50%', backgroundColor: `${T.accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
           <Gift size={28} color="#F5820B" />
         </div>
-        <h1 style={{ fontFamily: fontDisplay, fontSize: 28, fontWeight: 800, color: '#1A1A2E', marginBottom: 8 }}>Programa de referidos</h1>
-        <p style={{ color: '#64748B', fontSize: 16 }}>Invita a un amigo y ambos recibís <strong style={{ color: '#F5820B' }}>1 mes gratis</strong> de Growth</p>
+        <h1 style={{ fontFamily: fontDisplay, fontSize: 28, fontWeight: 800, color: T.fg, marginBottom: 8 }}>Programa de referidos</h1>
+        <p style={{ color: T.fgMuted, fontSize: 16 }}>Invita a un amigo y ambos recibís <strong style={{ color: T.accent }}>1 mes gratis</strong> de Growth</p>
       </div>
 
       {/* Referral link */}
       <div style={{ ...card, marginBottom: 24 }}>
-        <label style={{ fontSize: 13, fontWeight: 600, color: '#64748B', display: 'block', marginBottom: 8 }}>Tu enlace de referido</label>
+        <label style={{ fontSize: 13, fontWeight: 600, color: T.fgMuted, display: 'block', marginBottom: 8 }}>Tu enlace de referido</label>
         <div style={{ display: 'flex', gap: 8 }}>
           <input value={refLink} readOnly style={{
-            flex: 1, padding: '10px 14px', borderRadius: 8, border: '1px solid #E2E8F0',
-            fontFamily: fontMono, fontSize: 13, color: '#1A1A2E', backgroundColor: '#F8FAFC',
+            flex: 1, padding: '10px 14px', borderRadius: 8, border: `1px solid ${T.border}`,
+            fontFamily: fontMono, fontSize: 13, color: T.fg, backgroundColor: T.muted,
           }} />
           <button onClick={copyLink} style={{
             padding: '10px 18px', borderRadius: 8, border: 'none',
-            backgroundColor: copied ? '#10B981' : '#1E6FD9', color: 'white',
+            backgroundColor: copied ? T.success : T.primary, color: 'white',
             fontWeight: 600, fontSize: 13, cursor: 'pointer',
             display: 'flex', alignItems: 'center', gap: 6,
           }}>
@@ -54,7 +56,7 @@ export default function ReferralPage() {
         {/* Share buttons */}
         <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
           {[
-            { label: 'Email', icon: Mail, color: '#1E6FD9', href: `mailto:?subject=Prueba St4rtup&body=Regístrate con mi enlace: ${refLink}` },
+            { label: 'Email', icon: Mail, color: T.primary, href: `mailto:?subject=Prueba St4rtup&body=Regístrate con mi enlace: ${refLink}` },
             { label: 'WhatsApp', icon: MessageSquare, color: '#25D366', href: `https://wa.me/?text=Prueba St4rtup, el CRM para startups: ${refLink}` },
             { label: 'LinkedIn', icon: Linkedin, color: '#0077B5', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(refLink)}` },
           ].map(s => (
@@ -79,9 +81,9 @@ export default function ReferralPage() {
             { step: '3', title: 'Mes gratis', desc: 'Ambos recibís 1 mes gratis de Growth' },
           ].map(s => (
             <div key={s.step} style={{ textAlign: 'center' }}>
-              <div style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: '#EBF4FF', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 8px', fontWeight: 800, fontFamily: fontDisplay, color: '#1E6FD9', fontSize: 16 }}>{s.step}</div>
+              <div style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: `${T.primary}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 8px', fontWeight: 800, fontFamily: fontDisplay, color: T.primary, fontSize: 16 }}>{s.step}</div>
               <p style={{ fontWeight: 700, fontSize: 14, margin: '0 0 4px' }}>{s.title}</p>
-              <p style={{ fontSize: 13, color: '#64748B', margin: 0 }}>{s.desc}</p>
+              <p style={{ fontSize: 13, color: T.fgMuted, margin: 0 }}>{s.desc}</p>
             </div>
           ))}
         </div>
@@ -95,8 +97,8 @@ export default function ReferralPage() {
           { label: 'Meses gratis ganados', value: '1' },
         ].map(s => (
           <div key={s.label} style={{ ...card, textAlign: 'center' }}>
-            <p style={{ fontSize: 28, fontWeight: 800, fontFamily: fontDisplay, color: '#1E6FD9', margin: '0 0 4px' }}>{s.value}</p>
-            <p style={{ fontSize: 12, color: '#64748B', margin: 0 }}>{s.label}</p>
+            <p style={{ fontSize: 28, fontWeight: 800, fontFamily: fontDisplay, color: T.primary, margin: '0 0 4px' }}>{s.value}</p>
+            <p style={{ fontSize: 12, color: T.fgMuted, margin: 0 }}>{s.label}</p>
           </div>
         ))}
       </div>
@@ -105,15 +107,15 @@ export default function ReferralPage() {
       <div style={card}>
         <h3 style={{ fontFamily: fontDisplay, fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Tus referidos</h3>
         {MOCK_REFERRALS.map(r => (
-          <div key={r.email} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #F1F5F9' }}>
-            <span style={{ fontSize: 14, color: '#1A1A2E' }}>{r.email}</span>
+          <div key={r.email} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: `1px solid ${T.muted}` }}>
+            <span style={{ fontSize: 14, color: T.fg }}>{r.email}</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <span style={{
                 fontSize: 11, padding: '3px 10px', borderRadius: 6, fontWeight: 600,
                 backgroundColor: r.status === 'registered' ? '#10B98115' : '#F5820B15',
                 color: r.status === 'registered' ? '#10B981' : '#F5820B',
               }}>{r.status === 'registered' ? 'Registrado' : 'Pendiente'}</span>
-              <span style={{ fontSize: 12, color: '#94A3B8', fontFamily: fontMono }}>{r.date}</span>
+              <span style={{ fontSize: 12, color: T.fgMuted, fontFamily: fontMono }}>{r.date}</span>
             </div>
           </div>
         ))}

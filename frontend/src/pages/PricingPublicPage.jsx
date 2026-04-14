@@ -4,6 +4,7 @@ import SEO from '@/components/SEO'
 import { Link } from 'react-router-dom'
 import { Check, Minus, ChevronDown, ChevronUp, ArrowRight } from 'lucide-react'
 import ThemeTogglePublic from '@/components/ThemeTogglePublic'
+import { useThemeColors } from '@/utils/theme'
 
 const NAV_LINKS = [
   { label: 'Features', href: '/#features' },
@@ -56,14 +57,15 @@ const FAQS = [
 ]
 
 function Nav() {
+  const T = useThemeColors()
   return (
-    <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E2E8F0' }}>
+    <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${T.border}` }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
         <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
         <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
-          {NAV_LINKS.map(l => <a key={l.label} href={l.href} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{l.label}</a>)}
+          {NAV_LINKS.map(l => <a key={l.label} href={l.href} style={{ fontSize: 14, color: T.fgMuted, textDecoration: 'none', fontWeight: 500 }}>{l.label}</a>)}
           <ThemeTogglePublic />
-          <Link to="/register" style={{ padding: '8px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
+          <Link to="/register" style={{ padding: '8px 20px', backgroundColor: T.primary, color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
         </div>
       </div>
     </nav>
@@ -102,9 +104,10 @@ export default function PricingPublicPage() {
   const [annual, setAnnual] = useState(true)
   const [openFaq, setOpenFaq] = useState(null)
   const [openCats, setOpenCats] = useState({})
+  const T = useThemeColors()
 
   return (
-    <div className="public-page" style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+    <div className="public-page" style={{ fontFamily: "'Inter', sans-serif", color: T.fg }}>
       <SEO title="Precios" description="Planes de St4rtup CRM: Starter gratis, Growth €19/mes, Scale €49/mes. Sin tarjeta de crédito." path="/pricing" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
       <Nav />
@@ -112,34 +115,34 @@ export default function PricingPublicPage() {
       {/* Hero */}
       <section style={{ padding: '80px 24px 40px', textAlign: 'center', background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF7ED 100%)' }}>
         <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, marginBottom: 16 }}>Planes para cada etapa de tu startup</h1>
-        <p style={{ fontSize: 16, color: '#64748B', marginBottom: 32, maxWidth: 500, margin: '0 auto 32px' }}>Sin tarjeta de crédito. Cancela cuando quieras. Migra tus datos en cualquier momento.</p>
+        <p style={{ fontSize: 16, color: T.fgMuted, marginBottom: 32, maxWidth: 500, margin: '0 auto 32px' }}>Sin tarjeta de crédito. Cancela cuando quieras. Migra tus datos en cualquier momento.</p>
 
         {/* Toggle */}
-        <div style={{ display: 'inline-flex', padding: 4, backgroundColor: '#F1F5F9', borderRadius: 12, marginBottom: 48 }}>
-          <button onClick={() => setAnnual(false)} style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer', backgroundColor: !annual ? 'white' : 'transparent', color: !annual ? '#1A1A2E' : '#64748B', boxShadow: !annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s' }}>Mensual</button>
-          <button onClick={() => setAnnual(true)} style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer', backgroundColor: annual ? 'white' : 'transparent', color: annual ? '#1A1A2E' : '#64748B', boxShadow: annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s', position: 'relative' }}>
-            Anual <span style={{ position: 'absolute', top: -8, right: -12, padding: '2px 6px', backgroundColor: '#10B981', color: 'white', borderRadius: 6, fontSize: 10, fontWeight: 700 }}>-17%</span>
+        <div style={{ display: 'inline-flex', padding: 4, backgroundColor: T.muted, borderRadius: 12, marginBottom: 48 }}>
+          <button onClick={() => setAnnual(false)} style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer', backgroundColor: !annual ? T.card : 'transparent', color: !annual ? T.fg : T.fgMuted, boxShadow: !annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s' }}>Mensual</button>
+          <button onClick={() => setAnnual(true)} style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer', backgroundColor: annual ? T.card : 'transparent', color: annual ? T.fg : T.fgMuted, boxShadow: annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s', position: 'relative' }}>
+            Anual <span style={{ position: 'absolute', top: -8, right: -12, padding: '2px 6px', backgroundColor: T.success, color: 'white', borderRadius: 6, fontSize: 10, fontWeight: 700 }}>-17%</span>
           </button>
         </div>
 
         {/* Plan Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, maxWidth: 1000, margin: '0 auto' }}>
           {PLANS.map((p, i) => (
-            <div key={p.name} style={{ padding: 32, borderRadius: 16, backgroundColor: 'white', border: p.popular ? '2px solid #1E6FD9' : '1px solid #E2E8F0', boxShadow: p.popular ? '0 10px 40px rgba(30,111,217,0.15)' : '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', textAlign: 'left', transform: p.popular ? 'scale(1.02)' : 'none', transition: 'transform 0.2s, box-shadow 0.2s' }}
+            <div key={p.name} style={{ padding: 32, borderRadius: 16, backgroundColor: T.card, border: p.popular ? `2px solid ${T.primary}` : `1px solid ${T.border}`, boxShadow: p.popular ? '0 10px 40px rgba(30,111,217,0.15)' : '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', textAlign: 'left', transform: p.popular ? 'scale(1.02)' : 'none', transition: 'transform 0.2s, box-shadow 0.2s' }}
               onMouseEnter={e => { if (!p.popular) { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.08)' } }}
               onMouseLeave={e => { if (!p.popular) { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)' } }}
             >
               {p.popular && <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', padding: '4px 16px', background: 'linear-gradient(135deg, #1E6FD9, #3B8DE8)', color: 'white', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>Más popular</span>}
               <h3 style={{ fontSize: 22, fontWeight: 700, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{p.name}</h3>
-              <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.desc}</p>
+              <p style={{ fontSize: 13, color: T.fgMuted, marginBottom: 16 }}>{p.desc}</p>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
-                {annual && p.monthly > 0 && <span style={{ fontSize: 18, fontWeight: 500, color: '#94A3B8', textDecoration: 'line-through', marginRight: 4 }}>€{p.monthly}</span>}
+                {annual && p.monthly > 0 && <span style={{ fontSize: 18, fontWeight: 500, color: T.fgMuted, textDecoration: 'line-through', marginRight: 4 }}>€{p.monthly}</span>}
                 <span style={{ fontSize: 48, fontWeight: 800, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>€{annual ? p.annual : p.monthly}</span>
-                <span style={{ fontSize: 16, color: '#64748B' }}>/mes</span>
+                <span style={{ fontSize: 16, color: T.fgMuted }}>/mes</span>
               </div>
-              {annual && p.monthly > 0 && <p style={{ fontSize: 12, color: '#10B981', fontWeight: 600, marginBottom: 16 }}>Ahorras €{(p.monthly - p.annual) * 12}/año · facturado anual</p>}
-              {p.monthly === 0 && <p style={{ fontSize: 12, color: '#64748B', marginBottom: 16 }}>Gratis para siempre</p>}
-              <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.users} usuarios · {p.leads} leads</p>
+              {annual && p.monthly > 0 && <p style={{ fontSize: 12, color: T.success, fontWeight: 600, marginBottom: 16 }}>Ahorras €{(p.monthly - p.annual) * 12}/año · facturado anual</p>}
+              {p.monthly === 0 && <p style={{ fontSize: 12, color: T.fgMuted, marginBottom: 16 }}>Gratis para siempre</p>}
+              <p style={{ fontSize: 13, color: T.fgMuted, marginBottom: 16 }}>{p.users} usuarios · {p.leads} leads</p>
               <button onClick={async () => {
                 if (p.monthly === 0) { window.location.href = '/register'; return }
                 const plan = p.name.toLowerCase() + (annual ? '_annual' : '_monthly')
@@ -172,10 +175,10 @@ export default function PricingPublicPage() {
         </div>
 
         {/* Enterprise CTA */}
-        <div style={{ maxWidth: 1000, margin: '40px auto 0', padding: '28px 32px', borderRadius: 16, border: '1px solid #E2E8F0', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+        <div style={{ maxWidth: 1000, margin: '40px auto 0', padding: '28px 32px', borderRadius: 16, border: `1px solid ${T.border}`, backgroundColor: T.card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
           <div>
             <h3 style={{ fontSize: 18, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'" }}>Enterprise</h3>
-            <p style={{ fontSize: 14, color: '#64748B' }}>Usuarios ilimitados, SSO, SLA 99.9%, gestor dedicado</p>
+            <p style={{ fontSize: 14, color: T.fgMuted }}>Usuarios ilimitados, SSO, SLA 99.9%, gestor dedicado</p>
           </div>
           <Link to="/contact-sales" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 10, background: 'linear-gradient(135deg, #0F172A, #334155)', color: 'white', fontWeight: 700, fontSize: 14, textDecoration: 'none', boxShadow: '0 4px 14px rgba(15,23,42,0.3)' }}>
             Contactar ventas <ArrowRight size={16} />
@@ -184,47 +187,47 @@ export default function PricingPublicPage() {
       </section>
 
       {/* Feature Comparison */}
-      <section style={{ padding: '80px 24px', backgroundColor: 'white' }}>
+      <section style={{ padding: '80px 24px', backgroundColor: T.card }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 28, fontWeight: 800, textAlign: 'center', marginBottom: 48 }}>Comparativa de features</h2>
-          <div style={{ borderRadius: 16, border: '1px solid #E2E8F0', overflow: 'hidden' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px 80px', padding: '16px 24px', backgroundColor: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#64748B' }}>Feature</span>
-              {['Starter', 'Growth', 'Scale'].map(n => <span key={n} style={{ fontSize: 13, fontWeight: 700, color: '#1A1A2E', textAlign: 'center' }}>{n}</span>)}
+          <div style={{ borderRadius: 16, border: `1px solid ${T.border}`, overflow: 'hidden' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px 80px', padding: '16px 24px', backgroundColor: T.bg, borderBottom: `1px solid ${T.border}` }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: T.fgMuted }}>Feature</span>
+              {['Starter', 'Growth', 'Scale'].map(n => <span key={n} style={{ fontSize: 13, fontWeight: 700, color: T.fg, textAlign: 'center' }}>{n}</span>)}
             </div>
             {FEATURES.map(cat => (
               <div key={cat.category}>
                 <button onClick={() => setOpenCats(prev => ({ ...prev, [cat.category]: !prev[cat.category] }))}
-                  style={{ display: 'grid', gridTemplateColumns: '1fr 24px', width: '100%', padding: '14px 24px', backgroundColor: '#F8FAFC', border: 'none', borderBottom: '1px solid #E2E8F0', cursor: 'pointer', textAlign: 'left' }}>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: '#1A1A2E' }}>{cat.category}</span>
-                  {openCats[cat.category] ? <ChevronUp size={16} color="#64748B" /> : <ChevronDown size={16} color="#64748B" />}
+                  style={{ display: 'grid', gridTemplateColumns: '1fr 24px', width: '100%', padding: '14px 24px', backgroundColor: T.bg, border: 'none', borderBottom: `1px solid ${T.border}`, cursor: 'pointer', textAlign: 'left' }}>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: T.fg }}>{cat.category}</span>
+                  {openCats[cat.category] ? <ChevronUp size={16} color={T.fgMuted} /> : <ChevronDown size={16} color={T.fgMuted} />}
                 </button>
                 {openCats[cat.category] && cat.items.map(item => (
-                  <div key={item.name} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px 80px', padding: '10px 24px', borderBottom: '1px solid #F1F5F9' }}>
-                    <span style={{ fontSize: 13, color: '#475569' }}>{item.name}</span>
+                  <div key={item.name} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px 80px', padding: '10px 24px', borderBottom: `1px solid ${T.muted}` }}>
+                    <span style={{ fontSize: 13, color: T.fgMuted }}>{item.name}</span>
                     {[item.starter, item.growth, item.scale].map((v, i) => (
-                      <span key={i} style={{ textAlign: 'center', fontSize: 11, color: typeof v === 'string' ? '#1E6FD9' : undefined, fontWeight: typeof v === 'string' ? 600 : undefined }}>{v === true ? <Check size={16} color="#10B981" /> : v === false ? <Minus size={14} color="#CBD5E1" /> : v}</span>
+                      <span key={i} style={{ textAlign: 'center', fontSize: 11, color: typeof v === 'string' ? T.primary : undefined, fontWeight: typeof v === 'string' ? 600 : undefined }}>{v === true ? <Check size={16} color={T.success} /> : v === false ? <Minus size={14} color="#CBD5E1" /> : v}</span>
                     ))}
                   </div>
                 ))}
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 12, color: '#94A3B8', textAlign: 'center', marginTop: 16 }}>Precios sin IVA. Para empresas españolas se aplica el 21% de IVA.</p>
+          <p style={{ fontSize: 12, color: T.fgMuted, textAlign: 'center', marginTop: 16 }}>Precios sin IVA. Para empresas españolas se aplica el 21% de IVA.</p>
         </div>
       </section>
 
       {/* FAQ */}
-      <section style={{ padding: '80px 24px', backgroundColor: '#F8FAFC' }}>
+      <section style={{ padding: '80px 24px', backgroundColor: T.bg }}>
         <div style={{ maxWidth: 700, margin: '0 auto' }}>
           <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 28, fontWeight: 800, textAlign: 'center', marginBottom: 48 }}>Preguntas frecuentes</h2>
           {FAQS.map((f, i) => (
-            <div key={i} style={{ borderBottom: '1px solid #E2E8F0' }}>
+            <div key={i} style={{ borderBottom: `1px solid ${T.border}` }}>
               <button onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '16px 0', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', textAlign: 'left' }}>
-                <span style={{ fontSize: 15, fontWeight: 600, color: '#1A1A2E' }}>{f.q}</span>
-                {openFaq === i ? <ChevronUp size={18} color="#64748B" /> : <ChevronDown size={18} color="#64748B" />}
+                <span style={{ fontSize: 15, fontWeight: 600, color: T.fg }}>{f.q}</span>
+                {openFaq === i ? <ChevronUp size={18} color={T.fgMuted} /> : <ChevronDown size={18} color={T.fgMuted} />}
               </button>
-              {openFaq === i && <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.7, paddingBottom: 16 }}>{f.a}</p>}
+              {openFaq === i && <p style={{ fontSize: 14, color: T.fgMuted, lineHeight: 1.7, paddingBottom: 16 }}>{f.a}</p>}
             </div>
           ))}
         </div>

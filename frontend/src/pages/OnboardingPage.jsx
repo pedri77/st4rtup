@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Upload, Mail, BarChart3, Rocket, Check, Building2, Target } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { useOrganization } from '@/hooks/useOrganization'
+import { useThemeColors } from '@/utils/theme'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
 
@@ -44,6 +45,7 @@ export default function OnboardingPage() {
   const [monthlyTarget, setMonthlyTarget] = useState('')
   const nav = useNavigate()
   const { plan } = useOrganization()
+  const T = useThemeColors()
 
   const [transitioning, setTransitioning] = useState(false)
   const firedConfetti = useRef(false)
@@ -108,16 +110,16 @@ export default function OnboardingPage() {
     nav('/app')
   }
 
-  const card = { maxWidth: 560, margin: '0 auto', backgroundColor: 'white', borderRadius: 20, padding: '40px 36px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }
+  const card = { maxWidth: 560, margin: '0 auto', backgroundColor: T.card, borderRadius: 20, padding: '40px 36px', border: `1px solid ${T.border}`, boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }
   const btn = { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 12, fontSize: 15, fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: fontDisplay }
   // Explicit text + placeholder colours so the form is readable on white.
   // The browser default placeholder is too light against #FFFFFF.
-  const input = { width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #CBD5E1', fontSize: 14, outline: 'none', marginBottom: 12, boxSizing: 'border-box', color: '#1A1A2E', backgroundColor: '#FFFFFF' }
-  const primaryBtn = { ...btn, backgroundColor: '#1E6FD9', color: 'white', width: '100%', justifyContent: 'center', marginTop: 8 }
-  const skipBtn = { ...btn, backgroundColor: 'transparent', color: '#64748B', width: '100%', justifyContent: 'center', marginTop: 8, fontSize: 13 }
+  const input = { width: '100%', padding: '12px 16px', borderRadius: 10, border: `1px solid ${T.border}`, fontSize: 14, outline: 'none', marginBottom: 12, boxSizing: 'border-box', color: T.fg, backgroundColor: T.card }
+  const primaryBtn = { ...btn, backgroundColor: T.primary, color: 'white', width: '100%', justifyContent: 'center', marginTop: 8 }
+  const skipBtn = { ...btn, backgroundColor: 'transparent', color: T.fgMuted, width: '100%', justifyContent: 'center', marginTop: 8, fontSize: 13 }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#F8FAFC', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ minHeight: '100vh', backgroundColor: T.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: "'Inter', sans-serif" }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
       <style>{`
         .onb-input::placeholder { color: #64748B; opacity: 1; }
@@ -127,7 +129,7 @@ export default function OnboardingPage() {
       <img src="/logo.png" alt="st4rtup" style={{ height: 70, marginBottom: 24 }} />
 
       {plan && plan !== 'starter' && (
-        <p style={{ fontSize: 12, color: '#1E6FD9', marginBottom: 16, fontWeight: 600, backgroundColor: '#EBF4FF', padding: '4px 12px', borderRadius: 20 }}>
+        <p style={{ fontSize: 12, color: T.primary, marginBottom: 16, fontWeight: 600, backgroundColor: `${T.primary}15`, padding: '4px 12px', borderRadius: 20 }}>
           Plan {plan.charAt(0).toUpperCase() + plan.slice(1)} activo
         </p>
       )}
@@ -136,22 +138,22 @@ export default function OnboardingPage() {
       <div style={{ display: 'flex', gap: 6, marginBottom: 28 }}>
         {STEPS.map((s, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <div style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: i <= step ? '#1E6FD9' : '#E2E8F0', color: i <= step ? 'white' : '#94A3B8', fontSize: 11, fontWeight: 700, transition: 'all 0.3s' }}>
+            <div style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: i <= step ? T.primary : T.border, color: i <= step ? 'white' : T.fgMuted, fontSize: 11, fontWeight: 700, transition: 'all 0.3s' }}>
               {i < step ? <Check size={13} /> : i + 1}
             </div>
-            {i < STEPS.length - 1 && <div style={{ width: 16, height: 2, backgroundColor: i < step ? '#1E6FD9' : '#E2E8F0', transition: 'all 0.3s' }} />}
+            {i < STEPS.length - 1 && <div style={{ width: 16, height: 2, backgroundColor: i < step ? T.primary : T.border, transition: 'all 0.3s' }} />}
           </div>
         ))}
       </div>
 
-      <p style={{ fontSize: 12, color: '#94A3B8', marginBottom: 20 }}>Paso {step + 1} de {STEPS.length}: {STEPS[step].title}</p>
+      <p style={{ fontSize: 12, color: T.fgMuted, marginBottom: 20 }}>Paso {step + 1} de {STEPS.length}: {STEPS[step].title}</p>
 
       <div style={{ ...card, transition: 'opacity 0.2s ease, transform 0.2s ease', opacity: transitioning ? 0 : 1, transform: transitioning ? 'translateY(8px)' : 'translateY(0)' }}>
         {/* Step 0: Welcome */}
         {step === 0 && (
           <>
-            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>¡Bienvenido a St4rtup!</h2>
-            <p style={{ color: '#64748B', marginBottom: 24, fontSize: 15 }}>Configuremos tu CRM en menos de 5 minutos. Todo lo que configures ahora se puede cambiar después.</p>
+            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: T.fg }}>¡Bienvenido a St4rtup!</h2>
+            <p style={{ color: T.fgMuted, marginBottom: 24, fontSize: 15 }}>Configuremos tu CRM en menos de 5 minutos. Todo lo que configures ahora se puede cambiar después.</p>
             <input className="onb-input" placeholder="Tu nombre completo" value={name} onChange={e => setName(e.target.value)} style={input} id="onb-name" name="name" />
             <input className="onb-input" placeholder="Nombre de tu empresa" value={company} onChange={e => setCompany(e.target.value)} style={input} id="onb-company" name="company" />
             <button onClick={next} style={primaryBtn}>Siguiente <ArrowRight size={16} /></button>
@@ -161,20 +163,20 @@ export default function OnboardingPage() {
         {/* Step 1: Company/Sector */}
         {step === 1 && (
           <>
-            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>¿Qué tipo de empresa es {company || 'tu startup'}?</h2>
-            <p style={{ color: '#64748B', marginBottom: 20, fontSize: 15 }}>Esto nos ayuda a personalizar tu experiencia.</p>
+            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: T.fg }}>¿Qué tipo de empresa es {company || 'tu startup'}?</h2>
+            <p style={{ color: T.fgMuted, marginBottom: 20, fontSize: 15 }}>Esto nos ayuda a personalizar tu experiencia.</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, marginBottom: 16 }}>
               {SECTORS.map(s => (
                 <button key={s.id} onClick={() => setSector(s.id)} style={{
-                  padding: '14px 16px', borderRadius: 12, border: sector === s.id ? '2px solid #1E6FD9' : '1px solid #E2E8F0',
-                  backgroundColor: sector === s.id ? '#EBF4FF' : 'white', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
+                  padding: '14px 16px', borderRadius: 12, border: sector === s.id ? `2px solid ${T.primary}` : `1px solid ${T.border}`,
+                  backgroundColor: sector === s.id ? `${T.primary}15` : T.card, cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
                 }}>
                   <span style={{ fontSize: 20 }}>{s.icon}</span>
-                  <span style={{ fontSize: 13, fontWeight: 600, color: '#1A1A2E' }}>{s.name}</span>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: T.fg }}>{s.name}</span>
                 </button>
               ))}
             </div>
-            <select value={teamSize} onChange={e => setTeamSize(e.target.value)} style={{ ...input, color: teamSize ? '#1A1A2E' : '#94A3B8' }} id="onb-team" name="team">
+            <select value={teamSize} onChange={e => setTeamSize(e.target.value)} style={{ ...input, color: teamSize ? T.fg : T.fgMuted }} id="onb-team" name="team">
               <option value="">Tamaño de equipo de ventas</option>
               <option value="1">Solo yo</option>
               <option value="2-5">2-5 personas</option>
@@ -188,12 +190,12 @@ export default function OnboardingPage() {
         {/* Step 2: Import leads */}
         {step === 2 && (
           <>
-            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>Importa tus leads</h2>
-            <p style={{ color: '#64748B', marginBottom: 24, fontSize: 15 }}>Sube un CSV o empieza con datos de ejemplo para explorar la herramienta.</p>
-            <div style={{ border: '2px dashed #E2E8F0', borderRadius: 14, padding: '40px 20px', textAlign: 'center', marginBottom: 16, cursor: 'pointer' }}>
-              <Upload size={32} color="#94A3B8" />
-              <p style={{ color: '#94A3B8', fontSize: 14, marginTop: 8 }}>Arrastra tu CSV aquí o haz clic</p>
-              <p style={{ color: '#CBD5E1', fontSize: 12 }}>Soportamos HubSpot, Salesforce y formato genérico</p>
+            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: T.fg }}>Importa tus leads</h2>
+            <p style={{ color: T.fgMuted, marginBottom: 24, fontSize: 15 }}>Sube un CSV o empieza con datos de ejemplo para explorar la herramienta.</p>
+            <div style={{ border: `2px dashed ${T.border}`, borderRadius: 14, padding: '40px 20px', textAlign: 'center', marginBottom: 16, cursor: 'pointer' }}>
+              <Upload size={32} color={T.fgMuted} />
+              <p style={{ color: T.fgMuted, fontSize: 14, marginTop: 8 }}>Arrastra tu CSV aquí o haz clic</p>
+              <p style={{ color: T.fgMuted, fontSize: 12 }}>Soportamos HubSpot, Salesforce y formato genérico</p>
             </div>
             <button onClick={seedSampleData} style={primaryBtn}>Usar datos de ejemplo</button>
             <button onClick={skip} style={skipBtn}>Omitir este paso</button>
@@ -203,8 +205,8 @@ export default function OnboardingPage() {
         {/* Step 3: Connect email */}
         {step === 3 && (
           <>
-            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>Conecta tu email</h2>
-            <p style={{ color: '#64748B', marginBottom: 24, fontSize: 15 }}>Envía y recibe emails directamente desde el CRM con tracking de apertura y clics.</p>
+            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: T.fg }}>Conecta tu email</h2>
+            <p style={{ color: T.fgMuted, marginBottom: 24, fontSize: 15 }}>Envía y recibe emails directamente desde el CRM con tracking de apertura y clics.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
               {[
                 { name: 'Gmail / Google Workspace', icon: 'https://www.google.com/favicon.ico', desc: 'OAuth seguro, sin contraseñas' },
@@ -212,11 +214,11 @@ export default function OnboardingPage() {
                 { name: 'SMTP personalizado', icon: null, desc: 'Cualquier proveedor (Brevo, SES, Mailgun...)' },
               ].map(provider => (
                 <button key={provider.name} onClick={() => { window.location.href = '/app/integrations?tab=email'; next() }}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', borderRadius: 12, border: '1px solid #E2E8F0', backgroundColor: 'white', cursor: 'pointer', textAlign: 'left', width: '100%' }}>
-                  {provider.icon ? <img src={provider.icon} alt="" style={{ width: 20, height: 20 }} /> : <span style={{ width: 20, height: 20, borderRadius: 4, backgroundColor: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>@</span>}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', borderRadius: 12, border: `1px solid ${T.border}`, backgroundColor: T.card, cursor: 'pointer', textAlign: 'left', width: '100%' }}>
+                  {provider.icon ? <img src={provider.icon} alt="" style={{ width: 20, height: 20 }} /> : <span style={{ width: 20, height: 20, borderRadius: 4, backgroundColor: T.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>@</span>}
                   <div style={{ flex: 1 }}>
-                    <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: '#1A1A2E' }}>{provider.name}</p>
-                    <p style={{ margin: 0, fontSize: 12, color: '#94A3B8' }}>{provider.desc}</p>
+                    <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: T.fg }}>{provider.name}</p>
+                    <p style={{ margin: 0, fontSize: 12, color: T.fgMuted }}>{provider.desc}</p>
                   </div>
                 </button>
               ))}
@@ -228,17 +230,17 @@ export default function OnboardingPage() {
         {/* Step 4: Pipeline */}
         {step === 4 && (
           <>
-            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>Elige tu pipeline</h2>
-            <p style={{ color: '#64748B', marginBottom: 20, fontSize: 15 }}>Selecciona la plantilla que mejor se adapte a {company || 'tu negocio'}.</p>
+            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: T.fg }}>Elige tu pipeline</h2>
+            <p style={{ color: T.fgMuted, marginBottom: 20, fontSize: 15 }}>Selecciona la plantilla que mejor se adapte a {company || 'tu negocio'}.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {PIPELINES.map(p => (
                 <button key={p.id} onClick={() => setSelectedPipeline(p.id)}
-                  style={{ padding: '14px 18px', borderRadius: 12, border: selectedPipeline === p.id ? '2px solid #1E6FD9' : '1px solid #E2E8F0', backgroundColor: selectedPipeline === p.id ? '#EBF4FF' : 'white', cursor: 'pointer', textAlign: 'left' }}>
-                  <p style={{ fontWeight: 700, margin: '0 0 6px', fontSize: 14, color: '#1A1A2E' }}>{p.name}</p>
+                  style={{ padding: '14px 18px', borderRadius: 12, border: selectedPipeline === p.id ? `2px solid ${T.primary}` : `1px solid ${T.border}`, backgroundColor: selectedPipeline === p.id ? `${T.primary}15` : T.card, cursor: 'pointer', textAlign: 'left' }}>
+                  <p style={{ fontWeight: 700, margin: '0 0 6px', fontSize: 14, color: T.fg }}>{p.name}</p>
                   <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                     {p.stages.map((s, i) => (
-                      <span key={s} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#64748B', padding: '2px 8px', backgroundColor: '#F1F5F9', borderRadius: 4 }}>
-                        {s} {i < p.stages.length - 1 && <ArrowRight size={10} color="#CBD5E1" />}
+                      <span key={s} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: T.fgMuted, padding: '2px 8px', backgroundColor: T.muted, borderRadius: 4 }}>
+                        {s} {i < p.stages.length - 1 && <ArrowRight size={10} color={T.border} />}
                       </span>
                     ))}
                   </div>
@@ -252,13 +254,13 @@ export default function OnboardingPage() {
         {/* Step 5: Goals */}
         {step === 5 && (
           <>
-            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>¿Cuál es tu objetivo?</h2>
-            <p style={{ color: '#64748B', marginBottom: 24, fontSize: 15 }}>Esto nos ayuda a mostrarte las métricas más relevantes.</p>
+            <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: T.fg }}>¿Cuál es tu objetivo?</h2>
+            <p style={{ color: T.fgMuted, marginBottom: 24, fontSize: 15 }}>Esto nos ayuda a mostrarte las métricas más relevantes.</p>
             <input type="number" placeholder="Leads nuevos/mes que quieres conseguir" value={monthlyTarget} onChange={e => setMonthlyTarget(e.target.value)} style={input} id="onb-target" name="target" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
               {['Cerrar más deals', 'Automatizar el seguimiento', 'Mejorar el marketing', 'Generar contenido SEO', 'Gestionar equipo de ventas'].map(g => (
-                <label key={g} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 14, color: '#475569' }}>
-                  <input type="checkbox" style={{ accentColor: '#1E6FD9' }} /> {g}
+                <label key={g} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, cursor: 'pointer', fontSize: 14, color: T.fgMuted }}>
+                  <input type="checkbox" style={{ accentColor: T.primary }} /> {g}
                 </label>
               ))}
             </div>
@@ -271,13 +273,13 @@ export default function OnboardingPage() {
         {step === 6 && (
           <>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: '#10B98120', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                <Check size={32} color="#10B981" />
+              <div style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: `${T.success}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                <Check size={32} color={T.success} />
               </div>
-              <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>¡Todo listo, {name || 'crack'}!</h2>
-              <p style={{ color: '#64748B', marginBottom: 8, fontSize: 15 }}>{company || 'Tu empresa'} está configurada y lista para vender.</p>
+              <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: T.fg }}>¡Todo listo, {name || 'crack'}!</h2>
+              <p style={{ color: T.fgMuted, marginBottom: 8, fontSize: 15 }}>{company || 'Tu empresa'} está configurada y lista para vender.</p>
               {plan && plan !== 'starter' && (
-                <p style={{ fontSize: 13, color: '#1E6FD9', marginBottom: 24 }}>Plan {plan.charAt(0).toUpperCase() + plan.slice(1)} — 7 días de prueba gratis</p>
+                <p style={{ fontSize: 13, color: T.primary, marginBottom: 24 }}>Plan {plan.charAt(0).toUpperCase() + plan.slice(1)} — 7 días de prueba gratis</p>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24, textAlign: 'left' }}>
                 {[
@@ -288,8 +290,8 @@ export default function OnboardingPage() {
                   { label: '28 automatizaciones activas', done: true },
                 ].map(item => (
                   <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', fontSize: 14 }}>
-                    {item.done ? <Check size={16} color="#10B981" /> : <div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid #E2E8F0' }} />}
-                    <span style={{ color: item.done ? '#1A1A2E' : '#94A3B8' }}>{item.label}</span>
+                    {item.done ? <Check size={16} color={T.success} /> : <div style={{ width: 16, height: 16, borderRadius: '50%', border: `2px solid ${T.border}` }} />}
+                    <span style={{ color: item.done ? T.fg : T.fgMuted }}>{item.label}</span>
                   </div>
                 ))}
               </div>

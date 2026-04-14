@@ -2,30 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Default CSS custom properties (light). Overridden at runtime by theme.js */
+:root {
+  --color-bg: #F8FAFC;
+  --color-card: #FFFFFF;
+  --color-muted: #F1F5F9;
+  --color-border: #E2E8F0;
+  --color-fg: #0F172A;
+  --color-fg-muted: #64748B;
+  --color-primary: #1E6FD9;
+  --color-accent: #F5820B;
+  --color-destructive: #EF4444;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+}
+
+[data-theme="dark"] {
+  --color-bg: #0F172A;
+  --color-card: #1E293B;
+  --color-muted: #334155;
+  --color-border: #475569;
+  --color-fg: #F1F5F9;
+  --color-fg-muted: #94A3B8;
+  --color-primary: #3B82F6;
+  --color-accent: #F59E0B;
+  --color-destructive: #EF4444;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+}
+
 @layer base {
   html {
     font-size: 20px;
   }
   body {
-    @apply antialiased bg-gray-900 text-gray-100;
+    @apply antialiased;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition-all font-medium hover:shadow-lg hover:scale-105;
+    background-color: var(--color-primary);
+    @apply text-white px-4 py-2 rounded-lg transition-all font-medium hover:shadow-lg hover:scale-105 hover:brightness-110;
   }
   .btn-secondary {
-    @apply bg-gray-700 text-gray-200 px-4 py-2 rounded-lg border border-gray-600 hover:bg-gray-600 transition-all font-medium hover:border-gray-500;
+    background-color: var(--color-muted);
+    color: var(--color-fg);
+    border: 1px solid var(--color-border);
+    @apply px-4 py-2 rounded-lg transition-all font-medium hover:brightness-95;
   }
   .card {
-    @apply bg-gray-800/50 rounded-xl shadow-sm border border-gray-700/50 p-6 transition-all text-white;
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    color: var(--color-fg);
+    @apply rounded-xl shadow-sm p-6 transition-all;
   }
   .card-hover {
-    @apply card hover:shadow-md hover:border-gray-600 cursor-pointer;
+    @apply card cursor-pointer;
+  }
+  .card-hover:hover {
+    @apply shadow-md;
+    border-color: var(--color-fg-muted);
   }
   .input {
-    @apply w-full px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all;
+    background-color: var(--color-muted);
+    border: 1px solid var(--color-border);
+    color: var(--color-fg);
+    @apply w-full px-3 py-2 rounded-lg placeholder-gray-500 focus:ring-2 focus:border-transparent outline-none transition-all;
+    --tw-ring-color: var(--color-primary);
   }
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
@@ -62,9 +109,11 @@
     @apply -translate-y-1 shadow-lg;
   }
 
-  /* Focus Effects */
+  /* Focus Effects — theme-aware */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    --tw-ring-color: var(--color-primary);
+    --tw-ring-offset-color: var(--color-bg);
   }
 
   /* Microinteractions */
@@ -126,45 +175,23 @@
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideRight {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes savePulse {
@@ -174,86 +201,6 @@
 }
 
 @keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Public pages dark mode (toggle via data-theme attribute) */
-html[data-theme="dark"] .public-page {
-  background: #0F172A !important;
-  color: #CBD5E1 !important;
-}
-html[data-theme="dark"] .public-page nav {
-  background-color: rgba(15, 23, 42, 0.95) !important;
-  border-color: #1E293B !important;
-}
-html[data-theme="dark"] .public-page section {
-  background: #0F172A !important;
-}
-html[data-theme="dark"] .public-page h1,
-html[data-theme="dark"] .public-page h2,
-html[data-theme="dark"] .public-page h3,
-html[data-theme="dark"] .public-page strong {
-  color: #F1F5F9 !important;
-}
-html[data-theme="dark"] .public-page p,
-html[data-theme="dark"] .public-page span,
-html[data-theme="dark"] .public-page label,
-html[data-theme="dark"] .public-page li {
-  color: #94A3B8 !important;
-}
-html[data-theme="dark"] .public-page a:not([style*="background"]) {
-  color: #60A5FA !important;
-}
-html[data-theme="dark"] .public-page div[style*="backgroundColor: white"],
-html[data-theme="dark"] .public-page div[style*="background: white"],
-html[data-theme="dark"] .public-page div[style*="backgroundColor: '#FFFFFF'"] {
-  background-color: #1E293B !important;
-  border-color: #334155 !important;
-}
-html[data-theme="dark"] .public-page div[style*="backgroundColor: '#F8FAFC'"],
-html[data-theme="dark"] .public-page div[style*="background: 'linear-gradient(180deg, #FFFFFF"] {
-  background-color: #0F172A !important;
-}
-html[data-theme="dark"] .public-page input,
-html[data-theme="dark"] .public-page select,
-html[data-theme="dark"] .public-page textarea {
-  background-color: #1E293B !important;
-  border-color: #334155 !important;
-  color: #E2E8F0 !important;
-}
-html[data-theme="dark"] .public-page input::placeholder,
-html[data-theme="dark"] .public-page textarea::placeholder {
-  color: #475569 !important;
-}
-html[data-theme="dark"] .public-page footer {
-  background-color: #020617 !important;
-}
-html[data-theme="dark"] .public-page .bg-white,
-html[data-theme="dark"] .public-page .bg-gray-50 {
-  background-color: #1E293B !important;
-}
-html[data-theme="dark"] .public-page .border-gray-200 {
-  border-color: #334155 !important;
-}
-html[data-theme="dark"] .public-page .text-gray-800,
-html[data-theme="dark"] .public-page .text-gray-700 {
-  color: #E2E8F0 !important;
-}
-html[data-theme="dark"] .public-page .text-gray-500,
-html[data-theme="dark"] .public-page .text-gray-600,
-html[data-theme="dark"] .public-page .text-gray-400 {
-  color: #94A3B8 !important;
-}
-html[data-theme="dark"] .public-page .bg-gradient-to-br {
-  background: #0F172A !important;
-}
-html[data-theme="dark"] .public-page .shadow-xl {
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3) !important;
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }

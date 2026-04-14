@@ -1,6 +1,5 @@
 import { Lock, Trophy } from 'lucide-react'
-
-const fontDisplay = "'Plus Jakarta Sans', sans-serif"
+import { useThemeColors, fontDisplay } from '@/utils/theme'
 
 const BADGES = [
   { id: 'first_lead', name: 'Primer Lead', icon: '🎯', desc: 'Creaste tu primer lead', earned: true },
@@ -18,6 +17,7 @@ const BADGES = [
 ]
 
 export default function BadgesPage() {
+  const T = useThemeColors()
   const earned = BADGES.filter(b => b.earned).length
 
   return (
@@ -26,13 +26,13 @@ export default function BadgesPage() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
         <Trophy size={24} color="#F5820B" />
-        <h1 style={{ fontFamily: fontDisplay, fontSize: 28, fontWeight: 800, color: '#1A1A2E' }}>Logros</h1>
+        <h1 style={{ fontFamily: fontDisplay, fontSize: 28, fontWeight: 800, color: T.fg }}>Logros</h1>
       </div>
-      <p style={{ color: '#64748B', marginBottom: 32 }}>{earned} de {BADGES.length} logros desbloqueados</p>
+      <p style={{ color: T.fgMuted, marginBottom: 32 }}>{earned} de {BADGES.length} logros desbloqueados</p>
 
       {/* Progress bar */}
-      <div style={{ height: 8, borderRadius: 4, backgroundColor: '#F1F5F9', marginBottom: 32 }}>
-        <div style={{ height: '100%', width: `${(earned / BADGES.length) * 100}%`, borderRadius: 4, background: 'linear-gradient(90deg, #1E6FD9, #F5820B)', transition: 'width 0.5s' }} />
+      <div style={{ height: 8, borderRadius: 4, backgroundColor: T.muted, marginBottom: 32 }}>
+        <div style={{ height: '100%', width: `${(earned / BADGES.length) * 100}%`, borderRadius: 4, background: `linear-gradient(90deg, ${T.primary}, #F5820B)`, transition: 'width 0.5s' }} />
       </div>
 
       {/* Badges grid */}
@@ -40,8 +40,8 @@ export default function BadgesPage() {
         {BADGES.map(b => (
           <div key={b.id} style={{
             padding: 20, borderRadius: 14, textAlign: 'center', position: 'relative',
-            backgroundColor: b.earned ? 'white' : '#F8FAFC',
-            border: b.earned ? '2px solid #F5820B' : '1px solid #E2E8F0',
+            backgroundColor: b.earned ? T.card : T.bg,
+            border: b.earned ? '2px solid #F5820B' : `1px solid ${T.border}`,
             opacity: b.earned ? 1 : 0.6,
             transition: 'transform 0.2s',
           }}
@@ -49,13 +49,13 @@ export default function BadgesPage() {
             onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
             {!b.earned && (
               <div style={{ position: 'absolute', top: 10, right: 10 }}>
-                <Lock size={14} color="#CBD5E1" />
+                <Lock size={14} color={T.fgMuted} />
               </div>
             )}
             <span style={{ fontSize: 36, display: 'block', marginBottom: 8, filter: b.earned ? 'none' : 'grayscale(100%)' }}>{b.icon}</span>
-            <h3 style={{ fontFamily: fontDisplay, fontSize: 15, fontWeight: 700, marginBottom: 4, color: b.earned ? '#1A1A2E' : '#94A3B8' }}>{b.name}</h3>
-            <p style={{ fontSize: 12, color: b.earned ? '#64748B' : '#CBD5E1', margin: 0 }}>{b.desc}</p>
-            {b.earned && <span style={{ display: 'inline-block', marginTop: 8, fontSize: 11, padding: '3px 10px', borderRadius: 6, backgroundColor: '#10B98115', color: '#10B981', fontWeight: 600 }}>Desbloqueado</span>}
+            <h3 style={{ fontFamily: fontDisplay, fontSize: 15, fontWeight: 700, marginBottom: 4, color: b.earned ? T.fg : T.fgMuted }}>{b.name}</h3>
+            <p style={{ fontSize: 12, color: b.earned ? T.fgMuted : T.border, margin: 0 }}>{b.desc}</p>
+            {b.earned && <span style={{ display: 'inline-block', marginTop: 8, fontSize: 11, padding: '3px 10px', borderRadius: 6, backgroundColor: `${T.success}15`, color: T.success, fontWeight: 600 }}>Desbloqueado</span>}
           </div>
         ))}
       </div>

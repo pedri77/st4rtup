@@ -2,11 +2,13 @@ import { useState } from 'react'
 import WebChatWidget from "@/components/WebChatWidget"
 import { Link } from 'react-router-dom'
 import { ArrowRight, TrendingUp, Clock, DollarSign } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
 const fontMono = "'IBM Plex Mono', monospace"
 
 export default function RoiCalculatorPage() {
+  const T = useThemeColors()
   const [leads, setLeads] = useState(100)
   const [reps, setReps] = useState(2)
   const [dealValue, setDealValue] = useState(5000)
@@ -24,35 +26,35 @@ export default function RoiCalculatorPage() {
   const inputRow = (label, value, setValue, min, max, unit = '') => (
     <div style={{ marginBottom: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-        <label style={{ fontSize: 14, fontWeight: 500, color: '#334155' }}>{label}</label>
-        <span style={{ fontFamily: fontMono, fontSize: 14, fontWeight: 600, color: '#1E6FD9' }}>{unit}{value.toLocaleString()}</span>
+        <label style={{ fontSize: 14, fontWeight: 500, color: T.fg }}>{label}</label>
+        <span style={{ fontFamily: fontMono, fontSize: 14, fontWeight: 600, color: T.primary }}>{unit}{value.toLocaleString()}</span>
       </div>
       <input type="range" min={min} max={max} value={value} onChange={e => setValue(+e.target.value)}
-        style={{ width: '100%', accentColor: '#1E6FD9' }} />
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#94A3B8', fontFamily: fontMono }}>
+        style={{ width: '100%', accentColor: T.primary }} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: T.fgMuted, fontFamily: fontMono }}>
         <span>{unit}{min}</span><span>{unit}{max.toLocaleString()}</span>
       </div>
     </div>
   )
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E', minHeight: '100vh', backgroundColor: '#F8FAFC' }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", color: T.fg, minHeight: '100vh', backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
 
-      <nav style={{ backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', padding: '0 24px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+      <nav style={{ backgroundColor: T.card, borderBottom: `1px solid ${T.border}`, padding: '0 24px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
-        <Link to="/login" style={{ padding: '10px 22px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
+        <Link to="/login" style={{ padding: '10px 22px', backgroundColor: T.primary, color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
       </nav>
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '60px 24px 100px' }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <h1 style={{ fontFamily: fontDisplay, fontSize: 36, fontWeight: 800, marginBottom: 8 }}>Calculadora de ROI</h1>
-          <p style={{ color: '#64748B', fontSize: 16 }}>Descubre cuánto más puedes vender con St4rtup</p>
+          <p style={{ color: T.fgMuted, fontSize: 16 }}>Descubre cuánto más puedes vender con St4rtup</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
           {/* Inputs */}
-          <div style={{ padding: 28, borderRadius: 16, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
+          <div style={{ padding: 28, borderRadius: 16, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
             <h3 style={{ fontFamily: fontDisplay, fontSize: 18, fontWeight: 700, marginBottom: 24 }}>Tu situación actual</h3>
             {inputRow('Leads por mes', leads, setLeads, 10, 5000)}
             {inputRow('Comerciales en el equipo', reps, setReps, 1, 20)}
@@ -64,15 +66,15 @@ export default function RoiCalculatorPage() {
           {/* Results */}
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-              <div style={{ padding: 20, borderRadius: 14, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
-                <DollarSign size={18} color="#64748B" />
-                <p style={{ fontSize: 11, color: '#94A3B8', margin: '8px 0 4px', textTransform: 'uppercase', letterSpacing: 1 }}>Revenue actual/mes</p>
-                <p style={{ fontSize: 24, fontWeight: 800, fontFamily: fontDisplay, color: '#64748B', margin: 0 }}>€{revenueNow.toLocaleString()}</p>
+              <div style={{ padding: 20, borderRadius: 14, backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+                <DollarSign size={18} color={T.fgMuted} />
+                <p style={{ fontSize: 11, color: T.fgMuted, margin: '8px 0 4px', textTransform: 'uppercase', letterSpacing: 1 }}>Revenue actual/mes</p>
+                <p style={{ fontSize: 24, fontWeight: 800, fontFamily: fontDisplay, color: T.fgMuted, margin: 0 }}>€{revenueNow.toLocaleString()}</p>
               </div>
-              <div style={{ padding: 20, borderRadius: 14, backgroundColor: '#EBF4FF', border: '2px solid #1E6FD9' }}>
-                <TrendingUp size={18} color="#1E6FD9" />
-                <p style={{ fontSize: 11, color: '#1E6FD9', margin: '8px 0 4px', textTransform: 'uppercase', letterSpacing: 1 }}>Con St4rtup/mes</p>
-                <p style={{ fontSize: 24, fontWeight: 800, fontFamily: fontDisplay, color: '#1E6FD9', margin: 0 }}>€{revenueWithUs.toLocaleString()}</p>
+              <div style={{ padding: 20, borderRadius: 14, backgroundColor: `${T.primary}18`, border: `2px solid ${T.primary}` }}>
+                <TrendingUp size={18} color={T.primary} />
+                <p style={{ fontSize: 11, color: T.primary, margin: '8px 0 4px', textTransform: 'uppercase', letterSpacing: 1 }}>Con St4rtup/mes</p>
+                <p style={{ fontSize: 24, fontWeight: 800, fontFamily: fontDisplay, color: T.primary, margin: 0 }}>€{revenueWithUs.toLocaleString()}</p>
               </div>
             </div>
 
@@ -94,11 +96,11 @@ export default function RoiCalculatorPage() {
               </div>
             </div>
 
-            <div style={{ padding: 16, borderRadius: 12, backgroundColor: 'white', border: '1px solid #E2E8F0', textAlign: 'center' }}>
-              <p style={{ fontSize: 14, color: '#475569', margin: 0 }}>
-                Con St4rtup generas <strong style={{ color: '#1E6FD9' }}>€{revenueExtraYear.toLocaleString()}</strong> más al año.
+            <div style={{ padding: 16, borderRadius: 12, backgroundColor: T.card, border: `1px solid ${T.border}`, textAlign: 'center' }}>
+              <p style={{ fontSize: 14, color: T.fgMuted, margin: 0 }}>
+                Con St4rtup generas <strong style={{ color: T.primary }}>€{revenueExtraYear.toLocaleString()}</strong> más al año.
                 El plan Growth cuesta <strong>€{planCostYear}/año</strong>.
-                ROI: <strong style={{ color: '#F5820B' }}>{roi.toLocaleString()}%</strong>
+                ROI: <strong style={{ color: T.accent }}>{roi.toLocaleString()}%</strong>
               </p>
             </div>
           </div>
@@ -106,7 +108,7 @@ export default function RoiCalculatorPage() {
 
         {/* CTA */}
         <div style={{ marginTop: 48, textAlign: 'center' }}>
-          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(30,111,217,0.3)' }}>
+          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: T.primary, color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: `0 4px 14px ${T.primary}4D` }}>
             Empezar gratis <ArrowRight size={18} />
           </Link>
         </div>

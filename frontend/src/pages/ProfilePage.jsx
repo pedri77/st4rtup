@@ -62,18 +62,17 @@ function TwoFactorSection() {
     toast.success('2FA desactivado')
   }
 
-  const T = { card: '#FFFFFF', border: '#E2E8F0', fg: '#0F172A', fgMuted: '#64748B', cyan: '#1E6FD9', success: '#10B981', muted: '#F1F5F9' }
-  const fontDisplay = "'Rajdhani', sans-serif"
+  const T = useThemeColors()
 
   return (
     <div className="rounded-lg p-6 mt-6" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-semibold" style={{ fontFamily: fontDisplay, color: T.fg }}>Autenticación de dos factores (2FA)</h3>
-        {mfaState === 'active' && <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 10, backgroundColor: '#10B98115', color: T.success, fontWeight: 600 }}>✓ Activo</span>}
+        <h3 className="text-lg font-semibold" style={{ color: T.fg }}>Autenticación de dos factores (2FA)</h3>
+        {mfaState === 'active' && <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 10, backgroundColor: `${T.success}15`, color: T.success, fontWeight: 600 }}>✓ Activo</span>}
       </div>
       <p style={{ fontSize: 13, color: T.fgMuted, marginBottom: 16 }}>Protege tu cuenta con un código de verificación desde Google Authenticator o Authy.</p>
 
-      {error && <p style={{ fontSize: 12, color: '#EF4444', marginBottom: 12, padding: '8px 12px', backgroundColor: '#FEF2F2', borderRadius: 8 }}>{error}</p>}
+      {error && <p style={{ fontSize: 12, color: T.destructive, marginBottom: 12, padding: '8px 12px', backgroundColor: `${T.destructive}10`, borderRadius: 8 }}>{error}</p>}
 
       {mfaState === 'idle' && (
         <button onClick={enrollMFA} style={{ padding: '10px 20px', borderRadius: 10, backgroundColor: T.cyan, color: 'white', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
@@ -86,7 +85,7 @@ function TwoFactorSection() {
       {mfaState === 'verifying' && (
         <div>
           <p style={{ fontSize: 13, color: T.fg, fontWeight: 600, marginBottom: 12 }}>1. Escanea este código QR con tu app de autenticación:</p>
-          <div style={{ padding: 16, backgroundColor: 'white', borderRadius: 12, border: `1px solid ${T.border}`, display: 'inline-block', marginBottom: 16 }}>
+          <div style={{ padding: 16, backgroundColor: T.card, borderRadius: 12, border: `1px solid ${T.border}`, display: 'inline-block', marginBottom: 16 }}>
             <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUri)}`} alt="QR Code" style={{ width: 200, height: 200 }} />
           </div>
           <p style={{ fontSize: 13, color: T.fg, fontWeight: 600, marginBottom: 8 }}>2. Introduce el código de 6 dígitos:</p>
@@ -106,7 +105,7 @@ function TwoFactorSection() {
       {mfaState === 'active' && (
         <div>
           <p style={{ fontSize: 13, color: T.success, marginBottom: 12 }}>Tu cuenta está protegida con 2FA.</p>
-          <button onClick={unenrollMFA} style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.muted, color: '#EF4444', border: `1px solid ${T.border}`, fontSize: 12, cursor: 'pointer' }}>
+          <button onClick={unenrollMFA} style={{ padding: '8px 16px', borderRadius: 8, backgroundColor: T.muted, color: T.destructive, border: `1px solid ${T.border}`, fontSize: 12, cursor: 'pointer' }}>
             Desactivar 2FA
           </button>
         </div>

@@ -1,8 +1,10 @@
 import { Link, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { Home, ArrowLeft, Search } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
 export default function NotFoundPage() {
+  const T = useThemeColors()
   const location = useLocation()
   const isAppRoute = location.pathname.startsWith('/app/')
 
@@ -12,9 +14,10 @@ export default function NotFoundPage() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#F8FAFC',
+      backgroundColor: T.bg,
       fontFamily: "'Inter', sans-serif",
       padding: 24,
+      color: T.fg,
     }}>
       <Helmet>
         <title>Página no encontrada (404) | st4rtup</title>
@@ -25,7 +28,7 @@ export default function NotFoundPage() {
         <div style={{
           fontSize: 96,
           fontWeight: 800,
-          color: '#1E6FD9',
+          color: T.primary,
           lineHeight: 1,
           marginBottom: 16,
           letterSpacing: '-0.02em',
@@ -34,13 +37,13 @@ export default function NotFoundPage() {
         <h1 style={{
           fontSize: 28,
           fontWeight: 700,
-          color: '#1A1A2E',
+          color: T.fg,
           marginBottom: 12,
         }}>Esta página no existe</h1>
 
         <p style={{
           fontSize: 16,
-          color: '#64748B',
+          color: T.fgMuted,
           lineHeight: 1.6,
           marginBottom: 32,
         }}>
@@ -49,10 +52,10 @@ export default function NotFoundPage() {
           <code style={{
             display: 'inline-block',
             padding: '2px 8px',
-            backgroundColor: '#F1F5F9',
+            backgroundColor: T.muted,
             borderRadius: 4,
             fontSize: 13,
-            color: '#475569',
+            color: T.fgMuted,
             marginTop: 8,
           }}>{location.pathname}</code>
         </p>
@@ -63,7 +66,7 @@ export default function NotFoundPage() {
             alignItems: 'center',
             gap: 8,
             padding: '12px 24px',
-            backgroundColor: '#1E6FD9',
+            backgroundColor: T.primary,
             color: 'white',
             borderRadius: 10,
             textDecoration: 'none',
@@ -79,9 +82,9 @@ export default function NotFoundPage() {
             alignItems: 'center',
             gap: 8,
             padding: '12px 24px',
-            backgroundColor: 'white',
-            color: '#1E6FD9',
-            border: '1px solid #E2E8F0',
+            backgroundColor: T.card,
+            color: T.primary,
+            border: `1px solid ${T.border}`,
             borderRadius: 10,
             cursor: 'pointer',
             fontWeight: 600,
@@ -98,9 +101,9 @@ export default function NotFoundPage() {
               alignItems: 'center',
               gap: 8,
               padding: '12px 24px',
-              backgroundColor: 'white',
-              color: '#1E6FD9',
-              border: '1px solid #E2E8F0',
+              backgroundColor: T.card,
+              color: T.primary,
+              border: `1px solid ${T.border}`,
               borderRadius: 10,
               textDecoration: 'none',
               fontWeight: 600,

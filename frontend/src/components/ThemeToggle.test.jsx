@@ -6,7 +6,7 @@ import { useUserPreferencesStore } from '@/store/useUserPreferencesStore'
 describe('ThemeToggle', () => {
   beforeEach(() => {
     useUserPreferencesStore.setState({ theme: 'dark' })
-    document.documentElement.style.filter = ''
+    document.documentElement.removeAttribute('data-theme')
   })
 
   it('renderiza el boton', () => {

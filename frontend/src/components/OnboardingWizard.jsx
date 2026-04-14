@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { X, Check, ArrowRight } from 'lucide-react'
 import confetti from 'canvas-confetti'
+import { useThemeColors } from '@/utils/theme'
 
 const TASKS = [
   { id: 'lead', label: 'Crea tu primer lead', href: '/app/leads', check: () => false },
@@ -12,6 +13,7 @@ const TASKS = [
 ]
 
 export default function OnboardingWizard() {
+  const T = useThemeColors()
   const [completed, setCompleted] = useState(() => {
     try { return JSON.parse(localStorage.getItem('st4rtup_checklist') || '[]') } catch { return [] }
   })
@@ -43,33 +45,33 @@ export default function OnboardingWizard() {
   const pct = Math.round(done / total * 100)
 
   return (
-    <div style={{ backgroundColor: 'white', border: '1px solid #E2E8F0', borderRadius: 12, padding: '14px 18px', marginBottom: 16 }}>
+    <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 12, padding: '14px 18px', marginBottom: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 14 }}>🚀</span>
-          <span style={{ fontSize: 13, fontWeight: 600, color: '#0F172A' }}>Primeros pasos</span>
-          <span style={{ fontSize: 11, color: '#1E6FD9', backgroundColor: '#EBF4FF', padding: '2px 8px', borderRadius: 10, fontWeight: 600 }}>{done}/{total}</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: T.fg }}>Primeros pasos</span>
+          <span style={{ fontSize: 11, color: T.primary, backgroundColor: '#EBF4FF', padding: '2px 8px', borderRadius: 10, fontWeight: 600 }}>{done}/{total}</span>
         </div>
         <button aria-label="Cerrar" onClick={() => { setHidden(true); localStorage.setItem('st4rtup_checklist_hidden', 'true') }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
           <X size={14} color="#94A3B8" />
         </button>
       </div>
 
-      <div style={{ height: 3, backgroundColor: '#F1F5F9', borderRadius: 2, marginBottom: 10, overflow: 'hidden' }}>
-        <div style={{ width: `${pct}%`, height: '100%', backgroundColor: pct === 100 ? '#10B981' : '#1E6FD9', borderRadius: 2, transition: 'width 0.3s' }} />
+      <div style={{ height: 3, backgroundColor: T.muted, borderRadius: 2, marginBottom: 10, overflow: 'hidden' }}>
+        <div style={{ width: `${pct}%`, height: '100%', backgroundColor: pct === 100 ? T.success : T.primary, borderRadius: 2, transition: 'width 0.3s' }} />
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
         {TASKS.map(t => {
           const isDone = completed.includes(t.id)
           return (
-            <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 8, backgroundColor: isDone ? '#10B98110' : '#F8FAFC', border: `1px solid ${isDone ? '#10B98130' : '#E2E8F0'}`, cursor: 'pointer' }}
+            <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 8, backgroundColor: isDone ? '#10B98110' : T.bg, border: `1px solid ${isDone ? '#10B98130' : T.border}`, cursor: 'pointer' }}
               onClick={() => toggle(t.id)}>
-              <div style={{ width: 16, height: 16, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: isDone ? '#10B981' : 'white', border: isDone ? 'none' : '1.5px solid #CBD5E1' }}>
+              <div style={{ width: 16, height: 16, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: isDone ? T.success : T.card, border: isDone ? 'none' : '1.5px solid #CBD5E1' }}>
                 {isDone && <Check size={10} color="white" />}
               </div>
-              <span style={{ fontSize: 12, color: isDone ? '#10B981' : '#475569', textDecoration: isDone ? 'line-through' : 'none' }}>{t.label}</span>
-              {!isDone && <Link to={t.href} onClick={e => e.stopPropagation()} style={{ color: '#1E6FD9', display: 'flex' }}><ArrowRight size={12} /></Link>}
+              <span style={{ fontSize: 12, color: isDone ? T.success : T.fgMuted, textDecoration: isDone ? 'line-through' : 'none' }}>{t.label}</span>
+              {!isDone && <Link to={t.href} onClick={e => e.stopPropagation()} style={{ color: T.primary, display: 'flex' }}><ArrowRight size={12} /></Link>}
             </div>
           )
         })}

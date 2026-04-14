@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { LogIn, Rocket, Mail, ArrowLeft, CheckCircle } from 'lucide-react'
 import ThemeTogglePublic from '@/components/ThemeTogglePublic'
+import { useThemeColors } from '@/utils/theme'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [resetSent, setResetSent] = useState(false)
   const { signIn, signInWithGoogle } = useAuth()
   const navigate = useNavigate()
+  const T = useThemeColors()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -111,9 +113,9 @@ export default function LoginPage() {
                   <div>
                     <label htmlFor="reset-email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                     <input id="reset-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                      required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
-                      onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                      onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }}
+                      required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
+                      onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                      onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }}
                       placeholder="tu@email.com" autoComplete="email" />
                   </div>
                   <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2">
@@ -167,9 +169,9 @@ export default function LoginPage() {
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                   <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                     required disabled={loading} placeholder="tu@email.com" autoComplete="email"
-                    style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }} />
+                    style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }} />
                 </div>
 
                 <div>
@@ -180,9 +182,9 @@ export default function LoginPage() {
                   </div>
                   <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                     required disabled={loading} placeholder="••••••••" autoComplete="current-password"
-                    style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', color: '#0F172A', fontSize: 14, outline: 'none' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }} />
+                    style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }} />
                 </div>
 
                 <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2">

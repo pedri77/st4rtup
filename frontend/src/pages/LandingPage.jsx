@@ -2,6 +2,7 @@ import SEO from '@/components/SEO'
 import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 import ExitIntentPopup from '@/components/ExitIntentPopup'
 import WebChatWidget from '@/components/WebChatWidget'
+import { useThemeColors } from '@/utils/theme'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import {
@@ -46,13 +47,13 @@ function TypingText({ text, speed = 50 }) {
   }, [text, speed])
   return <>{displayed}{done
     ? <span style={{ marginLeft: 6, display: 'inline-block', animation: 'rocketBounce 2s ease-in-out infinite' }}>🚀</span>
-    : <span style={{ borderRight: '2px solid #1E6FD9', marginLeft: 2, animation: 'blink 1s infinite' }} />
+    : <span style={{ borderRight: '2px solid var(--color-primary, #1E6FD9)', marginLeft: 2, animation: 'blink 1s infinite' }} />
   }</>
 }
 
 const cardHoverLight = {
-  onMouseEnter: e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(30,111,217,0.08)'; e.currentTarget.style.borderColor = '#1E6FD930' },
-  onMouseLeave: e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)'; e.currentTarget.style.borderColor = '#E2E8F0' },
+  onMouseEnter: e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(30,111,217,0.08)'; e.currentTarget.style.borderColor = 'var(--color-primary, #1E6FD9)30' },
+  onMouseLeave: e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)'; e.currentTarget.style.borderColor = 'var(--color-border, #E2E8F0)' },
 }
 
 const BENTO_GRADIENTS = [
@@ -177,6 +178,7 @@ function FadeIn({ children, delay = 0 }) {
 }
 
 export default function LandingPage() {
+  const TC = useThemeColors()
   const [menuOpen, setMenuOpen] = useState(false)
   const [lang, setLang] = useState('es')
   const [annual, setAnnual] = useState(false)
@@ -198,41 +200,41 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div className="public-page" style={{ fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+    <div className="public-page" style={{ fontFamily: "'Inter', sans-serif", color: TC.fg }}>
       <SEO path="/" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
       {/* Nav */}
       <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} } @keyframes rocketBounce { 0%,100%{transform:translateY(0) rotate(-10deg)} 50%{transform:translateY(-4px) rotate(0deg)} }`}</style>
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(16px) saturate(180%)', WebkitBackdropFilter: 'blur(16px) saturate(180%)', borderBottom: '1px solid rgba(226,232,240,0.5)' }}>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: TC.bg === '#F8FAFC' ? 'rgba(255,255,255,0.8)' : 'rgba(15,23,42,0.8)', backdropFilter: 'blur(16px) saturate(180%)', WebkitBackdropFilter: 'blur(16px) saturate(180%)', borderBottom: `1px solid ${TC.border}50` }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
           <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
           <div style={{ display: 'flex', gap: 28, alignItems: 'center' }} className="hidden md:flex">
-            <a href="#features" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{t.nav.features}</a>
-            <a href="#pricing" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{t.nav.pricing}</a>
-            <Link to="/blog" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>Blog</Link>
-            <Link to="/help" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', fontWeight: 500 }}>{lang === 'es' ? 'Ayuda' : 'Help'}</Link>
-            <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} style={{ padding: '4px 10px', border: '1px solid #E2E8F0', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer', backgroundColor: 'white', color: '#64748B' }}>{lang === 'es' ? 'EN' : 'ES'}</button>
+            <a href="#features" style={{ fontSize: 14, color: TC.fgMuted, textDecoration: 'none', fontWeight: 500 }}>{t.nav.features}</a>
+            <a href="#pricing" style={{ fontSize: 14, color: TC.fgMuted, textDecoration: 'none', fontWeight: 500 }}>{t.nav.pricing}</a>
+            <Link to="/blog" style={{ fontSize: 14, color: TC.fgMuted, textDecoration: 'none', fontWeight: 500 }}>Blog</Link>
+            <Link to="/help" style={{ fontSize: 14, color: TC.fgMuted, textDecoration: 'none', fontWeight: 500 }}>{lang === 'es' ? 'Ayuda' : 'Help'}</Link>
+            <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} style={{ padding: '4px 10px', border: `1px solid ${TC.border}`, borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer', backgroundColor: TC.card, color: TC.fgMuted }}>{lang === 'es' ? 'EN' : 'ES'}</button>
             <ThemeTogglePublic />
-            <Link to="/login" style={{ fontSize: 14, color: '#1E6FD9', textDecoration: 'none', fontWeight: 600 }}>{t.nav.login}</Link>
-            <Link to="/register" style={{ padding: '10px 22px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>{t.nav.cta}</Link>
+            <Link to="/login" style={{ fontSize: 14, color: TC.primary, textDecoration: 'none', fontWeight: 600 }}>{t.nav.login}</Link>
+            <Link to="/register" style={{ padding: '10px 22px', backgroundColor: TC.primary, color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>{t.nav.cta}</Link>
           </div>
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
         {menuOpen && (
-          <div className="md:hidden" style={{ padding: '16px 24px', borderTop: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <a href="#features" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>{t.nav.features}</a>
-            <a href="#pricing" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, color: '#64748B', textDecoration: 'none' }}>{t.nav.pricing}</a>
-            <button onClick={() => { setLang(lang === 'es' ? 'en' : 'es'); setMenuOpen(false) }} style={{ padding: '6px 12px', border: '1px solid #E2E8F0', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer', backgroundColor: 'white', color: '#64748B', width: 'fit-content' }}>{lang === 'es' ? 'English' : 'Español'}</button>
-            <Link to="/register" style={{ padding: '10px 20px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none', textAlign: 'center' }}>{t.nav.cta}</Link>
+          <div className="md:hidden" style={{ padding: '16px 24px', borderTop: `1px solid ${TC.border}`, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <a href="#features" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, color: TC.fgMuted, textDecoration: 'none' }}>{t.nav.features}</a>
+            <a href="#pricing" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, color: TC.fgMuted, textDecoration: 'none' }}>{t.nav.pricing}</a>
+            <button onClick={() => { setLang(lang === 'es' ? 'en' : 'es'); setMenuOpen(false) }} style={{ padding: '6px 12px', border: `1px solid ${TC.border}`, borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer', backgroundColor: TC.card, color: TC.fgMuted, width: 'fit-content' }}>{lang === 'es' ? 'English' : 'Español'}</button>
+            <Link to="/register" style={{ padding: '10px 20px', backgroundColor: TC.primary, color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none', textAlign: 'center' }}>{t.nav.cta}</Link>
           </div>
         )}
       </nav>
 
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF7ED 100%)', padding: '80px 24px 100px', position: 'relative', backgroundImage: 'radial-gradient(circle, #1E6FD910 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
+      <section style={{ background: `linear-gradient(180deg, ${TC.card} 0%, ${TC.bg === '#F8FAFC' ? '#FFF7ED' : '#1A1A2E'} 100%)`, padding: '80px 24px 100px', position: 'relative', backgroundImage: `radial-gradient(circle, ${TC.primary}10 1px, transparent 1px)`, backgroundSize: '24px 24px' }}>
         <div style={{ position:'absolute', top:'-10%', right:'-5%', width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle, #1E6FD908, transparent 70%)', filter:'blur(80px)', pointerEvents:'none' }} />
         <div style={{ position:'absolute', bottom:'10%', left:'-10%', width:350, height:350, borderRadius:'50%', background:'radial-gradient(circle, #F5820B06, transparent 70%)', filter:'blur(80px)', pointerEvents:'none' }} />
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 60, flexWrap: 'wrap', position: 'relative' }}>
@@ -240,27 +242,27 @@ export default function LandingPage() {
             <FadeIn>
               <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(36px, 5vw, 56px)', fontWeight: 800, lineHeight: 1.15, marginBottom: 20 }}>
                 <TypingText text={t.hero.h1a} speed={60} /><br />
-                <span style={{ color: '#1E6FD9' }}>{lang === 'es' ? 'Simple' : 'Simple'}.</span>{' '}
+                <span style={{ color: TC.primary }}>{lang === 'es' ? 'Simple' : 'Simple'}.</span>{' '}
                 <span style={{ color: '#3B8DE8' }}>{lang === 'es' ? 'Potente' : 'Powerful'}.</span>{' '}
                 <span style={{ color: '#5BA3EF' }}>{lang === 'es' ? 'Para' : 'For'}</span>{' '}
                 <span style={{ color: '#F5820B' }}>startups.</span>
               </h1>
             </FadeIn>
-            <FadeIn delay={0.1}><p style={{ fontSize: 18, color: '#64748B', lineHeight: 1.7, marginBottom: 32, maxWidth: 500 }}>{AB_VARIANTS[lang]?.[AB_IDX] || t.hero.sub}</p></FadeIn>
+            <FadeIn delay={0.1}><p style={{ fontSize: 18, color: TC.fgMuted, lineHeight: 1.7, marginBottom: 32, maxWidth: 500 }}>{AB_VARIANTS[lang]?.[AB_IDX] || t.hero.sub}</p></FadeIn>
             <FadeIn delay={0.2}>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <Link to="/register" onClick={() => window.umami?.track('hero_cta_click', { variant: 'register' })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: '#1E6FD9', color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(30,111,217,0.4)' }}>{t.hero.cta1} <ArrowRight size={18} /></Link>
-                <Link to="/demo" onClick={() => window.umami?.track('hero_cta_click', { variant: 'demo' })} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", border: "2px solid #E2E8F0", color: "#1A1A2E", borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: "none" }}>{t.hero.cta2}</Link>
+                <Link to="/register" onClick={() => window.umami?.track('hero_cta_click', { variant: 'register' })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: TC.primary, color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: `0 4px 14px ${TC.primary}66` }}>{t.hero.cta1} <ArrowRight size={18} /></Link>
+                <Link to="/demo" onClick={() => window.umami?.track('hero_cta_click', { variant: 'demo' })} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", border: `2px solid ${TC.border}`, color: TC.fg, borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: "none" }}>{t.hero.cta2}</Link>
               </div>
             </FadeIn>
           </div>
           <FadeIn delay={0.3}>
             <div style={{ flex: '1 1 400px', position: 'relative' }}>
-              <div style={{ background: 'white', borderRadius: 16, padding: 24, boxShadow: '0 20px 60px rgba(0,0,0,0.08)', border: '1px solid #E2E8F0', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ background: TC.card, borderRadius: 16, padding: 24, boxShadow: '0 20px 60px rgba(0,0,0,0.08)', border: `1px solid ${TC.border}`, position: 'relative', overflow: 'hidden' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 16 }}>
                   {[{ label: t.mock.revenue, value: '€47.2K', color: '#1E6FD9' }, { label: t.mock.leads, value: '284', color: '#F5820B' }, { label: t.mock.conversion, value: '12.4%', color: '#10B981' }].map(k => (
-                    <div key={k.label} style={{ backgroundColor: '#F8FAFC', borderRadius: 10, padding: 12, textAlign: 'center' }}>
-                      <p style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1, color: '#64748B', margin: 0 }}>{k.label}</p>
+                    <div key={k.label} style={{ backgroundColor: TC.bg, borderRadius: 10, padding: 12, textAlign: 'center' }}>
+                      <p style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1, color: TC.fgMuted, margin: 0 }}>{k.label}</p>
                       <p style={{ fontSize: 22, fontWeight: 700, color: k.color, margin: '4px 0 0', fontFamily: "'Plus Jakarta Sans'" }}>{k.value}</p>
                     </div>
                   ))}
@@ -279,7 +281,7 @@ export default function LandingPage() {
       </section>
 
       {/* Trust */}
-      <section style={{ padding: '40px 24px', backgroundColor: '#F8FAFC', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0' }}>
+      <section style={{ padding: '40px 24px', backgroundColor: TC.bg, borderTop: `1px solid ${TC.border}`, borderBottom: `1px solid ${TC.border}` }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
           <p style={{ fontSize: 13, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 2, color: '#94A3B8', marginBottom: 20 }}>{t.trust}</p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 48, flexWrap: 'wrap' }}>
@@ -289,13 +291,13 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section id="features" style={{ padding: '100px 24px', backgroundColor: 'white' }}>
+      <section id="features" style={{ padding: '100px 24px', backgroundColor: TC.card }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: 60 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#1E6FD9', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>{t.features.tag}</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: TC.primary, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>{t.features.tag}</p>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 36, fontWeight: 800, marginBottom: 16 }}>{t.features.h2}</h2>
-              <p style={{ fontSize: 16, color: '#64748B', maxWidth: 600, margin: '0 auto' }}>{t.features.sub}</p>
+              <p style={{ fontSize: 16, color: TC.fgMuted, maxWidth: 600, margin: '0 auto' }}>{t.features.sub}</p>
             </div>
           </FadeIn>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
@@ -303,12 +305,12 @@ export default function LandingPage() {
               const Icon = ICONS[i]
               return (
                 <FadeIn key={f.title} delay={i * 0.05}>
-                  <div style={{ padding: 28, borderRadius: 16, border: '1px solid #E2E8F0', backgroundColor: 'white', transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s', background: BENTO_GRADIENTS[i] + ', white', gridColumn: i === 0 ? 'span 2' : undefined, gridRow: i === 4 ? 'span 2' : undefined }} {...cardHoverLight}>
+                  <div style={{ padding: 28, borderRadius: 16, border: `1px solid ${TC.border}`, backgroundColor: TC.card, transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s', background: BENTO_GRADIENTS[i] + `, ${TC.card}`, gridColumn: i === 0 ? 'span 2' : undefined, gridRow: i === 4 ? 'span 2' : undefined }} {...cardHoverLight}>
                     <div style={{ width: 44, height: 44, borderRadius: 10, background: 'linear-gradient(135deg, #EBF4FF, #FFF7ED)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
                       <Icon size={22} color="#1E6FD9" />
                     </div>
                     <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, fontFamily: "'Plus Jakarta Sans'" }}>{f.title}</h3>
-                    <p style={{ fontSize: 14, color: '#64748B', lineHeight: 1.6 }}>{f.desc}</p>
+                    <p style={{ fontSize: 14, color: TC.fgMuted, lineHeight: 1.6 }}>{f.desc}</p>
                   </div>
                 </FadeIn>
               )
@@ -318,11 +320,11 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section style={{ padding: '100px 24px', backgroundColor: '#F8FAFC' }}>
+      <section style={{ padding: '100px 24px', backgroundColor: TC.bg }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: 60 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#F5820B', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>{t.how.tag}</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: TC.accent, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>{t.how.tag}</p>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 36, fontWeight: 800 }}>{t.how.h2}</h2>
             </div>
           </FadeIn>
@@ -332,7 +334,7 @@ export default function LandingPage() {
                 <div style={{ textAlign: 'center', padding: 32 }}>
                   <span style={{ fontSize: 48, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'", color: STEP_COLORS[i], opacity: 0.2 }}>{s.n}</span>
                   <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 12, fontFamily: "'Plus Jakarta Sans'" }}>{s.title}</h3>
-                  <p style={{ fontSize: 15, color: '#64748B', lineHeight: 1.6 }}>{s.desc}</p>
+                  <p style={{ fontSize: 15, color: TC.fgMuted, lineHeight: 1.6 }}>{s.desc}</p>
                 </div>
               </FadeIn>
             ))}
@@ -341,21 +343,21 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" style={{ padding: '100px 24px', backgroundColor: 'white' }}>
+      <section id="pricing" style={{ padding: '100px 24px', backgroundColor: TC.card }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: 40 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#1E6FD9', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>{t.pricing.tag}</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: TC.primary, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>{t.pricing.tag}</p>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 36, fontWeight: 800, marginBottom: 16 }}>{t.pricing.h2}</h2>
-              <p style={{ fontSize: 16, color: '#64748B', marginBottom: 24 }}>{t.pricing.sub}</p>
+              <p style={{ fontSize: 16, color: TC.fgMuted, marginBottom: 24 }}>{t.pricing.sub}</p>
               {/* Billing toggle */}
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '4px 6px', backgroundColor: '#F1F5F9', borderRadius: 12 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '4px 6px', backgroundColor: TC.muted, borderRadius: 12 }}>
                 <button onClick={() => setAnnual(false)}
-                  style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', border: 'none', backgroundColor: !annual ? 'white' : 'transparent', color: !annual ? '#1A1A2E' : '#64748B', boxShadow: !annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s' }}>
+                  style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', border: 'none', backgroundColor: !annual ? TC.card : 'transparent', color: !annual ? TC.fg : TC.fgMuted, boxShadow: !annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s' }}>
                   {lang === 'es' ? 'Mensual' : 'Monthly'}
                 </button>
                 <button onClick={() => setAnnual(true)}
-                  style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', border: 'none', backgroundColor: annual ? 'white' : 'transparent', color: annual ? '#1A1A2E' : '#64748B', boxShadow: annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s', position: 'relative' }}>
+                  style={{ padding: '8px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', border: 'none', backgroundColor: annual ? TC.card : 'transparent', color: annual ? TC.fg : TC.fgMuted, boxShadow: annual ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s', position: 'relative' }}>
                   {lang === 'es' ? 'Anual' : 'Annual'}
                   <span style={{ position: 'absolute', top: -8, right: -12, padding: '2px 6px', backgroundColor: '#10B981', color: 'white', borderRadius: 6, fontSize: 10, fontWeight: 700 }}>-20%</span>
                 </button>
@@ -366,20 +368,20 @@ export default function LandingPage() {
             {t.pricing.plans.map((p, i) => {
               const pop = i === 1
               const btnStyles = [
-                { bg: 'white', color: '#1E6FD9', border: '2px solid #1E6FD9', shadow: 'none' },
-                { bg: 'linear-gradient(135deg, #1E6FD9, #3B8DE8)', color: 'white', border: 'none', shadow: '0 4px 14px rgba(30,111,217,0.4)' },
-                { bg: 'linear-gradient(135deg, #F5820B, #F59E0B)', color: 'white', border: 'none', shadow: '0 4px 14px rgba(245,130,11,0.35)' },
+                { bg: TC.card, color: TC.primary, border: `2px solid ${TC.primary}`, shadow: 'none' },
+                { bg: `linear-gradient(135deg, ${TC.primary}, #3B8DE8)`, color: 'white', border: 'none', shadow: `0 4px 14px ${TC.primary}66` },
+                { bg: `linear-gradient(135deg, ${TC.accent}, #F59E0B)`, color: 'white', border: 'none', shadow: `0 4px 14px ${TC.accent}59` },
                 { bg: 'linear-gradient(135deg, #0F172A, #334155)', color: 'white', border: 'none', shadow: '0 4px 14px rgba(15,23,42,0.3)' },
-              ][i] || { bg: '#F8FAFC', color: '#1A1A2E', border: '1px solid #E2E8F0', shadow: 'none' }
+              ][i] || { bg: TC.bg, color: TC.fg, border: `1px solid ${TC.border}`, shadow: 'none' }
               return (
                 <FadeIn key={`${p.name}-${i}`} delay={i * 0.1}>
-                  <div style={{ padding: 28, borderRadius: 16, backgroundColor: 'white', border: pop ? '2px solid #1E6FD9' : '1px solid #E2E8F0', boxShadow: pop ? '0 10px 40px rgba(30,111,217,0.15)' : '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', transform: pop ? 'scale(1.02)' : 'none', transition: 'transform 0.2s, box-shadow 0.2s' }}
+                  <div style={{ padding: 28, borderRadius: 16, backgroundColor: TC.card, border: pop ? `2px solid ${TC.primary}` : `1px solid ${TC.border}`, boxShadow: pop ? `0 10px 40px ${TC.primary}26` : '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', transform: pop ? 'scale(1.02)' : 'none', transition: 'transform 0.2s, box-shadow 0.2s' }}
                     onMouseEnter={e => { if (!pop) { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.08)' } }}
                     onMouseLeave={e => { if (!pop) { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)' } }}
                   >
                     {pop && <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', padding: '4px 16px', background: 'linear-gradient(135deg, #1E6FD9, #3B8DE8)', color: 'white', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{t.pricing.popular}</span>}
                     <h3 style={{ fontSize: 20, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'" }}>{p.name}</h3>
-                    <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>{p.desc}</p>
+                    <p style={{ fontSize: 13, color: TC.fgMuted, marginBottom: 16 }}>{p.desc}</p>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 24 }}>
                       {p.price !== null ? (() => {
                         const monthly = Number(p.price)
@@ -388,12 +390,12 @@ export default function LandingPage() {
                           <>
                             {annual && monthly > 0 && <span style={{ fontSize: 18, fontWeight: 500, color: '#94A3B8', textDecoration: 'line-through', marginRight: 4 }}>€{monthly}</span>}
                             <span style={{ fontSize: 44, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'", transition: 'all 0.3s' }}>€{displayed}</span>
-                            <span style={{ fontSize: 15, color: '#64748B' }}>/{annual ? (lang === 'es' ? 'mes' : 'mo') : (lang === 'es' ? 'mes' : 'mo')}</span>
+                            <span style={{ fontSize: 15, color: TC.fgMuted }}>/{annual ? (lang === 'es' ? 'mes' : 'mo') : (lang === 'es' ? 'mes' : 'mo')}</span>
                             {annual && monthly > 0 && <span style={{ fontSize: 11, color: '#10B981', fontWeight: 700, marginLeft: 6 }}>{lang === 'es' ? 'facturado anual' : 'billed yearly'}</span>}
                           </>
                         )
                       })() : (
-                        <span style={{ fontSize: 28, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'", color: '#1E6FD9' }}>{t.pricing.contact}</span>
+                        <span style={{ fontSize: 28, fontWeight: 800, fontFamily: "'Plus Jakarta Sans'", color: TC.primary }}>{t.pricing.contact}</span>
                       )}
                     </div>
                     <button onClick={async () => {
@@ -425,7 +427,7 @@ export default function LandingPage() {
                       PayPal
                     </button>}
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      {p.features.map(f => <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#475569' }}><Check size={16} color="#10B981" /> {f}</li>)}
+                      {p.features.map(f => <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: TC.fgMuted }}><Check size={16} color="#10B981" /> {f}</li>)}
                     </ul>
                   </div>
                 </FadeIn>
@@ -436,11 +438,11 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" style={{ padding: '100px 24px', backgroundColor: '#F8FAFC' }}>
+      <section id="testimonials" style={{ padding: '100px 24px', backgroundColor: TC.bg }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: 60 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#F5820B', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>{t.testimonials.tag}</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: TC.accent, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>{t.testimonials.tag}</p>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 36, fontWeight: 800 }}>{t.testimonials.h2}</h2>
             </div>
           </FadeIn>
@@ -448,20 +450,20 @@ export default function LandingPage() {
           <div className="hidden md:grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {t.testimonials.items.map((item, i) => (
               <FadeIn key={item.name} delay={i * 0.1}>
-                <div style={{ padding: 28, borderRadius: 16, backgroundColor: 'white', border: '1px solid #E2E8F0', transition: 'transform 0.2s, box-shadow 0.2s' }}
+                <div style={{ padding: 28, borderRadius: 16, backgroundColor: TC.card, border: `1px solid ${TC.border}`, transition: 'transform 0.2s, box-shadow 0.2s' }}
                   onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.06)' }}
                   onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}>
                   <div style={{ display: 'flex', gap: 2, marginBottom: 16 }}>{[1,2,3,4,5].map(j => <Star key={j} size={16} fill="#F59E0B" color="#F59E0B" />)}</div>
-                  <p style={{ fontSize: 15, color: '#2D2D44', lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>"{item.quote}"</p>
+                  <p style={{ fontSize: 15, color: TC.fg, lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>"{item.quote}"</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     {item.avatar ? (
-                      <img src={item.avatar} alt={item.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: '2px solid #E2E8F0' }} />
+                      <img src={item.avatar} alt={item.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${TC.border}` }} />
                     ) : (
                       <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>{item.name[0]}</div>
                     )}
                     <div>
                       <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>{item.name}</p>
-                      <p style={{ fontSize: 12, color: '#64748B', margin: 0 }}>{item.role}</p>
+                      <p style={{ fontSize: 12, color: TC.fgMuted, margin: 0 }}>{item.role}</p>
                     </div>
                   </div>
                 </div>
@@ -473,18 +475,18 @@ export default function LandingPage() {
             <div style={{ display: 'flex', transition: 'transform 0.4s ease', transform: `translateX(-${testimonialIdx * 100}%)` }}>
               {t.testimonials.items.map((item, i) => (
                 <div key={item.name} style={{ minWidth: '100%', padding: '0 4px', boxSizing: 'border-box' }}>
-                  <div style={{ padding: 24, borderRadius: 16, backgroundColor: 'white', border: '1px solid #E2E8F0' }}>
+                  <div style={{ padding: 24, borderRadius: 16, backgroundColor: TC.card, border: `1px solid ${TC.border}` }}>
                     <div style={{ display: 'flex', gap: 2, marginBottom: 12 }}>{[1,2,3,4,5].map(j => <Star key={j} size={16} fill="#F59E0B" color="#F59E0B" />)}</div>
-                    <p style={{ fontSize: 15, color: '#2D2D44', lineHeight: 1.7, marginBottom: 16, fontStyle: 'italic' }}>"{item.quote}"</p>
+                    <p style={{ fontSize: 15, color: TC.fg, lineHeight: 1.7, marginBottom: 16, fontStyle: 'italic' }}>"{item.quote}"</p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                       {item.avatar ? (
-                        <img src={item.avatar} alt={item.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: '2px solid #E2E8F0' }} />
+                        <img src={item.avatar} alt={item.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${TC.border}` }} />
                       ) : (
                         <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #1E6FD9, #F5820B)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>{item.name[0]}</div>
                       )}
                       <div>
                         <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>{item.name}</p>
-                        <p style={{ fontSize: 12, color: '#64748B', margin: 0 }}>{item.role}</p>
+                        <p style={{ fontSize: 12, color: TC.fgMuted, margin: 0 }}>{item.role}</p>
                       </div>
                     </div>
                   </div>
@@ -494,7 +496,7 @@ export default function LandingPage() {
             <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 16 }}>
               {t.testimonials.items.map((_, i) => (
                 <button key={i} onClick={() => setTestimonialIdx(i)}
-                  style={{ width: testimonialIdx === i ? 24 : 8, height: 8, borderRadius: 4, border: 'none', cursor: 'pointer', transition: 'all 0.3s', backgroundColor: testimonialIdx === i ? '#1E6FD9' : '#CBD5E1' }} />
+                  style={{ width: testimonialIdx === i ? 24 : 8, height: 8, borderRadius: 4, border: 'none', cursor: 'pointer', transition: 'all 0.3s', backgroundColor: testimonialIdx === i ? TC.primary : '#CBD5E1' }} />
               ))}
             </div>
           </div>
@@ -508,12 +510,12 @@ export default function LandingPage() {
           <div style={{ position: 'absolute', bottom: -60, left: -60, width: 300, height: 300, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.05)' }} />
           <h2 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: 'white', marginBottom: 16, position: 'relative' }}>{t.cta.h2}</h2>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.8)', marginBottom: 32, position: 'relative' }}>{t.cta.sub}</p>
-          <Link to="/register" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: 'white', color: '#1E6FD9', borderRadius: 12, fontSize: 16, fontWeight: 700, textDecoration: 'none', position: 'relative', boxShadow: '0 4px 14px rgba(0,0,0,0.15)' }}>{t.cta.btn} <ChevronRight size={18} /></Link>
+          <Link to="/register" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', backgroundColor: 'white', color: TC.primary, borderRadius: 12, fontSize: 16, fontWeight: 700, textDecoration: 'none', position: 'relative', boxShadow: '0 4px 14px rgba(0,0,0,0.15)' }}>{t.cta.btn} <ChevronRight size={18} /></Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer style={{ padding: '60px 24px 40px', backgroundColor: '#1A1A2E', color: 'white' }}>
+      <footer style={{ padding: '60px 24px 40px', backgroundColor: TC.bg === '#F8FAFC' ? '#1A1A2E' : '#020617', color: 'white' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 40 }}>
             <div>
@@ -532,8 +534,8 @@ export default function LandingPage() {
             ))}
           </div>
           <div style={{ borderTop: '1px solid #1E293B', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-            <p style={{ fontSize: 13, color: '#64748B' }}>{t.footer.copy}</p>
-            <p style={{ fontSize: 13, color: '#64748B' }}>hello@st4rtup.com</p>
+            <p style={{ fontSize: 13, color: TC.fgMuted }}>{t.footer.copy}</p>
+            <p style={{ fontSize: 13, color: TC.fgMuted }}>hello@st4rtup.com</p>
           </div>
         </div>
       </footer>

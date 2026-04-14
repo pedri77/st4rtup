@@ -5,11 +5,17 @@ import { persist } from 'zustand/middleware'
  * Store de preferencias de usuario — persiste en localStorage bajo la
  * clave 'user-preferences' (compatible con el valor previo guardado manualmente).
  */
+
+function getSystemTheme() {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return 'light'
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 export const useUserPreferencesStore = create(
   persist(
     (set) => ({
-      // Apariencia
-      theme: 'light',
+      // Apariencia — defaults to system preference, overridden once persisted
+      theme: getSystemTheme(),
       // Localización
       language: 'es',
       date_format: 'DD/MM/YYYY',

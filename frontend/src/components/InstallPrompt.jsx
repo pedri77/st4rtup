@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Download, X } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
 export default function InstallPrompt() {
+  const T = useThemeColors()
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [show, setShow] = useState(false)
 
@@ -37,20 +39,20 @@ export default function InstallPrompt() {
   return (
     <div style={{
       position: 'fixed', bottom: 80, left: '50%', transform: 'translateX(-50%)',
-      zIndex: 45, backgroundColor: '#FFFFFF', border: '1px solid #1E6FD9',
+      zIndex: 45, backgroundColor: T.card, border: `1px solid ${T.primary}`,
       borderRadius: 12, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12,
       boxShadow: '0 8px 32px rgba(0,0,0,0.5)', maxWidth: 340,
     }}>
-      <Download size={20} color="#1E6FD9" />
+      <Download size={20} color={T.primary} />
       <div style={{ flex: 1 }}>
-        <p style={{ fontSize: 13, fontWeight: 600, color: '#0F172A', margin: 0 }}>Instalar St4rtup</p>
-        <p style={{ fontSize: 11, color: '#64748B', margin: '2px 0 0' }}>Acceso rapido desde tu escritorio</p>
+        <p style={{ fontSize: 13, fontWeight: 600, color: T.fg, margin: 0 }}>Instalar St4rtup</p>
+        <p style={{ fontSize: 11, color: T.fgMuted, margin: '2px 0 0' }}>Acceso rapido desde tu escritorio</p>
       </div>
-      <button onClick={handleInstall} style={{ padding: '6px 14px', backgroundColor: '#1E6FD9', color: '#F8FAFC', border: 'none', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+      <button onClick={handleInstall} style={{ padding: '6px 14px', backgroundColor: T.primary, color: 'white', border: 'none', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
         Instalar
       </button>
       <button aria-label="Cerrar" onClick={handleDismiss} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-        <X size={16} color="#64748B" />
+        <X size={16} color={T.fgMuted} />
       </button>
     </div>
   )

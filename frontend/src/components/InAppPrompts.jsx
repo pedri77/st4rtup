@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { X, ArrowRight } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
 const PROMPTS = [
   { id: 'try_ai', page: '/app/dashboard', message: '¿Has probado los agentes IA? Pueden cualificar tus leads automáticamente.', cta: 'Probar IA', link: '/app/agents', delay: 5000 },
@@ -10,6 +11,7 @@ const PROMPTS = [
 ]
 
 export default function InAppPrompts() {
+  const T = useThemeColors()
   const [active, setActive] = useState(null)
   const location = useLocation()
 
@@ -34,7 +36,7 @@ export default function InAppPrompts() {
     <div style={{
       position: 'fixed', top: 80, right: 24, zIndex: 45,
       maxWidth: 340, padding: '16px 20px', borderRadius: 14,
-      backgroundColor: 'white', border: '1px solid #E2E8F0',
+      backgroundColor: T.card, border: `1px solid ${T.border}`,
       boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
       animation: 'fadeIn 0.3s ease',
     }}>
@@ -45,7 +47,7 @@ export default function InAppPrompts() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
         <Link to={active.link} onClick={dismiss} style={{
           display: 'inline-flex', alignItems: 'center', gap: 4,
-          padding: '6px 14px', borderRadius: 8, backgroundColor: '#1E6FD9',
+          padding: '6px 14px', borderRadius: 8, backgroundColor: T.primary,
           color: 'white', fontSize: 13, fontWeight: 600, textDecoration: 'none',
         }}>{active.cta} <ArrowRight size={12} /></Link>
         <button onClick={dismiss} style={{ background: 'none', border: 'none', fontSize: 12, color: '#94A3B8', cursor: 'pointer' }}>No mostrar más</button>

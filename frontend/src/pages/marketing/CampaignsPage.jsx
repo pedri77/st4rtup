@@ -22,7 +22,7 @@ const STATUS_CONFIG = {
   draft: { label: 'Borrador', bg: T.muted, color: T.fgMuted },
   active: { label: 'Activa', bg: 'hsla(142,71%,45%,0.15)', color: T.success },
   paused: { label: 'Pausada', bg: 'hsla(38,92%,50%,0.15)', color: T.warning },
-  finished: { label: 'Finalizada', bg: 'rgba(30,111,217,0.1)', color: '#1E6FD9' },
+  finished: { label: 'Finalizada', bg: 'rgba(30,111,217,0.1)', color: T.primary },
 }
 
 const CHANNEL_CONFIG = {
@@ -812,7 +812,7 @@ function CampaignRoiBubble() {
               if (!payload?.length) return null
               const d = payload[0]?.payload
               return (
-                <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, padding: '8px 12px', fontSize: 12, boxShadow: '0 8px 32px rgba(0,0,0,.4)' }}>
+                <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: 8, padding: '8px 12px', fontSize: 12, boxShadow: '0 8px 32px rgba(0,0,0,.4)' }}>
                   <p style={{ color: T.fg, fontWeight: 600, marginBottom: 4 }}>{d?.name}</p>
                   <p style={{ color: T.fgMuted }}>Presupuesto: <span style={{ color: T.fg }}>€{d?.budget?.toLocaleString()}</span></p>
                   <p style={{ color: T.fgMuted }}>Leads: <span style={{ color: T.fg }}>{d?.leads}</span></p>

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { X, Copy, Check } from 'lucide-react'
+import { useThemeColors } from '@/utils/theme'
 
 export default function ExitIntentPopup() {
+  const T = useThemeColors()
   const [show, setShow] = useState(false)
   const [copied, setCopied] = useState(false)
 
@@ -37,7 +39,7 @@ export default function ExitIntentPopup() {
       padding: 24,
     }}>
       <div style={{
-        backgroundColor: 'white', borderRadius: 20, padding: '40px 36px',
+        backgroundColor: T.card, borderRadius: 20, padding: '40px 36px',
         maxWidth: 420, width: '100%', position: 'relative', textAlign: 'center',
         boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
       }}>
@@ -47,10 +49,10 @@ export default function ExitIntentPopup() {
         }}><X size={20} color="#94A3B8" /></button>
 
         <p style={{ fontSize: 40, marginBottom: 12 }}>🎁</p>
-        <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 22, fontWeight: 800, marginBottom: 8, color: '#1A1A2E' }}>
+        <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 22, fontWeight: 800, marginBottom: 8, color: T.fg }}>
           ¡Espera! Tenemos algo para ti
         </h2>
-        <p style={{ color: '#64748B', fontSize: 15, marginBottom: 24 }}>
+        <p style={{ color: T.fgMuted, fontSize: 15, marginBottom: 24 }}>
           Usa este código y obtén un <strong>20% de descuento</strong> en tu primer mes
         </p>
 
@@ -69,7 +71,7 @@ export default function ExitIntentPopup() {
 
         <Link to="/login" onClick={() => setShow(false)} style={{
           display: 'block', padding: '12px 24px', borderRadius: 10,
-          backgroundColor: '#1E6FD9', color: 'white', fontWeight: 600,
+          backgroundColor: T.primary, color: 'white', fontWeight: 600,
           fontSize: 15, textDecoration: 'none', marginBottom: 12,
         }}>
           Empezar con descuento

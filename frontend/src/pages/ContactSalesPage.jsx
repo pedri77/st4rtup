@@ -3,17 +3,20 @@ import { Link } from 'react-router-dom'
 import { Send, CheckCircle, ArrowLeft, Building2, Users, Mail, Phone } from 'lucide-react'
 import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 import SEO from '@/components/SEO'
+import { useThemeColors } from '@/utils/theme'
 
-const inputStyle = {
-  width: '100%', padding: '10px 14px', borderRadius: 10,
-  border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC',
-  color: '#0F172A', fontSize: 14, outline: 'none',
-  transition: 'border-color 0.2s, box-shadow 0.2s',
-}
-const inputFocus = (e) => { e.currentTarget.style.borderColor = '#1E6FD9'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }
-const inputBlur = (e) => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }
+// inputStyle, inputFocus, inputBlur are now defined inside the component to use theme tokens
 
 export default function ContactSalesPage() {
+  const T = useThemeColors()
+  const inputStyle = {
+    width: '100%', padding: '10px 14px', borderRadius: 10,
+    border: `1px solid ${T.border}`, backgroundColor: T.muted,
+    color: T.fg, fontSize: 14, outline: 'none',
+    transition: 'border-color 0.2s, box-shadow 0.2s',
+  }
+  const inputFocus = (e) => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = `0 0 0 3px ${T.primary}1A` }
+  const inputBlur = (e) => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }
   const [form, setForm] = useState({ name: '', email: '', company: '', phone: '', teamSize: '', message: '' })
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
@@ -45,17 +48,17 @@ export default function ContactSalesPage() {
   const update = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }))
 
   return (
-    <div className="public-page" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)', fontFamily: "'Inter', sans-serif", color: '#1A1A2E' }}>
+    <div className="public-page" style={{ minHeight: '100vh', background: `linear-gradient(180deg, ${T.card} 0%, ${T.bg} 100%)`, fontFamily: "'Inter', sans-serif", color: T.fg }}>
       <SEO title="Contactar ventas" description="Habla con nuestro equipo para un plan Enterprise personalizado." path="/contact-sales" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
       {/* Nav */}
-      <nav style={{ padding: '16px 24px', borderBottom: '1px solid #E2E8F0', backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)' }}>
+      <nav style={{ padding: '16px 24px', borderBottom: `1px solid ${T.border}`, backgroundColor: `${T.card}E6`, backdropFilter: 'blur(12px)' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link to="/"><img src="/logo.png" alt="St4rtup" style={{ height: 50 }} /></Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <ThemeTogglePublic />
-            <Link to="/" style={{ fontSize: 14, color: '#64748B', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Link to="/" style={{ fontSize: 14, color: T.fgMuted, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
               <ArrowLeft size={16} /> Volver
             </Link>
           </div>
@@ -68,9 +71,9 @@ export default function ContactSalesPage() {
           {/* Left — Info */}
           <div>
             <h1 style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 'clamp(28px, 4vw, 38px)', fontWeight: 800, marginBottom: 16, lineHeight: 1.2 }}>
-              Hablemos de tu <span style={{ color: '#1E6FD9' }}>plan Enterprise</span>
+              Hablemos de tu <span style={{ color: T.primary }}>plan Enterprise</span>
             </h1>
-            <p style={{ fontSize: 16, color: '#64748B', lineHeight: 1.7, marginBottom: 36 }}>
+            <p style={{ fontSize: 16, color: T.fgMuted, lineHeight: 1.7, marginBottom: 36 }}>
               Para equipos grandes que necesitan SSO, SLA 99.9%, gestor dedicado y facturación a medida. Cuéntanos sobre tu equipo y te preparamos una propuesta.
             </p>
 
@@ -82,12 +85,12 @@ export default function ContactSalesPage() {
                 { icon: Phone, title: 'Onboarding personalizado', desc: 'Formación y migración de datos' },
               ].map(({ icon: Icon, title, desc }) => (
                 <div key={title} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg, #EBF4FF, #FFF7ED)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Icon size={20} color="#1E6FD9" />
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${T.primary}15, ${T.accent}15)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Icon size={20} color={T.primary} />
                   </div>
                   <div>
-                    <p style={{ fontSize: 15, fontWeight: 600, margin: 0, color: '#0F172A' }}>{title}</p>
-                    <p style={{ fontSize: 13, color: '#64748B', margin: '3px 0 0' }}>{desc}</p>
+                    <p style={{ fontSize: 15, fontWeight: 600, margin: 0, color: T.fg }}>{title}</p>
+                    <p style={{ fontSize: 13, color: T.fgMuted, margin: '3px 0 0' }}>{desc}</p>
                   </div>
                 </div>
               ))}
@@ -95,29 +98,29 @@ export default function ContactSalesPage() {
           </div>
 
           {/* Right — Form */}
-          <div style={{ backgroundColor: 'white', borderRadius: 20, padding: '36px 32px', border: '1px solid #E2E8F0', boxShadow: '0 8px 30px rgba(0,0,0,0.06)' }}>
+          <div style={{ backgroundColor: T.card, borderRadius: 20, padding: '36px 32px', border: `1px solid ${T.border}`, boxShadow: '0 8px 30px rgba(0,0,0,0.06)' }}>
             {sent ? (
               <div style={{ textAlign: 'center', padding: '32px 0' }}>
                 <CheckCircle size={56} color="#10B981" style={{ margin: '0 auto 16px' }} />
-                <h2 style={{ fontSize: 22, fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Mensaje enviado</h2>
-                <p style={{ fontSize: 14, color: '#64748B', marginBottom: 24 }}>Te responderemos en menos de 24 horas laborables.</p>
-                <Link to="/" style={{ fontSize: 14, color: '#1E6FD9', fontWeight: 600, textDecoration: 'none' }}>Volver al inicio</Link>
+                <h2 style={{ fontSize: 22, fontWeight: 700, color: T.fg, marginBottom: 8 }}>Mensaje enviado</h2>
+                <p style={{ fontSize: 14, color: T.fgMuted, marginBottom: 24 }}>Te responderemos en menos de 24 horas laborables.</p>
+                <Link to="/" style={{ fontSize: 14, color: T.primary, fontWeight: 600, textDecoration: 'none' }}>Volver al inicio</Link>
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
-                <h2 style={{ fontSize: 22, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'", marginBottom: 4, color: '#0F172A' }}>Solicitar información</h2>
-                <p style={{ fontSize: 14, color: '#64748B', marginBottom: 24 }}>Rellena el formulario y te contactamos.</p>
+                <h2 style={{ fontSize: 22, fontWeight: 700, fontFamily: "'Plus Jakarta Sans'", marginBottom: 4, color: T.fg }}>Solicitar información</h2>
+                <p style={{ fontSize: 14, color: T.fgMuted, marginBottom: 24 }}>Rellena el formulario y te contactamos.</p>
 
                 {error && <div style={{ backgroundColor: '#FEF2F2', color: '#DC2626', fontSize: 13, padding: '10px 14px', borderRadius: 10, marginBottom: 16, border: '1px solid #FECACA' }}>{error}</div>}
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
                   <div>
-                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Nombre *</label>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: T.fgMuted, marginBottom: 6 }}>Nombre *</label>
                     <input type="text" required value={form.name} onChange={update('name')} placeholder="Tu nombre"
                       style={inputStyle} onFocus={inputFocus} onBlur={inputBlur} />
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Email *</label>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: T.fgMuted, marginBottom: 6 }}>Email *</label>
                     <input type="email" required value={form.email} onChange={update('email')} placeholder="tu@empresa.com"
                       style={inputStyle} onFocus={inputFocus} onBlur={inputBlur} />
                   </div>
@@ -125,19 +128,19 @@ export default function ContactSalesPage() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
                   <div>
-                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Empresa *</label>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: T.fgMuted, marginBottom: 6 }}>Empresa *</label>
                     <input type="text" required value={form.company} onChange={update('company')} placeholder="Empresa S.L."
                       style={inputStyle} onFocus={inputFocus} onBlur={inputBlur} />
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Teléfono</label>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: T.fgMuted, marginBottom: 6 }}>Teléfono</label>
                     <input type="tel" value={form.phone} onChange={update('phone')} placeholder="+34 600..."
                       style={inputStyle} onFocus={inputFocus} onBlur={inputBlur} />
                   </div>
                 </div>
 
                 <div style={{ marginBottom: 12 }}>
-                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>Tamaño del equipo</label>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: T.fgMuted, marginBottom: 6 }}>Tamaño del equipo</label>
                   <select value={form.teamSize} onChange={update('teamSize')}
                     style={{ ...inputStyle, appearance: 'auto', cursor: 'pointer' }} onFocus={inputFocus} onBlur={inputBlur}>
                     <option value="">Seleccionar...</option>
@@ -149,7 +152,7 @@ export default function ContactSalesPage() {
                 </div>
 
                 <div style={{ marginBottom: 20 }}>
-                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>¿Qué necesitas?</label>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: T.fgMuted, marginBottom: 6 }}>¿Qué necesitas?</label>
                   <textarea value={form.message} onChange={update('message')} rows={3}
                     placeholder="Cuéntanos sobre tus necesidades, integraciones, plazos..."
                     style={{ ...inputStyle, resize: 'vertical' }} onFocus={inputFocus} onBlur={inputBlur} />
@@ -166,8 +169,8 @@ export default function ContactSalesPage() {
                   )}
                 </button>
 
-                <p style={{ fontSize: 12, color: '#94A3B8', textAlign: 'center', marginTop: 12 }}>
-                  También puedes escribirnos a <a href="mailto:hello@st4rtup.com" style={{ color: '#1E6FD9', textDecoration: 'none' }}>hello@st4rtup.com</a>
+                <p style={{ fontSize: 12, color: T.fgMuted, textAlign: 'center', marginTop: 12 }}>
+                  También puedes escribirnos a <a href="mailto:hello@st4rtup.com" style={{ color: T.primary, textDecoration: 'none' }}>hello@st4rtup.com</a>
                 </p>
               </form>
             )}

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Check, X, ChevronDown, ChevronUp, Mail, BarChart3, Users, Zap, Bot } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '@/services/api'
+import { useThemeColors } from '@/utils/theme'
 
 const CHECKLIST_ITEMS = [
   { id: 'leads', label: 'Importar o crear leads', link: '/app/leads', icon: Users },
@@ -13,6 +14,7 @@ const CHECKLIST_ITEMS = [
 ]
 
 export default function SetupChecklist() {
+  const T = useThemeColors()
   const [open, setOpen] = useState(true)
   const queryClient = useQueryClient()
 
@@ -81,7 +83,7 @@ export default function SetupChecklist() {
     <div style={{
       position: 'fixed', bottom: 24, right: 24, zIndex: 40,
       width: 320, borderRadius: 16,
-      backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0',
+      backgroundColor: T.card, border: `1px solid ${T.border}`,
       boxShadow: '0 10px 40px rgba(0,0,0,0.12)',
       overflow: 'hidden',
     }}>
@@ -91,7 +93,7 @@ export default function SetupChecklist() {
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '14px 16px', cursor: 'pointer',
-          borderBottom: open ? '1px solid #E2E8F0' : 'none',
+          borderBottom: open ? `1px solid ${T.border}` : 'none',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -108,10 +110,10 @@ export default function SetupChecklist() {
             }
           </div>
           <div>
-            <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#0F172A' }}>
+            <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: T.fg }}>
               {allDone ? 'Todo listo!' : 'Configura tu CRM'}
             </p>
-            <p style={{ margin: 0, fontSize: 11, color: '#64748B' }}>{progress}% completado</p>
+            <p style={{ margin: 0, fontSize: 11, color: T.fgMuted }}>{progress}% completado</p>
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -124,7 +126,7 @@ export default function SetupChecklist() {
 
       {/* Progress bar */}
       {open && (
-        <div style={{ height: 3, backgroundColor: '#F1F5F9' }}>
+        <div style={{ height: 3, backgroundColor: T.muted }}>
           <div style={{
             height: '100%', width: `${progress}%`,
             background: allDone ? '#10B981' : 'linear-gradient(to right, #1E6FD9, #6366F1)',
@@ -148,7 +150,7 @@ export default function SetupChecklist() {
                   opacity: item.done ? 0.5 : 1,
                   transition: 'background 0.15s',
                 }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F8FAFC'}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = T.bg}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <div style={{
@@ -157,8 +159,8 @@ export default function SetupChecklist() {
                   backgroundColor: item.done ? '#F0FDF4' : '#EFF6FF',
                 }}>
                   {item.done
-                    ? <Check size={14} color="#10B981" />
-                    : <Icon size={14} color="#1E6FD9" />
+                    ? <Check size={14} color={T.success} />
+                    : <Icon size={14} color={T.primary} />
                   }
                 </div>
                 <span style={{
@@ -173,12 +175,12 @@ export default function SetupChecklist() {
 
       {/* All done message */}
       {open && allDone && (
-        <div style={{ padding: '12px 16px', textAlign: 'center', borderTop: '1px solid #E2E8F0' }}>
-          <p style={{ margin: 0, fontSize: 13, color: '#10B981', fontWeight: 600 }}>Tu CRM esta listo para vender</p>
+        <div style={{ padding: '12px 16px', textAlign: 'center', borderTop: `1px solid ${T.border}` }}>
+          <p style={{ margin: 0, fontSize: 13, color: T.success, fontWeight: 600 }}>Tu CRM esta listo para vender</p>
           <button onClick={dismiss} style={{
             marginTop: 8, padding: '6px 16px', borderRadius: 8,
-            backgroundColor: '#F1F5F9', border: 'none', cursor: 'pointer',
-            fontSize: 12, color: '#64748B',
+            backgroundColor: T.muted, border: 'none', cursor: 'pointer',
+            fontSize: 12, color: T.fgMuted,
           }}>Cerrar checklist</button>
         </div>
       )}
