@@ -6,7 +6,7 @@ import { serviceCatalogApi } from '@/services/api'
 import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
-const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%' }
+const inputStyle = { backgroundColor: T.card, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%' }
 
 const BILLING_LABELS = { one_time: 'Pago único', monthly: 'Mensual', annual: 'Anual' }
 const BILLING_COLORS = { one_time: T.fgMuted, monthly: T.cyan, annual: T.success }

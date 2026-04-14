@@ -12,7 +12,7 @@ import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme
 
 
 
-const inputStyle = { backgroundColor: T.muted, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' }
+const inputStyle = { backgroundColor: T.card, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' }
 
 function TwoFactorSection() {
   const [mfaState, setMfaState] = useState('idle') // idle | enrolling | verifying | active
