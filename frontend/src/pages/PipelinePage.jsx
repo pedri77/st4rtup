@@ -566,12 +566,16 @@ function CreateOpportunityModal({ onClose, onSubmit, isLoading }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!formData.name || !formData.lead_id) { toast.error('Completa los campos requeridos'); return }
-    onSubmit({
+    const payload = {
       ...formData,
       value: formData.value ? parseFloat(formData.value) : null,
       recurring_revenue: formData.recurring_revenue ? parseFloat(formData.recurring_revenue) : null,
       probability: parseInt(formData.probability),
-    })
+      expected_close_date: formData.expected_close_date || null,
+      products: formData.products.length > 0 ? formData.products : null,
+      description: formData.description || null,
+    }
+    onSubmit(payload)
   }
 
   const addProduct = () => {
