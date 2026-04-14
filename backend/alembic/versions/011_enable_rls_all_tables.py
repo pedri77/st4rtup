@@ -52,15 +52,21 @@ def upgrade():
         # Enable RLS (idempotent — no error if already enabled)
         op.execute(f"ALTER TABLE public.{table} ENABLE ROW LEVEL SECURITY")
         # Allow service_role full access (this is how the backend connects)
-        op.execute(
-            f"CREATE POLICY IF NOT EXISTS service_role_all ON public.{table} "
-            f"FOR ALL TO service_role USING (true) WITH CHECK (true)"
-        )
+        op.execute(f"""
+            DO $$ BEGIN
+                CREATE POLICY service_role_all ON public.{table}
+                    FOR ALL TO service_role USING (true) WITH CHECK (true);
+            EXCEPTION WHEN duplicate_object THEN NULL;
+            END $$
+        """)
         # Allow postgres role full access (migrations, admin)
-        op.execute(
-            f"CREATE POLICY IF NOT EXISTS postgres_all ON public.{table} "
-            f"FOR ALL TO postgres USING (true) WITH CHECK (true)"
-        )
+        op.execute(f"""
+            DO $$ BEGIN
+                CREATE POLICY postgres_all ON public.{table}
+                    FOR ALL TO postgres USING (true) WITH CHECK (true);
+            EXCEPTION WHEN duplicate_object THEN NULL;
+            END $$
+        """)
 
 
 def downgrade():

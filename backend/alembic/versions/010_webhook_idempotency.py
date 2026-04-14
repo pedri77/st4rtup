@@ -15,6 +15,9 @@ depends_on = None
 
 
 def upgrade():
+    from sqlalchemy import inspect
+    if "processed_webhook_events" in inspect(op.get_bind()).get_table_names():
+        return
     op.create_table(
         "processed_webhook_events",
         sa.Column("event_id", sa.String(255), primary_key=True),

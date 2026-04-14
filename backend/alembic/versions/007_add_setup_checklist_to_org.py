@@ -15,15 +15,20 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column(
-        "organizations",
-        sa.Column(
-            "setup_checklist",
-            sa.JSON(),
-            nullable=True,
-            server_default='{"dismissed": false, "completed": []}',
-        ),
-    )
+    from sqlalchemy import inspect
+    bind = op.get_bind()
+    inspector = inspect(bind)
+    columns = [c["name"] for c in inspector.get_columns("organizations")]
+    if "setup_checklist" not in columns:
+        op.add_column(
+            "organizations",
+            sa.Column(
+                "setup_checklist",
+                sa.JSON(),
+                nullable=True,
+                server_default='{"dismissed": false, "completed": []}',
+            ),
+        )
 
 
 def downgrade():

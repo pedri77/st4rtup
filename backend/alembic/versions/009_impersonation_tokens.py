@@ -15,6 +15,9 @@ depends_on = None
 
 
 def upgrade():
+    from sqlalchemy import inspect
+    if "used_impersonation_tokens" in inspect(op.get_bind()).get_table_names():
+        return
     op.create_table(
         "used_impersonation_tokens",
         sa.Column("jti", sa.String(64), primary_key=True),

@@ -16,24 +16,31 @@ depends_on = None
 
 
 def upgrade():
-    # 2FA fields on users
-    op.add_column("users", sa.Column("totp_secret", sa.String(64), nullable=True))
-    op.add_column("users", sa.Column("totp_enabled", sa.Boolean(), nullable=False, server_default=sa.false()))
-    op.add_column("users", sa.Column("backup_codes", sa.JSON(), nullable=True))
+    from sqlalchemy import inspect
+    bind = op.get_bind()
+    inspector = inspect(bind)
+    user_cols = [c["name"] for c in inspector.get_columns("users")]
 
-    # User sessions table
-    op.create_table(
-        "user_sessions",
-        sa.Column("id", UUID(as_uuid=True), primary_key=True, server_default=sa.text("gen_random_uuid()")),
-        sa.Column("user_id", UUID(as_uuid=True), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True),
-        sa.Column("ip_address", sa.String(45)),
-        sa.Column("user_agent", sa.Text()),
-        sa.Column("device_label", sa.String(100)),
-        sa.Column("last_active_at", sa.DateTime(timezone=True)),
-        sa.Column("is_current", sa.Boolean(), default=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
-        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
-    )
+    if "totp_secret" not in user_cols:
+        op.add_column("users", sa.Column("totp_secret", sa.String(64), nullable=True))
+    if "totp_enabled" not in user_cols:
+        op.add_column("users", sa.Column("totp_enabled", sa.Boolean(), nullable=False, server_default=sa.false()))
+    if "backup_codes" not in user_cols:
+        op.add_column("users", sa.Column("backup_codes", sa.JSON(), nullable=True))
+
+    if "user_sessions" not in inspector.get_table_names():
+        op.create_table(
+            "user_sessions",
+            sa.Column("id", UUID(as_uuid=True), primary_key=True, server_default=sa.text("gen_random_uuid()")),
+            sa.Column("user_id", UUID(as_uuid=True), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True),
+            sa.Column("ip_address", sa.String(45)),
+            sa.Column("user_agent", sa.Text()),
+            sa.Column("device_label", sa.String(100)),
+            sa.Column("last_active_at", sa.DateTime(timezone=True)),
+            sa.Column("is_current", sa.Boolean(), default=False),
+            sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+            sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+        )
 
 
 def downgrade():
