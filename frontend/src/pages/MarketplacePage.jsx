@@ -56,7 +56,7 @@ const FEATURE_ROUTES = {
   agent_scoring: '/app/agents', agent_qualify: '/app/agents', agent_proposal: '/app/agents',
   agent_cs: '/app/agents', content_pipeline: '/app/content-pipeline',
   auto_tagging: '/app/agents', ai_summary: '/app/agents', chat_ai: '/app/chat',
-  calls_console: '/app/calls/console', calls_prompts: '/app/calls/prompts',
+  calls_console: '/app/calls', calls_prompts: '/app/calls/prompts',
   calls_queue: '/app/calls/queues', calls_ab: '/app/calls', calls_rgpd: '/app/calls',
   gmail: '/app/integrations', google_calendar: '/app/integrations', google_drive: '/app/integrations',
   stripe_int: '/app/payments', whatsapp: '/app/whatsapp', youtube: '/app/marketing/youtube',

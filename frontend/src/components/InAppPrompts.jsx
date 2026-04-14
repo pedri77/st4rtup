@@ -5,7 +5,7 @@ import { X, ArrowRight } from 'lucide-react'
 const PROMPTS = [
   { id: 'try_ai', page: '/app/dashboard', message: '¿Has probado los agentes IA? Pueden cualificar tus leads automáticamente.', cta: 'Probar IA', link: '/app/agents', delay: 5000 },
   { id: 'try_seo', page: '/app/marketing', message: 'El Centro de SEO genera contenido profesional con 4 agentes IA.', cta: 'Ir a SEO', link: '/app/marketing/seo-center', delay: 3000 },
-  { id: 'try_calls', page: '/app/pipeline', message: 'Las llamadas IA cualifican leads mientras tú cierras deals.', cta: 'Probar llamadas', link: '/app/calls/console', delay: 7000 },
+  { id: 'try_calls', page: '/app/pipeline', message: 'Las llamadas IA cualifican leads mientras tú cierras deals.', cta: 'Probar llamadas', link: '/app/calls', delay: 7000 },
   { id: 'import_leads', page: '/app/leads', message: '¿Sabías que puedes importar leads desde CSV? HubSpot, Salesforce y más.', cta: 'Importar', link: '/app/leads', delay: 4000 },
 ]
 
