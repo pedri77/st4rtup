@@ -1,5 +1,6 @@
 """Competitive Intelligence — competidores y battle cards."""
-from sqlalchemy import Column, String, Integer, Boolean, Text, JSON
+from sqlalchemy import Column, ForeignKey, String, Integer, Boolean, Text, JSON
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.models.base import BaseModel
 
@@ -7,6 +8,8 @@ from app.models.base import BaseModel
 class Competitor(BaseModel):
     """Competidor growth."""
     __tablename__ = "competitors"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     name = Column(String(255), nullable=False, unique=True)
     region = Column(String(20), default="global")  # local, europe, global

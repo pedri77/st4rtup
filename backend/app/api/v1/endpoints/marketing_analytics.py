@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, case, desc
 
 from app.core.database import get_db
+from app.core.tenant import get_org_id
 from app.core.security import get_current_user
 from app.models.marketing import (
     Campaign, Funnel, MarketingAsset, UTMCode,

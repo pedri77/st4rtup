@@ -1,5 +1,6 @@
 """Sales Playbook — tácticas de venta activables por deal."""
-from sqlalchemy import Column, String, Float, Text, JSON, Boolean, Integer
+from sqlalchemy import Column, ForeignKey, String, Float, Text, JSON, Boolean, Integer
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.models.base import BaseModel
 
@@ -7,6 +8,8 @@ from app.models.base import BaseModel
 class SalesTactic(BaseModel):
     """Táctica de venta del playbook."""
     __tablename__ = "sales_tactics"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     name = Column(String(255), nullable=False)
     category = Column(String(50), nullable=False)  # inbound, outbound, relacional, transaccional

@@ -1,6 +1,7 @@
 """Content Pipeline — 4 agentes IA para generacion de contenido."""
 from fastapi import APIRouter, Depends, Query
 from app.core.security import get_current_user
+from app.core.tenant import get_org_id
 
 router = APIRouter()
 

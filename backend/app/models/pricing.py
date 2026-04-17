@@ -1,5 +1,6 @@
 """Pricing Engine — tiers, módulos y cálculo de precio por deal."""
-from sqlalchemy import Column, String, Float, Integer, Boolean, Text, JSON
+from sqlalchemy import Column, ForeignKey, String, Float, Integer, Boolean, Text, JSON
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.models.base import BaseModel
 
@@ -7,6 +8,8 @@ from app.models.base import BaseModel
 class PricingTier(BaseModel):
     """Tier de pricing (Pilot, Enterprise, SMB)."""
     __tablename__ = "pricing_tiers"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     name = Column(String(100), nullable=False)  # Pilot PoC, Enterprise, SMB
     slug = Column(String(50), nullable=False, unique=True)

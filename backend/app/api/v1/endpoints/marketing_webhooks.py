@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc
 
 from app.core.database import get_db
+from app.core.tenant import get_org_id
 from app.core.security import get_current_user
 from app.models.marketing_webhook import MarketingWebhookLog, LeadAttribution, MarketingMetricsCache
 from app.models.marketing import MarketingAsset, MarketingCalendarEvent, MarketingAlert, Campaign

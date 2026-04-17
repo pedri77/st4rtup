@@ -12,6 +12,8 @@ class Backlink(BaseModel):
     """Backlink tracker — SEO off-site."""
     __tablename__ = "backlinks"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     source_url = Column(String(1000), nullable=False)
     source_domain = Column(String(255), nullable=False, index=True)
     target_url = Column(String(1000), nullable=False)

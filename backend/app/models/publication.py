@@ -33,6 +33,8 @@ class Publication(BaseModel):
     """Publicación externa trackeada."""
     __tablename__ = "publications"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     url = Column(String(1000), nullable=False)
     title = Column(String(500), nullable=False)
     platform = Column(SAEnum(PublicationPlatform, name="publication_platform", create_type=False), nullable=False, index=True)

@@ -12,6 +12,8 @@ class MarketingWebhookLog(BaseModel):
     """Log de webhooks de marketing procesados por n8n."""
     __tablename__ = "marketing_webhook_logs"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     event_id = Column(String(255), unique=True, nullable=False, index=True)
     webhook_type = Column(String(50), nullable=False, index=True)
     source = Column(String(100))
@@ -27,6 +29,8 @@ class MarketingWebhookLog(BaseModel):
 class LeadAttribution(BaseModel):
     """Atribución de leads a canales y campañas de marketing."""
     __tablename__ = "lead_attributions"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False, index=True)
     channel = Column(String(50))
@@ -45,6 +49,8 @@ class LeadAttribution(BaseModel):
 class MarketingMetricsCache(BaseModel):
     """Cache de métricas consolidadas de marketing."""
     __tablename__ = "marketing_metrics_cache"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     date = Column(Date, nullable=False, index=True)
     source = Column(String(50), nullable=False)

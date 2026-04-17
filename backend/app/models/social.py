@@ -1,5 +1,6 @@
 """Social Media — posts programados y publicados."""
-from sqlalchemy import Column, String, Text, Integer, JSON, DateTime, Boolean
+from sqlalchemy import Column, ForeignKey, String, Text, Integer, JSON, DateTime, Boolean
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.models.base import BaseModel
 
@@ -7,6 +8,8 @@ from app.models.base import BaseModel
 class SocialPost(BaseModel):
     """Post en redes sociales (LinkedIn, Twitter/X, YouTube)."""
     __tablename__ = "social_posts"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     platform = Column(String(50), nullable=False)  # linkedin, twitter, youtube, instagram
     content = Column(Text, nullable=False)
@@ -31,6 +34,8 @@ class SocialPost(BaseModel):
 class SocialRecurrence(BaseModel):
     """Programacion recurrente de posts en redes sociales."""
     __tablename__ = "social_recurrences"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     name = Column(String(255), nullable=False)
     platform = Column(String(50), nullable=False)

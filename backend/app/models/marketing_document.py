@@ -14,6 +14,8 @@ class MarketingDocument(BaseModel):
     """Documento de marketing con versionado y vinculación."""
     __tablename__ = "marketing_documents"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     name = Column(String(255), nullable=False, index=True)
     folder = Column(SAEnum(DocumentFolder), nullable=False, index=True)
     file_type = Column(String(50), nullable=False)  # pdf, docx, pptx, xlsx, png, jpg, etc.
@@ -57,6 +59,8 @@ class MarketingDocumentVersion(BaseModel):
     """Historial de versiones de un documento."""
     __tablename__ = "marketing_document_versions"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     document_id = Column(
         UUID(as_uuid=True),
         ForeignKey("marketing_documents.id", ondelete="CASCADE"),
@@ -82,6 +86,8 @@ class MarketingDocumentVersion(BaseModel):
 class MarketingDocumentLink(BaseModel):
     """Vinculación de documento con entidades (deals, leads, etc.)."""
     __tablename__ = "marketing_document_links"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     document_id = Column(
         UUID(as_uuid=True),

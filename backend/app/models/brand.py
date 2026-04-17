@@ -1,5 +1,6 @@
 """Brand & Positioning — configuración de marca de la empresa."""
-from sqlalchemy import Column, String, Float, Text, JSON
+from sqlalchemy import Column, ForeignKey, String, Float, Text, JSON
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.models.base import BaseModel
 
@@ -7,6 +8,8 @@ from app.models.base import BaseModel
 class BrandConfig(BaseModel):
     """Configuración de marca y posicionamiento (singleton)."""
     __tablename__ = "brand_config"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     company_name = Column(String(255), default="St4rtup")
     domain = Column(String(255), default="st4rtup.app")

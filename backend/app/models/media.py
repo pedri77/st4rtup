@@ -11,6 +11,8 @@ class AdCampaign(BaseModel):
     """Paid Media — campañas publicitarias (LinkedIn Ads, Google Ads, etc.)."""
     __tablename__ = "ad_campaigns"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     name = Column(String(255), nullable=False)
     platform = Column(String(50), nullable=False)  # linkedin_ads, google_ads, youtube_ads, meta_ads
     status = Column(String(20), default="active")  # active, paused, completed
@@ -45,6 +47,8 @@ class EarnedMention(BaseModel):
     """Earned Media — menciones, reviews, PR, shares."""
     __tablename__ = "earned_mentions"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     type = Column(String(50), nullable=False)  # review, press, social_mention, backlink, award
     platform = Column(String(100))  # g2, capterra, gartner, linkedin, twitter, media_outlet
     title = Column(String(500))
@@ -63,6 +67,8 @@ class EarnedMention(BaseModel):
 class MediaMetrics(BaseModel):
     """Métricas agregadas por tipo de media y período."""
     __tablename__ = "media_metrics"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     period = Column(String(10), nullable=False)  # 2026-03, 2026-Q1
     media_type = Column(String(20), nullable=False)  # owned, earned, paid

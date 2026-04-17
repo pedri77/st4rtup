@@ -9,6 +9,7 @@ import asyncio
 import json
 
 from app.core.database import get_db
+from app.core.tenant import get_org_id
 from app.core.security import get_current_user
 from app.models.notification import Notification, NotificationType, NotificationPriority
 from app.schemas.notification import (

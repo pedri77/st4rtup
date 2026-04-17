@@ -1,5 +1,6 @@
 """Pipeline automation rules — trigger actions on stage changes."""
-from sqlalchemy import Column, String, Text, Boolean, Integer, JSON
+from sqlalchemy import Column, ForeignKey, String, Text, Boolean, Integer, JSON
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.models.base import BaseModel
 
@@ -10,6 +11,8 @@ class PipelineRule(BaseModel):
     Cuando una oportunidad cambia de stage, ejecuta acciones configuradas.
     """
     __tablename__ = "pipeline_rules"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     name = Column(String(255), nullable=False)
     description = Column(Text)

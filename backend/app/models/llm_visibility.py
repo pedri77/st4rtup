@@ -10,6 +10,8 @@ class LLMVisibilityQuery(BaseModel):
     """Query predefinida para monitorizar en distintos LLMs."""
     __tablename__ = "llm_visibility_queries"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     query_text = Column(Text, nullable=False)
     category = Column(String(50), nullable=False, index=True)  # brand, competitor, product, regulation
     brand_keywords = Column(JSON)  # ["st4rtup", "st4rtup.app"]
@@ -32,6 +34,8 @@ class LLMVisibilityQuery(BaseModel):
 class LLMVisibilityResult(BaseModel):
     """Resultado de ejecutar una query de visibilidad en un LLM."""
     __tablename__ = "llm_visibility_results"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     query_id = Column(
         UUID(as_uuid=True),

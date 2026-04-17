@@ -1,5 +1,6 @@
 """OKR — Objectives and Key Results vinculados a KPIs."""
-from sqlalchemy import Column, String, Float, Integer, Text
+from sqlalchemy import Column, ForeignKey, String, Float, Integer, Text
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.models.base import BaseModel
 
@@ -7,6 +8,8 @@ from app.models.base import BaseModel
 class Objective(BaseModel):
     """Objetivo trimestral."""
     __tablename__ = "okr_objectives"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     title = Column(String(500), nullable=False)
     description = Column(Text)
@@ -21,6 +24,8 @@ class Objective(BaseModel):
 class KeyResult(BaseModel):
     """Key Result vinculado a un objetivo y opcionalmente a un KPI."""
     __tablename__ = "okr_key_results"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     objective_id = Column(String(36), nullable=False)  # UUID as string for simplicity
     title = Column(String(500), nullable=False)

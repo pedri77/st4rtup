@@ -1,7 +1,7 @@
 """MOD-COST-001 — Cost tracking models."""
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, String, Float, Boolean, Integer, DateTime, Text, JSON
+from sqlalchemy import Column, ForeignKey, String, Float, Boolean, Integer, DateTime, Text, JSON
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -16,6 +16,8 @@ class CostEvent(Base):
     """Evento de coste individual (rs_cost_events)."""
     __tablename__ = "cost_events"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     tool_id = Column(String(50), nullable=False, index=True)
     amount = Column(Float, nullable=False)
@@ -29,6 +31,8 @@ class CostEvent(Base):
 class BudgetCap(Base):
     """Tope de gasto configurable (rs_budget_caps)."""
     __tablename__ = "budget_caps"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     tool_id = Column(String(50), nullable=False, unique=True)
@@ -45,6 +49,8 @@ class BudgetCap(Base):
 class GuardrailLog(Base):
     """Audit trail de evaluaciones del GuardrailEngine (rs_cost_guardrail_log)."""
     __tablename__ = "cost_guardrail_log"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     tool_id = Column(String(50), nullable=False, index=True)

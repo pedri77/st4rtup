@@ -9,6 +9,8 @@ class LeadBANT(BaseModel):
     """Cualificacion BANT de un lead."""
     __tablename__ = "lead_bant"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=True, index=True)
     qualification_date = Column(Date)
     # Budget
@@ -49,6 +51,8 @@ class Partner(BaseModel):
     """Partner / aliado comercial."""
     __tablename__ = "partners"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     name = Column(String(255), nullable=False)
     partner_type = Column(String(50), nullable=False)
     contact_name = Column(String(255))
@@ -65,6 +69,8 @@ class Partner(BaseModel):
 class OnboardingChecklist(BaseModel):
     """Checklist de onboarding de nuevo cliente."""
     __tablename__ = "onboarding_checklists"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"))
     opportunity_id = Column(UUID(as_uuid=True), ForeignKey("opportunities.id", ondelete="SET NULL"))
@@ -88,6 +94,8 @@ class ChurnRecord(BaseModel):
     """Registro de baja / no-renovacion."""
     __tablename__ = "churn_records"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"))
     client_name = Column(String(255), nullable=False)
     churn_date = Column(Date)
@@ -107,6 +115,8 @@ class ChurnRecord(BaseModel):
 class ROICalculation(BaseModel):
     """Calculo de ROI para cliente."""
     __tablename__ = "roi_calculations"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"))
     client_name = Column(String(255), nullable=False)

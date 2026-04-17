@@ -21,6 +21,8 @@ class Campaign(BaseModel):
     """Campaña de marketing."""
     __tablename__ = "campaigns"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     name = Column(String(255), nullable=False, index=True)
     objective = Column(SAEnum(CampaignObjective), nullable=False)
     channel = Column(SAEnum(CampaignChannel), nullable=False)
@@ -72,6 +74,8 @@ class Funnel(BaseModel):
     """Funnel de marketing con etapas configurables."""
     __tablename__ = "funnels"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     name = Column(String(255), nullable=False)
     description = Column(Text)
     status = Column(
@@ -103,6 +107,8 @@ class Funnel(BaseModel):
 class MarketingAsset(BaseModel):
     """Landing pages, CTAs y otros assets de marketing."""
     __tablename__ = "marketing_assets"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     type = Column(SAEnum(MarketingAssetType), nullable=False)
     name = Column(String(255), nullable=False)
@@ -156,6 +162,8 @@ class UTMCode(BaseModel):
     """Códigos UTM generados para tracking de campañas."""
     __tablename__ = "utm_codes"
 
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+
     base_url = Column(String(500), nullable=False)
     utm_source = Column(String(100), nullable=False)
     utm_medium = Column(String(100), nullable=False)
@@ -184,6 +192,8 @@ class UTMCode(BaseModel):
 class MarketingCalendarEvent(BaseModel):
     """Evento en el calendario de marketing."""
     __tablename__ = "marketing_calendar_events"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     title = Column(String(255), nullable=False)
     event_type = Column(SAEnum(CalendarEventType), nullable=False)
@@ -222,6 +232,8 @@ class MarketingCalendarEvent(BaseModel):
 class MarketingAlert(BaseModel):
     """Alerta del sistema de marketing."""
     __tablename__ = "marketing_alerts"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     alert_type = Column(String(100), nullable=False)  # Flexible, no enum
     severity = Column(SAEnum(AlertSeverity), nullable=False, index=True)

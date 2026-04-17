@@ -1,5 +1,6 @@
 """Landing pages tracking."""
-from sqlalchemy import Column, String, Float, Integer, Text, JSON
+from sqlalchemy import Column, ForeignKey, String, Float, Integer, Text, JSON
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.models.base import BaseModel
 
@@ -7,6 +8,8 @@ from app.models.base import BaseModel
 class LandingPage(BaseModel):
     """Landing page con métricas de conversión."""
     __tablename__ = "landing_pages"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     url = Column(String(1000), nullable=False)
     name = Column(String(255))
@@ -25,6 +28,8 @@ class LandingPage(BaseModel):
 class WorkflowAuditLog(BaseModel):
     """Audit log centralizado de ejecuciones de workflows n8n."""
     __tablename__ = "workflow_audit_log"
+
+    org_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
 
     workflow_id = Column(String(100), nullable=False)
     module = Column(String(50))  # MKT, CALLS, DEAL, CRM, SUPPORT
