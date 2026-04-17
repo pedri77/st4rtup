@@ -67,6 +67,7 @@ def _kpi(kpi_id, name, category, value, target, unit="", priority="high"):
 async def gtm_dashboard(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Dashboard GTM con 20 KPIs y semáforos RAG."""
     now = datetime.now(timezone.utc)
@@ -357,8 +358,9 @@ async def gtm_dashboard(
 async def list_kpi_targets(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
-    result = await db.execute(select(KpiTarget).order_by(KpiTarget.kpi_id))
+    result = await db.execute(select(KpiTarget).where(KpiTarget.org_id == org_id).order_by(KpiTarget.kpi_id))
     return {"targets": [
         {"id": str(t.id), "kpi_id": t.kpi_id, "target_value": t.target_value,
          "target_label": t.target_label, "period": t.period}
@@ -378,6 +380,7 @@ async def update_kpi_target(
     data: KpiTargetUpdate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(KpiTarget).where(KpiTarget.kpi_id == kpi_id))
     target = result.scalar_one_or_none()
@@ -397,6 +400,7 @@ async def update_kpi_target(
 async def seed_all_gtm_data(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Ejecuta TODOS los seeds de GTM de una vez: competidores, tácticas, pricing, campañas."""
     results = {}
@@ -501,6 +505,7 @@ async def seed_all_gtm_data(
 async def check_kpi_alerts(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Evalúa KPIs y genera alertas para los que están en rojo."""
     import logging
@@ -555,6 +560,7 @@ async def check_kpi_alerts(
 async def win_loss_analysis(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Análisis win/loss — motivos de cierre por competidor y sector."""
     # Won deals
@@ -611,6 +617,7 @@ async def win_loss_analysis(
 async def revenue_forecast(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Proyección ARR 12 meses basada en pipeline + win rate + cycle."""
     now = datetime.now(timezone.utc)
@@ -679,6 +686,7 @@ async def revenue_forecast(
 async def poc_tracker(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Tracker de PoCs activos con countdown 90 días."""
     now = datetime.now(timezone.utc)
@@ -730,6 +738,7 @@ async def poc_tracker(
 async def snapshot_kpis(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Guarda snapshot de todos los KPIs actuales. Ejecutar mensualmente via n8n."""
     from sqlalchemy import text
@@ -754,6 +763,7 @@ async def snapshot_kpis(
 async def pipeline_analytics(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Funnel con conversion rates por etapa."""
     stages_order = [OpportunityStage.DISCOVERY, OpportunityStage.QUALIFICATION,
@@ -781,6 +791,7 @@ async def suggest_competitor(
     sector: str = "",
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Sugiere competidores relevantes basándose en el sector del lead."""
     from app.models.competitor import Competitor
@@ -808,6 +819,7 @@ async def suggest_competitor(
 async def generate_weekly_digest(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera resumen semanal: KPIs + pipeline + alertas. Para envío por email/Telegram."""
     data = await gtm_dashboard(db=db, _current_user=_current_user)
@@ -847,6 +859,7 @@ async def generate_weekly_digest(
 async def list_applied_migrations(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista migraciones SQL aplicadas."""
     try:
@@ -861,6 +874,7 @@ async def list_applied_migrations(
 async def export_gtm_pdf(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Exporta el GTM Dashboard como PDF board pack."""
     # Get dashboard data

@@ -48,6 +48,7 @@ def _get_system_prompt(settings_row: Optional[SystemSettings], conversation: Opt
 async def list_providers(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Listar proveedores de IA disponibles con sus modelos."""
     result = await db.execute(select(SystemSettings).limit(1))
@@ -96,6 +97,7 @@ async def list_conversations(
     limit: int = Query(50, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Listar conversaciones del usuario actual."""
     user_id = UUID(current_user["user_id"])
@@ -115,6 +117,7 @@ async def create_conversation(
     data: ConversationCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crear una nueva conversación."""
     user_id = UUID(current_user["user_id"])
@@ -144,6 +147,7 @@ async def get_conversation(
     conversation_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtener una conversación con todos sus mensajes."""
     user_id = UUID(current_user["user_id"])
@@ -176,6 +180,7 @@ async def update_conversation(
     data: ConversationUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualizar título o system prompt de una conversación."""
     user_id = UUID(current_user["user_id"])
@@ -203,6 +208,7 @@ async def delete_conversation(
     conversation_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Eliminar una conversación y todos sus mensajes."""
     user_id = UUID(current_user["user_id"])
@@ -226,6 +232,7 @@ async def send_message(
     data: ChatSendRequest,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Enviar un mensaje y recibir respuesta de la IA."""
     user_id = UUID(current_user["user_id"])
@@ -344,6 +351,7 @@ async def stream_message(
     data: ChatSendRequest,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Enviar un mensaje y recibir respuesta en streaming (SSE)."""
     user_id = UUID(current_user["user_id"])

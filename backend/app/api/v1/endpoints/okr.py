@@ -42,8 +42,9 @@ async def list_objectives(
     quarter: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
-    q = select(Objective).order_by(Objective.sort_order)
+    q = select(Objective).where(Objective.org_id == org_id).order_by(Objective.sort_order)
     if quarter:
         q = q.where(Objective.quarter == quarter)
     result = await db.execute(q)
@@ -101,6 +102,7 @@ async def create_objective(
     data: ObjectiveCreate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     obj = Objective(**data.model_dump())
     db.add(obj)
@@ -113,6 +115,7 @@ async def create_key_result(
     data: KeyResultCreate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     kr = KeyResult(**data.model_dump())
     db.add(kr)
@@ -126,6 +129,7 @@ async def update_key_result(
     data: KeyResultUpdate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(KeyResult).where(KeyResult.id == kr_id))
     kr = result.scalar_one_or_none()
@@ -145,6 +149,7 @@ async def update_key_result(
 async def seed_okrs(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Precarga OKRs Q2 2026 vinculados a KPIs."""
     objectives = [

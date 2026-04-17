@@ -25,9 +25,10 @@ async def list_campaigns(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Lista campañas de marketing con filtros."""
-    query = select(Campaign).order_by(Campaign.created_at.desc())
+    query = select(Campaign).where(Campaign.org_id == org_id).order_by(Campaign.created_at.desc())
     if status:
         query = query.where(Campaign.status == status)
     if channel:
@@ -53,9 +54,10 @@ async def create_campaign(
     data: CampaignCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Crea una campaña de marketing."""
-    campaign = Campaign(**data.model_dump(), created_by=UUID(current_user["user_id"]))
+    campaign = Campaign(**data.model_dump(), created_by=UUID(current_user["user_id"]), org_id=org_id)
     db.add(campaign)
     await db.commit()
     await db.refresh(campaign)
@@ -67,9 +69,10 @@ async def get_campaign(
     campaign_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    org_id: str = Depends(get_org_id),
 ):
     """Obtiene una campaña por ID."""
-    result = await db.execute(select(Campaign).where(Campaign.id == campaign_id))
+    result = await db.execute(select(Campaign).where(Campaign.id == campaign_id, Campaign.org_id == org_id))
     campaign = result.scalar_one_or_none()
     if not campaign:
         raise HTTPException(status_code=404, detail="Campaña no encontrada")
@@ -82,9 +85,10 @@ async def update_campaign(
     data: CampaignUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Actualiza una campaña de marketing."""
-    result = await db.execute(select(Campaign).where(Campaign.id == campaign_id))
+    result = await db.execute(select(Campaign).where(Campaign.id == campaign_id, Campaign.org_id == org_id))
     campaign = result.scalar_one_or_none()
     if not campaign:
         raise HTTPException(status_code=404, detail="Campaña no encontrada")
@@ -102,9 +106,10 @@ async def delete_campaign(
     campaign_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+    org_id: str = Depends(get_org_id),
 ):
     """Elimina una campaña de marketing."""
-    result = await db.execute(select(Campaign).where(Campaign.id == campaign_id))
+    result = await db.execute(select(Campaign).where(Campaign.id == campaign_id, Campaign.org_id == org_id))
     campaign = result.scalar_one_or_none()
     if not campaign:
         raise HTTPException(status_code=404, detail="Campaña no encontrada")

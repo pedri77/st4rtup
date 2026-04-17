@@ -37,6 +37,7 @@ class BrandConfigUpdate(BaseModel):
 async def get_brand_config(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtiene la configuración de marca."""
     result = await db.execute(select(BrandConfig).limit(1))
@@ -77,6 +78,7 @@ async def update_brand_config(
     data: BrandConfigUpdate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza la configuración de marca."""
     result = await db.execute(select(BrandConfig).limit(1))

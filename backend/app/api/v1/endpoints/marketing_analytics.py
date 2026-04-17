@@ -19,6 +19,7 @@ router = APIRouter()
 async def get_marketing_overview(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Dashboard de analytics de marketing — métricas agregadas."""
 

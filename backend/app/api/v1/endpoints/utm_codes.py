@@ -40,9 +40,10 @@ async def list_utm_codes(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista códigos UTM con filtros."""
-    query = select(UTMCode).order_by(UTMCode.created_at.desc())
+    query = select(UTMCode).where(UTMCode.org_id == org_id).order_by(UTMCode.created_at.desc())
     if campaign_id:
         query = query.where(UTMCode.campaign_id == campaign_id)
 
@@ -64,6 +65,7 @@ async def create_utm_code(
     data: UTMCodeCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea un código UTM con URL generada automáticamente."""
     full_url = build_utm_url(data)
@@ -83,6 +85,7 @@ async def get_utm_code(
     utm_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtiene un código UTM por ID."""
     result = await db.execute(select(UTMCode).where(UTMCode.id == utm_id))
@@ -97,6 +100,7 @@ async def delete_utm_code(
     utm_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina un código UTM."""
     result = await db.execute(select(UTMCode).where(UTMCode.id == utm_id))

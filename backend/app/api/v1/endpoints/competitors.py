@@ -36,8 +36,9 @@ async def list_competitors(
     tier: str = None,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
-    q = select(Competitor).order_by(Competitor.name)
+    q = select(Competitor).where(Competitor.org_id == org_id).order_by(Competitor.name)
     if region:
         q = q.where(Competitor.region == region)
     if tier:
@@ -64,6 +65,7 @@ async def list_competitors(
 async def competitor_stats(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Win/loss rate por competidor, deals activos."""
     from app.models.pipeline import Opportunity

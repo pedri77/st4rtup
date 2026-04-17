@@ -34,9 +34,10 @@ async def list_events(
     page_size: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista eventos del calendario de marketing con filtros."""
-    query = select(MarketingCalendarEvent).order_by(MarketingCalendarEvent.start_date.asc())
+    query = select(MarketingCalendarEvent).where(MarketingCalendarEvent.org_id == org_id).order_by(MarketingCalendarEvent.start_date.asc())
     if event_type:
         query = query.where(MarketingCalendarEvent.event_type == event_type)
     if campaign_id:
@@ -64,6 +65,7 @@ async def create_event(
     data: MarketingCalendarEventCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea un evento en el calendario de marketing."""
     event = MarketingCalendarEvent(
@@ -81,6 +83,7 @@ async def create_event(
 @router.get("/notion/status")
 async def notion_status(
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Comprueba la conexión con Notion."""
     return await notion_service.test_connection()
@@ -92,9 +95,10 @@ async def notion_push_events(
     start_until: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Empuja eventos del calendario a Notion."""
-    query = select(MarketingCalendarEvent).order_by(MarketingCalendarEvent.start_date.asc())
+    query = select(MarketingCalendarEvent).where(MarketingCalendarEvent.org_id == org_id).order_by(MarketingCalendarEvent.start_date.asc())
     if start_from:
         query = query.where(MarketingCalendarEvent.start_date >= start_from)
     if start_until:
@@ -128,6 +132,7 @@ async def notion_pull_events(
     start_before: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Importa eventos desde Notion al calendario."""
     notion_events = await notion_service.pull_events(start_after, start_before)
@@ -177,6 +182,7 @@ async def get_event(
     event_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtiene un evento por ID."""
     result = await db.execute(
@@ -194,6 +200,7 @@ async def update_event(
     data: MarketingCalendarEventUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza un evento del calendario."""
     result = await db.execute(
@@ -216,6 +223,7 @@ async def delete_event(
     event_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina un evento del calendario."""
     result = await db.execute(

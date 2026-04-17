@@ -199,6 +199,7 @@ def _build_response(settings: SystemSettings) -> dict:
 async def get_settings(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtener configuración del sistema (enmascarada). Accesible para todos los usuarios autenticados."""
     settings = await _get_or_create_settings(db)
@@ -210,6 +211,7 @@ async def update_settings(
     data: SettingsUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Actualizar configuración del sistema"""
     await _require_admin(current_user, db)
@@ -249,6 +251,7 @@ async def test_email_provider(
     data: TestEmailConnectionRequest,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Probar conexión del proveedor de email configurado"""
     await _require_admin(current_user, db)
@@ -281,6 +284,7 @@ async def send_test_email(
     data: SendTestEmailRequest,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Enviar email de prueba"""
     await _require_admin(current_user, db)
@@ -322,6 +326,7 @@ async def test_integration(
     data: dict,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Probar conexión con una integración externa"""
     await _require_admin(current_user, db)
@@ -377,6 +382,7 @@ async def test_integration(
 async def get_feature_flags(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtiene feature flags actuales (GrowthBook + local)."""
     from app.services.feature_flags import get_features
@@ -388,6 +394,7 @@ async def update_feature_flags(
     flags: dict,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza feature flags locales (override)."""
     result = await db.execute(select(SystemSettings).limit(1))
@@ -406,6 +413,7 @@ async def update_feature_flags(
 async def encrypt_existing_credentials(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Migra credenciales existentes de plaintext a cifrado Fernet (Enterprise)."""
     await _require_admin(current_user, db)
@@ -440,6 +448,7 @@ async def encrypt_existing_credentials(
 @router.get("/env-status")
 async def get_env_status(
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Verifica qué API keys están configuradas via env vars (Fly.io secrets)."""
     from app.core.config import settings as app_settings
@@ -517,6 +526,7 @@ async def get_env_status(
 async def google_oauth_authorize(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Generar URL de autorización de Google OAuth2 para Gmail."""
     await _require_admin(current_user, db)
@@ -670,6 +680,7 @@ async def google_oauth_callback(
 async def google_oauth_disconnect(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Desconectar Google OAuth2."""
     await _require_admin(current_user, db)
@@ -713,6 +724,7 @@ async def google_oauth_disconnect(
 async def google_oauth_status(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Estado de la conexión Gmail OAuth2."""
     settings_row = await _get_or_create_settings(db)
@@ -766,6 +778,7 @@ async def generic_oauth_authorize(
     provider: str,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Generar URL de autorización OAuth2 para servicios de Google (GSC, GA4, YouTube)."""
     # Gmail has its own handler above
@@ -938,6 +951,7 @@ async def generic_oauth_disconnect(
     provider: str,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Desconectar OAuth2 de un servicio de Google o LinkedIn."""
     if provider == "google":
@@ -987,6 +1001,7 @@ async def generic_oauth_status(
     provider: str,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Estado de la conexión OAuth2 de un servicio."""
     if provider == "google":

@@ -76,6 +76,7 @@ async def receive_campaign_metrics(
     request: Request,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Recibe métricas de campañas desde n8n (Google Ads, LinkedIn Ads, etc.)."""
     start = time.monotonic()
@@ -126,6 +127,7 @@ async def receive_social_engagement(
     request: Request,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Recibe datos de engagement de redes sociales desde n8n."""
     start = time.monotonic()
@@ -173,6 +175,7 @@ async def receive_content_published(
     request: Request,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Recibe notificación de contenido publicado desde n8n."""
     start = time.monotonic()
@@ -245,6 +248,7 @@ async def receive_lead_attribution(
     request: Request,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Recibe datos de atribución de leads desde n8n."""
     start = time.monotonic()
@@ -315,6 +319,7 @@ async def receive_external_alert(
     request: Request,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Recibe alertas externas de marketing desde n8n."""
     start = time.monotonic()
@@ -370,6 +375,7 @@ async def receive_metrics_sync(
     request: Request,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Recibe métricas consolidadas de marketing desde n8n (GA4, Search Console, etc.)."""
     start = time.monotonic()
@@ -425,9 +431,10 @@ async def list_webhook_logs(
     page_size: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista logs de webhooks de marketing."""
-    query = select(MarketingWebhookLog).order_by(desc(MarketingWebhookLog.created_at))
+    query = select(MarketingWebhookLog).where(MarketingWebhookLog.org_id == org_id).order_by(desc(MarketingWebhookLog.created_at))
 
     if webhook_type:
         query = query.where(MarketingWebhookLog.webhook_type == webhook_type)
@@ -452,6 +459,7 @@ async def list_webhook_logs(
 async def webhook_stats(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Estadísticas de webhooks de marketing."""
     total = await db.scalar(select(func.count()).select_from(MarketingWebhookLog)) or 0

@@ -38,6 +38,7 @@ router = APIRouter()
 async def generate_post(
     data: LinkedInGenerateRequest,
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera un post de LinkedIn usando un framework especifico."""
     from app.services.linkedin_content_service import generate_linkedin_post
@@ -60,6 +61,7 @@ async def generate_and_save(
     data: LinkedInGenerateRequest,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera un post y lo guarda como draft en social_posts."""
     from app.services.linkedin_content_service import generate_linkedin_post
@@ -115,6 +117,7 @@ async def publish_post(
     data: LinkedInPublishRequest,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Publica un post directamente en LinkedIn."""
     from app.services.linkedin_api_service import publish_post as li_publish, _get_linkedin_config
@@ -167,6 +170,7 @@ async def publish_post(
 @router.get("/templates")
 async def list_templates(
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista todos los frameworks/templates de LinkedIn."""
     from app.services.linkedin_content_service import get_templates
@@ -176,6 +180,7 @@ async def list_templates(
 @router.get("/best-times", response_model=BestTimeResponse)
 async def best_posting_times(
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Devuelve los mejores horarios para publicar en LinkedIn."""
     from app.services.linkedin_content_service import get_best_times
@@ -196,6 +201,7 @@ async def linkedin_analytics(
     days: int = Query(30, ge=7, le=365),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Analytics de posts de LinkedIn desde la BD local."""
     from datetime import datetime, timedelta, timezone
@@ -292,6 +298,7 @@ async def linkedin_analytics(
 async def get_oauth_url(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera la URL de autorizacion OAuth de LinkedIn."""
     from app.services.linkedin_api_service import get_oauth_url, _get_linkedin_config
@@ -315,6 +322,7 @@ async def oauth_callback(
     data: LinkedInOAuthCallback,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Intercambia el code OAuth por token y guarda en config."""
     from app.services.linkedin_api_service import (
@@ -368,6 +376,7 @@ async def oauth_callback(
 async def oauth_status(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Verifica si LinkedIn esta conectado."""
     from app.services.linkedin_api_service import _get_linkedin_config
@@ -394,6 +403,7 @@ async def oauth_status(
 async def sync_metrics(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Sincroniza metricas de posts publicados desde LinkedIn API."""
     from app.services.linkedin_api_service import get_post_stats, _get_linkedin_config
@@ -440,6 +450,7 @@ async def send_to_telegram(
     post_id: str,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Envia un post de LinkedIn a Telegram para revision antes de publicar."""
     import html as html_lib
@@ -479,6 +490,7 @@ async def send_to_telegram(
 async def seed_linkedin_posts(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Precarga posts LinkedIn de ejemplo para poblar analytics."""
     from datetime import timedelta
@@ -563,6 +575,7 @@ async def schedule_to_calendar(
     scheduled_at: str = Query(..., description="ISO datetime para publicar (Europe/Madrid)"),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Programa un post y crea un recordatorio en Google Calendar."""
     from datetime import datetime, timezone, timedelta
@@ -620,6 +633,7 @@ async def generate_carousel(
     slides: int = Query(8, ge=4, le=15),
     language: str = Query("es"),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera un guion de carousel estructurado slide por slide."""
     from app.services.linkedin_content_service import FRAMEWORKS
@@ -684,6 +698,7 @@ async def chart_engagement_over_time(
     days: int = Query(30, ge=7, le=180),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Datos para grafico de engagement a lo largo del tiempo."""
     from datetime import datetime, timedelta, timezone
@@ -727,6 +742,7 @@ async def chart_engagement_over_time(
 async def chart_framework_performance(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Rendimiento por framework de escritura."""
     result = await db.execute(
@@ -771,6 +787,7 @@ async def chart_framework_performance(
 async def chart_posting_heatmap(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Heatmap de engagement por dia/hora para optimizar publicacion."""
     result = await db.execute(
@@ -818,11 +835,12 @@ async def chart_posting_heatmap(
 async def list_rss_feeds(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista los feeds RSS (BD + defaults si no hay ninguno)."""
     from app.models.rss_feed import RssFeed
 
-    result = await db.execute(select(RssFeed).order_by(RssFeed.name))
+    result = await db.execute(select(RssFeed).where(RssFeed.org_id == org_id).order_by(RssFeed.name))
     db_feeds = result.scalars().all()
 
     if db_feeds:
@@ -843,6 +861,7 @@ async def create_rss_feed(
     category: str = Query("general"),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea un feed RSS personalizado."""
     from app.models.rss_feed import RssFeed
@@ -858,6 +877,7 @@ async def delete_rss_feed(
     feed_id: str,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina un feed RSS."""
     from app.models.rss_feed import RssFeed
@@ -874,6 +894,7 @@ async def delete_rss_feed(
 async def seed_default_feeds(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Carga los 10 feeds RSS por defecto en la BD."""
     from app.models.rss_feed import RssFeed
@@ -896,6 +917,7 @@ async def fetch_rss_articles(
     max_per_feed: int = Query(5, ge=1, le=20),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Fetches articulos recientes de los feeds RSS."""
     import httpx as httpx_lib
@@ -954,6 +976,7 @@ async def inspire_from_article(
     summary: str = Query(""),
     framework: str = Query("hook_story_cta"),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera un post de LinkedIn inspirado en un articulo RSS."""
     from app.services.linkedin_content_service import generate_linkedin_post

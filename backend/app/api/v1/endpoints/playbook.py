@@ -44,6 +44,7 @@ async def list_tactics(
     status: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     q = select(SalesTactic).where(SalesTactic.is_active == True).order_by(SalesTactic.sort_order)  # noqa: E712
     if category:
@@ -75,6 +76,7 @@ async def create_tactic(data: TacticCreate, db: AsyncSession = Depends(get_db), 
 async def playbook_stats(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Métricas reales por táctica — cruza con leads y oportunidades."""
     from app.models.lead import Lead
@@ -121,6 +123,7 @@ async def update_tactic(tactic_id: UUID, data: TacticUpdate, db: AsyncSession = 
 async def export_playbook_pdf(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Exporta el Sales Playbook completo como PDF."""
     from fastapi.responses import Response

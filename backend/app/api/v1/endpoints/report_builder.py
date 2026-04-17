@@ -85,6 +85,7 @@ async def generate_report(
     config: ReportConfig,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Genera un reporte personalizado."""
     start, end = _get_date_range(config.date_range, config.date_from, config.date_to)
@@ -294,6 +295,7 @@ async def export_report_csv(
     config: ReportConfig,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Genera reporte y devuelve como CSV."""
     import csv
@@ -336,6 +338,7 @@ async def export_report_pdf(
     config: ReportConfig,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Genera reporte y devuelve como PDF corporativo."""
     from fastapi.responses import Response
@@ -401,6 +404,7 @@ async def export_to_sheets(
     report_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Export report data to Google Sheets."""
     try:

@@ -31,9 +31,10 @@ async def list_alerts(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista alertas de marketing con filtros."""
-    query = select(MarketingAlert).order_by(MarketingAlert.created_at.desc())
+    query = select(MarketingAlert).where(MarketingAlert.org_id == org_id).order_by(MarketingAlert.created_at.desc())
     if severity:
         query = query.where(MarketingAlert.severity == severity)
     if entity_type:
@@ -58,6 +59,7 @@ async def list_alerts(
 async def get_alert_stats(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Estadísticas de alertas de marketing."""
     total = await db.scalar(select(func.count()).select_from(MarketingAlert)) or 0
@@ -79,6 +81,7 @@ async def create_alert(
     data: MarketingAlertCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Crea una alerta de marketing."""
     alert = MarketingAlert(
@@ -95,6 +98,7 @@ async def get_alert(
     alert_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtiene una alerta por ID."""
     result = await db.execute(select(MarketingAlert).where(MarketingAlert.id == alert_id))
@@ -110,6 +114,7 @@ async def update_alert(
     data: MarketingAlertUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza una alerta (marcar leída, resolver)."""
     result = await db.execute(select(MarketingAlert).where(MarketingAlert.id == alert_id))
@@ -130,6 +135,7 @@ async def update_alert(
 async def mark_all_read(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Marca todas las alertas como leídas."""
     stmt = (
@@ -147,6 +153,7 @@ async def delete_alert(
     alert_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina una alerta de marketing."""
     result = await db.execute(select(MarketingAlert).where(MarketingAlert.id == alert_id))
@@ -161,6 +168,7 @@ async def delete_alert(
 async def trigger_alert_engine(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Ejecuta el motor de alertas para generar alertas automáticas."""
     try:

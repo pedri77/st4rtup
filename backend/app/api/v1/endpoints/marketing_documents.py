@@ -61,6 +61,7 @@ async def list_documents(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista documentos de marketing con filtros."""
     query = select(MarketingDocument).order_by(MarketingDocument.created_at.desc())
@@ -103,6 +104,7 @@ async def create_document(
     data: MarketingDocumentCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea un documento de marketing (metadatos)."""
     doc = MarketingDocument(
@@ -128,6 +130,7 @@ async def upload_document(
     campaign_id: Optional[str] = Form(None),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Sube un archivo a Google Drive y crea el registro en BD."""
     # Validate file size (max 50MB)
@@ -177,6 +180,7 @@ async def upload_document(
 async def document_stats(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Estadísticas del gestor documental."""
     total = await db.scalar(select(func.count(MarketingDocument.id))) or 0
@@ -217,6 +221,7 @@ async def get_document(
     doc_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtiene un documento con sus versiones y links."""
     result = await db.execute(
@@ -236,6 +241,7 @@ async def update_document(
     data: MarketingDocumentUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza metadatos de un documento."""
     result = await db.execute(
@@ -258,6 +264,7 @@ async def delete_document(
     doc_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina un documento y su archivo de Drive."""
     result = await db.execute(
@@ -285,6 +292,7 @@ async def create_version(
     notes: Optional[str] = Form(None),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Sube una nueva versión de un documento."""
     result = await db.execute(
@@ -338,6 +346,7 @@ async def list_versions(
     doc_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista versiones de un documento."""
     result = await db.execute(
@@ -357,6 +366,7 @@ async def create_link(
     data: DocumentLinkCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Vincula un documento a una entidad (lead, opportunity, etc.)."""
     # Verify document exists
@@ -383,6 +393,7 @@ async def list_links(
     doc_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista las entidades vinculadas a un documento."""
     result = await db.execute(
@@ -399,6 +410,7 @@ async def delete_link(
     link_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina un vínculo documento-entidad."""
     result = await db.execute(
@@ -422,6 +434,7 @@ async def browse_drive(
     folder: str = Query("content", description="Carpeta: templates, campaigns, content, battlecards, legal"),
     max_results: int = Query(50, ge=1, le=200),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista archivos en una carpeta de Google Drive."""
     from app.services.google_drive_service import list_drive_files, FOLDER_DRIVE_MAP
@@ -437,6 +450,7 @@ async def browse_drive(
 @router.get("/drive/status")
 async def drive_status(
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Verifica si Google Drive esta configurado."""
     from app.services.google_drive_service import _get_drive_service, FOLDER_DRIVE_MAP

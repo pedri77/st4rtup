@@ -12,6 +12,7 @@ async def run_content_pipeline(
     target_audience: str = Query("CEOs y responsables de compliance en España"),
     word_count: int = Query(1500, ge=500, le=5000),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Ejecuta el pipeline completo: Keywords → Borrador → SEO → Meta."""
     from app.services.content_pipeline import run_full_pipeline
@@ -27,6 +28,7 @@ async def generate_keywords(
     topic: str = Query(...),
     target_audience: str = Query("CEOs y responsables de compliance en España"),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Agente 1: Keyword research."""
     from app.services.content_pipeline import agent_keywords
@@ -39,6 +41,7 @@ async def generate_draft(
     keywords: str = Query(""),
     word_count: int = Query(1500),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Agente 2: Genera borrador."""
     from app.services.content_pipeline import agent_draft
@@ -50,6 +53,7 @@ async def optimize_seo(
     draft: str = Query(...),
     primary_keyword: str = Query(...),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Agente 3: Optimiza para SEO."""
     from app.services.content_pipeline import agent_seo
@@ -61,6 +65,7 @@ async def generate_meta(
     article: str = Query(...),
     primary_keyword: str = Query(...),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Agente 4: Genera meta tags."""
     from app.services.content_pipeline import agent_meta

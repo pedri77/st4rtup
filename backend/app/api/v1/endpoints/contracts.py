@@ -20,6 +20,7 @@ async def generate_contract(
     opportunity_id: UUID,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera un contrato PDF basado en la oportunidad y su pricing."""
     result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id))
@@ -130,6 +131,7 @@ async def contract_status(
     opportunity_id: UUID,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Estado del contrato de una oportunidad."""
     result = await db.execute(select(Opportunity).where(Opportunity.id == opportunity_id))

@@ -34,6 +34,7 @@ class PricingTierCreate(BaseModel):
 async def list_tiers(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista todos los tiers de pricing."""
     result = await db.execute(select(PricingTier).where(PricingTier.is_active == True).order_by(PricingTier.sort_order))  # noqa: E712
@@ -55,6 +56,7 @@ async def create_tier(
     data: PricingTierCreate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea un tier de pricing."""
     tier = PricingTier(**data.model_dump())
@@ -71,6 +73,7 @@ async def calculate_price(
     discount_pct: float = 0,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Calcula precio para un deal según tier, módulos y descuento."""
     result = await db.execute(select(PricingTier).where(PricingTier.slug == tier_slug))
@@ -123,6 +126,7 @@ async def calculate_price(
 async def pricing_stats(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Stats de pricing: deals por tier, revenue, margen medio."""
     from app.models.pipeline import Opportunity
@@ -171,6 +175,7 @@ async def pricing_stats(
 async def seed_tiers(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Precarga los 3 tiers base del GTM."""
     defaults = [

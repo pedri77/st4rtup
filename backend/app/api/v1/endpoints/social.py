@@ -43,8 +43,9 @@ async def list_posts(
     limit: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
-    q = select(SocialPost).order_by(desc(SocialPost.created_at)).limit(limit)
+    q = select(SocialPost).where(SocialPost.org_id == org_id).order_by(desc(SocialPost.created_at)).limit(limit)
     if platform:
         q = q.where(SocialPost.platform == platform)
     if status:
@@ -68,6 +69,7 @@ async def create_post(
     data: PostCreate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     post = SocialPost(
         platform=data.platform, content=data.content,
@@ -86,6 +88,7 @@ async def update_post(
     data: PostUpdate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(SocialPost).where(SocialPost.id == post_id))
     post = result.scalar_one_or_none()
@@ -101,6 +104,7 @@ async def update_post(
 async def social_stats(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Stats de redes sociales por plataforma."""
     q = select(
@@ -133,6 +137,7 @@ async def social_stats(
 async def seed_social_posts(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Precarga posts de ejemplo para cada plataforma."""
     defaults = [
@@ -165,6 +170,7 @@ async def generate_social_post(
     topic: str = Query(""),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera contenido para redes sociales con IA."""
     if not topic:
@@ -225,9 +231,10 @@ class RecurrenceUpdate(BaseModel):
 async def list_recurrences(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(
-        select(SocialRecurrence).order_by(desc(SocialRecurrence.created_at))
+        select(SocialRecurrence).where(SocialRecurrence.org_id == org_id).order_by(desc(SocialRecurrence.created_at))
     )
     return {"recurrences": [
         {
@@ -247,6 +254,7 @@ async def create_recurrence(
     data: RecurrenceCreate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     from datetime import timedelta, timezone
     rec = SocialRecurrence(
@@ -275,6 +283,7 @@ async def update_recurrence(
     data: RecurrenceUpdate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(SocialRecurrence).where(SocialRecurrence.id == rec_id))
     rec = result.scalar_one_or_none()
@@ -291,6 +300,7 @@ async def delete_recurrence(
     rec_id: UUID,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(SocialRecurrence).where(SocialRecurrence.id == rec_id))
     rec = result.scalar_one_or_none()
@@ -305,6 +315,7 @@ async def generate_from_recurrence(
     rec_id: UUID,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera un post ahora a partir de una recurrencia."""
     result = await db.execute(select(SocialRecurrence).where(SocialRecurrence.id == rec_id))
@@ -336,6 +347,7 @@ async def generate_from_recurrence(
 @router.get("/listening/dashboard")
 async def social_listening_dashboard(
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Dashboard de social listening: menciones, competidores, sentimiento."""
     from app.services.social_listening import get_listening_dashboard
@@ -347,6 +359,7 @@ async def social_listening_search(
     keywords: list[str] = Query(default=[]),
     max_results: int = Query(20, ge=1, le=100),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Busca menciones de keywords especificas."""
     from app.services.social_listening import search_mentions
@@ -357,6 +370,7 @@ async def social_listening_search(
 @router.get("/listening/competitors")
 async def social_listening_competitors(
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Monitoriza menciones de competidores."""
     from app.services.social_listening import monitor_competitors

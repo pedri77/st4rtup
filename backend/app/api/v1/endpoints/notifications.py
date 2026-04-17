@@ -66,6 +66,7 @@ async def list_notifications(
     priority: Optional[NotificationPriority] = None,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """
     Lista notificaciones del usuario actual con filtros.
@@ -114,6 +115,7 @@ async def list_notifications(
 async def get_notification_stats(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """
     Obtiene estadísticas de notificaciones del usuario actual.
@@ -166,6 +168,7 @@ async def get_notification(
     notification_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """
     Obtiene una notificación por ID.
@@ -190,6 +193,7 @@ async def create_notification(
     notification: NotificationCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """
     Crea una notificación.
@@ -209,6 +213,7 @@ async def update_notification(
     notification_update: NotificationUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """
     Actualiza una notificación (principalmente para marcar como leída/no leída).
@@ -248,6 +253,7 @@ async def update_notification(
 async def mark_all_as_read(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """
     Marca todas las notificaciones del usuario como leídas.
@@ -274,6 +280,7 @@ async def delete_notification(
     notification_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """
     Elimina una notificación.

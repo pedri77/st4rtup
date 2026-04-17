@@ -54,8 +54,9 @@ async def list_ad_campaigns(
     status: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
-    q = select(AdCampaign).order_by(desc(AdCampaign.created_at))
+    q = select(AdCampaign).where(AdCampaign.org_id == org_id).order_by(desc(AdCampaign.created_at))
     if platform:
         q = q.where(AdCampaign.platform == platform)
     if status:
@@ -82,6 +83,7 @@ async def create_ad_campaign(
     data: AdCampaignCreate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     campaign = AdCampaign(**data.model_dump())
     db.add(campaign)
@@ -95,6 +97,7 @@ async def update_ad_campaign(
     data: AdCampaignUpdate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     result = await db.execute(select(AdCampaign).where(AdCampaign.id == campaign_id))
     campaign = result.scalar_one_or_none()
@@ -122,6 +125,7 @@ async def update_ad_campaign(
 async def paid_media_stats(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Stats agregados de Paid Media."""
     q = select(
@@ -185,8 +189,9 @@ async def list_mentions(
     platform: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
-    q = select(EarnedMention).order_by(desc(EarnedMention.created_at))
+    q = select(EarnedMention).where(EarnedMention.org_id == org_id).order_by(desc(EarnedMention.created_at))
     if type:
         q = q.where(EarnedMention.type == type)
     if platform:
@@ -208,6 +213,7 @@ async def create_mention(
     data: MentionCreate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     mention = EarnedMention(**data.model_dump())
     db.add(mention)
@@ -219,6 +225,7 @@ async def create_mention(
 async def earned_media_stats(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Stats agregados de Earned Media."""
     total = await db.scalar(select(func.count()).select_from(EarnedMention)) or 0
@@ -252,6 +259,7 @@ async def earned_media_stats(
 async def seed_ad_campaigns(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Precarga campañas B2B de tecnología adaptadas a St4rtup."""
     from datetime import date
@@ -301,6 +309,7 @@ async def seed_ad_campaigns(
 async def trifecta_overview(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Vista unificada del Digital Marketing Trifecta."""
     from app.models.marketing import MarketingAsset, Campaign

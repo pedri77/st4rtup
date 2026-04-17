@@ -28,8 +28,9 @@ async def list_landings(
     status: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
-    q = select(LandingPage).order_by(desc(LandingPage.created_at))
+    q = select(LandingPage).where(LandingPage.org_id == org_id).order_by(desc(LandingPage.created_at))
     if status:
         q = q.where(LandingPage.status == status)
     result = await db.execute(q)
@@ -70,8 +71,9 @@ async def list_workflow_audit(
     limit: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
-    q = select(WorkflowAuditLog).order_by(desc(WorkflowAuditLog.created_at)).limit(limit)
+    q = select(WorkflowAuditLog).where(WorkflowAuditLog.org_id == org_id).order_by(desc(WorkflowAuditLog.created_at)).limit(limit)
     if module:
         q = q.where(WorkflowAuditLog.module == module)
     result = await db.execute(q)

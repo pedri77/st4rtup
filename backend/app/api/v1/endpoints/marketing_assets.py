@@ -28,9 +28,10 @@ async def list_assets(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista assets de marketing con filtros."""
-    query = select(MarketingAsset).order_by(MarketingAsset.created_at.desc())
+    query = select(MarketingAsset).where(MarketingAsset.org_id == org_id).order_by(MarketingAsset.created_at.desc())
     if status:
         query = query.where(MarketingAsset.status == status)
     if type:
@@ -58,6 +59,7 @@ async def create_asset(
     data: MarketingAssetCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea un asset de marketing."""
     asset = MarketingAsset(**data.model_dump(), created_by=UUID(current_user["user_id"]))
@@ -72,6 +74,7 @@ async def get_asset(
     asset_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtiene un asset por ID."""
     result = await db.execute(select(MarketingAsset).where(MarketingAsset.id == asset_id))
@@ -87,6 +90,7 @@ async def update_asset(
     data: MarketingAssetUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza un asset de marketing."""
     result = await db.execute(select(MarketingAsset).where(MarketingAsset.id == asset_id))
@@ -107,6 +111,7 @@ async def delete_asset(
     asset_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina un asset de marketing."""
     result = await db.execute(select(MarketingAsset).where(MarketingAsset.id == asset_id))

@@ -21,6 +21,7 @@ async def sales_performance(
     period: str = Query("last_30", pattern="^(last_7|last_30|last_90|this_month|last_month|this_year)$"),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Rendimiento de ventas: ofertas, pipeline, conversion, ingresos."""
     now = datetime.now(timezone.utc)
@@ -89,6 +90,7 @@ async def conversion_funnel(
     period: str = Query("last_30", pattern="^(last_7|last_30|last_90|this_month|last_month|this_year)$"),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Embudo de conversion: leads → qualified → opportunity → offer → won."""
     now = datetime.now(timezone.utc)
@@ -144,6 +146,7 @@ async def activity_report(
     period: str = Query("last_30", pattern="^(last_7|last_30|last_90|this_month|last_month|this_year)$"),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Actividad comercial: emails, visitas, acciones por dia."""
     now = datetime.now(timezone.utc)
@@ -211,6 +214,7 @@ async def top_accounts(
     limit: int = Query(10, ge=1, le=50),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Top cuentas por valor de pipeline y ofertas."""
     # Subquery for offer stats (avoids N+1 loop)
@@ -259,6 +263,7 @@ async def top_accounts(
 async def leads_by_source(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Distribucion de leads por fuente de captacion."""
     q = select(
@@ -286,6 +291,7 @@ async def leads_by_source(
 async def export_crm_csv(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Exporta todos los leads + oportunidades como CSV."""
     from fastapi.responses import Response
@@ -320,6 +326,7 @@ async def roi_by_channel(
     period: str = Query("last_90", pattern="^(last_30|last_90|this_year)$"),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """ROI por canal de captación — leads, oportunidades y valor por fuente."""
     now = datetime.now(timezone.utc)
@@ -375,6 +382,7 @@ async def roi_by_channel(
 async def pipeline_velocity(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Pipeline velocity — tiempo medio por etapa y velocidad de cierre."""
     # Average deal cycle (created → won)
@@ -420,6 +428,7 @@ async def lead_cohorts(
     months: int = Query(6, ge=1, le=12),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Análisis de cohortes — leads agrupados por mes de captación con evolución de estado."""
     now = datetime.now(timezone.utc)
@@ -478,6 +487,7 @@ def _get_date_range(period: str, now: datetime) -> tuple:
 async def download_pipeline_pdf(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Descarga reporte de pipeline en PDF."""
     from fastapi.responses import Response as FastResponse
@@ -556,6 +566,7 @@ async def download_activity_pdf(
     period: str = Query("last_30", pattern="^(last_7|last_30|last_90)$"),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Descarga reporte de actividad en PDF."""
     from fastapi.responses import Response as FastResponse
@@ -630,6 +641,7 @@ async def lead_activity_feed(
     limit: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Timeline unificado de toda la actividad de un lead."""
     from sqlalchemy import union_all, literal_column, cast, String

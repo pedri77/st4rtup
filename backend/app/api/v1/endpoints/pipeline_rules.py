@@ -45,10 +45,11 @@ class RuleUpdate(BaseModel):
 async def list_rules(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista todas las reglas de pipeline."""
     result = await db.execute(
-        select(PipelineRule).order_by(PipelineRule.priority.desc(), PipelineRule.created_at)
+        select(PipelineRule).where(PipelineRule.org_id == org_id).order_by(PipelineRule.priority.desc(), PipelineRule.created_at)
     )
     rules = result.scalars().all()
     return {
@@ -72,6 +73,7 @@ async def create_rule(
     data: RuleCreate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea una regla de automatizacion de pipeline."""
     rule = PipelineRule(
@@ -90,6 +92,7 @@ async def update_rule(
     data: RuleUpdate,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza una regla."""
     result = await db.execute(select(PipelineRule).where(PipelineRule.id == rule_id))
@@ -107,6 +110,7 @@ async def delete_rule(
     rule_id: UUID,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina una regla."""
     result = await db.execute(select(PipelineRule).where(PipelineRule.id == rule_id))
@@ -121,6 +125,7 @@ async def delete_rule(
 async def seed_default_rules(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Carga reglas de pipeline por defecto."""
     from sqlalchemy import func

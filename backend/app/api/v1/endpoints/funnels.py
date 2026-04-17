@@ -24,9 +24,10 @@ async def list_funnels(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista funnels de marketing con filtros."""
-    query = select(Funnel).order_by(Funnel.created_at.desc())
+    query = select(Funnel).where(Funnel.org_id == org_id).order_by(Funnel.created_at.desc())
     if status:
         query = query.where(Funnel.status == status)
     if campaign_id:
@@ -50,6 +51,7 @@ async def create_funnel(
     data: FunnelCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea un funnel de marketing."""
     funnel = Funnel(**data.model_dump(), created_by=UUID(current_user["user_id"]))
@@ -64,6 +66,7 @@ async def get_funnel(
     funnel_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtiene un funnel por ID."""
     result = await db.execute(select(Funnel).where(Funnel.id == funnel_id))
@@ -79,6 +82,7 @@ async def update_funnel(
     data: FunnelUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza un funnel de marketing."""
     result = await db.execute(select(Funnel).where(Funnel.id == funnel_id))
@@ -99,6 +103,7 @@ async def delete_funnel(
     funnel_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina un funnel de marketing."""
     result = await db.execute(select(Funnel).where(Funnel.id == funnel_id))

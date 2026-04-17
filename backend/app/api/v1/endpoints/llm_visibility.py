@@ -34,9 +34,10 @@ async def list_queries(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista queries de visibilidad LLM."""
-    query = select(LLMVisibilityQuery).order_by(desc(LLMVisibilityQuery.created_at))
+    query = select(LLMVisibilityQuery).where(LLMVisibilityQuery.org_id == org_id).order_by(desc(LLMVisibilityQuery.created_at))
     if category:
         query = query.where(LLMVisibilityQuery.category == category)
     if is_active is not None:
@@ -60,6 +61,7 @@ async def create_query(
     data: LLMVisibilityQueryCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea una query de visibilidad LLM."""
     q = LLMVisibilityQuery(
@@ -76,6 +78,7 @@ async def create_query(
 async def seed_queries(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera queries predefinidas para monitorización growth."""
     seeds = [
@@ -157,6 +160,7 @@ async def run_single_query(
     query_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Ejecuta una query contra todos sus providers configurados."""
     result = await db.execute(
@@ -188,6 +192,7 @@ async def run_single_query(
 async def run_all_active(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Ejecuta todas las queries activas."""
     result = await db.execute(
@@ -220,9 +225,10 @@ async def list_results(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista resultados de visibilidad LLM."""
-    query = select(LLMVisibilityResult).order_by(desc(LLMVisibilityResult.created_at))
+    query = select(LLMVisibilityResult).where(LLMVisibilityResult.org_id == org_id).order_by(desc(LLMVisibilityResult.created_at))
     if query_id:
         query = query.where(LLMVisibilityResult.query_id == query_id)
     if provider:
@@ -250,6 +256,7 @@ async def list_results(
 async def get_stats(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Estadísticas de visibilidad LLM."""
     total_queries = await db.scalar(
@@ -315,6 +322,7 @@ async def get_query(
     query_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Obtiene una query por ID."""
     result = await db.execute(
@@ -332,6 +340,7 @@ async def update_query(
     data: LLMVisibilityQueryUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza una query de visibilidad."""
     result = await db.execute(
@@ -354,6 +363,7 @@ async def delete_query(
     query_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina una query y sus resultados."""
     result = await db.execute(

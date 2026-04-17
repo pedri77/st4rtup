@@ -23,6 +23,7 @@ router = APIRouter()
 async def cost_summary(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Resumen de costes del mes actual con guardrail status por herramienta."""
     return await guardrail_engine.get_monthly_summary(db)
@@ -36,6 +37,7 @@ async def evaluate_guardrail(
     estimated_cost: float = Query(0),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Pre-check: evalúa si una operación debe proceder según el presupuesto."""
     return await guardrail_engine.evaluate(db, tool_id, estimated_cost)
@@ -55,6 +57,7 @@ async def record_cost(
     request: RecordCostRequest,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Registra un evento de coste + auto-evalúa guardrail."""
     return await guardrail_engine.record_cost(
@@ -68,9 +71,10 @@ async def record_cost(
 async def list_caps(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista todos los topes de presupuesto."""
-    result = await db.execute(select(BudgetCap).order_by(BudgetCap.tool_name))
+    result = await db.execute(select(BudgetCap).where(BudgetCap.org_id == org_id).order_by(BudgetCap.tool_name))
     caps = result.scalars().all()
     return {
         "caps": [
@@ -102,6 +106,7 @@ async def update_cap(
     request: UpdateCapRequest,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza un tope de presupuesto (sin redespliegue)."""
     result = await db.execute(select(BudgetCap).where(BudgetCap.tool_id == tool_id))
@@ -142,9 +147,10 @@ async def guardrail_log(
     limit: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Audit trail de evaluaciones del GuardrailEngine."""
-    q = select(GuardrailLog).order_by(desc(GuardrailLog.created_at)).limit(limit)
+    q = select(GuardrailLog).where(GuardrailLog.org_id == org_id).order_by(desc(GuardrailLog.created_at)).limit(limit)
     if tool_id:
         q = q.where(GuardrailLog.tool_id == tool_id)
     if level:
@@ -174,6 +180,7 @@ async def guardrail_log(
 async def predictive_cost_alert(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Alerta predictiva: proyección fin de mes basada en gasto actual."""
     from datetime import datetime, timezone
@@ -226,6 +233,7 @@ async def predictive_cost_alert(
 async def cost_roi(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """ROI por herramienta — coste vs valor generado."""
     from app.models.cost import CostEvent
@@ -266,6 +274,7 @@ async def cost_roi(
 async def cost_by_department(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Costes agrupados por departamento/categoria."""
     from app.models.cost import CostEvent
@@ -320,6 +329,7 @@ async def set_department_budgets(
     budgets: dict,
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Establece presupuesto mensual por departamento. Body: {\"sales\": 5000, \"marketing\": 3000, ...}"""
     result = await db.execute(select(SystemSettings).limit(1))
@@ -338,6 +348,7 @@ async def set_department_budgets(
 async def predictive_advanced(
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Dashboard predictivo avanzado: tendencias, anomalias, proyecciones multi-mes."""
     from app.models.cost import CostEvent
@@ -411,6 +422,7 @@ async def cost_burn_rate(
     days: int = Query(30, ge=7, le=90),
     db: AsyncSession = Depends(get_db),
     _current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Cost burn rate: daily spending by tool over time."""
     from datetime import datetime, timezone, timedelta

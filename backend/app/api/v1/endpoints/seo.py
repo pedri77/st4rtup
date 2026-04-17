@@ -40,9 +40,10 @@ async def list_keywords(
     page_size: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista keywords SEO monitorizadas."""
-    query = select(SEOKeyword).order_by(desc(SEOKeyword.created_at))
+    query = select(SEOKeyword).where(SEOKeyword.org_id == org_id).order_by(desc(SEOKeyword.created_at))
     if category:
         query = query.where(SEOKeyword.category == category)
     if is_active is not None:
@@ -67,6 +68,7 @@ async def create_keyword(
     data: SEOKeywordCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea una keyword SEO para monitorizar."""
     kw = SEOKeyword(**data.model_dump(), created_by=UUID(current_user["user_id"]))
@@ -80,6 +82,7 @@ async def create_keyword(
 async def seed_keywords(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Genera keywords predefinidas para growth/cybersecurity en España."""
     seeds = [
@@ -130,6 +133,7 @@ async def update_keyword(
     data: SEOKeywordUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza una keyword SEO."""
     result = await db.execute(select(SEOKeyword).where(SEOKeyword.id == keyword_id))
@@ -148,6 +152,7 @@ async def delete_keyword(
     keyword_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina una keyword y sus rankings."""
     result = await db.execute(select(SEOKeyword).where(SEOKeyword.id == keyword_id))
@@ -173,9 +178,10 @@ async def list_rankings(
     page_size: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista rankings SEO con filtros."""
-    query = select(SEORanking).order_by(desc(SEORanking.check_date))
+    query = select(SEORanking).where(SEORanking.org_id == org_id).order_by(desc(SEORanking.check_date))
     if keyword_id:
         query = query.where(SEORanking.keyword_id == keyword_id)
     if country:
@@ -202,6 +208,7 @@ async def create_ranking(
     data: SEORankingCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Registra un ranking (manual o automático)."""
     ranking = SEORanking(**data.model_dump())
@@ -216,6 +223,7 @@ async def create_rankings_bulk(
     items: list[SEORankingCreate],
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Registra rankings en bulk (para crons/n8n)."""
     created = 0
@@ -241,9 +249,10 @@ async def list_geo_pages(
     page_size: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista páginas geo-localizadas."""
-    query = select(GeoPage).order_by(desc(GeoPage.created_at))
+    query = select(GeoPage).where(GeoPage.org_id == org_id).order_by(desc(GeoPage.created_at))
     if country:
         query = query.where(GeoPage.country == country)
     if region:
@@ -268,6 +277,7 @@ async def create_geo_page(
     data: GeoPageCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Crea una página geo-localizada."""
     page_obj = GeoPage(**data.model_dump(), created_by=UUID(current_user["user_id"]))
@@ -283,6 +293,7 @@ async def update_geo_page(
     data: GeoPageUpdate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Actualiza una página geo-localizada."""
     result = await db.execute(select(GeoPage).where(GeoPage.id == page_id))
@@ -301,6 +312,7 @@ async def delete_geo_page(
     page_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina una página geo-localizada."""
     result = await db.execute(select(GeoPage).where(GeoPage.id == page_id))
@@ -324,9 +336,10 @@ async def list_nap_audits(
     page_size: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista auditorías NAP."""
-    query = select(NAPAudit).order_by(desc(NAPAudit.check_date))
+    query = select(NAPAudit).where(NAPAudit.org_id == org_id).order_by(desc(NAPAudit.check_date))
     if is_consistent is not None:
         query = query.where(NAPAudit.is_consistent.is_(is_consistent))
     if country:
@@ -349,6 +362,7 @@ async def create_nap_audit(
     data: NAPAuditCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Registra una auditoría NAP."""
     audit = NAPAudit(**data.model_dump(), created_by=UUID(current_user["user_id"]))
@@ -363,6 +377,7 @@ async def delete_nap_audit(
     audit_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Elimina una auditoría NAP."""
     result = await db.execute(select(NAPAudit).where(NAPAudit.id == audit_id))
@@ -386,9 +401,10 @@ async def list_geo_rankings(
     page_size: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Lista rankings geo-localizados."""
-    query = select(GeoKeywordRanking).order_by(desc(GeoKeywordRanking.check_date))
+    query = select(GeoKeywordRanking).where(GeoKeywordRanking.org_id == org_id).order_by(desc(GeoKeywordRanking.check_date))
     if keyword:
         query = query.where(GeoKeywordRanking.keyword.ilike(f"%{keyword}%"))
     if location:
@@ -411,6 +427,7 @@ async def create_geo_ranking(
     data: GeoKeywordRankingCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Registra un ranking geo-localizado."""
     ranking = GeoKeywordRanking(**data.model_dump())
@@ -425,6 +442,7 @@ async def create_geo_rankings_bulk(
     items: list[GeoKeywordRankingCreate],
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_write_access),
+org_id: str = Depends(get_org_id),
 ):
     """Registra rankings geo en bulk (para crons/n8n)."""
     created = 0
@@ -445,6 +463,7 @@ async def create_geo_rankings_bulk(
 async def get_seo_stats(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+org_id: str = Depends(get_org_id),
 ):
     """Estadísticas unificadas SEO + Geo-SEO."""
     total_keywords = await db.scalar(select(func.count()).select_from(SEOKeyword)) or 0
