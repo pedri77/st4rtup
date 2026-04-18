@@ -1,31 +1,41 @@
 /**
- * PostHog SDK wrapper — product analytics para AGENT-CS-001.
- * Completamente opcional: si VITE_POSTHOG_KEY no está configurado, no hace nada.
- * No requiere instalar posthog-js — usa fetch directo a la API.
+ * PostHog SDK — product analytics.
+ * Uses official posthog-js SDK for reliable tracking.
  */
+import posthog from 'posthog-js'
 
-let config = null
+let initialized = false
 
 export function initPostHog() {
   const key = import.meta.env.VITE_POSTHOG_KEY
-  const host = import.meta.env.VITE_POSTHOG_HOST
-  if (key && host) {
-    config = { key, host }
-  }
+  const host = import.meta.env.VITE_POSTHOG_HOST || 'https://eu.posthog.com'
+  if (!key || initialized) return
+
+  posthog.init(key, {
+    api_host: host,
+    capture_pageview: true,
+    capture_pageleave: true,
+    autocapture: true,
+    persistence: 'localStorage',
+  })
+  initialized = true
+
+  // Expose globally for GrowthBook tracking callback
+  window.posthog = posthog
 }
 
 export function identify(userId, properties = {}) {
-  if (!config) return
-  _send('$identify', { $set: properties, distinct_id: userId })
+  if (!initialized) return
+  posthog.identify(userId, properties)
 }
 
 export function track(event, properties = {}) {
-  if (!config) return
-  _send(event, { ...properties, source: 'frontend' })
+  if (!initialized) return
+  posthog.capture(event, properties)
 }
 
 export function trackPageView(pageName) {
-  track('$pageview', { page: pageName, $current_url: window.location.href })
+  track('$pageview', { page: pageName })
 }
 
 export function trackLeadCreated(leadId, companyName, source) {
@@ -40,36 +50,10 @@ export function trackDealStageChanged(dealId, fromStage, toStage) {
   track('deal_stage_changed', { deal_id: dealId, from: fromStage, to: toStage })
 }
 
-export function trackProposalGenerated(leadId, companyName) {
-  track('proposal_generated', { lead_id: leadId, company: companyName })
-}
-
-export function trackProposalDownloaded(leadId) {
-  track('proposal_downloaded', { lead_id: leadId })
-}
-
-export function trackCallCompleted(callId, duration, result) {
-  track('call_completed', { call_id: callId, duration, result })
-}
-
 export function trackFeatureUsed(feature, details = {}) {
   track('feature_used', { feature, ...details })
 }
 
-export function reset() { config = null }
-
-function _send(event, properties) {
-  if (!config) return
-  const body = {
-    api_key: config.key,
-    event,
-    properties: { ...properties, $lib: 'riskitera-web' },
-    timestamp: new Date().toISOString(),
-    distinct_id: properties.distinct_id || localStorage.getItem('posthog_id') || 'anonymous',
-  }
-  fetch(`${config.host}/capture/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  }).catch(() => {})
+export function reset() {
+  if (initialized) posthog.reset()
 }
