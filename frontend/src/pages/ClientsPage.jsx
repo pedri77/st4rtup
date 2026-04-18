@@ -9,9 +9,12 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import ExportButton from '@/components/ExportButton'
+import DataTable, { ColumnRenderers } from '@/components/DataTable'
+import { LayoutList } from 'lucide-react'
 import { ListItemSkeleton } from '@/components/LoadingStates'
 import { useConfirm } from '@/components/common/ConfirmDialog'
 import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
+import PageHeader from '@/components/common/PageHeader'
 
 
 const inputStyle = { backgroundColor: T.card, border: `1px solid ${T.border}`, color: T.fg, borderRadius: '0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.875rem', width: '100%', outline: 'none' }
@@ -139,13 +142,12 @@ export default function ClientsPage() {
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-3xl font-bold" style={{ color: T.fg, fontFamily: fontDisplay }}>Contactos y Stakeholders</h1>
-          <p className="text-sm mt-1" style={{ color: T.fgMuted }}>
-            Mapa de poder y contactos clave de tus clientes
-          </p>
-        </div>
+      <PageHeader
+        title="Contactos y Stakeholders"
+        subtitle="Mapa de poder y contactos clave de tus clientes"
+        icon={Users}
+        badge={`${contacts?.length || 0}`}
+        actions={
         <div className="flex items-center gap-3">
           <div className="flex rounded-lg p-1" style={{ backgroundColor: T.muted }}>
             <button
@@ -157,6 +159,17 @@ export default function ClientsPage() {
               }}
             >
               Lista
+            </button>
+            <button
+              onClick={() => setViewMode('table')}
+              className="px-3 py-1.5 text-sm rounded-md transition-colors flex items-center gap-1"
+              style={{
+                backgroundColor: viewMode === 'table' ? `${T.cyan}20` : 'transparent',
+                color: viewMode === 'table' ? T.cyan : T.fgMuted,
+              }}
+            >
+              <LayoutList className="w-4 h-4" />
+              Tabla
             </button>
             <button
               onClick={() => setViewMode('powermap')}
@@ -194,7 +207,8 @@ export default function ClientsPage() {
             Nuevo Contacto
           </button>
         </div>
-      </div>
+        }
+      />
 
       {/* Stats */}
       {stats && (
@@ -277,6 +291,33 @@ export default function ClientsPage() {
       {/* Content */}
       {isLoading ? (
         <div className="space-y-3">{[...Array(5)].map((_, i) => <ListItemSkeleton key={i} />)}</div>
+      ) : viewMode === 'table' ? (
+        <DataTable
+          columns={[
+            { key: 'full_name', label: 'Nombre', width: '20%', render: (v, row) => (
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold" style={{ background: `linear-gradient(135deg, ${T.cyan}20, ${T.purple}15)`, color: T.cyan }}>
+                  {(v || '?')[0]}
+                </div>
+                <div>
+                  <span className="font-medium text-sm">{v || '—'}</span>
+                  {row.role && <p className="text-[10px]" style={{ color: T.fgMuted }}>{ROLE_LABELS[row.role] || row.role}</p>}
+                </div>
+              </div>
+            )},
+            { key: 'email', label: 'Email', width: '22%', render: (v) => v ? <a href={`mailto:${v}`} className="text-sm" style={{ color: T.cyan }}>{v}</a> : '—' },
+            { key: 'phone', label: 'Teléfono', width: '14%', render: (v) => v || '—' },
+            { key: 'lead_name', label: 'Empresa', width: '18%', render: (_, row) => row.lead?.company_name || '—' },
+            { key: 'influence_level', label: 'Influencia', width: '12%', render: (v) => {
+              const colors = { champion: T.success, decision_maker: T.cyan, influencer: T.warning, blocker: T.destructive, user: T.fgMuted }
+              return v ? <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: `${colors[v] || T.fgMuted}15`, color: colors[v] || T.fgMuted }}>{INFLUENCE_LABELS[v] || v}</span> : '—'
+            }},
+            { key: 'relationship_status', label: 'Relación', width: '14%', render: (v) => v ? <span className="text-xs capitalize" style={{ color: T.fgMuted }}>{v.replace('_', ' ')}</span> : '—' },
+          ]}
+          data={contacts}
+          onRowClick={(row) => setSelectedContact(row)}
+          pageSize={20}
+        />
       ) : viewMode === 'powermap' ? (
         <PowerMapView
           contacts={contacts}

@@ -8,6 +8,8 @@ import { useLeadsSelect } from '@/hooks/useLeadsSelect'
 import { useLeadsByIds } from '@/hooks/useLeadsByIds'
 import { Plus, X, FileText, Loader2, Download } from 'lucide-react'
 import toast from 'react-hot-toast'
+import PageHeader from '@/components/common/PageHeader'
+import { GitBranch } from 'lucide-react'
 import { mockOpportunities, mockDelay, USE_MOCK_DATA } from '@/mocks/mockData'
 import ExportButton from '@/components/ExportButton'
 import { DealScoreBadge as DealScoreCardInline } from '@/components/DealScoreCard'
@@ -151,12 +153,12 @@ export default function PipelinePage() {
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-full" style={{ backgroundColor: T.bg }}>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold" style={{ fontFamily: fontDisplay, color: T.fg }}>Pipeline</h1>
-          <p className="text-sm mt-1" style={{ fontFamily: fontMono, color: T.fgMuted }}>{activeOpportunities.length} operaciones activas</p>
-        </div>
+      <PageHeader
+        title="Pipeline"
+        subtitle={`${activeOpportunities.length} operaciones activas`}
+        icon={GitBranch}
+        badge={`€${((stats?.pipeline_value || 0) / 1000).toFixed(0)}K`}
+        actions={
         <div className="flex items-center gap-3">
           <ExportButton
             data={opportunities || []}
@@ -180,7 +182,8 @@ export default function PipelinePage() {
             <Plus className="w-4 h-4" /> Nueva Op.
           </button>
         </div>
-      </div>
+        }
+      />
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">

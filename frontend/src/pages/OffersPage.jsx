@@ -8,6 +8,7 @@ import {
 'lucide-react';
 import toast from 'react-hot-toast';
 import { offersApi, serviceCatalogApi } from '@/services/api';
+import PageHeader from '@/components/common/PageHeader';
 import { useLeadsSelect } from '@/hooks/useLeadsSelect';
 import { generateOfferPDF } from '@/utils/offerPdf';
 import ExportButton from '@/components/ExportButton';
@@ -95,25 +96,23 @@ export default function OffersPage() {
     <div className="-m-4 md:-m-8 p-4 md:p-8 min-h-screen" style={{ backgroundColor: T.bg, color: T.fg, fontFamily: fontDisplay }}>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3" style={{ color: T.fg, fontFamily: fontDisplay }}>
-            <FileText className="w-7 h-7" style={{ color: T.cyan }} />
-            Ofertas
-          </h1>
-          <p className="text-sm mt-1" style={{ color: T.fgMuted }}>Propuestas comerciales</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <ExportButton data={offers || []} filename="ofertas" transform={(o) => ({ 'Referencia': o.reference || '', 'Empresa': o.lead_name || '', 'Estado': o.status, 'Importe Total': o.total_amount || 0, 'Valida Hasta': formatDateForExport(o.valid_until), 'Enviada': formatDateForExport(o.sent_at), 'Creado': formatDateForExport(o.created_at) })} size="sm" />
-          <Link to="/app/offers/catalog" className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors" style={{ border: `1px solid ${T.border}`, color: T.fgMuted, textDecoration: 'none' }}>
-            <Package className="w-4 h-4" /> Catálogo
-          </Link>
-          <button onClick={() => {setEditingOffer(null);setShowModal(true);}} className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors" style={{ backgroundColor: T.cyan, color: T.bg }}>
-            <Plus className="w-4 h-4" /> Nueva Oferta
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Ofertas"
+        subtitle="Propuestas comerciales"
+        icon={FileText}
+        badge={`${(offers || []).length}`}
+        actions={
+          <div className="flex items-center gap-3">
+            <ExportButton data={offers || []} filename="ofertas" transform={(o) => ({ 'Referencia': o.reference || '', 'Empresa': o.lead_name || '', 'Estado': o.status, 'Importe Total': o.total_amount || 0, 'Valida Hasta': formatDateForExport(o.valid_until), 'Enviada': formatDateForExport(o.sent_at), 'Creado': formatDateForExport(o.created_at) })} size="sm" />
+            <Link to="/app/offers/catalog" className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors" style={{ border: `1px solid ${T.border}`, color: T.fgMuted, textDecoration: 'none' }}>
+              <Package className="w-4 h-4" /> Catálogo
+            </Link>
+            <button onClick={() => {setEditingOffer(null);setShowModal(true);}} className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors" style={{ backgroundColor: T.cyan, color: T.bg }}>
+              <Plus className="w-4 h-4" /> Nueva Oferta
+            </button>
+          </div>
+        }
+      />
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
