@@ -6,6 +6,7 @@ import ActivityFeed from '@/components/ActivityFeed';
 import { ArrowLeft, Mail, Building2, User, Phone, MapPin, Globe, FileText, Tag, TrendingUp, Users, Star, Crown, Linkedin, Calendar, Clock, Video, Send, Sparkles, Loader2, CheckCircle2, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
+import InlineEdit from '@/components/common/InlineEdit'
 
 
 ;
@@ -99,6 +100,14 @@ export default function LeadDetailPage() {
     enabled: !!id
   });
 
+  const updateField = async (field, value) => {
+    try {
+      await leadsApi.update(id, { [field]: value })
+      refetch()
+      toast.success('Campo actualizado')
+    } catch { toast.error('Error al guardar') }
+  }
+
   const triggerEM01 = useMutation({
     mutationFn: () => automationTasksApi.triggerEM01(id),
     onSuccess: () => {toast.success('Welcome Sequence iniciada! Email Day 0 enviado.', { duration: 5000 });refetch();},
@@ -156,7 +165,7 @@ export default function LeadDetailPage() {
 
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-3xl font-bold mb-2" style={{ fontFamily: fontDisplay, color: T.fg }}>{lead.company_name}</h1>
+            <InlineEdit value={lead.company_name} onSave={(v) => updateField('company_name', v)} className="text-3xl font-bold mb-2" style={{ fontFamily: fontDisplay, color: T.fg }} />
             <div className="flex items-center gap-3">
               <span className="text-xs px-2 py-0.5 rounded font-semibold" style={{ color: st.color, backgroundColor: st.bg }}>{lead.status}</span>
               <span className="text-sm" style={{ color: T.fgMuted }}>{sourceLabels[lead.source] || lead.source}</span>
@@ -259,10 +268,10 @@ export default function LeadDetailPage() {
               <Building2 className="w-5 h-5" style={{ color: T.cyan }} /> Informacion de la Empresa
             </h2>
             <div className="grid grid-cols-2 gap-4">
-              {lead.company_cif && <div><p className="text-xs" style={{ color: T.fgMuted }}>CIF</p><p className="text-sm font-medium" style={{ color: T.fg }}>{lead.company_cif}</p></div>}
-              {lead.company_sector && <div><p className="text-xs" style={{ color: T.fgMuted }}>Sector</p><p className="text-sm font-medium capitalize" style={{ color: T.fg }}>{lead.company_sector}</p></div>}
-              {lead.company_size && <div><p className="text-xs" style={{ color: T.fgMuted }}>Tamano</p><p className="text-sm font-medium" style={{ color: T.fg }}>{lead.company_size}</p></div>}
-              {lead.company_revenue && <div><p className="text-xs" style={{ color: T.fgMuted }}>Facturacion</p><p className="text-sm font-medium" style={{ color: T.fg }}>{lead.company_revenue}</p></div>}
+              <div><p className="text-xs mb-1" style={{ color: T.fgMuted }}>CIF</p><InlineEdit value={lead.company_cif || ''} onSave={(v) => updateField('company_cif', v)} placeholder="Añadir CIF" className="text-sm font-medium" /></div>
+              <div><p className="text-xs mb-1" style={{ color: T.fgMuted }}>Sector</p><InlineEdit value={lead.company_sector || ''} onSave={(v) => updateField('company_sector', v)} type="select" options={[{value:'saas',label:'SaaS'},{value:'fintech',label:'Fintech'},{value:'ecommerce',label:'Ecommerce'},{value:'services',label:'Servicios'},{value:'healthcare',label:'Healthcare'},{value:'education',label:'Educación'},{value:'other',label:'Otro'}]} placeholder="Seleccionar" className="text-sm font-medium capitalize" /></div>
+              <div><p className="text-xs mb-1" style={{ color: T.fgMuted }}>Tamano</p><InlineEdit value={lead.company_size || ''} onSave={(v) => updateField('company_size', v)} type="select" options={[{value:'1-10',label:'1-10'},{value:'11-50',label:'11-50'},{value:'51-200',label:'51-200'},{value:'201-1000',label:'201-1000'},{value:'1000+',label:'1000+'}]} placeholder="Seleccionar" className="text-sm font-medium" /></div>
+              <div><p className="text-xs mb-1" style={{ color: T.fgMuted }}>Facturacion</p><InlineEdit value={lead.company_revenue || ''} onSave={(v) => updateField('company_revenue', v)} placeholder="Añadir" className="text-sm font-medium" /></div>
               {lead.company_website &&
               <div className="col-span-2">
                   <p className="text-xs mb-1" style={{ color: T.fgMuted }}>Website</p>
@@ -289,8 +298,8 @@ export default function LeadDetailPage() {
               <User className="w-5 h-5" style={{ color: T.cyan }} /> Contacto Principal
             </h2>
             <div className="grid grid-cols-2 gap-4">
-              {lead.contact_name && <div><p className="text-xs" style={{ color: T.fgMuted }}>Nombre</p><p className="text-sm font-medium" style={{ color: T.fg }}>{lead.contact_name}</p></div>}
-              {lead.contact_title && <div><p className="text-xs" style={{ color: T.fgMuted }}>Cargo</p><p className="text-sm font-medium" style={{ color: T.fg }}>{lead.contact_title}</p></div>}
+              <div><p className="text-xs mb-1" style={{ color: T.fgMuted }}>Nombre</p><InlineEdit value={lead.contact_name || ''} onSave={(v) => updateField('contact_name', v)} placeholder="Añadir nombre" className="text-sm font-medium" /></div>
+              <div><p className="text-xs mb-1" style={{ color: T.fgMuted }}>Cargo</p><InlineEdit value={lead.contact_title || ''} onSave={(v) => updateField('contact_title', v)} placeholder="Añadir cargo" className="text-sm font-medium" /></div>
               {lead.contact_email &&
               <div className="col-span-2">
                   <p className="text-xs mb-1" style={{ color: T.fgMuted }}>Email</p>
