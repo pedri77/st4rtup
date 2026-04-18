@@ -189,7 +189,7 @@ export default function Layout() {
   }, [])
 
   return (
-    <div className="flex h-screen" style={{ backgroundColor: T.bg }}>
+    <div className="flex h-dvh" style={{ backgroundColor: T.bg }}>
       <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:text-white focus:bg-blue-600 focus:outline-none">
         Ir al contenido principal
       </a>

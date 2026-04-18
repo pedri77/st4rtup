@@ -50,7 +50,7 @@ export default function LoginPage() {
   const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 focus:bg-white placeholder:text-gray-400"
 
   return (
-    <div className="public-page min-h-screen flex">
+    <div className="public-page min-h-dvh flex">
       {/* Left: Form */}
       <div className="flex-1 flex items-center justify-center p-6 bg-white">
         <div className="w-full max-w-md">

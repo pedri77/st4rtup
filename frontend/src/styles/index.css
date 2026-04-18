@@ -85,25 +85,46 @@
 }
 
 @layer utilities {
-  /* Animations */
+  /*
+   * Animation duration tokens:
+   *   --duration-fast:   150ms (micro-interactions, active states)
+   *   --duration-normal: 250ms (enter transitions, slides)
+   *   --duration-slow:   350ms (fade-in, complex transitions)
+   *   Exit = 60% of enter (feels snappier)
+   */
+
+  /* Animations — enter */
   .animate-fade-in {
-    animation: fadeIn 0.5s ease-in-out;
+    animation: fadeIn 350ms ease-out;
   }
 
   .animate-slide-down {
-    animation: slideDown 0.3s ease-out;
+    animation: slideDown 250ms ease-out;
   }
 
   .animate-slide-up {
-    animation: slideUp 0.3s ease-out;
+    animation: slideUp 250ms ease-out;
   }
 
   .animate-slide-right {
-    animation: slideRight 0.3s ease-out;
+    animation: slideRight 250ms ease-out;
   }
 
   .animate-scale-in {
-    animation: scaleIn 0.2s ease-out;
+    animation: scaleIn 200ms ease-out;
+  }
+
+  /* Animations — exit (60% of enter duration) */
+  .animate-fade-out {
+    animation: fadeOut 200ms ease-in;
+  }
+
+  .animate-slide-down-exit {
+    animation: slideDownExit 150ms ease-in;
+  }
+
+  .animate-scale-out {
+    animation: scaleOut 120ms ease-in;
   }
 
   /* Hover Effects */
@@ -142,19 +163,19 @@
   }
 
   .list-item-enter {
-    animation: slideUp 0.2s ease-out both;
+    animation: slideUp 200ms ease-out both;
   }
 
   .save-pulse {
-    animation: savePulse 0.6s ease-out;
+    animation: savePulse 600ms ease-out;
   }
 
   .fade-in {
-    animation: fadeIn 0.3s ease-out both;
+    animation: fadeIn 250ms ease-out both;
   }
 
   .slide-up {
-    animation: slideUp 0.25s ease-out both;
+    animation: slideUp 250ms ease-out both;
   }
 
   /* Mobile responsive utilities */
@@ -208,6 +229,22 @@
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* Exit keyframes (reverse of enter) */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideDownExit {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes scaleOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
 }
 
 /* Accessibility: respect user motion preferences */
