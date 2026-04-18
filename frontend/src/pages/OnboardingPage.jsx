@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Upload, Mail, BarChart3, Rocket, Check, Building2, Target } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { useOrganization } from '@/hooks/useOrganization'
+import { gb } from '@/lib/growthbook'
+import { trackEvent } from '@/lib/growthbook'
 import { useThemeColors } from '@/utils/theme'
 
 const fontDisplay = "'Plus Jakarta Sans', sans-serif"
@@ -25,7 +27,7 @@ const PIPELINES = [
   { id: 'custom', name: 'Personalizado', stages: ['Fase 1', 'Fase 2', 'Fase 3', 'Fase 4', 'Cerrado'] },
 ]
 
-const STEPS = [
+const STEPS_FULL = [
   { icon: Rocket, title: 'Bienvenida' },
   { icon: Building2, title: 'Empresa' },
   { icon: Upload, title: 'Leads' },
@@ -35,7 +37,16 @@ const STEPS = [
   { icon: Check, title: '¡Listo!' },
 ]
 
+const STEPS_SHORT = [
+  { icon: Rocket, title: 'Bienvenida' },
+  { icon: Building2, title: 'Empresa' },
+  { icon: Check, title: '¡Listo!' },
+]
+
 export default function OnboardingPage() {
+  const isShortOnboarding = gb.isOn('onboarding_short')
+  const STEPS = isShortOnboarding ? STEPS_SHORT : STEPS_FULL
+
   const [step, setStep] = useState(0)
   const [name, setName] = useState('')
   const [company, setCompany] = useState('')
@@ -88,6 +99,7 @@ export default function OnboardingPage() {
     next()
   }
   async function finish() {
+    trackEvent('onboarding_complete', 1, { variant: isShortOnboarding ? 'short' : 'full', steps: STEPS.length })
     const onboardingData = { name, company, sector, teamSize, pipeline: selectedPipeline, target: monthlyTarget }
     // Persist to backend so it syncs cross-device
     try {
@@ -274,7 +286,7 @@ export default function OnboardingPage() {
         )}
 
         {/* Step 6: Done */}
-        {step === 6 && (
+        {step === STEPS.length - 1 && (
           <>
             <div style={{ textAlign: 'center' }}>
               <div style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: `${T.success}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>

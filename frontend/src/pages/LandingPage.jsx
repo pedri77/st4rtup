@@ -4,6 +4,7 @@ import ExitIntentPopup from '@/components/ExitIntentPopup'
 import WebChatWidget from '@/components/WebChatWidget'
 import { useThemeColors } from '@/utils/theme'
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { gb } from '@/lib/growthbook'
 import { Link } from 'react-router-dom'
 import {
   ArrowRight, BarChart3, Mail, Phone, Globe, Zap,
@@ -229,6 +230,12 @@ export default function LandingPage() {
   const [testimonialIdx, setTestimonialIdx] = useState(0)
   const t = T[lang]
 
+  // GrowthBook A/B experiments
+  const isCtaOrange = gb.isOn('cta_color_orange')
+  const isHeroVariant = gb.isOn('hero_variant')
+  const isPricingSimplified = gb.isOn('pricing_simplified')
+  const ctaColor = isCtaOrange ? '#F5820B' : TC.primary
+
   // Track A/B variant
   useEffect(() => {
     window.umami?.track('hero_ab_view', { variant: AB_IDX })
@@ -367,13 +374,38 @@ export default function LandingPage() {
             <FadeIn delay={0.1}><p className="landing-hero-sub" style={{ fontSize: 'clamp(15px, 3.5vw, 18px)', color: TC.fgMuted, lineHeight: 1.7, marginBottom: 32, maxWidth: 500 }}>{AB_VARIANTS[lang]?.[AB_IDX] || t.hero.sub}</p></FadeIn>
             <FadeIn delay={0.2}>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <Link to="/register" onClick={() => window.umami?.track('hero_cta_click', { variant: 'register' })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: TC.primary, color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: `0 4px 14px ${TC.primary}66` }}>{t.hero.cta1} <ArrowRight size={18} /></Link>
+                <Link to="/register" onClick={() => { window.umami?.track('hero_cta_click', { variant: 'register', cta_color: isCtaOrange ? 'orange' : 'blue' }); import('@/lib/growthbook').then(m => m.trackEvent('hero_cta_click', 1, { color: isCtaOrange ? 'orange' : 'blue' })) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: ctaColor, color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: `0 4px 14px ${ctaColor}66` }}>{t.hero.cta1} <ArrowRight size={18} /></Link>
                 <Link to="/demo" onClick={() => window.umami?.track('hero_cta_click', { variant: 'demo' })} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", border: `2px solid ${TC.border}`, color: TC.fg, borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: "none" }}>{t.hero.cta2}</Link>
               </div>
             </FadeIn>
           </div>
           <FadeIn delay={0.3}>
             <div style={{ flex: '1 1 400px', position: 'relative' }}>
+              {isHeroVariant ? (
+                /* Variant B: Social proof */
+                <div style={{ borderRadius: 16, padding: 32, background: `linear-gradient(135deg, ${TC.primary}08, ${TC.accent}05)`, border: `1px solid ${TC.border}` }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    {t.testimonials.items.slice(0, 2).map((item, i) => (
+                      <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                        <img src={item.avatar} alt={item.name} style={{ width: 40, height: 40, borderRadius: '50%', flexShrink: 0 }} />
+                        <div>
+                          <p style={{ fontSize: 14, color: TC.fg, lineHeight: 1.5, fontStyle: 'italic' }}>"{item.quote.slice(0, 120)}..."</p>
+                          <p style={{ fontSize: 12, color: TC.fgMuted, marginTop: 4, fontWeight: 600 }}>{item.name} · {item.role}</p>
+                        </div>
+                      </div>
+                    ))}
+                    <div style={{ display: 'flex', gap: 24, paddingTop: 12, borderTop: `1px solid ${TC.border}` }}>
+                      {[{ v: '22+', l: 'Automatizaciones' }, { v: '14', l: 'Gráficos' }, { v: '5min', l: 'Setup' }].map(s => (
+                        <div key={s.l} style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: 24, fontWeight: 800, color: TC.primary }}>{s.v}</div>
+                          <div style={{ fontSize: 11, color: TC.fgMuted }}>{s.l}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+              /* Variant A: Video (control) */
               <div style={{ borderRadius: 16, boxShadow: '0 20px 60px rgba(0,0,0,0.12)', border: `1px solid ${TC.border}`, position: 'relative', overflow: 'hidden', background: TC.card }}>
                 <video
                   src="/videos/hero-demo.mp4"
@@ -385,6 +417,7 @@ export default function LandingPage() {
                   style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 15 }}
                 />
               </div>
+              )}
               <div style={{ position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 16, padding: '8px 20px', backgroundColor: TC.card, borderRadius: 12, border: `1px solid ${TC.border}`, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
                 <span style={{ fontSize: 11, fontWeight: 600, color: TC.fgMuted }}>🚀 {lang === 'es' ? 'Sin tarjeta' : 'No credit card'}</span>
                 <span style={{ fontSize: 11, fontWeight: 600, color: TC.fgMuted }}>⚡ Setup 5 min</span>
@@ -611,7 +644,7 @@ export default function LandingPage() {
             </div>
           </FadeIn>
           <div className="landing-pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20, alignItems: 'start' }}>
-            {t.pricing.plans.map((p, i) => {
+            {(isPricingSimplified ? t.pricing.plans.filter(p => p.price !== null) : t.pricing.plans).map((p, i) => {
               const pop = i === 1
               const btnStyles = [
                 { bg: TC.card, color: TC.primary, border: `2px solid ${TC.primary}`, shadow: 'none' },
