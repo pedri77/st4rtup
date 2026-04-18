@@ -12,6 +12,7 @@ from app.models.user import User
 from app.models import Lead, Opportunity, Action, Email, Visit
 from app.models.pipeline import OpportunityStage
 from app.models.payment import Payment
+from app.models.survey import EmailTemplate
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -524,18 +525,30 @@ async def admin_delete_cost(
 @router.get("/logs")
 async def admin_logs(
     lines: int = Query(50, ge=10, le=200),
+    level: str = Query("all"),
     current_user: dict = Depends(require_admin),
 ):
-    """Recent backend logs (from journalctl)."""
-    import subprocess
+    """Recent backend logs from rotating log file."""
+    import os
+    log_file = "/tmp/app.log"
     try:
-        result = subprocess.run(
-            ["journalctl", "-u", "st4rtup", "--no-pager", "-n", str(lines), "--output=short"],
-            capture_output=True, text=True, timeout=5,
-        )
-        log_lines = result.stdout.strip().split("\n") if result.stdout else []
-        errors = [l for l in log_lines if "ERROR" in l or "500" in l or "Traceback" in l]
-        return {"lines": log_lines[-lines:], "total": len(log_lines), "errors": len(errors), "error_lines": errors[-10:]}
+        if not os.path.exists(log_file):
+            return {"lines": [], "total": 0, "errors": 0, "error_lines": []}
+        with open(log_file, "r") as f:
+            all_lines = f.readlines()
+        # Filter by level
+        if level == "error":
+            all_lines = [l for l in all_lines if "ERROR" in l or "CRITICAL" in l or "Traceback" in l]
+        elif level == "warning":
+            all_lines = [l for l in all_lines if "WARNING" in l]
+        log_lines = [l.rstrip() for l in all_lines[-lines:]]
+        errors = [l for l in log_lines if "ERROR" in l or "CRITICAL" in l or "Traceback" in l]
+        return {
+            "lines": log_lines,
+            "total": len(log_lines),
+            "errors": len(errors),
+            "error_lines": errors[-10:],
+        }
     except Exception as e:
         return {"lines": [], "total": 0, "errors": 0, "error": str(e)}
 
@@ -749,3 +762,101 @@ async def integration_health(
             "active_automations": total_active_automations,
         },
     }
+
+
+# ─── EMAIL TEMPLATES (admin CRUD) ────────────────────────────────
+
+@router.get("/email-templates")
+async def admin_list_email_templates(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """List all email templates across orgs."""
+    total = (await db.execute(select(func.count(EmailTemplate.id)))).scalar() or 0
+    result = await db.execute(
+        select(EmailTemplate)
+        .order_by(desc(EmailTemplate.created_at))
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+    )
+    templates = result.scalars().all()
+    items = []
+    for t in templates:
+        items.append({
+            "id": str(t.id),
+            "name": t.name,
+            "description": t.description,
+            "category": t.category,
+            "subject": t.subject,
+            "body_html": t.body_html,
+            "body_text": t.body_text,
+            "variables": t.variables,
+            "is_active": t.is_active,
+            "org_id": str(t.org_id) if t.org_id else None,
+            "created_at": t.created_at.isoformat() if t.created_at else None,
+            "updated_at": t.updated_at.isoformat() if t.updated_at else None,
+        })
+    return {"items": items, "total": total, "page": page, "page_size": page_size}
+
+
+@router.post("/email-templates")
+async def admin_create_email_template(
+    data: dict,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Create a global email template."""
+    template = EmailTemplate(
+        name=data["name"],
+        subject=data["subject"],
+        body_html=data.get("body_html", ""),
+        body_text=data.get("body_text"),
+        description=data.get("description"),
+        category=data.get("category"),
+        variables=data.get("variables"),
+        is_active=data.get("is_active", True),
+    )
+    db.add(template)
+    await db.commit()
+    await db.refresh(template)
+    return {
+        "id": str(template.id),
+        "name": template.name,
+        "subject": template.subject,
+        "created": True,
+    }
+
+
+@router.put("/email-templates/{template_id}")
+async def admin_update_email_template(
+    template_id: str,
+    data: dict,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Update an email template."""
+    template = await db.get(EmailTemplate, template_id)
+    if not template:
+        raise HTTPException(404, "Template not found")
+    for field in ("name", "subject", "body_html", "body_text", "description", "category", "variables", "is_active"):
+        if field in data:
+            setattr(template, field, data[field])
+    await db.commit()
+    return {"updated": True, "id": str(template.id)}
+
+
+@router.delete("/email-templates/{template_id}")
+async def admin_delete_email_template(
+    template_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Delete an email template."""
+    template = await db.get(EmailTemplate, template_id)
+    if not template:
+        raise HTTPException(404, "Template not found")
+    await db.delete(template)
+    await db.commit()
+    return {"deleted": True}

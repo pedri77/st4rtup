@@ -3,8 +3,12 @@ import WebChatWidget from "@/components/WebChatWidget"
 import SEO from '@/components/SEO'
 import { Link } from 'react-router-dom'
 import { Check, Minus, ChevronDown, ChevronUp, ArrowRight } from 'lucide-react'
-import ThemeTogglePublic from '@/components/ThemeTogglePublic'
-import { useThemeColors } from '@/utils/theme'
+// Light mode forced on public pages
+const LIGHT_COLORS = {
+  bg: '#F8FAFC', card: '#FFFFFF', muted: '#F1F5F9', border: '#E2E8F0',
+  fg: '#0F172A', fgMuted: '#64748B', primary: '#1E6FD9', accent: '#F5820B',
+  cyan: '#1E6FD9', purple: '#F5820B',
+}
 
 const NAV_LINKS = [
   { label: 'Features', href: '/#features' },
@@ -57,14 +61,13 @@ const FAQS = [
 ]
 
 function Nav() {
-  const T = useThemeColors()
+  const T = LIGHT_COLORS
   return (
     <nav style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${T.border}` }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
         <Link to="/"><img src="/logo.png" alt="st4rtup" style={{ height: 100 }} /></Link>
         <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
           {NAV_LINKS.map(l => <a key={l.label} href={l.href} style={{ fontSize: 14, color: T.fgMuted, textDecoration: 'none', fontWeight: 500 }}>{l.label}</a>)}
-          <ThemeTogglePublic />
           <Link to="/register" style={{ padding: '8px 20px', backgroundColor: T.primary, color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Empezar gratis</Link>
         </div>
       </div>
@@ -104,7 +107,7 @@ export default function PricingPublicPage() {
   const [annual, setAnnual] = useState(true)
   const [openFaq, setOpenFaq] = useState(null)
   const [openCats, setOpenCats] = useState({})
-  const T = useThemeColors()
+  const T = LIGHT_COLORS
 
   return (
     <div className="public-page" style={{ fontFamily: "'Inter', sans-serif", color: T.fg }}>

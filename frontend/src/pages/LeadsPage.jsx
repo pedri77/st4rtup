@@ -46,14 +46,14 @@ function ScoreGauge({ value }) {
 }
 
 function StatusCode({ status }) {
-  const s = STATUS_MAP[status] || { code: '?', color: T.fgMuted };
+  const s = STATUS_MAP[status] || { code: '?', color: T.fgMuted, label: status };
   return (
-    <span className="inline-flex items-center justify-center w-7 h-7 text-xs font-bold rounded"
-    style={{ fontFamily: fontMono, color: s.color, backgroundColor: `${s.color}15`, border: `1px solid ${s.color}30` }}
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full"
+    style={{ color: s.color, backgroundColor: `${s.color}12`, border: `1px solid ${s.color}20` }}
     title={s.label}>
-      {s.code}
+      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: s.color }} />
+      {s.label}
     </span>);
-
 }
 
 const inputStyle = {
@@ -397,10 +397,16 @@ export default function LeadsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold"
-                    style={{ background: `linear-gradient(135deg, ${T.cyan}20, ${T.purple}15)`, color: T.cyan }}>
-                          {(lead.company_name || '?')[0]}
-                        </div>
+                        {(() => {
+                          const colors = ['#1E6FD9','#10B981','#F59E0B','#8B5CF6','#EF4444','#0891B2','#EC4899','#F97316']
+                          const c = colors[(lead.company_name || '?').charCodeAt(0) % colors.length]
+                          return (
+                            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold shadow-sm"
+                              style={{ background: `linear-gradient(135deg, ${c}25, ${c}10)`, color: c, border: `1px solid ${c}20` }}>
+                              {(lead.company_name || '?')[0]}
+                            </div>
+                          )
+                        })()}
                         <Link to={`/app/leads/${lead.id}`}
                     className="text-sm font-medium transition-colors group-hover:underline"
                     style={{ color: T.fg }}

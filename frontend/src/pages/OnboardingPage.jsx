@@ -153,7 +153,11 @@ export default function OnboardingPage() {
         {step === 0 && (
           <>
             <h2 style={{ fontFamily: fontDisplay, fontSize: 24, fontWeight: 800, marginBottom: 8, color: T.fg }}>¡Bienvenido a St4rtup!</h2>
-            <p style={{ color: T.fgMuted, marginBottom: 24, fontSize: 15 }}>Configuremos tu CRM en menos de 5 minutos. Todo lo que configures ahora se puede cambiar después.</p>
+            <p style={{ color: T.fgMuted, marginBottom: 16, fontSize: 15 }}>Configuremos tu CRM en menos de 5 minutos. Todo lo que configures ahora se puede cambiar después.</p>
+            <div style={{ borderRadius: 12, overflow: 'hidden', marginBottom: 20, boxShadow: '0 4px 16px rgba(0,0,0,0.08)', border: `1px solid ${T.border}` }}>
+              <video src="/videos/onboarding-welcome.mp4" autoPlay muted playsInline poster="/images/showcase-dashboard.webp"
+                style={{ width: '100%', height: 'auto', display: 'block' }} />
+            </div>
             <input className="onb-input" placeholder="Tu nombre completo" value={name} onChange={e => setName(e.target.value)} style={input} id="onb-name" name="name" />
             <input className="onb-input" placeholder="Nombre de tu empresa" value={company} onChange={e => setCompany(e.target.value)} style={input} id="onb-company" name="company" />
             <button onClick={next} style={primaryBtn}>Siguiente <ArrowRight size={16} /></button>

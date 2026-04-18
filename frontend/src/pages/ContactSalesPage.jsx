@@ -57,7 +57,6 @@ export default function ContactSalesPage() {
         <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link to="/"><img src="/logo.png" alt="St4rtup" style={{ height: 50 }} /></Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <ThemeTogglePublic />
             <Link to="/" style={{ fontSize: 14, color: T.fgMuted, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
               <ArrowLeft size={16} /> Volver
             </Link>

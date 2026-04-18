@@ -10,6 +10,17 @@ const api = axios.create({
   },
 })
 
+// Ensure trailing slash on API paths to avoid 307 redirects that lose auth headers
+api.interceptors.request.use((config) => {
+  if (config.url) {
+    const [path, query] = config.url.split('?')
+    if (path && !path.endsWith('/')) {
+      config.url = query ? `${path}/?${query}` : `${path}/`
+    }
+  }
+  return config
+})
+
 // Auth interceptor — prefer impersonation token if active, else Supabase session
 api.interceptors.request.use(
   (config) => {
@@ -30,17 +41,12 @@ api.interceptors.request.use(
   }
 )
 
-// Response interceptor
+// Response interceptor — NO retry loop, just reject on 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Session expired or invalid — sign out + clear any impersonation token
-      localStorage.removeItem('st4rtup_impersonate_token')
-      supabase.auth.signOut().then(() => {
-        window.location.href = '/login'
-      })
-    }
+    // Don't auto-signout on 401 — let React Query handle retries
+    // Only signout if explicitly navigating to a protected page without session
     return Promise.reject(error)
   }
 )
@@ -286,6 +292,19 @@ export const settingsApi = {
   envStatus: () => api.get('/settings/env-status'),
   featureFlags: () => api.get('/settings/feature-flags'),
   updateFeatureFlags: (flags) => api.put('/settings/feature-flags', flags),
+  // GrowthBook API proxy
+  gbFeatures: () => api.get('/settings/growthbook/features'),
+  gbExperiments: () => api.get('/settings/growthbook/experiments'),
+  gbMetrics: () => api.get('/settings/growthbook/metrics'),
+  gbEnvironments: () => api.get('/settings/growthbook/environments'),
+  // Experiment tracking
+  trackExposure: (data) => api.post('/settings/experiments/exposure', data),
+  trackEvent: (data) => api.post('/settings/experiments/event', data),
+  experimentStats: () => api.get('/settings/experiments/stats'),
+  // Platform costs
+  platformCosts: (project = 'st4rtup') => api.get(`/settings/platform-costs?project=${project}`),
+  updatePlatformCost: (id, data) => api.put(`/settings/platform-costs/${id}`, data),
+  collectCosts: () => api.post('/settings/platform-costs/collect'),
 }
 
 export const chatApi = {

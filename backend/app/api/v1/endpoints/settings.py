@@ -407,6 +407,311 @@ org_id: str = Depends(get_org_id),
     return {"updated": True, "flags": flags}
 
 
+# ─── Internal API Key auth (for n8n/cron) ─────────────────────────────
+
+from fastapi import Request as FastAPIRequest
+
+
+@router.post("/platform-costs/collect-internal")
+async def collect_costs_internal(
+    request: FastAPIRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Endpoint para n8n/cron — auth via X-Internal-Key header."""
+    from app.core.config import settings as app_settings
+    key = request.headers.get("x-internal-key", "")
+    expected = getattr(app_settings, "INTERNAL_API_KEY", "")
+    if not expected or key != expected:
+        raise HTTPException(status_code=401, detail="Invalid internal key")
+
+    from app.services.cost_collector import collect_all_costs
+    from sqlalchemy import text
+    import json
+
+    results = await collect_all_costs()
+    updates = []
+    if results.get('openai', {}).get('status') == 'ok':
+        cost = results['openai'].get('cost_eur', 0)
+        await db.execute(text("UPDATE platform_costs SET amount_eur = :amt, updated_at = NOW() WHERE name = 'OpenAI API' AND project = 'st4rtup'"), {"amt": cost})
+        updates.append(f"OpenAI: €{cost}")
+    if results.get('deepseek', {}).get('status') == 'ok':
+        bal = results['deepseek'].get('balance_eur', 0)
+        await db.execute(text("UPDATE platform_costs SET notes = :n, updated_at = NOW() WHERE name = 'DeepSeek API' AND project = 'st4rtup'"),
+            {"n": f"Balance: €{bal}"})
+        updates.append(f"DeepSeek: balance €{bal}")
+    if results.get('falai', {}).get('status') == 'ok':
+        await db.execute(text("UPDATE platform_costs SET notes = :n, updated_at = NOW() WHERE name = 'fal.ai' AND project = 'st4rtup'"),
+            {"n": f"Auto: {json.dumps(results['falai'].get('balance', {}))[:200]}"})
+        updates.append("fal.ai: updated")
+    await db.commit()
+
+    return {"collected_at": __import__('datetime').datetime.utcnow().isoformat(), "results": results, "updates": updates}
+
+
+# ─── Platform Costs Dashboard ─────────────────────────────────────────
+
+@router.get("/platform-costs")
+async def get_platform_costs(
+    project: str = "st4rtup",
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Dashboard de costes reales de la plataforma."""
+    from sqlalchemy import text
+
+    # Active costs
+    costs = (await db.execute(text(
+        "SELECT id, name, provider, category, amount_eur, billing_cycle, is_variable, is_active, project, service_type, url, notes "
+        "FROM platform_costs WHERE project = :project ORDER BY category, name"
+    ), {"project": project})).fetchall()
+
+    # Monthly history
+    history = (await db.execute(text(
+        "SELECT ch.month, SUM(ch.amount_eur) as total "
+        "FROM cost_history ch JOIN platform_costs pc ON ch.platform_cost_id = pc.id "
+        "WHERE pc.project = :project GROUP BY ch.month ORDER BY ch.month DESC LIMIT 12"
+    ), {"project": project})).fetchall()
+
+    # Totals by category
+    by_category = {}
+    total_monthly = 0
+    for c in costs:
+        cat = c[3]
+        amt = float(c[4] or 0)
+        by_category[cat] = by_category.get(cat, 0) + amt
+        if c[6]:  # is_active
+            total_monthly += amt
+
+    return {
+        "costs": [{
+            "id": str(c[0]), "name": c[1], "provider": c[2], "category": c[3],
+            "amount_eur": float(c[4] or 0), "billing_cycle": c[5], "is_variable": c[6],
+            "is_active": c[7], "project": c[8], "service_type": c[9], "url": c[10], "notes": c[11],
+        } for c in costs],
+        "by_category": by_category,
+        "total_monthly": total_monthly,
+        "total_annual": total_monthly * 12,
+        "history": [{"month": str(h[0]), "total": float(h[1])} for h in history],
+    }
+
+
+@router.put("/platform-costs/{cost_id}")
+async def update_platform_cost(
+    cost_id: str,
+    data: dict,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Actualiza un coste de la plataforma."""
+    from sqlalchemy import text
+    allowed = ["name", "provider", "category", "amount_eur", "billing_cycle", "is_variable", "is_active", "notes", "url", "service_type"]
+    sets = ", ".join([f"{k} = :{k}" for k in data if k in allowed])
+    if not sets:
+        raise HTTPException(status_code=400, detail="No valid fields to update")
+    params = {k: v for k, v in data.items() if k in allowed}
+    params["id"] = cost_id
+    await db.execute(text(f"UPDATE platform_costs SET {sets}, updated_at = NOW() WHERE id = :id"), params)
+    await db.commit()
+    return {"updated": True}
+
+
+@router.post("/platform-costs/collect")
+async def collect_costs_now(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Ejecuta recoleccion de costes de todos los proveedores con API."""
+    from app.services.cost_collector import collect_all_costs
+    from sqlalchemy import text
+    import json
+
+    results = await collect_all_costs()
+
+    # Auto-update costs in DB based on collected data
+    updates = []
+    if results.get('openai', {}).get('status') == 'ok':
+        cost = results['openai'].get('cost_eur', 0)
+        await db.execute(text("UPDATE platform_costs SET amount_eur = :amt, notes = :notes, updated_at = NOW() WHERE name = 'OpenAI API' AND project = 'st4rtup'"),
+            {"amt": cost, "notes": f"Auto-collected. {results['openai'].get('tokens', 0)} tokens. {json.dumps(results['openai'])[:200]}"})
+        updates.append(f"OpenAI: €{cost}")
+
+    if results.get('deepseek', {}).get('status') == 'ok':
+        bal = results['deepseek'].get('balance_eur', 0)
+        await db.execute(text("UPDATE platform_costs SET notes = :notes, updated_at = NOW() WHERE name = 'DeepSeek API' AND project = 'st4rtup'"),
+            {"notes": f"Balance: €{bal}. {json.dumps(results['deepseek'].get('raw', []))[:200]}"})
+        updates.append(f"DeepSeek: balance €{bal}")
+
+    if results.get('falai', {}).get('status') == 'ok':
+        await db.execute(text("UPDATE platform_costs SET notes = :notes, updated_at = NOW() WHERE name = 'fal.ai' AND project = 'st4rtup'"),
+            {"notes": f"Auto-collected. {json.dumps(results['falai'].get('balance', {}))[:200]}"})
+        updates.append("fal.ai: balance updated")
+
+    await db.commit()
+
+    return {
+        "collected_at": __import__('datetime').datetime.utcnow().isoformat(),
+        "results": results,
+        "updates": updates,
+    }
+
+
+# ─── Experiment Tracking ──────────────────────────────────────────────
+
+class ExperimentExposure(BaseModel):
+    experiment_key: str
+    variation_id: str
+    model_config = ConfigDict(extra="ignore")
+
+class ExperimentEvent(BaseModel):
+    event_name: str
+    value: float = 1.0
+    properties: dict = {}
+    model_config = ConfigDict(extra="ignore")
+
+
+@router.post("/experiments/exposure")
+async def track_exposure(
+    data: ExperimentExposure,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Registra que un usuario vio una variante de un experimento."""
+    await db.execute(
+        __import__('sqlalchemy', fromlist=['text']).text(
+            "INSERT INTO experiment_exposures (user_id, experiment_key, variation_id) VALUES (:uid, :key, :var)"
+        ),
+        {"uid": str(current_user.get("id", "")), "key": data.experiment_key, "var": data.variation_id},
+    )
+    await db.commit()
+    return {"tracked": True}
+
+
+@router.post("/experiments/event")
+async def track_event(
+    data: ExperimentEvent,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Registra un evento de conversion para metricas de experimentos."""
+    import json
+    await db.execute(
+        __import__('sqlalchemy', fromlist=['text']).text(
+            "INSERT INTO experiment_events (user_id, event_name, value, properties) VALUES (:uid, :name, :val, :props::jsonb)"
+        ),
+        {"uid": str(current_user.get("id", "")), "name": data.event_name, "val": data.value, "props": json.dumps(data.properties)},
+    )
+    await db.commit()
+    return {"tracked": True}
+
+
+# ─── Experiment Analytics ─────────────────────────────────────────────
+
+@router.get("/experiments/stats")
+async def experiment_stats(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Dashboard de metricas de experimentos — lee de experiment_exposures y experiment_events."""
+    from sqlalchemy import text
+
+    # Exposures by experiment
+    exposures = (await db.execute(text("""
+        SELECT experiment_key, variation_id, COUNT(*) as count
+        FROM experiment_exposures
+        GROUP BY experiment_key, variation_id
+        ORDER BY experiment_key, variation_id
+    """))).fetchall()
+
+    # Events summary
+    events = (await db.execute(text("""
+        SELECT event_name, COUNT(*) as count, SUM(value) as total_value
+        FROM experiment_events
+        GROUP BY event_name
+        ORDER BY count DESC
+    """))).fetchall()
+
+    # Events by experiment (join via user_id)
+    conversions = (await db.execute(text("""
+        SELECT e.experiment_key, e.variation_id, ev.event_name, COUNT(DISTINCT ev.user_id) as conversions
+        FROM experiment_exposures e
+        JOIN experiment_events ev ON e.user_id = ev.user_id
+        WHERE ev.timestamp >= e.timestamp
+        GROUP BY e.experiment_key, e.variation_id, ev.event_name
+        ORDER BY e.experiment_key, e.variation_id
+    """))).fetchall()
+
+    # Recent exposures
+    recent = (await db.execute(text("""
+        SELECT user_id, experiment_key, variation_id, timestamp
+        FROM experiment_exposures
+        ORDER BY timestamp DESC
+        LIMIT 20
+    """))).fetchall()
+
+    return {
+        "exposures": [{"experiment": r[0], "variation": r[1], "count": r[2]} for r in exposures],
+        "events": [{"event": r[0], "count": r[1], "total_value": float(r[2] or 0)} for r in events],
+        "conversions": [{"experiment": r[0], "variation": r[1], "event": r[2], "conversions": r[3]} for r in conversions],
+        "recent": [{"user_id": r[0], "experiment": r[1], "variation": r[2], "timestamp": r[3].isoformat()} for r in recent],
+    }
+
+
+# ─── GrowthBook API Proxy (admin only) ────────────────────────────────
+
+@router.get("/growthbook/features")
+async def growthbook_features(current_user: dict = Depends(get_current_user)):
+    """Proxy — lista features de GrowthBook."""
+    return await _gb_api_get("/api/v1/features")
+
+
+@router.get("/growthbook/experiments")
+async def growthbook_experiments(current_user: dict = Depends(get_current_user)):
+    """Proxy — lista experimentos de GrowthBook."""
+    return await _gb_api_get("/api/v1/experiments")
+
+
+@router.get("/growthbook/metrics")
+async def growthbook_metrics(current_user: dict = Depends(get_current_user)):
+    """Proxy — lista metricas de GrowthBook."""
+    return await _gb_api_get("/api/v1/metrics")
+
+
+@router.get("/growthbook/environments")
+async def growthbook_environments(current_user: dict = Depends(get_current_user)):
+    """Proxy — lista environments de GrowthBook."""
+    return await _gb_api_get("/api/v1/environments")
+
+
+async def _gb_api_get(path: str):
+    """Helper — GET a la API REST de GrowthBook con autenticacion server-side."""
+    import httpx
+    from app.core.config import settings as app_settings
+
+    api_key = app_settings.GROWTHBOOK_API_KEY
+    if not api_key:
+        raise HTTPException(status_code=501, detail="GrowthBook API key not configured")
+
+    api_host = app_settings.GROWTHBOOK_API_HOST.rstrip("/")
+    # API REST uses api.growthbook.io, not cdn
+    base = api_host.replace("cdn.growthbook.io", "api.growthbook.io")
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            r = await client.get(
+                f"{base}{path}",
+                headers={"Authorization": f"Bearer {api_key}"},
+            )
+            if r.status_code != 200:
+                raise HTTPException(status_code=r.status_code, detail=f"GrowthBook API error: {r.text[:200]}")
+            return r.json()
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=504, detail="GrowthBook API timeout")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"GrowthBook API error: {str(e)[:200]}")
+
+
 # ─── Encrypt existing credentials ─────────────────────────────────────
 
 @router.post("/encrypt-credentials")

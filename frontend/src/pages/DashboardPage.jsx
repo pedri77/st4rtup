@@ -22,6 +22,7 @@ import OnboardingWizard from '@/components/OnboardingWizard'
 import DashboardCustomizer, { useDashboardWidgets } from '@/components/DashboardCustomizer'
 import { exportToPDF } from '@/utils/exportPdf'
 import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
+import { useFeatureFlags } from '@/hooks/useFeatureFlags'
 
 
 const chartTooltipStyle = {
@@ -33,34 +34,82 @@ const chartTooltipStyle = {
   fontFamily: fontMono,
 }
 
-const KPI_GRADIENTS = [
-  'linear-gradient(135deg, #EBF4FF, #F0F0FF)',
-  'linear-gradient(135deg, #ECFDF5, #F0FFF4)',
-  'linear-gradient(135deg, #FFF7ED, #FFFBEB)',
-  'linear-gradient(135deg, #F5F3FF, #FDF4FF)',
-  'linear-gradient(135deg, #FEF2F2, #FFF1F2)',
-  'linear-gradient(135deg, #ECFEFF, #F0F9FF)',
+const KPI_THEMES = [
+  { gradient: 'linear-gradient(135deg, #EBF4FF, #F0F0FF)', accent: '#1E6FD9', iconBg: '#1E6FD915' },
+  { gradient: 'linear-gradient(135deg, #ECFDF5, #F0FFF4)', accent: '#10B981', iconBg: '#10B98115' },
+  { gradient: 'linear-gradient(135deg, #FFF7ED, #FFFBEB)', accent: '#F59E0B', iconBg: '#F59E0B15' },
+  { gradient: 'linear-gradient(135deg, #F5F3FF, #FDF4FF)', accent: '#8B5CF6', iconBg: '#8B5CF615' },
+  { gradient: 'linear-gradient(135deg, #FEF2F2, #FFF1F2)', accent: '#EF4444', iconBg: '#EF444415' },
+  { gradient: 'linear-gradient(135deg, #ECFEFF, #F0F9FF)', accent: '#0891B2', iconBg: '#0891B215' },
 ]
 let _kpiIdx = 0
 
-function Readout({ label, value, trend, subtext, color }) {
+function MiniSparkline({ color = '#1E6FD9' }) {
+  // Decorative sparkline — generates consistent "up trend" path
+  const points = [4, 6, 3, 7, 5, 8, 6, 9, 7, 10]
+  const w = 60, h = 24, max = Math.max(...points), min = Math.min(...points)
+  const path = points.map((p, i) => {
+    const x = (i / (points.length - 1)) * w
+    const y = h - ((p - min) / (max - min)) * h
+    return `${i === 0 ? 'M' : 'L'}${x},${y}`
+  }).join(' ')
+  return (
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ flexShrink: 0 }}>
+      <defs>
+        <linearGradient id={`sg-${color.replace('#','')}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.2" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path d={`${path} L${w},${h} L0,${h} Z`} fill={`url(#sg-${color.replace('#','')})`} />
+      <path d={path} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function Readout({ label, value, trend, subtext, color, icon: Icon }) {
   const trendColor = !trend || trend === 0 ? T.fgMuted : trend > 0 ? T.success : T.destructive
   const trendArrow = !trend || trend === 0 ? '' : trend > 0 ? '↑' : '↓'
-  const gradient = KPI_GRADIENTS[_kpiIdx++ % KPI_GRADIENTS.length]
+  const theme = KPI_THEMES[_kpiIdx++ % KPI_THEMES.length]
+  const accentColor = color || theme.accent
 
   return (
-    <div style={{ background: gradient, borderRadius: 16, padding: '18px 20px', border: '1px solid rgba(0,0,0,0.04)', transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'default' }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.06)' }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}>
-      <p className="text-xs uppercase tracking-[0.15em]" style={{ fontFamily: fontDisplay, color: T.fgMuted }}>{label}</p>
-      <p className="text-3xl font-bold mt-1 tabular-nums" style={{ fontFamily: fontMono, color: color || T.fg }}>{value}</p>
-      <div className="flex items-center gap-3 mt-1">
-        {trend !== undefined && trend !== 0 && (
-          <span className="text-xs font-semibold" style={{ fontFamily: fontMono, color: trendColor }}>
-            {trendArrow} {Math.abs(trend)}%
-          </span>
-        )}
-        {subtext && <span className="text-xs" style={{ color: T.fgMuted }}>{subtext}</span>}
+    <div style={{
+      background: theme.gradient, borderRadius: 16, padding: '16px 18px',
+      border: `1px solid ${accentColor}10`,
+      borderLeft: `3px solid ${accentColor}40`,
+      transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s',
+      cursor: 'default', position: 'relative', overflow: 'hidden',
+    }}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px) scale(1.01)'; e.currentTarget.style.boxShadow = `0 12px 30px ${accentColor}12` }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.boxShadow = 'none' }}>
+      {/* Decorative circle */}
+      <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: `${accentColor}06`, pointerEvents: 'none' }} />
+
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-1">
+            {Icon && (
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: theme.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon size={14} color={accentColor} />
+              </div>
+            )}
+            <p className="text-[11px] uppercase tracking-[0.12em] font-semibold" style={{ fontFamily: fontDisplay, color: T.fgMuted }}>{label}</p>
+          </div>
+          <p className="text-2xl font-bold mt-1 tabular-nums" style={{ fontFamily: fontMono, color: T.fg }}>{value}</p>
+          <div className="flex items-center gap-2 mt-1.5">
+            {trend !== undefined && trend !== 0 && (
+              <span className="text-[11px] font-bold px-1.5 py-0.5 rounded-md" style={{
+                fontFamily: fontMono, color: trendColor,
+                backgroundColor: `${trendColor}12`,
+              }}>
+                {trendArrow} {Math.abs(trend)}%
+              </span>
+            )}
+            {subtext && <span className="text-[11px]" style={{ color: T.fgMuted }}>{subtext}</span>}
+          </div>
+        </div>
+        <MiniSparkline color={accentColor} />
       </div>
     </div>
   )
@@ -265,6 +314,7 @@ function DraggableSection({ id, draggedWidget, setDraggedWidget, dragOverWidget,
 
 export default function DashboardPage() {
   const T = useThemeColors()
+  const { isEnabled } = useFeatureFlags()
   const { widgets, isVisible, getSize, toggle, setSize, reset, moveUp, moveDown, reorder } = useDashboardWidgets()
   const [draggedWidget, setDraggedWidget] = useState(null)
   const [dragOverWidget, setDragOverWidget] = useState(null)
@@ -431,20 +481,20 @@ export default function DashboardPage() {
       {isVisible('kpis') && <DraggableSection id="kpis" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
           <div className="col-span-2">
-            <Readout label="Revenue Mes" value={`€${((stats?.revenue_won_this_month || 0) / 1000).toFixed(0)}K`} color={T.warning} subtext="cerrados este mes" />
+            <Readout label="Revenue Mes" value={`€${((stats?.revenue_won_this_month || 0) / 1000).toFixed(0)}K`} color={T.warning} subtext="cerrados este mes" icon={Activity} />
           </div>
-          <Readout label="Revenue Trim." value={`€${((stats?.revenue_won_this_quarter || 0) / 1000).toFixed(0)}K`} subtext="Q actual" />
-          <Readout label="Ofertas" value={stats?.offers_this_month || 0} subtext={`${stats?.offers_accepted_this_month || 0} aceptadas`} />
-          <Readout label="Conversion" value={`${stats?.conversion_rate || 0}%`} trend={stats?.conversion_trend} color={T.success} />
-          <Readout label="Leads" value={stats?.total_leads || 0} trend={stats?.leads_trend} subtext="total base" />
+          <Readout label="Revenue Trim." value={`€${((stats?.revenue_won_this_quarter || 0) / 1000).toFixed(0)}K`} subtext="Q actual" icon={Activity} />
+          <Readout label="Ofertas" value={stats?.offers_this_month || 0} subtext={`${stats?.offers_accepted_this_month || 0} aceptadas`} icon={FileText} />
+          <Readout label="Conversion" value={`${stats?.conversion_rate || 0}%`} trend={stats?.conversion_trend} color={T.success} icon={GitBranch} />
+          <Readout label="Leads" value={stats?.total_leads || 0} trend={stats?.leads_trend} subtext="total base" icon={Send} />
           <div className="col-span-2">
-            <Readout label="Pipeline Activo" value={`€${((stats?.pipeline_value || 0) / 1000).toFixed(0)}K`} trend={stats?.pipeline_trend} color={T.cyan} />
+            <Readout label="Pipeline Activo" value={`€${((stats?.pipeline_value || 0) / 1000).toFixed(0)}K`} trend={stats?.pipeline_trend} color={T.cyan} icon={GitBranch} />
           </div>
           <div className="col-span-2">
-            <Readout label="Pipeline Ponderado" value={`€${((stats?.weighted_pipeline || 0) / 1000).toFixed(0)}K`} subtext="prob. ponderada" />
+            <Readout label="Pipeline Ponderado" value={`€${((stats?.weighted_pipeline || 0) / 1000).toFixed(0)}K`} subtext="prob. ponderada" icon={GitBranch} />
           </div>
-          <Readout label="Visitas Prox. 7d" value={stats?.upcoming_visits?.length || 0} />
-          <Readout label="Deals por Cerrar" value={stats?.deals_closing_soon?.length || 0} color={T.warning} subtext="proximos 14 dias" />
+          <Readout label="Visitas Prox. 7d" value={stats?.upcoming_visits?.length || 0} icon={CalendarCheck} />
+          <Readout label="Deals por Cerrar" value={stats?.deals_closing_soon?.length || 0} color={T.warning} subtext="proximos 14 dias" icon={Receipt} />
         </div>
       </DraggableSection>}
 
@@ -518,8 +568,8 @@ export default function DashboardPage() {
         <WaterfallAndRadarSection />
       </DraggableSection>}
 
-      {/* Activity Heatmap (GitHub-style) */}
-      {isVisible('activity') && <DraggableSection id="activity" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
+      {/* Activity Heatmap (GitHub-style) — gated by feature flag */}
+      {isEnabled('activity_heatmap') && isVisible('activity') && <DraggableSection id="activity" draggedWidget={draggedWidget} setDraggedWidget={setDraggedWidget} dragOverWidget={dragOverWidget} setDragOverWidget={setDragOverWidget} onReorder={reorder} widgets={widgets}>
         <ActivityHeatmap months={6} />
       </DraggableSection>}
 

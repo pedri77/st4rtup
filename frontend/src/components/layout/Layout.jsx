@@ -16,6 +16,7 @@ import KeyboardShortcuts from '@/components/KeyboardShortcuts'
 import { useHasRole } from '@/components/RoleGuard'
 import { useAuth } from '@/contexts/AuthContext'
 import { useUIStore } from '@/store/useUIStore'
+import { useFeatureFlags } from '@/hooks/useFeatureFlags'
 import { useUserPreferencesStore } from '@/store/useUserPreferencesStore'
 import ThemeToggle from '@/components/ThemeToggle'
 import useDynamicFavicon from '@/hooks/useDynamicFavicon'
@@ -44,6 +45,7 @@ function getNavigationGroups(t) {
       items: [
         { name: t('nav.my_day'), href: '/app/my-day', icon: CalendarDays },
         { name: t('nav.dashboard'), href: '/app/dashboard', icon: LayoutDashboard },
+        { name: 'Ejecutivo', href: '/app/executive', icon: BarChart3, badge: 'NEW' },
         { name: t('nav.leads'), href: '/app/leads', icon: Users },
         { name: t('nav.pipeline'), href: '/app/pipeline', icon: GitBranch },
         { name: t('nav.kanban'), href: '/app/pipeline/kanban', icon: Columns3 },
@@ -68,14 +70,14 @@ function getNavigationGroups(t) {
       label: t('nav.group.intelligence'),
       items: [
         { name: t('nav.gtm'), href: '/app/gtm', icon: Target },
-        { name: t('nav.agents'), href: '/app/agents', icon: Bot },
+        { name: t('nav.agents'), href: '/app/agents', icon: Bot, badge: 'IA' },
         { name: t('nav.seo_center'), href: '/app/marketing/seo-center', icon: Search },
         { name: t('nav.marketing'), href: '/app/marketing', icon: Megaphone },
         { name: t('nav.calls'), href: '/app/calls', icon: Phone },
         { name: t('nav.reports'), href: '/app/reports', icon: FileText },
         { name: t('nav.report_builder'), href: '/app/report-builder', icon: BarChart3 },
         { name: t('nav.social_media'), href: '/app/marketing/social', icon: Megaphone },
-        { name: 'LinkedIn Studio', href: '/app/marketing/linkedin', icon: Activity },
+        { name: 'LinkedIn Studio', href: '/app/marketing/linkedin', icon: Activity, badge: 'NEW' },
         { name: t('nav.customer_health'), href: '/app/customer-health', icon: Heart },
       ],
     },
@@ -89,13 +91,12 @@ function getNavigationGroups(t) {
         { name: t('nav.alert_channels'), href: '/app/alert-channels', icon: Bell },
         { name: t('nav.webhooks'), href: '/app/webhooks', icon: Zap },
         { name: t('nav.mcp_gateway'), href: '/app/integrations?tab=airtable', icon: BrainCircuit },
-        { name: t('nav.whatsapp'), href: '/app/whatsapp', icon: MessageSquare },
+        { name: t('nav.whatsapp'), href: '/app/whatsapp', icon: MessageSquare, featureFlag: 'whatsapp_channel' },
         { name: t('nav.payments'), href: '/app/payments', icon: CreditCard },
         { name: 'Pricing', href: '/app/billing', icon: CreditCard },
         { name: 'Docs', href: '/app/docs', icon: BookOpen },
-        { name: 'Marketplace', href: '/app/marketplace', icon: ShoppingBag },
+        { name: 'Marketplace', href: '/app/marketplace', icon: ShoppingBag, badge: 'NEW' },
         { name: t('nav.chat'), href: '/app/chat', icon: Sparkles },
-        { name: 'Admin', href: '/app/admin', icon: Shield },
       ],
     },
   ]
@@ -142,10 +143,14 @@ export default function Layout() {
   useRealtimeNotifications()
   useSetupProgress()
 
+  const { isEnabled } = useFeatureFlags()
   const navigationGroups = getNavigationGroups(t)
   const visibleGroups = navigationGroups.map(group => ({
     ...group,
-    items: group.items.filter(item => !item.adminOnly || hasRole('admin')),
+    items: group.items.filter(item =>
+      (!item.adminOnly || hasRole('admin')) &&
+      (!item.featureFlag || isEnabled(item.featureFlag))
+    ),
   })).filter(group => group.items.length > 0)
 
   // Favorites + Recents
@@ -292,7 +297,13 @@ export default function Layout() {
                       })}
                     >
                       <item.icon className="w-4 h-4 flex-shrink-0" />
-                      {!collapsed && item.name}
+                      {!collapsed && <span className="flex-1">{item.name}</span>}
+                      {!collapsed && item.badge && (
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none" style={{
+                          backgroundColor: item.badge === 'NEW' ? '#10B98118' : item.badge === 'IA' ? '#8B5CF618' : `${T.cyan}15`,
+                          color: item.badge === 'NEW' ? '#10B981' : item.badge === 'IA' ? '#8B5CF6' : T.cyan,
+                        }}>{item.badge}</span>
+                      )}
                     </NavLink>
                     {!collapsed && (
                       <button onClick={() => toggleFavorite(item)}
@@ -350,6 +361,30 @@ export default function Layout() {
 
         {/* API Cost Widget */}
         {!collapsed && <ApiCostWidget />}
+
+        {/* CTA Upgrade Card */}
+        {!collapsed && (
+          <div style={{
+            margin: '8px 12px', padding: '14px 16px', borderRadius: 12,
+            background: 'linear-gradient(135deg, #1E6FD9, #3B82F6)',
+            position: 'relative', overflow: 'hidden',
+          }}>
+            <div style={{ position: 'absolute', top: -15, right: -15, width: 60, height: 60, borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
+            <p style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>Pro tip</p>
+            <p style={{ fontSize: 12, fontWeight: 600, color: '#fff', lineHeight: 1.4, marginBottom: 10 }}>
+              Activa las 22 automatizaciones y ahorra 15h/semana
+            </p>
+            <Link to="/app/automations" style={{
+              display: 'inline-block', padding: '5px 14px', borderRadius: 6,
+              backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff',
+              fontSize: 11, fontWeight: 600, textDecoration: 'none',
+              border: '1px solid rgba(255,255,255,0.15)',
+            }}>
+              Ver automatizaciones
+            </Link>
+          </div>
+        )}
+
         {/* Collapse toggle */}
         <button onClick={toggleSidebar} style={{ width: '100%', padding: 12, border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'center', color: T.fgMuted, backgroundColor: 'transparent', borderTop: `1px solid ${T.border}` }} title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}>
           {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
@@ -452,9 +487,45 @@ export default function Layout() {
           </div>
         </header>
 
+        {/* Breadcrumbs */}
+        {(() => {
+          const segments = location.pathname.replace('/app', '').split('/').filter(Boolean)
+          if (segments.length === 0) return null
+          const LABELS = {
+            dashboard: 'Dashboard', leads: 'Leads', pipeline: 'Pipeline', kanban: 'Kanban',
+            offers: 'Ofertas', calendar: 'Calendario', visits: 'Visitas', emails: 'Emails',
+            actions: 'Acciones', clients: 'Contactos', surveys: 'Encuestas', reviews: 'Seguimiento',
+            gtm: 'GTM', agents: 'Agentes IA', marketing: 'Marketing', calls: 'Llamadas',
+            reports: 'Informes', automations: 'Automatizaciones', integrations: 'Integraciones',
+            settings: 'Configuración', 'cost-control': 'Cost Control', chat: 'Chat',
+            'my-day': 'Mi Día', 'report-builder': 'Report Builder', 'seo-center': 'SEO Center',
+            'customer-health': 'Customer Health', webhooks: 'Webhooks', payments: 'Pagos',
+            billing: 'Pricing', docs: 'Docs', marketplace: 'Marketplace', whatsapp: 'WhatsApp',
+            'alert-channels': 'Alertas', formularios: 'Formularios', social: 'Social Media',
+            linkedin: 'LinkedIn Studio', 'pipeline': 'Pipeline', executive: 'Ejecutivo',
+          }
+          return (
+            <div className="px-4 md:px-8 pt-3 pb-0 flex items-center gap-1.5 text-xs" style={{ backgroundColor: T.bg }}>
+              <Link to="/app/dashboard" style={{ color: T.fgMuted, textDecoration: 'none' }}>Home</Link>
+              {segments.map((seg, i) => (
+                <span key={i} className="flex items-center gap-1.5">
+                  <span style={{ color: T.border }}>/</span>
+                  {i < segments.length - 1 ? (
+                    <Link to={`/app/${segments.slice(0, i + 1).join('/')}`} style={{ color: T.fgMuted, textDecoration: 'none' }}>
+                      {LABELS[seg] || seg}
+                    </Link>
+                  ) : (
+                    <span style={{ color: T.fg, fontWeight: 600 }}>{LABELS[seg] || seg}</span>
+                  )}
+                </span>
+              ))}
+            </div>
+          )
+        })()}
+
         {/* Page content */}
         <main className="flex-1 overflow-auto" style={{ backgroundColor: T.bg }}>
-          <div className="p-4 md:p-8">
+          <div className="p-4 md:p-8 page-transition" key={location.pathname}>
             <Outlet />
           </div>
         </main>

@@ -20,7 +20,7 @@ const ADMIN_TABS = [
   { id: 'alerts', label: 'Alertas', icon: AlertTriangle },
   { id: 'affiliates', label: 'Afiliados', icon: DollarSign },
   { id: 'costs', label: 'Costes', icon: TrendingUp },
-  { id: 'logs', label: 'Logs', icon: Server },
+
   { id: 'api-costs', label: 'API Costs', icon: DollarSign },
   { id: 'audit', label: 'Audit Log', icon: ClipboardList },
   { id: 'onboarding', label: 'Onboarding', icon: UserPlus },

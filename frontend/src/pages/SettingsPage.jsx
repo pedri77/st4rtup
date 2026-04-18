@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { User, Bell, Key, Globe, Palette, Save, Check, Mail, Send, Loader2, Eye, EyeOff } from 'lucide-react'
+import { User, Bell, Key, Globe, Palette, Save, Check, Mail, Send, Loader2, Eye, EyeOff, ToggleLeft, FlaskConical } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 import { useUserPreferencesStore } from '@/store/useUserPreferencesStore'
@@ -17,6 +17,8 @@ const tabs = [
   { id: 'api', name: 'API & Integraciones', icon: Key },
   { id: 'preferences', name: 'Preferencias', icon: Globe },
   { id: 'appearance', name: 'Apariencia', icon: Palette },
+  { id: 'flags', name: 'Feature Flags', icon: ToggleLeft },
+  { id: 'growthbook', name: 'GrowthBook', icon: FlaskConical },
 ]
 
 const EMAIL_PROVIDERS = [
@@ -76,6 +78,8 @@ export default function SettingsPage() {
           {activeTab === 'api' && <APITab />}
           {activeTab === 'preferences' && <PreferencesTab />}
           {activeTab === 'appearance' && <AppearanceTab />}
+          {activeTab === 'flags' && <FeatureFlagsTab />}
+          {activeTab === 'growthbook' && <GrowthBookTab />}
         </div>
       </div>
     </div>
@@ -602,6 +606,341 @@ function AppearanceTab() {
           </button>
         </div>
       </div>
+    </div>
+  )
+}
+
+const FLAG_META = {
+  inline_editing: { label: 'Edicion inline', desc: 'Permite editar campos directamente haciendo clic en ellos.' },
+  activity_heatmap: { label: 'Heatmap de actividad', desc: 'Muestra el mapa de calor estilo GitHub en el dashboard.' },
+  email_tracking_pixel: { label: 'Tracking de emails', desc: 'Pixel de seguimiento para apertura de emails.' },
+  hunter_verification: { label: 'Verificacion Hunter.io', desc: 'Verifica emails de leads con Hunter.io.' },
+  social_recurrence: { label: 'Posts recurrentes', desc: 'Permite programar publicaciones sociales recurrentes.' },
+  whatsapp_channel: { label: 'WhatsApp Business', desc: 'Habilita el modulo de WhatsApp Business y chatbot IA.' },
+  google_calendar_sync: { label: 'Google Calendar Sync', desc: 'Sincronizacion bidireccional con Google Calendar.' },
+  ai_content_pipeline: { label: 'Pipeline de contenido IA', desc: '4 agentes IA para generacion de contenido SEO.' },
+  dark_mode: { label: 'Modo oscuro', desc: 'Habilita el toggle de tema claro/oscuro.' },
+  pwa_mobile: { label: 'PWA Mobile', desc: 'Muestra el prompt de instalacion como app movil.' },
+}
+
+function FeatureFlagsTab() {
+  const T = useThemeColors()
+  const { data: flags, isLoading } = useQuery({
+    queryKey: ['feature-flags'],
+    queryFn: () => settingsApi.featureFlags().then(r => r.data),
+  })
+  const qc = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (newFlags) => settingsApi.updateFeatureFlags(newFlags),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['feature-flags'] })
+      toast.success('Feature flags actualizados')
+    },
+    onError: () => toast.error('Error al actualizar flags'),
+  })
+
+  const toggle = (key) => {
+    const updated = { ...flags, [key]: !flags[key] }
+    mutation.mutate(updated)
+  }
+
+  if (isLoading) return <div className="flex items-center justify-center p-12"><Loader2 className="w-6 h-6 animate-spin" style={{ color: T.primary }} /></div>
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-lg font-bold" style={{ fontFamily: fontDisplay }}>Feature Flags</h2>
+        <p className="text-sm mt-1" style={{ color: T.fgMuted }}>Activa o desactiva funcionalidades del CRM. Los cambios se aplican inmediatamente.</p>
+      </div>
+      <div className="space-y-2">
+        {Object.entries(flags || {}).map(([key, enabled]) => {
+          const meta = FLAG_META[key] || { label: key, desc: '' }
+          return (
+            <div key={key} className="flex items-center justify-between p-4 rounded-xl border transition-all"
+              style={{ backgroundColor: T.card, borderColor: enabled ? `${T.primary}30` : T.border }}>
+              <div className="flex-1 mr-4">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sm" style={{ fontFamily: fontDisplay }}>{meta.label}</span>
+                  <code className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: T.muted, color: T.fgMuted }}>{key}</code>
+                </div>
+                {meta.desc && <p className="text-xs mt-1" style={{ color: T.fgMuted }}>{meta.desc}</p>}
+              </div>
+              <button onClick={() => toggle(key)}
+                className="relative w-12 h-7 rounded-full transition-all duration-200 flex-shrink-0"
+                style={{ backgroundColor: enabled ? T.primary : T.muted }}>
+                <div className="absolute top-0.5 transition-all duration-200 w-6 h-6 rounded-full bg-white shadow"
+                  style={{ left: enabled ? 22 : 2 }} />
+              </button>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function GrowthBookTab() {
+  const T = useThemeColors()
+  const [tab, setTab] = useState('analytics')
+
+  const { data: features, isLoading: loadingF } = useQuery({
+    queryKey: ['gb-features'],
+    queryFn: () => settingsApi.gbFeatures().then(r => r.data),
+    retry: false,
+  })
+  const { data: experiments, isLoading: loadingE } = useQuery({
+    queryKey: ['gb-experiments'],
+    queryFn: () => settingsApi.gbExperiments().then(r => r.data),
+    retry: false,
+  })
+  const { data: stats, isLoading: loadingS } = useQuery({
+    queryKey: ['experiment-stats'],
+    queryFn: () => settingsApi.experimentStats().then(r => r.data),
+    refetchInterval: 30_000,
+    retry: false,
+  })
+
+  const featuresList = features?.features || []
+  const experimentsList = experiments?.experiments || []
+  const isLoading = loadingF || loadingE
+
+  if (isLoading) return <div className="flex items-center justify-center p-12"><Loader2 className="w-6 h-6 animate-spin" style={{ color: T.primary }} /></div>
+
+  if (features?.detail || experiments?.detail) {
+    return (
+      <div className="space-y-4">
+        <h2 className="text-lg font-bold" style={{ fontFamily: fontDisplay }}>GrowthBook</h2>
+        <div className="rounded-xl border p-6 text-center" style={{ borderColor: T.border, backgroundColor: T.muted }}>
+          <FlaskConical className="w-8 h-8 mx-auto mb-3" style={{ color: T.fgMuted }} />
+          <p className="text-sm font-medium" style={{ color: T.fg }}>GrowthBook API no configurada</p>
+          <p className="text-xs mt-1" style={{ color: T.fgMuted }}>Configura GROWTHBOOK_API_KEY en el backend para conectar.</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <h2 className="text-lg font-bold" style={{ fontFamily: fontDisplay }}>GrowthBook</h2>
+        <p className="text-sm mt-1" style={{ color: T.fgMuted }}>Feature flags remotos, A/B testing y rollouts graduales.</p>
+      </div>
+
+      <div className="flex gap-1 p-1 rounded-xl" style={{ backgroundColor: T.muted }}>
+        {[
+          { id: 'analytics', label: 'Analytics' },
+          { id: 'features', label: `Features (${featuresList.length})` },
+          { id: 'experiments', label: `Experiments (${experimentsList.length})` },
+          { id: 'dashboard', label: 'Dashboard' },
+        ].map(t2 => (
+          <button key={t2.id} onClick={() => setTab(t2.id)}
+            className="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all"
+            style={{
+              backgroundColor: tab === t2.id ? T.card : 'transparent',
+              color: tab === t2.id ? T.fg : T.fgMuted,
+              boxShadow: tab === t2.id ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+            }}>
+            {t2.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Analytics dashboard */}
+      {tab === 'analytics' && (
+        <div className="space-y-4">
+          {loadingS ? (
+            <div className="flex items-center justify-center p-8"><Loader2 className="w-5 h-5 animate-spin" style={{ color: T.primary }} /></div>
+          ) : (
+            <>
+              {/* Experiment exposures */}
+              <div className="rounded-xl border p-4" style={{ borderColor: T.border, backgroundColor: T.card }}>
+                <h3 className="text-sm font-bold mb-3">Exposiciones por Experimento</h3>
+                {(stats?.exposures || []).length === 0 ? (
+                  <p className="text-xs text-center py-4" style={{ color: T.fgMuted }}>Sin datos aun. Los experimentos registraran exposiciones cuando los usuarios visiten las paginas.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {Object.entries((stats?.exposures || []).reduce((acc, e) => {
+                      if (!acc[e.experiment]) acc[e.experiment] = []
+                      acc[e.experiment].push(e)
+                      return acc
+                    }, {})).map(([exp, variants]) => {
+                      const total = variants.reduce((s, v) => s + v.count, 0)
+                      return (
+                        <div key={exp} className="p-3 rounded-lg" style={{ backgroundColor: T.muted }}>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-semibold">{exp}</span>
+                            <span className="text-xs font-mono" style={{ color: T.fgMuted }}>{total} total</span>
+                          </div>
+                          <div className="flex gap-2">
+                            {variants.map(v => {
+                              const pct = total > 0 ? ((v.count / total) * 100).toFixed(1) : 0
+                              return (
+                                <div key={v.variation} className="flex-1">
+                                  <div className="flex items-center justify-between text-xs mb-1">
+                                    <span style={{ color: T.fgMuted }}>Var {v.variation}</span>
+                                    <span className="font-bold">{v.count} ({pct}%)</span>
+                                  </div>
+                                  <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: T.border }}>
+                                    <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: v.variation === '0' || v.variation === 'control' ? T.primary : '#10B981' }} />
+                                  </div>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Conversion events */}
+              <div className="rounded-xl border p-4" style={{ borderColor: T.border, backgroundColor: T.card }}>
+                <h3 className="text-sm font-bold mb-3">Eventos de Conversion</h3>
+                {(stats?.events || []).length === 0 ? (
+                  <p className="text-xs text-center py-4" style={{ color: T.fgMuted }}>Sin eventos. Usa trackEvent() para registrar conversiones.</p>
+                ) : (
+                  <div className="space-y-1">
+                    {(stats?.events || []).map(e => (
+                      <div key={e.event} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-gray-50" style={{ borderBottom: `1px solid ${T.border}20` }}>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#10B981' }} />
+                          <span className="text-sm font-medium">{e.event}</span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span className="text-xs font-mono" style={{ color: T.fgMuted }}>{e.count} eventos</span>
+                          {e.total_value !== e.count && <span className="text-xs font-mono font-bold" style={{ color: T.primary }}>val: {e.total_value}</span>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Conversions by experiment+variant */}
+              {(stats?.conversions || []).length > 0 && (
+                <div className="rounded-xl border p-4" style={{ borderColor: T.border, backgroundColor: T.card }}>
+                  <h3 className="text-sm font-bold mb-3">Conversiones por Variante</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr style={{ borderBottom: `1px solid ${T.border}` }}>
+                          <th className="text-left py-2 text-xs font-semibold" style={{ color: T.fgMuted }}>Experimento</th>
+                          <th className="text-left py-2 text-xs font-semibold" style={{ color: T.fgMuted }}>Variante</th>
+                          <th className="text-left py-2 text-xs font-semibold" style={{ color: T.fgMuted }}>Evento</th>
+                          <th className="text-right py-2 text-xs font-semibold" style={{ color: T.fgMuted }}>Conversiones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(stats?.conversions || []).map((c, i) => (
+                          <tr key={i} style={{ borderBottom: `1px solid ${T.border}20` }}>
+                            <td className="py-2 font-medium">{c.experiment}</td>
+                            <td className="py-2">
+                              <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: c.variation === '0' ? `${T.primary}15` : '#10B98115', color: c.variation === '0' ? T.primary : '#10B981' }}>
+                                {c.variation === '0' ? 'Control' : 'Variante'}
+                              </span>
+                            </td>
+                            <td className="py-2 font-mono text-xs" style={{ color: T.fgMuted }}>{c.event}</td>
+                            <td className="py-2 text-right font-bold">{c.conversions}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Recent exposures */}
+              {(stats?.recent || []).length > 0 && (
+                <div className="rounded-xl border p-4" style={{ borderColor: T.border, backgroundColor: T.card }}>
+                  <h3 className="text-sm font-bold mb-3">Ultimas Exposiciones</h3>
+                  <div className="space-y-1 max-h-48 overflow-y-auto">
+                    {(stats?.recent || []).map((r, i) => (
+                      <div key={i} className="flex items-center justify-between text-xs py-1.5" style={{ borderBottom: `1px solid ${T.border}10` }}>
+                        <span className="font-mono truncate w-24" style={{ color: T.fgMuted }}>{r.user_id.slice(0, 8)}...</span>
+                        <span className="font-medium">{r.experiment}</span>
+                        <span className="px-1.5 py-0.5 rounded" style={{ backgroundColor: T.muted }}>{r.variation}</span>
+                        <span style={{ color: T.fgMuted }}>{new Date(r.timestamp).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' })}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {tab === 'features' && (
+        <div className="space-y-2">
+          {featuresList.length === 0 ? (
+            <p className="text-sm text-center py-8" style={{ color: T.fgMuted }}>No hay features en GrowthBook. Crea una desde el dashboard.</p>
+          ) : featuresList.map(f => (
+            <div key={f.id} className="flex items-center justify-between p-4 rounded-xl border"
+              style={{ backgroundColor: T.card, borderColor: T.border }}>
+              <div className="flex-1 mr-4">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sm">{f.id}</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
+                    style={{ backgroundColor: f.defaultValue ? '#10B98115' : `${T.fgMuted}15`, color: f.defaultValue ? '#10B981' : T.fgMuted }}>
+                    {f.defaultValue ? 'ON' : 'OFF'}
+                  </span>
+                  {f.tags?.map(tag => (
+                    <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded" style={{ backgroundColor: `${T.primary}10`, color: T.primary }}>{tag}</span>
+                  ))}
+                </div>
+                {f.description && <p className="text-xs mt-1" style={{ color: T.fgMuted }}>{f.description}</p>}
+              </div>
+              <span className="text-[10px] font-mono" style={{ color: T.fgMuted }}>{f.valueType || 'boolean'}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === 'experiments' && (
+        <div className="space-y-2">
+          {experimentsList.length === 0 ? (
+            <p className="text-sm text-center py-8" style={{ color: T.fgMuted }}>No hay experimentos activos. Crea uno desde el dashboard de GrowthBook.</p>
+          ) : experimentsList.map(e => {
+            const statusColors = { running: '#10B981', stopped: '#EF4444', draft: T.fgMuted }
+            return (
+              <div key={e.id} className="p-4 rounded-xl border" style={{ backgroundColor: T.card, borderColor: T.border }}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-sm">{e.name || e.id}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase"
+                      style={{ backgroundColor: `${statusColors[e.status] || T.fgMuted}15`, color: statusColors[e.status] || T.fgMuted }}>
+                      {e.status}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono" style={{ color: T.fgMuted }}>{e.variations?.length || 0} variants</span>
+                </div>
+                {e.hypothesis && <p className="text-xs mt-2" style={{ color: T.fgMuted }}>{e.hypothesis}</p>}
+                {e.variations?.length > 0 && (
+                  <div className="flex gap-2 mt-2">
+                    {e.variations.map((v, i) => (
+                      <span key={i} className="text-[10px] px-2 py-1 rounded" style={{ backgroundColor: T.muted, color: T.fg }}>
+                        {v.name || `Variant ${i}`}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {tab === 'dashboard' && (
+        <div className="rounded-xl border overflow-hidden" style={{ borderColor: T.border }}>
+          <iframe
+            src="https://app.growthbook.io"
+            className="w-full border-0"
+            style={{ height: 'calc(100vh - 240px)', minHeight: 500 }}
+            title="GrowthBook Dashboard"
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -4,6 +4,34 @@ import { useThemeColors } from '@/utils/theme'
 
 const PLAN_RANK = { starter: 0, growth: 1, scale: 2, enterprise: 3 }
 
+// Feature → minimum plan mapping
+export const FEATURE_PLAN = {
+  pipeline: 'starter',
+  leads: 'starter',
+  emails: 'starter',
+  marketing_hub: 'growth',
+  ai_agents: 'growth',
+  seo_center: 'growth',
+  automations: 'growth',
+  analytics: 'growth',
+  deal_room: 'scale',
+  whatsapp: 'scale',
+  public_api: 'scale',
+  sso: 'enterprise',
+  custom_integrations: 'enterprise',
+}
+
+export function getUserPlan() {
+  try {
+    const org = JSON.parse(localStorage.getItem('st4rtup_org') || '{}')
+    return org.plan || 'starter'
+  } catch { return 'starter' }
+}
+
+export function planAtLeast(current, required) {
+  return (PLAN_RANK[current] || 0) >= (PLAN_RANK[required] || 0)
+}
+
 export default function PlanGate({ requiredPlan = 'growth', children }) {
   const T = useThemeColors()
   const { plan } = useOrganization()

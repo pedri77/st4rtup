@@ -88,13 +88,17 @@ export default function ActionsPage() {
   const today = new Date().toISOString().split('T')[0]
 
   const overdueActions = actions.filter(a =>
-    a.due_date < today && (a.status === 'pending' || a.status === 'in_progress')
+    a.due_date && a.due_date < today && a.status !== 'completed' && a.status !== 'cancelled'
   )
   const todayActions = actions.filter(a =>
-    a.due_date === today && (a.status === 'pending' || a.status === 'in_progress')
+    a.due_date === today && a.status !== 'completed' && a.status !== 'cancelled'
   )
-  const pendingActions = actions.filter(a => a.status === 'pending' && a.due_date > today)
-  const inProgressActions = actions.filter(a => a.status === 'in_progress' && a.due_date > today)
+  const pendingActions = actions.filter(a =>
+    a.status === 'pending' && (!a.due_date || a.due_date > today)
+  )
+  const inProgressActions = actions.filter(a =>
+    a.status === 'in_progress' && (!a.due_date || a.due_date > today)
+  )
   const completedActions = actions.filter(a => a.status === 'completed')
 
   const handleStatusChange = (action, newStatus) => {

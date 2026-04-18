@@ -4,6 +4,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 import logging
+from logging.handlers import RotatingFileHandler
 
 from sqlalchemy import text
 
@@ -20,6 +21,15 @@ import app.agents.customer_success  # noqa: register AGENT-CS-001
 import app.agents.deal_scorer  # noqa: register AGENT-DEAL-001
 
 logger = logging.getLogger(__name__)
+
+# ─── File logging for admin panel ────────────────────────────────
+LOG_FILE = "/tmp/app.log"
+_file_handler = RotatingFileHandler(LOG_FILE, maxBytes=5_000_000, backupCount=2)
+_file_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
+_file_handler.setLevel(logging.INFO)
+logging.getLogger().addHandler(_file_handler)
+logging.getLogger("uvicorn.access").addHandler(_file_handler)
+logging.getLogger("uvicorn.error").addHandler(_file_handler)
 
 
 # ─── Sentry error monitoring ──────────────────────────────────────
@@ -258,6 +268,10 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # API Versioning
 from app.core.versioning import APIVersionMiddleware
 app.add_middleware(APIVersionMiddleware)
+
+# Audit logging
+from app.core.audit_middleware import AuditMiddleware
+app.add_middleware(AuditMiddleware)
 
 # Observability
 from app.core.observability import ObservabilityMiddleware, get_metrics

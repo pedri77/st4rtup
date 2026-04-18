@@ -177,7 +177,6 @@ function Nav() {
           {NAV_LINKS.map(l => (
             <Link key={l.label} to={l.href} style={{ fontSize: 14, color: T.fgMuted, textDecoration: 'none', fontWeight: 500 }}>{l.label}</Link>
           ))}
-          <ThemeTogglePublic />
           <Link to="/register" style={{ padding: '8px 20px', backgroundColor: T.primary, color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Get Started</Link>
         </div>
       </div>

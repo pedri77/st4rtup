@@ -10,7 +10,9 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import Sparkline from '@/components/Sparkline'
-import { costControlApi } from '@/services/api'
+import { costControlApi, settingsApi } from '@/services/api'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
 
@@ -36,6 +38,22 @@ export default function CostControlPage() {
     queryKey: ['cost-burn-rate'],
     queryFn: () => costControlApi.burnRate().then(r => r.data).catch(() => null),
     staleTime: 120000,
+  })
+
+  const { data: platformCosts } = useQuery({
+    queryKey: ['platform-costs'],
+    queryFn: () => settingsApi.platformCosts().then(r => r.data),
+  })
+
+  const queryClient = useQueryClient()
+  const collectMutation = useMutation({
+    mutationFn: () => settingsApi.collectCosts(),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ['platform-costs'] })
+      const updates = res.data?.updates || []
+      toast.success(`Costes actualizados: ${updates.length} proveedores`)
+    },
+    onError: () => toast.error('Error al recoger costes'),
   })
 
   if (isLoading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin" style={{ color: T.cyan }} /></div>
@@ -195,6 +213,109 @@ export default function CostControlPage() {
                 <span className="text-xs w-10 text-right" style={{ fontFamily: fontMono, color: T.fgMuted }}>{t.pct_of_total}%</span>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Platform Costs — Real infrastructure costs */}
+      {platformCosts && (
+        <div>
+          <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold" style={{ fontFamily: fontDisplay }}>Costes de Plataforma</h2>
+          <button onClick={() => collectMutation.mutate()} disabled={collectMutation.isPending}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:-translate-y-0.5"
+            style={{ backgroundColor: T.cyan, color: '#fff', boxShadow: `0 4px 12px ${T.cyan}40` }}>
+            {collectMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <TrendingUp className="w-4 h-4" />}
+            {collectMutation.isPending ? 'Recogiendo...' : 'Recoger costes'}
+          </button>
+        </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            {[
+              { label: 'Coste mensual', value: `€${(platformCosts.total_monthly || 0).toFixed(2)}`, color: T.primary || T.cyan },
+              { label: 'Coste anual', value: `€${(platformCosts.total_annual || 0).toFixed(2)}`, color: T.success },
+              { label: 'Servicios activos', value: (platformCosts.costs || []).filter(c => c.is_active).length, color: T.warning },
+              { label: 'Variables', value: (platformCosts.costs || []).filter(c => c.is_variable).length, color: '#8B5CF6' },
+            ].map(k => (
+              <div key={k.label} className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+                <p className="text-xs uppercase tracking-wide mb-1" style={{ color: T.fgMuted }}>{k.label}</p>
+                <p className="text-2xl font-bold" style={{ fontFamily: fontMono, color: k.color }}>{k.value}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+              <h3 className="text-sm font-bold mb-3">Por categoria</h3>
+              <div className="space-y-2">
+                {Object.entries(platformCosts.by_category || {}).sort((a, b) => b[1] - a[1]).map(([cat, amt]) => {
+                  const colors = { ai: '#8B5CF6', compute: '#3B82F6', database: '#10B981', hosting: '#F59E0B', auth: '#0891B2', analytics: '#EC4899', email: '#F97316', automation: '#EF4444', dns: '#6B7280', devtools: '#6B7280', gpu: '#EF4444' }
+                  return (
+                    <div key={cat} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded" style={{ backgroundColor: colors[cat] || '#6B7280' }} />
+                        <span className="text-sm capitalize">{cat}</span>
+                      </div>
+                      <span className="text-sm font-bold" style={{ fontFamily: fontMono }}>€{amt.toFixed(2)}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className="rounded-xl p-4" style={{ backgroundColor: T.card, border: `1px solid ${T.border}` }}>
+              <h3 className="text-sm font-bold mb-3">Por proveedor</h3>
+              <div className="space-y-2">
+                {Object.entries((platformCosts.costs || []).reduce((acc, c) => {
+                  acc[c.provider] = (acc[c.provider] || 0) + c.amount_eur
+                  return acc
+                }, {})).sort((a, b) => b[1] - a[1]).map(([prov, amt]) => (
+                  <div key={prov} className="flex items-center justify-between">
+                    <span className="text-sm">{prov}</span>
+                    <span className="text-sm font-bold" style={{ fontFamily: fontMono }}>€{amt.toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${T.border}` }}>
+            <table className="w-full text-sm">
+              <thead>
+                <tr style={{ backgroundColor: T.muted }}>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase" style={{ color: T.fgMuted }}>Servicio</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase" style={{ color: T.fgMuted }}>Proveedor</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase" style={{ color: T.fgMuted }}>Tipo</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase" style={{ color: T.fgMuted }}>€/mes</th>
+                  <th className="text-center px-4 py-3 text-xs font-semibold uppercase" style={{ color: T.fgMuted }}>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(platformCosts.costs || []).map((c, i) => (
+                  <tr key={c.id} style={{ backgroundColor: i % 2 === 0 ? T.card : T.bg, borderBottom: `1px solid ${T.border}20` }}>
+                    <td className="px-4 py-3">
+                      <span className="font-medium">{c.name}</span>
+                      {c.notes && <p className="text-xs mt-0.5" style={{ color: T.fgMuted }}>{c.notes}</p>}
+                    </td>
+                    <td className="px-4 py-3" style={{ color: T.fgMuted }}>{c.provider}</td>
+                    <td className="px-4 py-3">
+                      <span className="text-xs px-2 py-0.5 rounded-full" style={{
+                        backgroundColor: c.is_variable ? '#F59E0B15' : `${T.cyan}15`,
+                        color: c.is_variable ? '#F59E0B' : T.cyan,
+                      }}>
+                        {c.is_variable ? 'Variable' : 'Fijo'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-right font-bold" style={{ fontFamily: fontMono }}>
+                      {c.amount_eur > 0 ? `€${c.amount_eur.toFixed(2)}` : <span style={{ color: T.success }}>Free</span>}
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: c.is_active ? T.success : T.fgMuted }} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

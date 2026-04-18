@@ -41,3 +41,7 @@ content/blog/IMAGE_PROMPTS.md
 # Local test virtualenv (never commit)
 backend/.venv_test/
 backend/venv/
+
+# Remotion videos (deployed via CF Pages directly)
+videos/
+frontend/public/videos/

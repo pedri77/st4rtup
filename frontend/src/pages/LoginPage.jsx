@@ -2,56 +2,35 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
-import { LogIn, Rocket, Mail, ArrowLeft, CheckCircle } from 'lucide-react'
-import ThemeTogglePublic from '@/components/ThemeTogglePublic'
-import { useThemeColors } from '@/utils/theme'
+import { LogIn, Rocket, Mail, ArrowLeft, CheckCircle, BarChart3, Zap, Shield, ArrowRight } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [googleLoading, setGoogleLoading] = useState(false)
   const [resetMode, setResetMode] = useState(false)
   const [resetSent, setResetSent] = useState(false)
-  const { signIn, signInWithGoogle } = useAuth()
+  const { signIn } = useAuth()
   const navigate = useNavigate()
-  const T = useThemeColors()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setLoading(true)
-
     try {
       await signIn(email, password)
       navigate('/app')
     } catch (err) {
-      // Login failed
       setError('Credenciales inválidas. Por favor, verifica tu email y contraseña.')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleGoogle = async () => {
-    setError('')
-    setGoogleLoading(true)
-    try {
-      await signInWithGoogle()
-    } catch (err) {
-      // Google auth failed
-      setError('Error al conectar con Google. Inténtalo de nuevo.')
-      setGoogleLoading(false)
-    }
-  }
-
   const handleResetPassword = async (e) => {
     e.preventDefault()
-    if (!email) {
-      setError('Introduce tu email para recuperar la contraseña.')
-      return
-    }
+    if (!email) { setError('Introduce tu email para recuperar la contraseña.'); return }
     setError('')
     setLoading(true)
     try {
@@ -67,31 +46,30 @@ export default function LoginPage() {
     }
   }
 
-  return (
-    <div className="public-page min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center p-4">
-      <div className="fixed top-4 right-4 z-50"><ThemeTogglePublic /></div>
-      <div className="w-full max-w-md">
-        {/* Logo and Title */}
-        <div className="text-center mb-8">
-          <Link to="/">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-orange-500 rounded-2xl mb-4 shadow-lg">
-              <Rocket className="w-10 h-10 text-white" />
-            </div>
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">St4rtup CRM</h1>
-          <p className="text-gray-500">{resetMode ? 'Recupera tu acceso' : 'Tu CRM de ventas para startups'}</p>
-        </div>
+  const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 focus:bg-white placeholder:text-gray-400"
 
-        {/* Card */}
-        <div className="bg-white backdrop-blur-sm rounded-xl border border-gray-200 p-8 shadow-xl">
+  return (
+    <div className="public-page min-h-screen flex">
+      {/* Left: Form */}
+      <div className="flex-1 flex items-center justify-center p-6 bg-white">
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <Link to="/" className="inline-flex items-center gap-3 mb-10 group">
+            <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
+              <Rocket className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xl font-bold text-gray-900" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>St4rtup</span>
+          </Link>
+
           {resetMode ? (
-            // Password Reset Mode
             resetSent ? (
-              <div className="text-center py-4">
-                <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">Email enviado</h2>
-                <p className="text-sm text-gray-500 mb-6">
-                  Revisa tu bandeja de entrada en <strong>{email}</strong> y sigue las instrucciones para restablecer tu contraseña.
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Email enviado</h2>
+                <p className="text-sm text-gray-500 mb-6 max-w-xs mx-auto">
+                  Revisa tu bandeja de entrada en <strong>{email}</strong> y sigue las instrucciones.
                 </p>
                 <button onClick={() => { setResetMode(false); setResetSent(false) }}
                   className="text-blue-600 font-semibold text-sm hover:underline flex items-center gap-1 mx-auto">
@@ -100,115 +78,118 @@ export default function LoginPage() {
               </div>
             ) : (
               <>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-2">Recuperar contraseña</h2>
-                <p className="text-sm text-gray-500 mb-6">Te enviaremos un enlace para restablecer tu contraseña.</p>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Recuperar contraseña</h1>
+                <p className="text-gray-500 mb-8">Te enviaremos un enlace para restablecer tu contraseña.</p>
 
                 {error && (
-                  <div className="bg-red-500/10 border border-red-500/30 text-red-500 px-4 py-3 rounded-lg mb-6">
-                    <p className="text-sm">{error}</p>
-                  </div>
+                  <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-6 text-sm">{error}</div>
                 )}
 
                 <form onSubmit={handleResetPassword} className="space-y-4">
                   <div>
-                    <label htmlFor="reset-email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <label htmlFor="reset-email" className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
                     <input id="reset-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                      required disabled={loading} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
-                      onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                      onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }}
-                      placeholder="tu@email.com" autoComplete="email" />
+                      required disabled={loading} className={inputClass} placeholder="tu@email.com" autoComplete="email" />
                   </div>
-                  <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2">
-                    {loading ? (
-                      <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Enviando...</>
-                    ) : (
-                      <><Mail className="w-5 h-5" /> Enviar enlace</>
-                    )}
+                  <button type="submit" disabled={loading}
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-60">
+                    {loading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Mail className="w-4 h-4" />}
+                    {loading ? 'Enviando...' : 'Enviar enlace'}
                   </button>
                 </form>
                 <button onClick={() => { setResetMode(false); setError('') }}
-                  className="text-sm text-gray-500 hover:text-gray-700 mt-4 flex items-center gap-1 mx-auto">
+                  className="text-sm text-gray-400 hover:text-gray-600 mt-6 flex items-center gap-1 mx-auto transition-colors">
                   <ArrowLeft className="w-3.5 h-3.5" /> Volver al login
                 </button>
               </>
             )
           ) : (
-            // Login Mode
             <>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Iniciar Sesión</h2>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Bienvenido de nuevo</h1>
+              <p className="text-gray-500 mb-8">Inicia sesión para acceder a tu CRM.</p>
 
               {error && (
-                <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-6">
-                  <p className="text-sm">{error}</p>
-                </div>
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-6 text-sm">{error}</div>
               )}
 
-              {/* Google OAuth — hidden until Google Cloud account is configured
-              <button type="button" onClick={handleGoogle} disabled={googleLoading || loading}
-                className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 mb-6">
-                {googleLoading ? (
-                  <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                  </svg>
-                )}
-                <span className="font-medium text-gray-700">{googleLoading ? 'Conectando...' : 'Continuar con Google'}</span>
-              </button>
-              <div className="relative mb-6">
-                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
-                <div className="relative flex justify-center"><span className="bg-white px-3 text-sm text-gray-400">o con email</span></div>
-              </div>
-              */}
-
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
                   <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    required disabled={loading} placeholder="tu@email.com" autoComplete="email"
-                    style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }} />
+                    required disabled={loading} placeholder="tu@email.com" autoComplete="email" className={inputClass} />
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-1.5">
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
                     <button type="button" onClick={() => { setResetMode(true); setError('') }}
-                      className="text-xs text-blue-600 hover:underline">¿Olvidaste tu contraseña?</button>
+                      className="text-xs text-blue-600 hover:text-blue-700 font-medium">¿Olvidaste tu contraseña?</button>
                   </div>
                   <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                    required disabled={loading} placeholder="••••••••" autoComplete="current-password"
-                    style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: `1px solid ${T.border}`, backgroundColor: T.muted, color: T.fg, fontSize: 14, outline: 'none' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,111,217,0.1)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none' }} />
+                    required disabled={loading} placeholder="••••••••" autoComplete="current-password" className={inputClass} />
                 </div>
 
-                <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2">
-                  {loading ? (
-                    <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Iniciando sesión...</>
-                  ) : (
-                    <><LogIn className="w-5 h-5" /> Iniciar Sesión</>
-                  )}
+                <button type="submit" disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-60">
+                  {loading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <LogIn className="w-4 h-4" />}
+                  {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                 </button>
               </form>
 
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <p className="text-sm text-gray-500 text-center">
-                  ¿No tienes cuenta?{' '}
-                  <Link to="/register" className="text-blue-600 font-semibold hover:underline">Crear cuenta gratis</Link>
-                </p>
-              </div>
+              <p className="text-sm text-gray-500 text-center mt-8">
+                ¿No tienes cuenta?{' '}
+                <Link to="/register" className="text-blue-600 font-semibold hover:underline">Crear cuenta gratis</Link>
+              </p>
             </>
           )}
-        </div>
 
-        {/* Footer */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">© {new Date().getFullYear()} St4rtup. Todos los derechos reservados.</p>
+          <p className="text-xs text-gray-400 text-center mt-10">© {new Date().getFullYear()} St4rtup. Todos los derechos reservados.</p>
+        </div>
+      </div>
+
+      {/* Right: Hero visual */}
+      <div className="hidden lg:flex flex-1 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1E6FD9, #3B82F6, #1E40AF)' }}>
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-full opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-white/5" />
+        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] rounded-full bg-white/5" />
+
+        <div className="relative z-10 flex flex-col items-center justify-center p-16 text-white w-full">
+          <h2 className="text-4xl font-bold mb-4 text-center leading-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            Gestiona tus ventas<br />con inteligencia.
+          </h2>
+          <p className="text-blue-100 text-center mb-12 max-w-md text-lg">
+            Pipeline visual, 22 automatizaciones y dashboard con IA. Todo en un solo lugar.
+          </p>
+
+          {/* Feature pills */}
+          <div className="flex flex-col gap-4 w-full max-w-sm">
+            {[
+              { icon: BarChart3, text: 'Dashboard con 14 gráficos en tiempo real', color: '#34D399' },
+              { icon: Zap, text: '22 automatizaciones listas para activar', color: '#FBBF24' },
+              { icon: Shield, text: 'Datos seguros con cifrado end-to-end', color: '#A78BFA' },
+            ].map((f, i) => (
+              <div key={i} className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl px-5 py-4 border border-white/10">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${f.color}20` }}>
+                  <f.icon className="w-5 h-5" style={{ color: f.color }} />
+                </div>
+                <span className="text-sm font-medium text-white/90">{f.text}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* CRM preview mockup */}
+          <div className="mt-12 w-full max-w-md">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-4">
+              <div className="flex gap-1.5 mb-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/60" />
+                <div className="w-2.5 h-2.5 rounded-full bg-green-400/60" />
+              </div>
+              <video src="/videos/showcase-dashboard.mp4" autoPlay muted loop playsInline
+                className="w-full rounded-lg" style={{ opacity: 0.85 }} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

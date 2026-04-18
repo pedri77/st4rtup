@@ -5,6 +5,8 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
 import { ConfirmProvider } from '@/components/common/ConfirmDialog'
 import PWAInstallPrompt from '@/components/PWAInstallPrompt'
+import CookieConsent from '@/components/CookieConsent'
+import { useFeatureFlags } from '@/hooks/useFeatureFlags'
 import useFavicon from '@/hooks/useFavicon'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
@@ -81,6 +83,7 @@ const MarketplacePage = lazy(() => import('./pages/MarketplacePage'))
 const BillingPage = lazy(() => import('./pages/BillingPage'))
 const AgentsPage = lazy(() => import('./pages/AgentsPage'))
 const CostControlPage = lazy(() => import('./pages/CostControlPage'))
+const ExecutivePage = lazy(() => import('./pages/ExecutivePage'))
 const DealRoomPage = lazy(() => import('./pages/DealRoomPage'))
 const DealRoomPublicPage = lazy(() => import('./pages/DealRoomPublicPage'))
 const GTMDashboardPage = lazy(() => import('./pages/GTMDashboardPage'))
@@ -118,14 +121,36 @@ const ServiceCatalogPage = lazy(() => import('./pages/ServiceCatalogPage'))
 
 function PageLoader() {
   return (
-    <div className="flex items-center justify-center h-64">
-      <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
+    <div className="flex flex-col items-center justify-center h-64 animate-fade-in">
+      <div className="w-9 h-9 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
+      <p className="text-xs text-gray-400 font-medium">Cargando...</p>
+      <style>{`
+        @keyframes pageFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: pageFadeIn 0.3s ease-out; }
+        .page-transition { animation: pageFadeIn 0.25s ease-out; }
+      `}</style>
     </div>
   )
 }
 
 function AppContent() {
   useFavicon()
+  return null
+}
+
+function FeatureGatedPWA() {
+  const { isEnabled } = useFeatureFlags()
+  return isEnabled('pwa_mobile') ? <PWAInstallPrompt /> : null
+}
+
+function GrowthBookInit() {
+  useEffect(() => {
+    import('@/lib/growthbook').then(({ initGrowthBook }) => {
+      const org = JSON.parse(localStorage.getItem('st4rtup_org') || '{}')
+      const user = JSON.parse(localStorage.getItem('st4rtup_user') || '{}')
+      initGrowthBook({ userId: user.id, email: user.email, plan: org.plan, orgId: org.id })
+    }).catch(() => {})
+  }, [])
   return null
 }
 
@@ -137,6 +162,7 @@ function App() {
     <ErrorBoundary>
     <ConfirmProvider>
     <KeyboardShortcuts />
+    <GrowthBookInit />
     <AuthProvider>
       <AppContent />
       <Routes>
@@ -172,7 +198,7 @@ function App() {
           path="/app"
           element={
             <PrivateRoute>
-              <PWAInstallPrompt />
+              <FeatureGatedPWA />
               <Layout />
             </PrivateRoute>
           }
@@ -260,7 +286,7 @@ function App() {
           <Route path="gtm" element={<Suspense fallback={<PageLoader />}><GTMDashboardPage /></Suspense>} />
           <Route path="gtm/brand" element={<Suspense fallback={<PageLoader />}><BrandPage /></Suspense>} />
           <Route path="gtm/pricing" element={<Suspense fallback={<PageLoader />}><PricingPage /></Suspense>} />
-          <Route path="admin" element={<Suspense fallback={<PageLoader />}><AdminDashboardPage /></Suspense>} />
+          {/* Admin panel moved to st4rtup-admin.pages.dev */}
           <Route path="referral" element={<Suspense fallback={<PageLoader />}><ReferralPage /></Suspense>} />
           <Route path="badges" element={<Suspense fallback={<PageLoader />}><BadgesPage /></Suspense>} />
           <Route path="gtm/competitors" element={<Suspense fallback={<PageLoader />}><CompetitorsPage /></Suspense>} />
@@ -272,6 +298,7 @@ function App() {
           <Route path="gtm/forecast" element={<Suspense fallback={<PageLoader />}><ForecastPage /></Suspense>} />
           <Route path="gtm/poc-tracker" element={<Suspense fallback={<PageLoader />}><PocTrackerPage /></Suspense>} />
           <Route path="cost-control" element={<Suspense fallback={<PageLoader />}><CostControlPage /></Suspense>} />
+          <Route path="executive" element={<Suspense fallback={<PageLoader />}><ExecutivePage /></Suspense>} />
           <Route path="alert-channels" element={<Suspense fallback={<PageLoader />}><AlertChannelsPage /></Suspense>} />
           <Route path="webhooks" element={<Suspense fallback={<PageLoader />}><WebhooksPage /></Suspense>} />
           <Route path="report-builder" element={<Suspense fallback={<PageLoader />}><ReportBuilderPage /></Suspense>} />
@@ -287,6 +314,7 @@ function App() {
         {/* 404 catch-all */}
         <Route path="*" element={<Suspense fallback={<PageLoader />}><NotFoundPage /></Suspense>} />
       </Routes>
+    <CookieConsent />
     </AuthProvider>
     </ConfirmProvider>
     </ErrorBoundary>

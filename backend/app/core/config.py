@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     DEBUG: bool = False
     API_V1_PREFIX: str = "/api/v1"
-    BACKEND_CORS_ORIGINS: str = '["http://localhost:5173","https://app.st4rtup.app","https://st4rtup.pages.dev"]'
+    BACKEND_CORS_ORIGINS: str = '["http://localhost:5173","http://localhost:5174","https://app.st4rtup.app","https://st4rtup.pages.dev","https://admin.st4rtup.com"]'
 
     @property
     def cors_origins(self) -> List[str]:
@@ -274,6 +274,8 @@ class Settings(BaseSettings):
     # GrowthBook
     GROWTHBOOK_CLIENT_KEY: str = ""
     GROWTHBOOK_API_HOST: str = "https://cdn.growthbook.io"
+    GROWTHBOOK_API_KEY: str = ""
+    INTERNAL_API_KEY: str = ""  # For n8n/cron endpoints (X-Internal-Key header)
     DEEPSEEK_MODEL: str = "deepseek-chat"
     AI_DEFAULT_PROVIDER: str = "openai"
     AI_SYSTEM_PROMPT: str = "Eres un asistente de ventas de St4rtup CRM. Ayudas al equipo comercial con información sobre leads, oportunidades y estrategias de venta para startups. Responde siempre en español."

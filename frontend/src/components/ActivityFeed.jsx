@@ -89,34 +89,37 @@ export default function ActivityFeed({ leadId }) {
 
       <div className="relative">
         {/* Timeline line */}
-        <div className="absolute left-4 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700" />
+        <div className="absolute left-[18px] top-2 bottom-2 w-px" style={{ background: 'linear-gradient(180deg, #E2E8F0, transparent)' }} />
 
-        <div className="space-y-3">
+        <div className="space-y-1">
           {events.map((event, i) => {
             const Icon = ICONS[event.type] || FileText
             const colors = TYPE_COLORS[event.type] || TYPE_COLORS.action
             return (
-              <div key={`${event.type}-${event.id}-${i}`} className="relative flex items-start gap-3 pl-1">
-                {/* Icon dot */}
-                <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${colors.bg}`}>
-                  <Icon className={`w-3.5 h-3.5 ${colors.text}`} />
+              <div key={`${event.type}-${event.id}-${i}`}
+                className="relative flex items-start gap-3 pl-1 py-2 px-2 rounded-xl transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 group">
+                {/* Icon dot with ring */}
+                <div className={`relative z-10 w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${colors.bg} border border-white dark:border-gray-800 shadow-sm`}>
+                  <Icon className={`w-4 h-4 ${colors.text}`} />
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 min-w-0 pb-2">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-medium uppercase px-1.5 py-0.5 rounded ${colors.bg} ${colors.text}`}>
-                      {event.type}
-                    </span>
-                    <span className="text-[10px] text-gray-400 dark:text-gray-500">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full ${colors.bg} ${colors.text}`}>
+                        {event.type}
+                      </span>
+                      <p className="text-sm text-gray-900 dark:text-white font-medium truncate">
+                        {event.title}
+                      </p>
+                    </div>
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500 flex-shrink-0 font-medium">
                       {formatRelativeTime(event.timestamp)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-900 dark:text-white font-medium mt-0.5 truncate">
-                    {event.title}
-                  </p>
                   {event.detail && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 pl-0">
                       {event.detail}
                     </p>
                   )}
