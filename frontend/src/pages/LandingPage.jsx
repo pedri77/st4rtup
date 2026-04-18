@@ -1,5 +1,4 @@
 import SEO from '@/components/SEO'
-import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 import ExitIntentPopup from '@/components/ExitIntentPopup'
 import WebChatWidget from '@/components/WebChatWidget'
 import { useThemeColors } from '@/utils/theme'

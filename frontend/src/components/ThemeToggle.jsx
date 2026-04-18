@@ -10,6 +10,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={() => setPreferences({ theme: isDark ? 'light' : 'dark' })}
+      aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       title={isDark ? 'Modo claro' : 'Modo oscuro'}
       style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center',

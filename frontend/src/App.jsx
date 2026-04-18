@@ -13,6 +13,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import RoleGuard from './components/RoleGuard'
 import Layout from './components/layout/Layout'
+import ForceLightTheme from './components/ForceLightTheme'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 const ContactSalesPage = lazy(() => import('./pages/ContactSalesPage'))
@@ -166,29 +167,29 @@ function App() {
     <AuthProvider>
       <AppContent />
       <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/pricing" element={<PricingPublicPage />} />
-        <Route path="/demo" element={<Suspense fallback={<PageLoader />}><DemoPage /></Suspense>} />
-        <Route path="/blog" element={<Suspense fallback={<PageLoader />}><BlogPage /></Suspense>} />
-        <Route path="/blog/:slug" element={<Suspense fallback={<PageLoader />}><BlogArticlePage /></Suspense>} />
-        <Route path="/changelog" element={<Suspense fallback={<PageLoader />}><ChangelogPage /></Suspense>} />
-        <Route path="/status" element={<Suspense fallback={<PageLoader />}><StatusPage /></Suspense>} />
-        <Route path="/vs/:competitor" element={<Suspense fallback={<PageLoader />}><ComparePage /></Suspense>} />
-        <Route path="/roi" element={<Suspense fallback={<PageLoader />}><RoiCalculatorPage /></Suspense>} />
-        <Route path="/help" element={<Suspense fallback={<PageLoader />}><HelpCenterPage /></Suspense>} />
-        <Route path="/api-docs" element={<Suspense fallback={<PageLoader />}><ApiDocsPage /></Suspense>} />
-        <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><PrivacyPage /></Suspense>} />
-        <Route path="/terms" element={<Suspense fallback={<PageLoader />}><TermsPage /></Suspense>} />
-        <Route path="/cookies" element={<Suspense fallback={<PageLoader />}><CookiesPage /></Suspense>} />
-        <Route path="/affiliates" element={<Suspense fallback={<PageLoader />}><AffiliatesPage /></Suspense>} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/contact-sales" element={<Suspense fallback={<PageLoader />}><ContactSalesPage /></Suspense>} />
-        <Route path="/survey/:token" element={<Suspense fallback={<PageLoader />}><SurveyPublicPage /></Suspense>} />
-        <Route path="/proposal" element={<Suspense fallback={<PageLoader />}><ProposalViewPage /></Suspense>} />
-        <Route path="/form/:formId" element={<Suspense fallback={<PageLoader />}><PublicFormPage /></Suspense>} />
-        <Route path="/deal/:token" element={<Suspense fallback={<PageLoader />}><DealRoomPublicPage /></Suspense>} />
+        {/* Public routes — always light theme */}
+        <Route path="/" element={<><ForceLightTheme /><LandingPage /></>} />
+        <Route path="/pricing" element={<><ForceLightTheme /><PricingPublicPage /></>} />
+        <Route path="/demo" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><DemoPage /></Suspense></>} />
+        <Route path="/blog" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><BlogPage /></Suspense></>} />
+        <Route path="/blog/:slug" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><BlogArticlePage /></Suspense></>} />
+        <Route path="/changelog" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><ChangelogPage /></Suspense></>} />
+        <Route path="/status" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><StatusPage /></Suspense></>} />
+        <Route path="/vs/:competitor" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><ComparePage /></Suspense></>} />
+        <Route path="/roi" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><RoiCalculatorPage /></Suspense></>} />
+        <Route path="/help" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><HelpCenterPage /></Suspense></>} />
+        <Route path="/api-docs" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><ApiDocsPage /></Suspense></>} />
+        <Route path="/privacy" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><PrivacyPage /></Suspense></>} />
+        <Route path="/terms" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><TermsPage /></Suspense></>} />
+        <Route path="/cookies" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><CookiesPage /></Suspense></>} />
+        <Route path="/affiliates" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><AffiliatesPage /></Suspense></>} />
+        <Route path="/login" element={<><ForceLightTheme /><LoginPage /></>} />
+        <Route path="/register" element={<><ForceLightTheme /><RegisterPage /></>} />
+        <Route path="/contact-sales" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><ContactSalesPage /></Suspense></>} />
+        <Route path="/survey/:token" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><SurveyPublicPage /></Suspense></>} />
+        <Route path="/proposal" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><ProposalViewPage /></Suspense></>} />
+        <Route path="/form/:formId" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><PublicFormPage /></Suspense></>} />
+        <Route path="/deal/:token" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><DealRoomPublicPage /></Suspense></>} />
 
         {/* Onboarding (protected, no layout) */}
         <Route path="/app/onboarding" element={<PrivateRoute><Suspense fallback={<PageLoader />}><OnboardingPage /></Suspense></PrivateRoute>} />

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Code, Key, Zap, Globe, ArrowRight, Copy, Check } from 'lucide-react'
 import { useThemeColors, fontDisplay, fontMono } from '@/utils/theme'
-import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },

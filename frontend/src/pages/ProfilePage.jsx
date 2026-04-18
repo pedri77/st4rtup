@@ -72,7 +72,7 @@ function TwoFactorSection() {
       </div>
       <p style={{ fontSize: 13, color: T.fgMuted, marginBottom: 16 }}>Protege tu cuenta con un código de verificación desde Google Authenticator o Authy.</p>
 
-      {error && <p style={{ fontSize: 12, color: T.destructive, marginBottom: 12, padding: '8px 12px', backgroundColor: `${T.destructive}10`, borderRadius: 8 }}>{error}</p>}
+      {error && <p role="alert" style={{ fontSize: 12, color: T.destructive, marginBottom: 12, padding: '8px 12px', backgroundColor: `${T.destructive}10`, borderRadius: 8 }}>{error}</p>}
 
       {mfaState === 'idle' && (
         <button onClick={enrollMFA} style={{ padding: '10px 20px', borderRadius: 10, backgroundColor: T.cyan, color: 'white', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
@@ -322,7 +322,7 @@ export default function ProfilePage() {
                 onBlur={(e) => setNameError(validateName(e.target.value))}
                 style={{ ...inputStyle, ...(nameError ? { borderColor: T.destructive } : {}) }}
                 placeholder="Tu nombre completo" />
-              {nameError && <p className="text-xs mt-1" style={{ color: T.destructive }}>{nameError}</p>}
+              {nameError && <p role="alert" className="text-xs mt-1" style={{ color: T.destructive }}>{nameError}</p>}
             </div>
             <div>
               <label htmlFor="profile-email" className="block text-xs uppercase tracking-[0.1em] mb-1" style={{ fontFamily: fontDisplay, color: T.fgMuted }}>Email</label>

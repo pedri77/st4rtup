@@ -190,6 +190,9 @@ export default function Layout() {
 
   return (
     <div className="flex h-screen" style={{ backgroundColor: T.bg }}>
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:text-white focus:bg-blue-600 focus:outline-none">
+        Ir al contenido principal
+      </a>
       <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       {/* Mobile overlay */}
@@ -386,7 +389,7 @@ export default function Layout() {
         )}
 
         {/* Collapse toggle */}
-        <button onClick={toggleSidebar} style={{ width: '100%', padding: 12, border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'center', color: T.fgMuted, backgroundColor: 'transparent', borderTop: `1px solid ${T.border}` }} title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}>
+        <button onClick={toggleSidebar} aria-label={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'} style={{ width: '100%', padding: 12, border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'center', color: T.fgMuted, backgroundColor: 'transparent', borderTop: `1px solid ${T.border}` }} title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}>
           {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
       </aside>
@@ -425,7 +428,7 @@ export default function Layout() {
 
           <div className="flex items-center gap-2 md:gap-4 ml-2 md:ml-6">
             {/* Docs help */}
-            <Link to="/app/docs" title="Documentación" style={{ width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${T.border}`, color: T.fgMuted, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>?</Link>
+            <Link to="/app/docs" title="Documentación" aria-label="Documentación" style={{ width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${T.border}`, color: T.fgMuted, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>?</Link>
             {/* Notifications */}
             <div className="relative">
               <button aria-label="Notificaciones" onClick={() => setNotificationsOpen(true)}
@@ -445,7 +448,7 @@ export default function Layout() {
 
             {/* User avatar + dropdown */}
             <div style={{ position: 'relative' }}>
-              <button onClick={() => setUserMenuOpen(!userMenuOpen)} style={{
+              <button onClick={() => setUserMenuOpen(!userMenuOpen)} aria-label="Menú de usuario" aria-expanded={userMenuOpen} style={{
                 width: 32, height: 32, borderRadius: '50%', backgroundColor: T.cyan,
                 color: 'white', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -480,7 +483,7 @@ export default function Layout() {
             {/* Settings */}
             {hasRole('admin') && (
               <NavLink to="/app/settings" className="p-2 rounded-lg transition-colors"
-                style={{ color: T.fgMuted }}>
+                style={{ color: T.fgMuted }} aria-label="Configuración">
                 <Settings className="w-5 h-5" />
               </NavLink>
             )}
@@ -524,7 +527,7 @@ export default function Layout() {
         })()}
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto" style={{ backgroundColor: T.bg }}>
+        <main id="main-content" className="flex-1 overflow-auto" style={{ backgroundColor: T.bg }}>
           <div className="p-4 md:p-8 page-transition" key={location.pathname}>
             <Outlet />
           </div>

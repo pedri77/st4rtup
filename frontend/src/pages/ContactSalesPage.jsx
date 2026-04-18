@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Send, CheckCircle, ArrowLeft, Building2, Users, Mail, Phone } from 'lucide-react'
-import ThemeTogglePublic from '@/components/ThemeTogglePublic'
 import SEO from '@/components/SEO'
 import { useThemeColors } from '@/utils/theme'
 

@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
-import { LogIn, Rocket, Mail, ArrowLeft, CheckCircle, BarChart3, Zap, Shield, ArrowRight } from 'lucide-react'
+import { LogIn, Rocket, Mail, ArrowLeft, CheckCircle, BarChart3, Zap, Shield, ArrowRight, Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [resetMode, setResetMode] = useState(false)
   const [resetSent, setResetSent] = useState(false)
   const { signIn } = useAuth()
@@ -82,7 +83,7 @@ export default function LoginPage() {
                 <p className="text-gray-500 mb-8">Te enviaremos un enlace para restablecer tu contraseña.</p>
 
                 {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-6 text-sm">{error}</div>
+                  <div role="alert" className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-6 text-sm">{error}</div>
                 )}
 
                 <form onSubmit={handleResetPassword} className="space-y-4">
@@ -109,7 +110,7 @@ export default function LoginPage() {
               <p className="text-gray-500 mb-8">Inicia sesión para acceder a tu CRM.</p>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-6 text-sm">{error}</div>
+                <div role="alert" className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-6 text-sm">{error}</div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -125,8 +126,14 @@ export default function LoginPage() {
                     <button type="button" onClick={() => { setResetMode(true); setError('') }}
                       className="text-xs text-blue-600 hover:text-blue-700 font-medium">¿Olvidaste tu contraseña?</button>
                   </div>
-                  <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                    required disabled={loading} placeholder="••••••••" autoComplete="current-password" className={inputClass} />
+                  <div className="relative">
+                    <input id="password" type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)}
+                      required disabled={loading} placeholder="••••••••" autoComplete="current-password" className={inputClass} style={{ paddingRight: '2.5rem' }} />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                 </div>
 
                 <button type="submit" disabled={loading}

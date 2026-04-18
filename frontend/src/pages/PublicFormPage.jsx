@@ -163,7 +163,7 @@ export default function PublicFormPage() {
         <p style={{ color: T.fgMuted, fontSize: 14, margin: '0 0 32px 0' }}>{config.subtitle}</p>
 
         {error && (
-          <div style={{ backgroundColor: `${T.destructive}15`, border: `1px solid ${T.destructive}44`, borderRadius: 8, padding: 12, marginBottom: 24, color: T.destructive, fontSize: 14 }}>
+          <div role="alert" style={{ backgroundColor: `${T.destructive}15`, border: `1px solid ${T.destructive}44`, borderRadius: 8, padding: 12, marginBottom: 24, color: T.destructive, fontSize: 14 }}>
             {error}
           </div>
         )}

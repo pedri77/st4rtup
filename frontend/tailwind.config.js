@@ -6,6 +6,15 @@ export default {
   ],
   theme: {
     extend: {
+      zIndex: {
+        dropdown: '10',
+        sticky: '20',
+        sidebar: '30',
+        overlay: '40',
+        modal: '50',
+        toast: '60',
+        skiplink: '100',
+      },
       colors: {
         primary: {
           50: '#EBF4FF',
