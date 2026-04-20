@@ -63,7 +63,7 @@
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
       "keywords": ["angel investor", "business angel", "inversión ángel startup"],
-      "publicado": false
+      "publicado": true
     },
     {
       "slug": "que-es-el-venture-capital",
@@ -76,7 +76,7 @@
       "tiempo_lectura": "10 min",
       "autor": "St4rtup",
       "keywords": ["venture capital", "capital riesgo", "fondos VC España"],
-      "publicado": false
+      "publicado": true
     },
     {
       "slug": "pre-seed-seed-serie-a-diferencias",
@@ -89,7 +89,7 @@
       "tiempo_lectura": "9 min",
       "autor": "St4rtup",
       "keywords": ["pre-seed", "seed", "serie A", "rondas financiación"],
-      "publicado": false
+      "publicado": true
     },
     {
       "slug": "mvp-que-es-startup",
@@ -102,7 +102,7 @@
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
       "keywords": ["MVP", "producto mínimo viable", "validar startup"],
-      "publicado": false
+      "publicado": true
     },
     {
       "slug": "pitch-deck-que-es",
@@ -115,7 +115,7 @@
       "tiempo_lectura": "9 min",
       "autor": "St4rtup",
       "keywords": ["pitch deck", "presentación inversores", "slides pitch"],
-      "publicado": false
+      "publicado": true
     },
     {
       "slug": "habilidades-founder-startup",
@@ -128,7 +128,7 @@
       "tiempo_lectura": "7 min",
       "autor": "St4rtup",
       "keywords": ["habilidades founder", "competencias emprendedor"],
-      "publicado": false
+      "publicado": true
     },
     {
       "slug": "vesting-startup-que-es",
@@ -141,7 +141,7 @@
       "tiempo_lectura": "7 min",
       "autor": "St4rtup",
       "keywords": ["vesting", "equity startup", "cliff period"],
-      "publicado": false
+      "publicado": true
     },
     {
       "slug": "contratos-startups-mas-importantes",
@@ -154,18 +154,21 @@
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
       "keywords": ["contratos startup", "documentos legales", "pacto de socios"],
-      "publicado": false
+      "publicado": true
     },
-    { "slug": "startup-vs-pyme", "titulo": "Startup vs Pyme: 5 diferencias clave", "excerpt": "Entiende qué separa a una startup de una pyme tradicional.", "categoria": "Ecosistema", "cluster": "C1", "fecha": "2026-04-28", "imagen": "/blog/startup-vs-pyme.webp", "tiempo_lectura": "6 min", "autor": "St4rtup", "keywords": ["startup vs pyme", "diferencias"], "publicado": false },
-    { "slug": "unicornio-startup", "titulo": "¿Qué es un unicornio startup? Ejemplos en España", "excerpt": "Startups valoradas en +1.000M$. Qué las hace únicas y cuáles hay en España.", "categoria": "Ecosistema", "cluster": "C1", "fecha": "2026-04-30", "imagen": "/blog/unicornio-startup.webp", "tiempo_lectura": "7 min", "autor": "St4rtup", "keywords": ["unicornio", "startup española"], "publicado": false },
-    { "slug": "scaleup-que-es", "titulo": "Scaleup: qué es y cómo pasar de startup a scaleup", "excerpt": "De startup a scaleup: las claves del crecimiento acelerado.", "categoria": "Ecosistema", "cluster": "C1", "fecha": "2026-05-02", "imagen": "/blog/scaleup-que-es.webp", "tiempo_lectura": "7 min", "autor": "St4rtup", "keywords": ["scaleup", "crecimiento startup"], "publicado": false },
-    { "slug": "bootstrapping", "titulo": "Bootstrapping: cómo financiar tu startup sin inversores", "excerpt": "Crecer sin inversión externa es posible. Guía práctica.", "categoria": "Financiación", "cluster": "C2", "fecha": "2026-05-05", "imagen": "/blog/bootstrapping.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["bootstrapping", "autofinanciación"], "publicado": false },
-    { "slug": "valoracion-startup", "titulo": "Cómo valorar una startup: métodos y ejemplos", "excerpt": "DCF, múltiplos, Berkus y más. Guía de valoración para founders.", "categoria": "Financiación", "cluster": "C2", "fecha": "2026-05-07", "imagen": "/blog/valoracion-startup.webp", "tiempo_lectura": "9 min", "autor": "St4rtup", "keywords": ["valoración startup", "métodos valoración"], "publicado": false },
-    { "slug": "como-hacer-pitch", "titulo": "Cómo hacer un pitch perfecto en 5 minutos", "excerpt": "Estructura, consejos y errores a evitar en tu pitch.", "categoria": "Crear & Lanzar", "cluster": "C3", "fecha": "2026-05-09", "imagen": "/blog/como-hacer-pitch.webp", "tiempo_lectura": "7 min", "autor": "St4rtup", "keywords": ["pitch", "presentación inversores"], "publicado": false },
-    { "slug": "errores-comunes-startups", "titulo": "Los 10 errores más comunes al crear una startup", "excerpt": "Errores que todo founder comete y cómo evitarlos.", "categoria": "Crear & Lanzar", "cluster": "C3", "fecha": "2026-05-12", "imagen": "/blog/errores-comunes-startups.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["errores startup", "fracaso startup"], "publicado": false },
-    { "slug": "pacto-socios", "titulo": "Pacto de socios: guía completa para cofounders", "excerpt": "El documento más importante entre cofounders. Qué incluir y por qué.", "categoria": "Legal", "cluster": "C11", "fecha": "2026-05-14", "imagen": "/blog/pacto-socios.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["pacto de socios", "cofounders"], "publicado": false },
-    { "slug": "stock-options", "titulo": "Stock options en startups: cómo funcionan en España", "excerpt": "Phantom shares, ESOP y fiscalidad. Guía práctica española.", "categoria": "Legal", "cluster": "C11", "fecha": "2026-05-16", "imagen": "/blog/stock-options.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["stock options", "phantom shares", "ESOP"], "publicado": false },
-    { "slug": "propiedad-intelectual", "titulo": "Propiedad intelectual en startups: protege tu idea", "excerpt": "Patentes, marcas, copyright y secretos comerciales para startups.", "categoria": "Legal", "cluster": "C11", "fecha": "2026-05-19", "imagen": "/blog/propiedad-intelectual.webp", "tiempo_lectura": "7 min", "autor": "St4rtup", "keywords": ["propiedad intelectual", "patentes startup"], "publicado": false },
-    { "slug": "rgpd-startups", "titulo": "RGPD para startups: guía práctica de cumplimiento", "excerpt": "Cumplir con el RGPD sin morir en el intento. Pasos claros.", "categoria": "Legal", "cluster": "C11", "fecha": "2026-05-21", "imagen": "/blog/rgpd-startups.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["RGPD", "protección datos", "compliance"], "publicado": false }
+    { "slug": "startup-vs-pyme", "titulo": "Startup vs Pyme: 5 diferencias clave", "excerpt": "Entiende qué separa a una startup de una pyme tradicional.", "categoria": "Ecosistema", "cluster": "C1", "fecha": "2026-04-28", "imagen": "/blog/startup-vs-pyme.webp", "tiempo_lectura": "6 min", "autor": "St4rtup", "keywords": ["startup vs pyme", "diferencias"], "publicado": true },
+    { "slug": "unicornio-startup", "titulo": "¿Qué es un unicornio startup? Ejemplos en España", "excerpt": "Startups valoradas en +1.000M$. Qué las hace únicas y cuáles hay en España.", "categoria": "Ecosistema", "cluster": "C1", "fecha": "2026-04-30", "imagen": "/blog/unicornio-startup.webp", "tiempo_lectura": "7 min", "autor": "St4rtup", "keywords": ["unicornio", "startup española"], "publicado": true },
+    { "slug": "scaleup-que-es", "titulo": "Scaleup: qué es y cómo pasar de startup a scaleup", "excerpt": "De startup a scaleup: las claves del crecimiento acelerado.", "categoria": "Ecosistema", "cluster": "C1", "fecha": "2026-05-02", "imagen": "/blog/scaleup-que-es.webp", "tiempo_lectura": "7 min", "autor": "St4rtup", "keywords": ["scaleup", "crecimiento startup"], "publicado": true },
+    { "slug": "bootstrapping", "titulo": "Bootstrapping: cómo financiar tu startup sin inversores", "excerpt": "Crecer sin inversión externa es posible. Guía práctica.", "categoria": "Financiación", "cluster": "C2", "fecha": "2026-05-05", "imagen": "/blog/bootstrapping.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["bootstrapping", "autofinanciación"], "publicado": true },
+    { "slug": "valoracion-startup", "titulo": "Cómo valorar una startup: métodos y ejemplos", "excerpt": "DCF, múltiplos, Berkus y más. Guía de valoración para founders.", "categoria": "Financiación", "cluster": "C2", "fecha": "2026-05-07", "imagen": "/blog/valoracion-startup.webp", "tiempo_lectura": "9 min", "autor": "St4rtup", "keywords": ["valoración startup", "métodos valoración"], "publicado": true },
+    { "slug": "como-hacer-pitch", "titulo": "Cómo hacer un pitch perfecto en 5 minutos", "excerpt": "Estructura, consejos y errores a evitar en tu pitch.", "categoria": "Crear & Lanzar", "cluster": "C3", "fecha": "2026-05-09", "imagen": "/blog/como-hacer-pitch.webp", "tiempo_lectura": "7 min", "autor": "St4rtup", "keywords": ["pitch", "presentación inversores"], "publicado": true },
+    { "slug": "errores-comunes-startups", "titulo": "Los 10 errores más comunes al crear una startup", "excerpt": "Errores que todo founder comete y cómo evitarlos.", "categoria": "Crear & Lanzar", "cluster": "C3", "fecha": "2026-05-12", "imagen": "/blog/errores-comunes-startups.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["errores startup", "fracaso startup"], "publicado": true },
+    { "slug": "pacto-socios", "titulo": "Pacto de socios: guía completa para cofounders", "excerpt": "El documento más importante entre cofounders. Qué incluir y por qué.", "categoria": "Legal", "cluster": "C11", "fecha": "2026-05-14", "imagen": "/blog/pacto-socios.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["pacto de socios", "cofounders"], "publicado": true },
+    { "slug": "stock-options", "titulo": "Stock options en startups: cómo funcionan en España", "excerpt": "Phantom shares, ESOP y fiscalidad. Guía práctica española.", "categoria": "Legal", "cluster": "C11", "fecha": "2026-05-16", "imagen": "/blog/stock-options.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["stock options", "phantom shares", "ESOP"], "publicado": true },
+    { "slug": "propiedad-intelectual", "titulo": "Propiedad intelectual en startups: protege tu idea", "excerpt": "Patentes, marcas, copyright y secretos comerciales para startups.", "categoria": "Legal", "cluster": "C11", "fecha": "2026-05-19", "imagen": "/blog/propiedad-intelectual.webp", "tiempo_lectura": "7 min", "autor": "St4rtup", "keywords": ["propiedad intelectual", "patentes startup"], "publicado": true },
+    { "slug": "rgpd-startups", "titulo": "RGPD para startups: guía práctica de cumplimiento", "excerpt": "Cumplir con el RGPD sin morir en el intento. Pasos claros.", "categoria": "Legal", "cluster": "C11", "fecha": "2026-05-21", "imagen": "/blog/rgpd-startups.webp", "tiempo_lectura": "8 min", "autor": "St4rtup", "keywords": ["RGPD", "protección datos", "compliance"], "publicado": true },
+    { "slug": "ia-productividad-founders", "titulo": "IA y productividad para founders: cómo hacer el trabajo de 10 personas siendo 1", "excerpt": "Framework de 4 capas para multiplicar tu productividad con IA. Herramientas, ejemplos y plan de acción.", "categoria": "IA & Productividad", "cluster": "C12", "fecha": "2026-04-20", "imagen": "/blog/ia-productividad-founders.webp", "tiempo_lectura": "12 min", "autor": "St4rtup", "keywords": ["IA productividad", "herramientas IA founders", "automatizar startup"], "publicado": true },
+    { "slug": "herramientas-ia-startups-2026", "titulo": "Las 15 mejores herramientas de IA para startups en 2026: guía práctica por departamento", "excerpt": "Selección de herramientas de IA organizadas por función: ventas, marketing, producto, análisis y legal.", "categoria": "IA & Productividad", "cluster": "C12", "fecha": "2026-04-20", "imagen": "/blog/herramientas-ia-startups-2026.webp", "tiempo_lectura": "10 min", "autor": "St4rtup", "keywords": ["herramientas IA startups", "stack IA 2026", "mejores herramientas IA"], "publicado": true },
+    { "slug": "automatizar-ventas-ia-startup", "titulo": "Cómo automatizar tus ventas con IA: guía práctica para startups B2B", "excerpt": "Playbook paso a paso para automatizar tu proceso de ventas B2B con IA. 7 etapas, herramientas y métricas.", "categoria": "IA & Productividad", "cluster": "C12", "fecha": "2026-04-20", "imagen": "/blog/automatizar-ventas-ia-startup.webp", "tiempo_lectura": "11 min", "autor": "St4rtup", "keywords": ["automatizar ventas IA", "CRM IA startup", "ventas B2B automatizadas"], "publicado": true }
   ]
 }
