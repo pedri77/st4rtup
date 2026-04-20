@@ -633,47 +633,54 @@ async def public_checkout(
     org_id: str = Query("", description="Organization ID (for add-on activation)"),
 ):
     """Crea sesión de Stripe Checkout SIN login — para la landing/pricing page."""
-    if plan not in PLAN_PRICES:
-        raise HTTPException(400, f"Plan inválido. Opciones: {', '.join(PLAN_PRICES.keys())}")
+    import logging
+    _log = logging.getLogger("payments.checkout")
+    try:
+        if plan not in PLAN_PRICES:
+            raise HTTPException(400, f"Plan inválido. Opciones: {', '.join(PLAN_PRICES.keys())}")
 
-    if not payment_service.stripe_configured():
-        raise HTTPException(400, "Stripe no configurado")
+        if not payment_service.stripe_configured():
+            raise HTTPException(400, "Stripe no configurado")
 
-    plan_info = PLAN_PRICES[plan]
-    price_id = plan_info.get("price_id") or getattr(settings, plan_info.get("price_id_env", ""), "")
+        plan_info = PLAN_PRICES[plan]
+        price_id = plan_info.get("price_id") or getattr(settings, plan_info.get("price_id_env", ""), "")
+        _log.info(f"Checkout: plan={plan}, price_id={price_id[:20] if price_id else 'NONE'}, email={email}")
 
-    if not price_id:
-        # Fallback: create ad-hoc checkout without price_id
-        session = await payment_service.stripe_create_checkout(
-            amount_cents=plan_info["amount"] * 100,
-            customer_email=email,
-            description=f"St4rtup {plan.replace('_', ' ').title()}",
-            success_url="https://st4rtup.com/login?payment=success&plan=" + plan,
-            cancel_url="https://st4rtup.com/pricing?cancelled=1",
-            metadata={"plan": plan, "org_id": org_id},
-        )
-    else:
-        # Use Stripe subscription checkout with price_id via SDK
-        is_addon = plan in ("extra_users", "ai_advanced", "deal_room_addon", "whatsapp_addon", "api_access")
-        success_url = f"https://st4rtup.com/app/marketplace?activated={plan}" if is_addon else f"https://st4rtup.com/login?payment=success&plan={plan}"
-        trial_days = 0 if is_addon else (settings.TRIAL_DAYS or 0)
+        if not price_id:
+            session = await payment_service.stripe_create_checkout(
+                amount_cents=plan_info["amount"] * 100,
+                customer_email=email,
+                description=f"St4rtup {plan.replace('_', ' ').title()}",
+                success_url="https://st4rtup.com/login?payment=success&plan=" + plan,
+                cancel_url="https://st4rtup.com/pricing?cancelled=1",
+                metadata={"plan": plan, "org_id": org_id},
+            )
+        else:
+            is_addon = plan in ("extra_users", "ai_advanced", "deal_room_addon", "whatsapp_addon", "api_access")
+            success_url = f"https://st4rtup.com/app/marketplace?activated={plan}" if is_addon else f"https://st4rtup.com/login?payment=success&plan={plan}"
+            trial_days = 0 if is_addon else (settings.TRIAL_DAYS or 0)
 
-        session = payment_service.stripe_create_checkout_subscription(
-            price_id=price_id,
-            email=email,
-            metadata={"plan": plan, "org_id": org_id},
-            success_url=success_url,
-            cancel_url="https://st4rtup.com/pricing?cancelled=1",
-            trial_days=trial_days,
-        )
+            session = payment_service.stripe_create_checkout_subscription(
+                price_id=price_id,
+                email=email,
+                metadata={"plan": plan, "org_id": org_id},
+                success_url=success_url,
+                cancel_url="https://st4rtup.com/pricing?cancelled=1",
+                trial_days=trial_days,
+            )
 
-    # session can be a Stripe Session object or a dict
-    checkout_url = getattr(session, "url", None) or (session.get("url", "") if isinstance(session, dict) else "")
-    session_id = getattr(session, "id", None) or (session.get("id", "") if isinstance(session, dict) else "")
-    if not checkout_url:
-        raise HTTPException(500, "Error creando sesión de checkout")
+        checkout_url = getattr(session, "url", None) or (session.get("url", "") if isinstance(session, dict) else "")
+        session_id = getattr(session, "id", None) or (session.get("id", "") if isinstance(session, dict) else "")
+        if not checkout_url:
+            raise HTTPException(500, "Error creando sesión de checkout")
 
-    return {"checkout_url": checkout_url, "session_id": session_id, "plan": plan}
+        _log.info(f"Checkout OK: session={session_id[:20] if session_id else '?'}")
+        return {"checkout_url": checkout_url, "session_id": session_id, "plan": plan}
+    except HTTPException:
+        raise
+    except Exception as e:
+        _log.error(f"Checkout FAILED: {type(e).__name__}: {e}", exc_info=True)
+        raise HTTPException(500, f"Checkout error: {type(e).__name__}: {str(e)[:200]}")
 
 
 @router.post("/public/paypal-order")
