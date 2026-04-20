@@ -667,11 +667,13 @@ async def public_checkout(
             trial_days=trial_days,
         )
 
-    checkout_url = session.get("url", "")
+    # session can be a Stripe Session object or a dict
+    checkout_url = getattr(session, "url", None) or (session.get("url", "") if isinstance(session, dict) else "")
+    session_id = getattr(session, "id", None) or (session.get("id", "") if isinstance(session, dict) else "")
     if not checkout_url:
         raise HTTPException(500, "Error creando sesión de checkout")
 
-    return {"checkout_url": checkout_url, "session_id": session.get("id", ""), "plan": plan}
+    return {"checkout_url": checkout_url, "session_id": session_id, "plan": plan}
 
 
 @router.post("/public/paypal-order")
