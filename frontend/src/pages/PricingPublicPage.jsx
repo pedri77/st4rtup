@@ -150,8 +150,8 @@ export default function PricingPublicPage() {
                 if (p.monthly === 0) { window.location.href = '/register'; return }
                 const plan = p.name.toLowerCase() + (annual ? '_annual' : '_monthly')
                 try {
-                  const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
-                  if(window.umami)window.umami.track('checkout_click',{plan});const res = await fetch(`${apiUrl}/payments/public/create-session?plan=${plan}`, { method: 'POST' })
+                  const payUrl = 'https://riskitera-sales-backend.fly.dev/api/v1'
+                  if(window.umami)window.umami.track('checkout_click',{plan});const res = await fetch(`${payUrl}/payments/public/create-session?plan=${plan}`, { method: 'POST' })
                   const data = await res.json()
                   if (data.checkout_url) window.location.href = data.checkout_url
                   else alert('Error al crear el pago. Inténtalo de nuevo.')

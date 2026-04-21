@@ -681,8 +681,8 @@ export default function LandingPage() {
                       if (p.price === null) { window.location.href = '/contact-sales'; return }
                       const plan = p.name.toLowerCase() + (annual ? '_yearly' : '_monthly')
                       try {
-                        const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
-                        if(window.umami)window.umami.track('checkout_click',{plan});const res = await fetch(`${apiUrl}/payments/public/create-session?plan=${plan}`, { method: 'POST' })
+                        const payUrl = 'https://riskitera-sales-backend.fly.dev/api/v1'
+                        if(window.umami)window.umami.track('checkout_click',{plan});const res = await fetch(`${payUrl}/payments/public/create-session?plan=${plan}`, { method: 'POST' })
                         const data = await res.json()
                         if (data.checkout_url) window.location.href = data.checkout_url
                         else alert('Error al crear el pago')
