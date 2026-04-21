@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     DEBUG: bool = False
     API_V1_PREFIX: str = "/api/v1"
-    BACKEND_CORS_ORIGINS: str = '["http://localhost:5173","http://localhost:5174","https://app.st4rtup.app","https://st4rtup.pages.dev","https://admin.st4rtup.com"]'
+    BACKEND_CORS_ORIGINS: str = '["http://localhost:5173","http://localhost:5174","https://st4rtup.com","https://www.st4rtup.com","https://app.st4rtup.app","https://st4rtup.pages.dev","https://admin.st4rtup.com"]'
 
     @property
     def cors_origins(self) -> List[str]:

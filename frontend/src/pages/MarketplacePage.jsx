@@ -266,7 +266,7 @@ export default function MarketplacePage() {
                           try {
                             const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
                             const orgId = org?.org_id || ''
-                            const res = await fetch(`${apiUrl}/payments/public/checkout?plan=${a.id}&email=&org_id=${orgId}`, { method: 'POST' })
+                            const res = await fetch(`${apiUrl}/payments/public/create-session?plan=${a.id}&email=&org_id=${orgId}`, { method: 'POST' })
                             const data = await res.json()
                             if (data.checkout_url) window.location.href = data.checkout_url
                             else alert('Contacta con soporte para activar este add-on')

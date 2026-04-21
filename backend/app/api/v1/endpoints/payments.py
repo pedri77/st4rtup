@@ -624,7 +624,7 @@ PLAN_PRICES = {
     "api_access": {"price_id_env": "STRIPE_PRICE_API_ACCESS", "amount": 15, "interval": "month"},
 }
 
-@router.post("/public/checkout")
+@router.post("/public/create-session")
 @limiter.limit("10/minute")
 async def public_checkout(
     request: Request,

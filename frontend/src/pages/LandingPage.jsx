@@ -682,7 +682,7 @@ export default function LandingPage() {
                       const plan = p.name.toLowerCase() + (annual ? '_yearly' : '_monthly')
                       try {
                         const apiUrl = import.meta.env.VITE_API_URL || 'https://api.st4rtup.com/api/v1'
-                        if(window.umami)window.umami.track('checkout_click',{plan});const res = await fetch(`${apiUrl}/payments/public/checkout?plan=${plan}`, { method: 'POST' })
+                        if(window.umami)window.umami.track('checkout_click',{plan});const res = await fetch(`${apiUrl}/payments/public/create-session?plan=${plan}`, { method: 'POST' })
                         const data = await res.json()
                         if (data.checkout_url) window.location.href = data.checkout_url
                         else alert('Error al crear el pago')
