@@ -157,7 +157,7 @@ export default function PipelinePage() {
         title="Pipeline"
         subtitle={`${activeOpportunities.length} operaciones activas`}
         icon={GitBranch}
-        badge={`€${((stats?.pipeline_value || 0) / 1000).toFixed(0)}K`}
+        badge={`€${((totalValue || 0) / 1000).toFixed(0)}K`}
         actions={
         <div className="flex items-center gap-3">
           <ExportButton
