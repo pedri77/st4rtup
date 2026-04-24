@@ -3,8 +3,10 @@ primary_region = "cdg"
 
 [build]
 
-[deploy]
-  release_command = "sh -c 'PYTHONPATH=/app alembic upgrade head'"
+# [deploy]
+#   release_command = "sh -c 'PYTHONPATH=/app alembic upgrade head'"
+#   NOTE: disabled — Supabase SSL issues from Fly.io ephemeral machines.
+#   Apply migrations manually via Supabase SQL Editor.
 
 [http_service]
   internal_port = 8001
