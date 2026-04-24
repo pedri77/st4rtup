@@ -53,8 +53,7 @@ Thumbs.db
 *.md
 docs/
 
-# Alembic
-alembic.ini
+# Alembic — ini included for release_command migration
 
 # Logs
 *.log
