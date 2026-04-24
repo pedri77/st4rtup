@@ -860,3 +860,102 @@ async def admin_delete_email_template(
     await db.delete(template)
     await db.commit()
     return {"deleted": True}
+
+
+# ---------------------------------------------------------------------------
+# API Keys (M2M authentication)
+# ---------------------------------------------------------------------------
+
+
+@router.post("/api-keys")
+async def create_api_key(
+    name: str = Query(..., description="Nombre descriptivo de la key"),
+    scopes: str = Query("read", description="Scopes separados por coma: read,write,admin"),
+    expires_days: int = Query(None, description="Dias hasta expiracion (null = sin expiracion)"),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Create a new API key. Returns the plaintext key ONCE."""
+    from app.models.api_key import ApiKey, generate_api_key
+
+    plaintext_key, key_hash, prefix = generate_api_key()
+    scope_list = [s.strip() for s in scopes.split(",") if s.strip()]
+
+    expires_at = None
+    if expires_days:
+        expires_at = datetime.now(timezone.utc) + timedelta(days=expires_days)
+
+    api_key = ApiKey(
+        name=name,
+        key_hash=key_hash,
+        key_prefix=prefix,
+        scopes=scope_list,
+        expires_at=expires_at,
+        created_by=current_user.get("email", "admin"),
+    )
+    db.add(api_key)
+    await db.commit()
+    await db.refresh(api_key)
+
+    return {
+        "id": str(api_key.id),
+        "name": name,
+        "key": plaintext_key,  # SHOWN ONCE — never stored
+        "prefix": prefix,
+        "scopes": scope_list,
+        "expires_at": expires_at.isoformat() if expires_at else None,
+        "warning": "Guarda esta key ahora. No se puede recuperar.",
+    }
+
+
+@router.get("/api-keys")
+async def list_api_keys(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """List all API keys (without plaintext values)."""
+    from app.models.api_key import ApiKey
+
+    result = await db.execute(
+        select(ApiKey).order_by(desc(ApiKey.created_at))
+    )
+    keys = result.scalars().all()
+
+    return {
+        "api_keys": [
+            {
+                "id": str(k.id),
+                "name": k.name,
+                "prefix": k.key_prefix,
+                "scopes": k.scopes,
+                "is_active": k.is_active,
+                "is_valid": k.is_valid,
+                "expires_at": k.expires_at.isoformat() if k.expires_at else None,
+                "last_used_at": k.last_used_at.isoformat() if k.last_used_at else None,
+                "created_at": k.created_at.isoformat(),
+                "created_by": k.created_by,
+            }
+            for k in keys
+        ]
+    }
+
+
+@router.post("/api-keys/{key_id}/revoke")
+async def revoke_api_key(
+    key_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
+    """Revoke an API key (irreversible)."""
+    from app.models.api_key import ApiKey
+    from uuid import UUID
+
+    api_key = await db.get(ApiKey, UUID(key_id))
+    if not api_key:
+        raise HTTPException(404, "API key not found")
+
+    api_key.is_active = False
+    api_key.revoked_at = datetime.now(timezone.utc)
+    await db.commit()
+
+    return {"revoked": True, "id": key_id, "name": api_key.name}

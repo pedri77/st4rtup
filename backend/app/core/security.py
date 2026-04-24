@@ -57,9 +57,67 @@ async def get_current_user(
             return {
                 "user_id": "00000000-0000-0000-0000-000000000000",
                 "email": "n8n@st4rtup.app",
-                "role": "service",  # NOT admin — service can only call workflow endpoints
+                "role": "service",
                 "user_metadata": {"service": "n8n"},
             }
+
+        # Check if it's a database-stored API key (stk_ prefix)
+        if token.startswith("stk_"):
+            from app.models.api_key import ApiKey
+            from app.core.database import AsyncSessionLocal
+            import asyncio
+
+            key_hash = ApiKey.hash_key(token)
+
+            async def _check_api_key():
+                async with AsyncSessionLocal() as db:
+                    result = await db.execute(
+                        select(ApiKey).where(ApiKey.key_hash == key_hash)
+                    )
+                    return result.scalar_one_or_none()
+
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    import concurrent.futures
+                    with concurrent.futures.ThreadPoolExecutor() as pool:
+                        api_key = pool.submit(asyncio.run, _check_api_key()).result(timeout=5)
+                else:
+                    api_key = asyncio.run(_check_api_key())
+            except Exception:
+                api_key = None
+
+            if api_key and api_key.is_valid:
+                # Update last_used_at (fire and forget)
+                try:
+                    async def _update_last_used():
+                        async with AsyncSessionLocal() as db:
+                            from sqlalchemy import update
+                            from datetime import datetime, timezone
+                            await db.execute(
+                                update(ApiKey).where(ApiKey.id == api_key.id).values(
+                                    last_used_at=datetime.now(timezone.utc)
+                                )
+                            )
+                            await db.commit()
+                    asyncio.get_event_loop().create_task(_update_last_used())
+                except Exception:
+                    pass
+
+                scopes = api_key.scopes or ["read"]
+                return {
+                    "user_id": str(api_key.id),
+                    "email": f"apikey-{api_key.key_prefix}@st4rtup.app",
+                    "role": "service",
+                    "user_metadata": {
+                        "service": "api_key",
+                        "key_name": api_key.name,
+                        "scopes": scopes,
+                    },
+                }
+
+            if token.startswith("stk_"):
+                raise credentials_exception
 
         # Try as a local impersonation JWT first (signed with our SECRET_KEY).
         # These are short-lived tokens issued by /admin/impersonate/{org_id}/login
