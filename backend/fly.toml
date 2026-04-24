@@ -4,7 +4,7 @@ primary_region = "cdg"
 [build]
 
 [deploy]
-  release_command = "alembic upgrade head"
+  release_command = "sh -c 'PYTHONPATH=/app alembic upgrade head'"
 
 [http_service]
   internal_port = 8001
