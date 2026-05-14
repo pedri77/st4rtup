@@ -1,0 +1,21 @@
+name: Slack Notification
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Notify Slack
+        if: always()
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          AUTHOR=$(git log -1 --pretty=%an)
+          REPO="st4rtup"
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"text\":\"📦 Push to ${REPO} (main)\n📝 ${COMMIT_MSG}\n👤 ${AUTHOR}\"}" || true
