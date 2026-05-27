@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { offersApi, serviceCatalogApi } from '@/services/api';
 import PageHeader from '@/components/common/PageHeader';
 import { useLeadsSelect } from '@/hooks/useLeadsSelect';
-import { generateOfferPDF } from '@/utils/offerPdf';
+const generateOfferPDF = (offer) => import('@/utils/offerPdf').then(m => m.generateOfferPDF(offer));
 import ExportButton from '@/components/ExportButton';
 import { formatDateForExport } from '@/utils/export';
 import { ListItemSkeleton } from '@/components/LoadingStates';

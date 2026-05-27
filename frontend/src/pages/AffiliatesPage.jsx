@@ -94,7 +94,7 @@ export default function AffiliatesPage() {
           </div>
           {EARNINGS.map(([refs, plan, tierName, commission], i) => (
             <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', padding: '12px 20px', borderBottom: i < EARNINGS.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
-              <span>{refs}</span><span>>{tierName}</span><span style={{ fontSize: '.8rem', color: '#1E6FD9' }}>{plan}</span><span style={{ textAlign: 'right', color: '#1E6FD9', fontWeight: 600, fontFamily: 'monospace' }}>{commission}</span>
+              <span>{refs}</span><span>&gt;{tierName}</span><span style={{ fontSize: '.8rem', color: '#1E6FD9' }}>{plan}</span><span style={{ textAlign: 'right', color: '#1E6FD9', fontWeight: 600, fontFamily: 'monospace' }}>{commission}</span>
             </div>
           ))}
         </div>

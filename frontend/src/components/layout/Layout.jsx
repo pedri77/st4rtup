@@ -505,7 +505,7 @@ export default function Layout() {
             'customer-health': 'Customer Health', webhooks: 'Webhooks', payments: 'Pagos',
             billing: 'Pricing', docs: 'Docs', marketplace: 'Marketplace', whatsapp: 'WhatsApp',
             'alert-channels': 'Alertas', formularios: 'Formularios', social: 'Social Media',
-            linkedin: 'LinkedIn Studio', 'pipeline': 'Pipeline', executive: 'Ejecutivo',
+            linkedin: 'LinkedIn Studio', executive: 'Ejecutivo',
           }
           return (
             <div className="px-4 md:px-8 pt-3 pb-0 flex items-center gap-1.5 text-xs" style={{ backgroundColor: T.bg }}>

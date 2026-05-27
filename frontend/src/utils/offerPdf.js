@@ -1,9 +1,3 @@
-import jsPDF from 'jspdf'
-import { applyPlugin } from 'jspdf-autotable'
-
-// Apply autoTable plugin to jsPDF
-applyPlugin(jsPDF)
-
 const BRAND_CYAN = [8, 145, 178]    // #0891b2
 const BRAND_DARK = [21, 94, 117]    // #155e75
 const GRAY_800 = [31, 41, 55]
@@ -106,8 +100,14 @@ La presente propuesta y la relación contractual derivada se regirán por la leg
  * Genera un PDF profesional de la oferta comercial y lo descarga
  * @param {Object} offer - Objeto de la oferta con todos sus datos
  */
-export function generateOfferPDF(offer) {
+export async function generateOfferPDF(offer) {
   try {
+    const [{ default: jsPDF }, { applyPlugin }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ])
+    applyPlugin(jsPDF)
+
     const doc = new jsPDF('p', 'mm', 'a4')
     const pageWidth = doc.internal.pageSize.getWidth()
     const pageHeight = doc.internal.pageSize.getHeight()
