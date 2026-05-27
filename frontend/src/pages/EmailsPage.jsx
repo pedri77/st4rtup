@@ -8,7 +8,7 @@ import { Plus, Send, XCircle, ChevronDown, ChevronUp, Mail } from 'lucide-react'
 import toast from 'react-hot-toast';
 import { mockEmails, mockDelay, USE_MOCK_DATA } from '@/mocks/mockData';
 import ExportButton from '@/components/ExportButton';
-import { formatDateForExport } from '@/utils/export';
+import { formatDateForExport } from '@/utils/exportHelpers';
 import { ListItemSkeleton } from '@/components/LoadingStates';
 import { SearchWithFilters, FilterSummary } from '@/components/AdvancedFilters';
 import { usePersistedFilterSearch } from '@/hooks/usePersistedFilters';

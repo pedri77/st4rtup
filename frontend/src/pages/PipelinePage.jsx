@@ -13,7 +13,7 @@ import { GitBranch } from 'lucide-react'
 import { mockOpportunities, mockDelay, USE_MOCK_DATA } from '@/mocks/mockData'
 import ExportButton from '@/components/ExportButton'
 import { DealScoreBadge as DealScoreCardInline } from '@/components/DealScoreCard'
-import { formatDateForExport } from '@/utils/export'
+import { formatDateForExport } from '@/utils/exportHelpers'
 import { ListItemSkeleton } from '@/components/LoadingStates'
 import { useThemeColors, LIGHT as T, fontDisplay, fontMono } from '@/utils/theme'
 
