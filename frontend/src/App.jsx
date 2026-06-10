@@ -14,12 +14,13 @@ import PrivateRoute from './components/PrivateRoute'
 import RoleGuard from './components/RoleGuard'
 import Layout from './components/layout/Layout'
 import ForceLightTheme from './components/ForceLightTheme'
-import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage'
+const LoginPage = lazy(() => import('./pages/LoginPage'))
+const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 const ContactSalesPage = lazy(() => import('./pages/ContactSalesPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
-import LandingPage from './pages/LandingPage'
-import PricingPublicPage from './pages/PricingPublicPage'
+const LandingPage = lazy(() => import('./pages/LandingPage'))
+const PricingPublicPage = lazy(() => import('./pages/PricingPublicPage'))
+const SalesQuizPage = lazy(() => import('./pages/SalesQuizPage'))
 const ApiDocsPage = lazy(() => import('./pages/ApiDocsPage'))
 const PrivacyPage = lazy(() => import('./pages/legal/PrivacyPage'))
 const TermsPage = lazy(() => import('./pages/legal/TermsPage'))
@@ -168,8 +169,9 @@ function App() {
       <AppContent />
       <Routes>
         {/* Public routes — always light theme */}
-        <Route path="/" element={<><ForceLightTheme /><LandingPage /></>} />
-        <Route path="/pricing" element={<><ForceLightTheme /><PricingPublicPage /></>} />
+        <Route path="/" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><LandingPage /></Suspense></>} />
+        <Route path="/pricing" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><PricingPublicPage /></Suspense></>} />
+        <Route path="/quiz" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><SalesQuizPage /></Suspense></>} />
         <Route path="/demo" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><DemoPage /></Suspense></>} />
         <Route path="/blog" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><BlogPage /></Suspense></>} />
         <Route path="/blog/:slug" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><BlogArticlePage /></Suspense></>} />
@@ -183,8 +185,8 @@ function App() {
         <Route path="/terms" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><TermsPage /></Suspense></>} />
         <Route path="/cookies" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><CookiesPage /></Suspense></>} />
         <Route path="/affiliates" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><AffiliatesPage /></Suspense></>} />
-        <Route path="/login" element={<><ForceLightTheme /><LoginPage /></>} />
-        <Route path="/register" element={<><ForceLightTheme /><RegisterPage /></>} />
+        <Route path="/login" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><LoginPage /></Suspense></>} />
+        <Route path="/register" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><RegisterPage /></Suspense></>} />
         <Route path="/contact-sales" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><ContactSalesPage /></Suspense></>} />
         <Route path="/survey/:token" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><SurveyPublicPage /></Suspense></>} />
         <Route path="/proposal" element={<><ForceLightTheme /><Suspense fallback={<PageLoader />}><ProposalViewPage /></Suspense></>} />
