@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '@/components/SEO'
+import { supabase } from '@/lib/supabase'
 import { track, identify } from '@/utils/posthog'
 import {
   ArrowRight, ArrowLeft, Users, Wrench, AlertTriangle,
@@ -179,6 +180,17 @@ export default function SalesQuizPage() {
         segments: res.segments,
         answers,
       })
+      const params = new URLSearchParams(window.location.search)
+      supabase.from('quiz_leads').insert({
+        answers,
+        segments: res.segments,
+        total_score: res.totalScore,
+        recommended_plan: res.recommendedPlan,
+        source: document.referrer || null,
+        utm_source: params.get('utm_source'),
+        utm_medium: params.get('utm_medium'),
+        utm_campaign: params.get('utm_campaign'),
+      }).then(() => {}).catch(() => {})
     }
   }
 
