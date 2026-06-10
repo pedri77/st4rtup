@@ -1,6 +1,7 @@
 import SEO from '@/components/SEO'
 import ExitIntentPopup from '@/components/ExitIntentPopup'
 import WebChatWidget from '@/components/WebChatWidget'
+import CountdownBar from '@/components/CountdownBar'
 import { useThemeColors } from '@/utils/theme'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { gb } from '@/lib/growthbook'
@@ -375,6 +376,7 @@ export default function LandingPage() {
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <Link to="/register" onClick={() => { window.umami?.track('hero_cta_click', { variant: 'register', cta_color: isCtaOrange ? 'orange' : 'blue' }); import('@/lib/growthbook').then(m => m.trackEvent('hero_cta_click', 1, { color: isCtaOrange ? 'orange' : 'blue' })) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 28px', backgroundColor: ctaColor, color: 'white', borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: 'none', boxShadow: `0 4px 14px ${ctaColor}66` }}>{t.hero.cta1} <ArrowRight size={18} /></Link>
                 <Link to="/demo" onClick={() => window.umami?.track('hero_cta_click', { variant: 'demo' })} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", border: `2px solid ${TC.border}`, color: TC.fg, borderRadius: 12, fontSize: 16, fontWeight: 600, textDecoration: "none" }}>{t.hero.cta2}</Link>
+                <Link to="/quiz" onClick={() => window.umami?.track('hero_cta_click', { variant: 'quiz' })} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", border: "none", background: "none", color: TC.primary, borderRadius: 12, fontSize: 14, fontWeight: 600, textDecoration: "underline", textUnderlineOffset: 3 }}>{lang === 'en' ? 'Sales diagnostic' : 'Diagnóstico de ventas'}</Link>
               </div>
             </FadeIn>
           </div>
@@ -793,7 +795,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer style={{ padding: 'clamp(30px, 8vw, 60px) 16px clamp(20px, 5vw, 40px)', backgroundColor: '#1A1A2E', color: 'white' }}>
+      <footer style={{ padding: 'clamp(30px, 8vw, 60px) 16px clamp(60px, 10vw, 80px)', backgroundColor: '#1A1A2E', color: 'white' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="landing-footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'clamp(24px, 5vw, 40px)', marginBottom: 'clamp(24px, 5vw, 40px)' }}>
             <div>
@@ -818,6 +820,11 @@ export default function LandingPage() {
         </div>
       </footer>
       <WebChatWidget />
+      <CountdownBar
+        targetDate="2026-06-30T23:59:00+02:00"
+        label={lang === 'en' ? 'Launch price ends in' : 'Precio de lanzamiento termina en'}
+        enabled={true}
+      />
     </div>
   )
 }
