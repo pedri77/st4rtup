@@ -25,6 +25,7 @@ import Changelog from '@/components/Changelog'
 import QuickActions from '@/components/QuickActions'
 import InstallPrompt from '@/components/InstallPrompt'
 import FeedbackWidget from '@/components/FeedbackWidget'
+import SupportWidget from '@/components/SupportWidget'
 import InAppPrompts from '@/components/InAppPrompts'
 import SetupChecklist from '@/components/SetupChecklist'
 import TrialBanner from '@/components/TrialBanner'
@@ -543,6 +544,7 @@ export default function Layout() {
       <SetupChecklist />
       <KeyboardShortcuts />
       <Changelog />
+      <SupportWidget email={user?.email} />
     </div>
   )
 }

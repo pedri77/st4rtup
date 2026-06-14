@@ -2,7 +2,7 @@
 import logging
 from datetime import datetime, timezone, timedelta
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
@@ -126,3 +126,104 @@ async def list_invoices(
         "receipt_url": p.receipt_url, "paid_at": p.paid_at.isoformat() if p.paid_at else None,
         "created_at": p.created_at.isoformat() if p.created_at else None,
     } for p in payments]}
+
+
+@router.post("/webhook/stripe")
+async def stripe_webhook(request: Request):
+    """Handle Stripe webhook: checkout completed -> send onboarding email."""
+    import json
+
+    payload = await request.body()
+    event = json.loads(payload)
+    event_type = event.get("type", "")
+
+    if event_type == "checkout.session.completed":
+        session = event.get("data", {}).get("object", {})
+        email = session.get("customer_details", {}).get("email", "")
+        name = session.get("customer_details", {}).get("name", "")
+        plan = session.get("metadata", {}).get("plan", "growth")
+        if email:
+            await _send_onboarding_email(email, name, plan)
+
+    return {"received": True}
+
+
+async def _send_onboarding_email(email: str, name: str, plan: str):
+    """Send welcome email via Brevo after successful checkout."""
+    import httpx
+    import os
+
+    brevo_key = os.getenv("BREVO_API_KEY", "")
+    if not brevo_key:
+        logger.warning("BREVO_API_KEY not set, skipping onboarding email")
+        return
+
+    display = name or email.split("@")[0]
+    html = f"""<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#0F172A;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0F172A;padding:40px 0;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#1E293B;border-radius:12px;overflow:hidden;">
+  <tr><td style="background:linear-gradient(135deg,#1E6FD9,#1447A0);padding:32px 40px;text-align:center;">
+    <h1 style="color:#FFFFFF;font-size:28px;margin:0;">st4rtup</h1>
+    <p style="color:#93C5FD;font-size:14px;margin:8px 0 0;">Tu CRM inteligente</p>
+  </td></tr>
+  <tr><td style="padding:40px;">
+    <h2 style="color:#F1F5F9;font-size:22px;margin:0 0 16px;">Bienvenido, {display}</h2>
+    <p style="color:#94A3B8;font-size:15px;line-height:1.6;margin:0 0 24px;">
+      Tu plan <strong style="color:#60A5FA;">{plan.capitalize()}</strong> ya esta activo.
+      Tienes todo listo para empezar a cerrar deals.
+    </p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+      <tr><td style="padding:12px 16px;background:#0F172A;border-radius:8px;border-left:3px solid #1E6FD9;">
+        <p style="color:#60A5FA;font-size:13px;font-weight:600;margin:0 0 4px;">Paso 1</p>
+        <p style="color:#CBD5E1;font-size:14px;margin:0;">Accede a tu dashboard y explora las secciones</p>
+      </td></tr>
+      <tr><td style="height:8px;"></td></tr>
+      <tr><td style="padding:12px 16px;background:#0F172A;border-radius:8px;border-left:3px solid #1E6FD9;">
+        <p style="color:#60A5FA;font-size:13px;font-weight:600;margin:0 0 4px;">Paso 2</p>
+        <p style="color:#CBD5E1;font-size:14px;margin:0;">Importa tus primeros leads (CSV o manual)</p>
+      </td></tr>
+      <tr><td style="height:8px;"></td></tr>
+      <tr><td style="padding:12px 16px;background:#0F172A;border-radius:8px;border-left:3px solid #1E6FD9;">
+        <p style="color:#60A5FA;font-size:13px;font-weight:600;margin:0 0 4px;">Paso 3</p>
+        <p style="color:#CBD5E1;font-size:14px;margin:0;">Conecta tu email para enviar secuencias</p>
+      </td></tr>
+      <tr><td style="height:8px;"></td></tr>
+      <tr><td style="padding:12px 16px;background:#0F172A;border-radius:8px;border-left:3px solid #1E6FD9;">
+        <p style="color:#60A5FA;font-size:13px;font-weight:600;margin:0 0 4px;">Paso 4</p>
+        <p style="color:#CBD5E1;font-size:14px;margin:0;">Configura tu pipeline y empieza a vender</p>
+      </td></tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+      <tr><td style="background:#1E6FD9;border-radius:8px;padding:14px 32px;">
+        <a href="https://st4rtup.com/app" style="color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:600;">Ir al dashboard</a>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="padding:24px 40px;background:#0F172A;text-align:center;">
+    <p style="color:#475569;font-size:12px;margin:0;">st4rtup.com | info@st4rtup.com</p>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>"""
+
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            resp = await client.post(
+                "https://api.brevo.com/v3/smtp/email",
+                headers={"api-key": brevo_key, "Content-Type": "application/json"},
+                json={
+                    "sender": {"name": "st4rtup", "email": "info@st4rtup.com"},
+                    "to": [{"email": email}],
+                    "subject": f"Bienvenido a st4rtup \u2014 Plan {plan.capitalize()} activo",
+                    "htmlContent": html,
+                },
+            )
+            logger.info(f"Onboarding email sent to {email}: {resp.status_code}")
+    except Exception as e:
+        logger.error(f"Failed to send onboarding email to {email}: {e}")

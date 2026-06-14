@@ -250,6 +250,21 @@ export default function LandingPage() {
     return () => clearInterval(timer)
   }, [])
 
+  // Lead popup (empresaautomatizada.es)
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://empresaautomatizada.es/lead-popup.js'
+    script.defer = true
+    script.setAttribute('data-project', 'st4rtup')
+    script.setAttribute('data-title', 'Empieza gratis tu CRM con IA')
+    script.setAttribute('data-subtitle', 'Registrate y prueba 7 dias gratis todas las funcionalidades.')
+    script.setAttribute('data-cta', 'Probar gratis')
+    script.setAttribute('data-color', '#1E6FD9')
+    script.setAttribute('data-privacy-url', '/legal/privacy')
+    document.body.appendChild(script)
+    return () => { document.body.removeChild(script) }
+  }, [])
+
   return (
     <div className="public-page" style={{ fontFamily: "'Inter', sans-serif", color: TC.fg }}>
       <SEO path="/" />

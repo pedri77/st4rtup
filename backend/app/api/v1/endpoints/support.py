@@ -28,3 +28,40 @@ async def tawkto_script(
     if not property_id:
         return {"configured": False, "script": ""}
     return {"configured": True, "script": tawkto_service.get_widget_script(property_id)}
+
+
+@router.post("/tickets")
+async def create_ticket(
+    payload: dict,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Create support ticket via LaunchPad API."""
+    import httpx
+    async with httpx.AsyncClient(timeout=10) as client:
+        resp = await client.post(
+            "http://localhost:8002/api/v1/tickets",
+            json={
+                "project": "st4rtup",
+                "email": current_user.get("email", ""),
+                "name": current_user.get("name", ""),
+                "subject": payload.get("subject", ""),
+                "message": payload.get("message", ""),
+                "category": payload.get("category", "general"),
+            },
+        )
+        return resp.json()
+
+
+@router.get("/tickets")
+async def list_tickets(
+    current_user: dict = Depends(get_current_user),
+):
+    """List user's tickets from LaunchPad."""
+    import httpx
+    email = current_user.get("email", "")
+    async with httpx.AsyncClient(timeout=10) as client:
+        resp = await client.get(
+            f"http://localhost:8002/api/v1/tickets?email={email}&project=st4rtup"
+        )
+        return resp.json()
