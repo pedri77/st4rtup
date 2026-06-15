@@ -132,8 +132,9 @@ async def list_invoices(
 async def stripe_webhook(request: Request):
     """Handle Stripe webhook: checkout completed -> send onboarding email."""
     import json
+    from app.core.webhook_verify import verify_webhook_signature
 
-    payload = await request.body()
+    payload = await verify_webhook_signature(request, "stripe")
     event = json.loads(payload)
     event_type = event.get("type", "")
 
