@@ -127,8 +127,11 @@ export default function SalesQuizPage() {
   const [answers, setAnswers] = useState({})
   const [completed, setCompleted] = useState(false)
   const [result, setResult] = useState(null)
+  const [contactName, setContactName] = useState('')
+  const [contactEmail, setContactEmail] = useState('')
+  const [contactStep, setContactStep] = useState(false)
 
-  const step = currentStep >= 0 ? STEPS[currentStep] : null
+  const step = currentStep >= 0 && !contactStep ? STEPS[currentStep] : null
   const totalSteps = STEPS.length
   const progress = currentStep >= 0 ? ((currentStep + 1) / totalSteps) * 100 : 0
 
@@ -158,6 +161,34 @@ export default function SalesQuizPage() {
     return true
   }, [step, answers])
 
+  const submitQuiz = () => {
+    const res = calcResult(answers)
+    setResult(res)
+    setCompleted(true)
+    track('quiz_completed', {
+      project: 'st4rtup',
+      total_score: res.totalScore,
+      recommended_plan: res.recommendedPlan,
+      segments: res.segments,
+      answers,
+      contact_email: contactEmail,
+    })
+    if (contactEmail) {
+      identify(contactEmail, { name: contactName, quiz_plan: res.recommendedPlan })
+    }
+    const params = new URLSearchParams(window.location.search)
+    supabase.from('quiz_leads').insert({
+      answers: { ...answers, contact_name: contactName, contact_email: contactEmail },
+      segments: res.segments,
+      total_score: res.totalScore,
+      recommended_plan: res.recommendedPlan,
+      source: document.referrer || null,
+      utm_source: params.get('utm_source'),
+      utm_medium: params.get('utm_medium'),
+      utm_campaign: params.get('utm_campaign'),
+    }).then(() => {}).catch(() => {})
+  }
+
   const handleNext = () => {
     if (!canProceed()) return
 
@@ -170,27 +201,7 @@ export default function SalesQuizPage() {
     if (currentStep < totalSteps - 1) {
       setCurrentStep(s => s + 1)
     } else {
-      const res = calcResult(answers)
-      setResult(res)
-      setCompleted(true)
-      track('quiz_completed', {
-        project: 'st4rtup',
-        total_score: res.totalScore,
-        recommended_plan: res.recommendedPlan,
-        segments: res.segments,
-        answers,
-      })
-      const params = new URLSearchParams(window.location.search)
-      supabase.from('quiz_leads').insert({
-        answers,
-        segments: res.segments,
-        total_score: res.totalScore,
-        recommended_plan: res.recommendedPlan,
-        source: document.referrer || null,
-        utm_source: params.get('utm_source'),
-        utm_medium: params.get('utm_medium'),
-        utm_campaign: params.get('utm_campaign'),
-      }).then(() => {}).catch(() => {})
+      setContactStep(true)
     }
   }
 
@@ -294,6 +305,72 @@ export default function SalesQuizPage() {
     )
   }
 
+  // Contact capture step
+  if (contactStep && !completed) {
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)
+    return (
+      <>
+        <SEO title="Ultimo paso | Diagnostico st4rtup" />
+        <div style={{ minHeight: '100vh', backgroundColor: T.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 24px' }}>
+          <Link to="/" style={{ marginBottom: 24 }}>
+            <img src="/logo.png" alt="st4rtup" style={{ height: 60 }} />
+          </Link>
+          <div style={{ maxWidth: 520, width: '100%', textAlign: 'center' }}>
+            <div style={{ height: 4, borderRadius: 2, backgroundColor: T.muted, marginBottom: 32, overflow: 'hidden' }}>
+              <div style={{ height: '100%', borderRadius: 2, backgroundColor: T.primary, width: '100%' }} />
+            </div>
+            <h2 style={{ fontSize: 24, fontWeight: 700, color: T.fg, marginBottom: 8 }}>
+              Tu resultado esta listo
+            </h2>
+            <p style={{ fontSize: 15, color: T.fgMuted, marginBottom: 32 }}>
+              Dejanos tu email para ver tu diagnostico personalizado.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24, textAlign: 'left' }}>
+              <div>
+                <label style={{ fontSize: 13, fontWeight: 600, color: T.fg, display: 'block', marginBottom: 6 }}>Nombre</label>
+                <input
+                  type="text" value={contactName} onChange={e => setContactName(e.target.value)}
+                  placeholder="Tu nombre"
+                  style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: `1.5px solid ${T.border}`, fontSize: 15, outline: 'none', boxSizing: 'border-box' }}
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: 13, fontWeight: 600, color: T.fg, display: 'block', marginBottom: 6 }}>Email *</label>
+                <input
+                  type="email" value={contactEmail} onChange={e => setContactEmail(e.target.value)}
+                  placeholder="tu@empresa.com" required
+                  style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: `1.5px solid ${contactEmail && !emailValid ? '#EF4444' : T.border}`, fontSize: 15, outline: 'none', boxSizing: 'border-box' }}
+                />
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <button
+                onClick={() => { setContactStep(false); setCurrentStep(totalSteps - 1) }}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '12px 20px', borderRadius: 8, border: 'none', backgroundColor: 'transparent', color: T.fgMuted, cursor: 'pointer', fontSize: 14, fontWeight: 500 }}
+              >
+                <ArrowLeft size={16} /> Anterior
+              </button>
+              <button
+                onClick={submitQuiz}
+                disabled={!emailValid}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6, padding: '12px 24px', borderRadius: 8, border: 'none',
+                  background: emailValid ? `linear-gradient(135deg, ${T.primary}, #3B8DE8)` : T.muted,
+                  color: emailValid ? 'white' : T.fgMuted, cursor: emailValid ? 'pointer' : 'default', fontSize: 14, fontWeight: 600,
+                }}
+              >
+                Ver resultado <ArrowRight size={16} />
+              </button>
+            </div>
+            <p style={{ marginTop: 16, fontSize: 12, color: T.fgMuted }}>
+              No spam. Solo tu diagnostico y contenido relevante.
+            </p>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   // Intro
   if (currentStep === -1) {
     return (
@@ -327,7 +404,7 @@ export default function SalesQuizPage() {
               <ArrowRight size={18} />
             </button>
             <p style={{ marginTop: 16, fontSize: 13, color: T.fgMuted }}>
-              Sin registro. Sin email. Resultado inmediato.
+              Sin registro. Resultado en 2 minutos.
             </p>
           </div>
         </div>
