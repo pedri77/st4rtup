@@ -84,7 +84,7 @@ async def create_alert(
 org_id: str = Depends(get_org_id),
 ):
     """Crea una alerta de marketing."""
-    alert = MarketingAlert(
+    alert = MarketingAlert(org_id=UUID(org_id), 
         **data.model_dump(), created_by=UUID(current_user["user_id"]),
     )
     db.add(alert)
