@@ -111,36 +111,24 @@ jobs:
             --exclude 'venv' \
             --exclude 'tests' \
             --exclude '.env*' \
+            --exclude 'docker-compose*.yml' \
+            --exclude 'Dockerfile' \
+            --exclude 'fly.toml' \
             -e "ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no" \
-            backend/app/ \
-            root@${{ secrets.HETZNER_HOST }}:/opt/st4rtup/app/
+            backend/ \
+            root@${{ secrets.HETZNER_HOST }}:/opt/st4rtup/
 
-      - name: Install new Python deps (if requirements.txt changed)
-        run: |
-          rsync -az \
-            -e "ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no" \
-            backend/requirements.txt \
-            root@${{ secrets.HETZNER_HOST }}:/opt/st4rtup/requirements.txt
-          ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no \
-            root@${{ secrets.HETZNER_HOST }} \
-            "cd /opt/st4rtup && venv/bin/pip install -q -r requirements.txt"
-
-      - name: Sync alembic migrations + upgrade DB
-        run: |
-          rsync -az --delete \
-            --exclude '__pycache__' \
-            -e "ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no" \
-            backend/alembic/ \
-            root@${{ secrets.HETZNER_HOST }}:/opt/st4rtup/alembic/
-          ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no \
-            root@${{ secrets.HETZNER_HOST }} \
-            "cd /opt/st4rtup && PYTHONPATH=/opt/st4rtup venv/bin/alembic upgrade head"
-
-      - name: Restart backend service
+      - name: Rebuild and restart container
         run: |
           ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no \
             root@${{ secrets.HETZNER_HOST }} \
-            "systemctl restart st4rtup && sleep 5 && systemctl is-active st4rtup"
+            "cd /opt/st4rtup && docker compose -f docker-compose.production.yml build --no-cache && docker compose -f docker-compose.production.yml up -d"
+
+      - name: Run alembic migrations inside container
+        run: |
+          ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no \
+            root@${{ secrets.HETZNER_HOST }} \
+            "docker exec st4rtup-api python -m alembic upgrade head"
 
       - name: Health check (retry up to 30s)
         run: |
@@ -190,7 +178,7 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
