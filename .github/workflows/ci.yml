@@ -101,22 +101,27 @@ jobs:
           chmod 600 ~/.ssh/id_deploy
           ssh-keyscan -H ${{ secrets.HETZNER_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Rsync backend to server
+      - name: Sync app code to server
         run: |
+          SSH="ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no"
+          # Sync app/ with --delete (only code, safe)
           rsync -az --delete \
             --exclude '__pycache__' \
             --exclude '*.pyc' \
-            --exclude '.pytest_cache' \
-            --exclude '.venv*' \
-            --exclude 'venv' \
-            --exclude 'tests' \
-            --exclude '.env*' \
-            --exclude 'docker-compose*.yml' \
-            --exclude 'Dockerfile' \
-            --exclude 'fly.toml' \
-            -e "ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no" \
-            backend/ \
-            root@${{ secrets.HETZNER_HOST }}:/opt/st4rtup/
+            -e "$SSH" \
+            backend/app/ \
+            root@${{ secrets.HETZNER_HOST }}:/opt/st4rtup/app/
+          # Sync alembic/ with --delete
+          rsync -az --delete \
+            --exclude '__pycache__' \
+            -e "$SSH" \
+            backend/alembic/ \
+            root@${{ secrets.HETZNER_HOST }}:/opt/st4rtup/alembic/
+          # Sync requirements.txt (no --delete, single file)
+          rsync -az \
+            -e "$SSH" \
+            backend/requirements.txt \
+            root@${{ secrets.HETZNER_HOST }}:/opt/st4rtup/requirements.txt
 
       - name: Rebuild and restart container
         run: |
@@ -178,9 +183,7 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v4
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=st4rtup --branch=main
-          workingDirectory: frontend
+        run: npx wrangler pages deploy dist --project-name=st4rtup --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
