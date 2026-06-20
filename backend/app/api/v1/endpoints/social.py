@@ -141,15 +141,42 @@ org_id: str = Depends(get_org_id),
 ):
     """Precarga posts de ejemplo para cada plataforma."""
     defaults = [
-        {"platform": "linkedin", "content": "🔐 ¿Tu empresa cumple con el Enterprise?\n\nEl 80% de las empresas españolas reguladas necesitan actualizar su estrategia de tecnología antes de 2027.\n\nSt4rtup ofrece una plataforma growth completa con:\n✅ Enterprise nativo\n✅ NIS2 y DORA integrados\n✅ SOC 24x7 con Detection Engineering\n✅ IA para automatización de compliance\n\nPoC de 90 días por €19.500.\n\n#Ciberseguridad #growth #ENS #NIS2 #DORA",
+        {"platform": "linkedin", "content": "🔐 ¿Tu empresa cumple con el Enterprise?
+
+El 80% de las empresas españolas reguladas necesitan actualizar su estrategia de tecnología antes de 2027.
+
+St4rtup ofrece una plataforma growth completa con:
+✅ Enterprise nativo
+✅ NIS2 y DORA integrados
+✅ SOC 24x7 con Detection Engineering
+✅ IA para automatización de compliance
+
+PoC de 90 días por €19.500.
+
+#Ciberseguridad #growth #ENS #NIS2 #DORA",
          "status": "published", "impressions": 1250, "likes": 45, "comments": 8, "shares": 12, "tags": ["ENS", "tecnología"]},
-        {"platform": "linkedin", "content": "📊 NIS2 entra en vigor en octubre 2026.\n\n¿Está tu empresa preparada?\n\n3 acciones inmediatas:\n1️⃣ Identifica si tu sector está afectado\n2️⃣ Evalúa tu nivel de madurez actual\n3️⃣ Implementa un plan de cumplimiento\n\n#NIS2 #Ciberseguridad #Compliance",
+        {"platform": "linkedin", "content": "📊 NIS2 entra en vigor en octubre 2026.
+
+¿Está tu empresa preparada?
+
+3 acciones inmediatas:
+1️⃣ Identifica si tu sector está afectado
+2️⃣ Evalúa tu nivel de madurez actual
+3️⃣ Implementa un plan de cumplimiento
+
+#NIS2 #Ciberseguridad #Compliance",
          "status": "published", "impressions": 890, "likes": 32, "comments": 5, "shares": 8, "tags": ["NIS2"]},
         {"platform": "twitter", "content": "🚀 Enterprise + NIS2 + DORA en una sola plataforma. Soberanía 100% EU. PoC 90 días → st4rtup.app #Ciberseguridad #growth #ENS",
          "status": "published", "impressions": 450, "likes": 18, "comments": 3, "shares": 6, "tags": ["ENS", "growth"]},
-        {"platform": "youtube", "content": "🎥 Cómo implementar Enterprise en 90 días | Demo St4rtup\n\n⏱️ 00:00 Intro · 01:30 Qué es ENS · 03:00 Demo · 08:00 Controles · 12:00 SOC · 15:00 Pricing",
+        {"platform": "youtube", "content": "🎥 Cómo implementar Enterprise en 90 días | Demo St4rtup
+
+⏱️ 00:00 Intro · 01:30 Qué es ENS · 03:00 Demo · 08:00 Controles · 12:00 SOC · 15:00 Pricing",
          "status": "published", "impressions": 320, "likes": 15, "comments": 4, "shares": 2, "tags": ["ENS", "demo"]},
-        {"platform": "linkedin", "content": "💡 DORA obligatorio para entidades financieras UE desde enero 2025.\n\nSt4rtup ayuda a banca, seguros y fintech a mapear riesgos TIC, documentar incidentes y reportar al regulador.\n\n#DORA #Fintech #Banca #RegTech",
+        {"platform": "linkedin", "content": "💡 DORA obligatorio para entidades financieras UE desde enero 2025.
+
+St4rtup ayuda a banca, seguros y fintech a mapear riesgos TIC, documentar incidentes y reportar al regulador.
+
+#DORA #Fintech #Banca #RegTech",
          "status": "draft", "tags": ["DORA", "banca"]},
     ]
     created = 0
@@ -257,7 +284,7 @@ async def create_recurrence(
 org_id: str = Depends(get_org_id),
 ):
     from datetime import timedelta, timezone
-    rec = SocialRecurrence(
+    rec = SocialRecurrence(org_id=UUID(org_id), 
         name=data.name, platform=data.platform,
         content_template=data.content_template, media_url=data.media_url,
         tags=data.tags, frequency=data.frequency,
