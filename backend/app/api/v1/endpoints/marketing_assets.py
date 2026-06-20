@@ -62,7 +62,7 @@ async def create_asset(
 org_id: str = Depends(get_org_id),
 ):
     """Crea un asset de marketing."""
-    asset = MarketingAsset(**data.model_dump(), created_by=UUID(current_user["user_id"]))
+    asset = MarketingAsset(**data.model_dump(), org_id=UUID(org_id), created_by=UUID(current_user["user_id"]))
     db.add(asset)
     await db.commit()
     await db.refresh(asset)
