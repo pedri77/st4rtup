@@ -1,0 +1,28 @@
+# st4rtup backend — saas-01 deployment
+# Usage: docker compose -f docker-compose.production.yml up -d
+
+services:
+  st4rtup-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: st4rtup-api
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env.production
+    environment:
+      - DEBUG=False
+    ports:
+      - "127.0.0.1:8001:8001"
+    networks:
+      - saas_default
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+networks:
+  saas_default:
+    external: true
