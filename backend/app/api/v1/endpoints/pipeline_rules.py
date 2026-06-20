@@ -76,7 +76,7 @@ async def create_rule(
 org_id: str = Depends(get_org_id),
 ):
     """Crea una regla de automatizacion de pipeline."""
-    rule = PipelineRule(
+    rule = PipelineRule(org_id=UUID(org_id), 
         name=data.name, description=data.description,
         trigger_stage=data.trigger_stage, trigger_condition=data.trigger_condition,
         conditions=data.conditions, actions=data.actions, priority=data.priority,
@@ -285,7 +285,12 @@ async def _execute_action(db: AsyncSession, action: dict, opp):
                     lead = (await db.execute(select(Lead.company_name).where(Lead.id == opp.lead_id))).scalar()
                     company = lead or ""
                 await send_message(
-                    f"<b>Pipeline Automation</b>\n\n{message}\n\nDeal: {company}\nValor: {float(opp.value or 0):,.0f} EUR",
+                    f"<b>Pipeline Automation</b>
+
+{message}
+
+Deal: {company}
+Valor: {float(opp.value or 0):,.0f} EUR",
                     parse_mode="HTML",
                 )
             except Exception as e:
