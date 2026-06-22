@@ -57,13 +57,15 @@ async def send_for_signature(
     Envía una oferta para firma electrónica.
     Retorna {signature_request_id, signature_url, provider}.
     """
-    if provider not in ("docusign", "yousign"):
+    if provider not in ("docusign", "yousign", "docuseal"):
         raise ValueError(f"Proveedor no soportado: {provider}")
 
     offer, lead = await _get_offer_with_lead(db, offer_id)
     config = await _get_provider_config(db, provider)
 
-    if provider == "yousign":
+    if provider == "docuseal":
+        result = await _send_docuseal(offer, lead, config, signer_email, signer_name, message)
+    elif provider == "yousign":
         result = await _send_yousign(offer, lead, config, signer_email, signer_name, message)
     else:
         result = await _send_docusign(offer, lead, config, signer_email, signer_name, message)
@@ -353,13 +355,97 @@ def _generate_simple_pdf(offer: Offer, company: str) -> bytes:
     return body + xref + trailer
 
 
+async def _send_docuseal(
+    offer: Offer,
+    lead: Lead,
+    config: dict,
+    signer_email: str,
+    signer_name: str,
+    message: Optional[str],
+) -> dict:
+    """Crea solicitud de firma en DocuSeal API."""
+    api_key = config.get("api_key", "")
+    base_url = config.get("base_url", "https://firmas.empresaautomatizada.es")
+    if not api_key:
+        raise ValueError("DocuSeal API key no configurada")
+
+    headers = {
+        "X-Auth-Token": api_key,
+        "Content-Type": "application/json",
+    }
+
+    company = lead.company_name if lead else "Cliente"
+    name_parts = signer_name.split() if signer_name else ["Cliente"]
+    first_name = name_parts[0]
+
+    # Generate PDF
+    pdf_content = _generate_simple_pdf(offer, company)
+    pdf_b64 = base64.b64encode(pdf_content).decode("utf-8")
+
+    subject = f"Propuesta comercial {offer.reference} - St4rtup"
+    body_message = message or (
+        f"Estimado/a {first_name},\n\n"
+        f"Adjuntamos la propuesta comercial {offer.reference} para {company}.\n\n"
+        "Por favor, revise y firme el documento.\n\nAtentamente,\nSt4rtup"
+    )
+
+    payload = {
+        "template": {
+            "name": subject,
+            "documents": [
+                {
+                    "name": offer.reference,
+                    "file": f"data:application/pdf;base64,{pdf_b64}",
+                    "fields": [
+                        {
+                            "name": "signature",
+                            "type": "signature",
+                            "role": "Firmante",
+                            "areas": [{"page": 0, "x": 0.12, "y": 0.52, "w": 0.33, "h": 0.07}],
+                        }
+                    ],
+                }
+            ],
+        },
+        "send_email": True,
+        "submitters": [
+            {
+                "role": "Firmante",
+                "email": signer_email,
+                "name": signer_name,
+            }
+        ],
+        "message": {"subject": subject, "body": body_message},
+    }
+
+    async with httpx.AsyncClient(timeout=TIMEOUT) as client:
+        response = await client.post(f"{base_url}/api/submissions", headers=headers, json=payload)
+        if response.status_code not in (200, 201):
+            raise ValueError(f"DocuSeal error: {response.status_code} - {response.text[:300]}")
+
+        data = response.json()
+        submitters = data if isinstance(data, list) else [data]
+        submission = submitters[0] if submitters else {}
+
+        submission_id = str(submission.get("submission_id", submission.get("id", "")))
+        slug = submission.get("slug", "")
+
+        return {
+            "signature_request_id": submission_id,
+            "signature_url": submission.get("embed_src", f"{base_url}/s/{slug}"),
+            "provider": "docuseal",
+        }
+
+
 async def handle_webhook(
     db: AsyncSession,
     provider: str,
     payload: dict,
 ) -> dict:
     """Procesa webhook de firma electrónica y actualiza estado."""
-    if provider == "yousign":
+    if provider == "docuseal":
+        return await _handle_docuseal_webhook(db, payload)
+    elif provider == "yousign":
         return await _handle_yousign_webhook(db, payload)
     elif provider == "docusign":
         return await _handle_docusign_webhook(db, payload)
@@ -435,3 +521,34 @@ async def _handle_docusign_webhook(db: AsyncSession, payload: dict) -> dict:
 
     await db.commit()
     return {"status": "processed", "docusign_status": status, "offer_id": str(offer.id)}
+
+
+async def _handle_docuseal_webhook(db: AsyncSession, payload: dict) -> dict:
+    """Procesa webhook de DocuSeal."""
+    event_type = payload.get("event_type", "")
+    data = payload.get("data", {})
+    submission_id = str(data.get("submission_id", data.get("id", "")))
+
+    if not submission_id:
+        return {"status": "no_id"}
+
+    result = await db.execute(
+        select(Offer).where(Offer.signature_request_id == submission_id)
+    )
+    offer = result.scalar_one_or_none()
+    if not offer:
+        return {"status": "offer_not_found"}
+
+    now = datetime.now(timezone.utc)
+
+    if event_type == "form.completed":
+        offer.signature_status = "signed"
+        offer.signed_at = now
+        offer.status = "accepted"
+        offer.accepted_at = now
+    elif event_type == "submission.archived":
+        offer.signature_status = "expired"
+        offer.status = "expired"
+
+    await db.commit()
+    return {"status": "processed", "event": event_type, "offer_id": str(offer.id)}
