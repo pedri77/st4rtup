@@ -110,7 +110,7 @@ export default function BlogArticlePage() {
     <div style={{ fontFamily: "'Inter', sans-serif", color: T.fg, backgroundColor: T.bg }}>
       <Helmet>
         <title>{article.titulo} | st4rtup Blog</title>
-        <meta name="description" content={article.excerpt} />
+        <meta name="description" content={article.meta_description || article.excerpt} />
         <meta name="keywords" content={(article.keywords || []).join(', ')} />
         <link rel="canonical" href={`https://st4rtup.com/blog/${article.slug}`} />
         <meta property="og:title" content={article.titulo} />
@@ -125,7 +125,7 @@ export default function BlogArticlePage() {
           "@context": "https://schema.org",
           "@type": "BlogPosting",
           "headline": article.titulo,
-          "description": article.excerpt,
+          "description": article.meta_description || article.excerpt,
           "author": { "@type": "Person", "name": article.autor },
           "datePublished": article.fecha,
           "image": article.imagen ? `https://st4rtup.com${article.imagen}` : undefined,
@@ -133,6 +133,17 @@ export default function BlogArticlePage() {
           "mainEntityOfPage": `https://st4rtup.com/blog/${article.slug}`,
           "keywords": (article.keywords || []).join(', '),
         })}</script>
+        {article.schema_faq && article.schema_faq.length > 0 && (
+          <script type="application/ld+json">{JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": article.schema_faq.map(faq => ({
+              "@type": "Question",
+              "name": faq.q,
+              "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+            }))
+          })}</script>
+        )}
       </Helmet>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
 
