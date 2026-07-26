@@ -1824,6 +1824,310 @@
         "como-crear-una-startup",
         "ia-productividad-founders"
       ]
+    },
+    {
+      "slug": "product-market-fit",
+      "titulo": "Product market fit: qué es, cómo medirlo y cómo encontrarlo",
+      "excerpt": "Guía completa de PMF: test Sean Ellis, curvas retención, NPS. Cómo encontrarlo y qué hacer después.",
+      "categoria": "Crear & Lanzar",
+      "cluster": "C3",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/product-market-fit.webp",
+      "tiempo_lectura": "10 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "product market fit",
+        "pmf startup",
+        "encaje producto mercado"
+      ],
+      "publicado": true,
+      "meta_description": "Qué es product market fit, cómo medirlo con el test de Sean Ellis (40%), curvas de retención y NPS. Guía para encontrar el PMF de tu startup.",
+      "schema_faq": [
+        {
+          "q": "¿Cómo sé si tengo product market fit?",
+          "a": "Si más del 40% de tus usuarios dicen que estarían muy decepcionados sin tu producto (test Sean Ellis), tienes PMF."
+        },
+        {
+          "q": "¿Cuánto tarda encontrar el PMF?",
+          "a": "De media 18-24 meses. Algunas startups lo encuentran en 6 meses, otras pivotan 3-4 veces antes de encontrarlo."
+        },
+        {
+          "q": "¿Se puede perder el product market fit?",
+          "a": "Sí. El mercado cambia, la competencia evoluciona. Hay que medir PMF continuamente, no una sola vez."
+        }
+      ],
+      "related_slugs": [
+        "validar-idea-de-negocio",
+        "mvp-que-es-startup",
+        "metricas-startup",
+        "growth-hacking-startups"
+      ]
+    },
+    {
+      "slug": "term-sheet-que-es",
+      "titulo": "Term sheet: qué es, cláusulas clave y cómo negociarlo",
+      "excerpt": "Term sheet explicado: cláusulas clave, red flags, y consejos de negociación para founders.",
+      "categoria": "Financiación",
+      "cluster": "C2",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/term-sheet-que-es.webp",
+      "tiempo_lectura": "11 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "term sheet que es",
+        "term sheet startup",
+        "clausulas inversion"
+      ],
+      "publicado": true,
+      "meta_description": "Qué es un term sheet, cláusulas clave (valoración, liquidation preference, anti-dilución, vesting) y cómo negociarlo como founder.",
+      "schema_faq": [
+        {
+          "q": "¿El term sheet es vinculante?",
+          "a": "No en general. Es una carta de intenciones. Solo las cláusulas de exclusividad y confidencialidad suelen ser vinculantes."
+        },
+        {
+          "q": "¿Cuánto tarda negociar un term sheet?",
+          "a": "Entre 2 y 6 semanas desde la primera oferta hasta la firma. La due diligence posterior puede tardar 1-3 meses más."
+        },
+        {
+          "q": "¿Qué es la liquidation preference?",
+          "a": "El derecho del inversor a recuperar su inversión antes que los founders en caso de venta. 1x non-participating es lo estándar."
+        }
+      ],
+      "related_slugs": [
+        "que-es-el-venture-capital",
+        "valoracion-startup",
+        "safe-note-espana",
+        "inversores-startups-espana"
+      ]
+    },
+    {
+      "slug": "product-led-growth",
+      "titulo": "Product led growth: estrategia de crecimiento liderada por el producto",
+      "excerpt": "PLG explicado: freemium, viral loops, métricas PQL. Playbook de implementación con ejemplos de Slack y Notion.",
+      "categoria": "Growth",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/product-led-growth.webp",
+      "tiempo_lectura": "11 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "product led growth",
+        "plg startup",
+        "crecimiento producto"
+      ],
+      "publicado": true,
+      "meta_description": "Estrategia PLG para startups: freemium, free trial, self-serve, viral loops. PLG vs sales-led, métricas clave y playbook de implementación.",
+      "schema_faq": [
+        {
+          "q": "¿Qué diferencia hay entre PLG y sales-led?",
+          "a": "En PLG el producto es el canal de adquisición (freemium, self-serve). En sales-led un equipo comercial vende activamente. PLG tiene CAC más bajo pero requiere producto excelente."
+        },
+        {
+          "q": "¿Para qué tipo de startup funciona PLG?",
+          "a": "SaaS B2B con ticket bajo-medio (<500 EUR/mes), decisión individual (no comité), y producto que se puede probar sin demo."
+        },
+        {
+          "q": "¿Qué es un PQL?",
+          "a": "Product Qualified Lead: usuario que ha alcanzado un umbral de activación en el producto y es candidato a convertir a pago."
+        }
+      ],
+      "related_slugs": [
+        "growth-hacking-startups",
+        "metricas-startup",
+        "marketing-startup-bajo-presupuesto",
+        "mvp-que-es-startup"
+      ]
+    },
+    {
+      "slug": "churn-rate-que-es",
+      "titulo": "Churn rate: qué es, cómo calcularlo y 8 estrategias para reducirlo",
+      "excerpt": "Customer vs revenue churn, benchmarks, análisis cohortes y 8 tácticas para reducir cancelaciones.",
+      "categoria": "Growth",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/churn-rate-que-es.webp",
+      "tiempo_lectura": "10 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "churn rate que es",
+        "tasa cancelacion",
+        "reducir churn"
+      ],
+      "publicado": true,
+      "meta_description": "Churn rate explicado: customer vs revenue churn, fórmulas, benchmarks por industria y 8 estrategias probadas para reducir la cancelación.",
+      "schema_faq": [
+        {
+          "q": "¿Cuál es un buen churn rate para SaaS?",
+          "a": "B2B SaaS: 3-5% mensual en SMB, <1% mensual en enterprise. B2C SaaS: 5-7% mensual es aceptable."
+        },
+        {
+          "q": "¿Qué es negative churn?",
+          "a": "Cuando los ingresos de expansión (upsells, upgrades) superan los ingresos perdidos por cancelaciones. Es el santo grial SaaS."
+        },
+        {
+          "q": "¿Cómo predecir el churn?",
+          "a": "Monitoriza engagement: usuarios que no hacen login en 7 días, bajan uso >50%, o no usan features core tienen 3x más probabilidad de cancelar."
+        }
+      ],
+      "related_slugs": [
+        "metricas-startup",
+        "product-market-fit",
+        "saas-metricas",
+        "customer-acquisition-cost"
+      ]
+    },
+    {
+      "slug": "customer-acquisition-cost",
+      "titulo": "Customer acquisition cost (CAC): cómo calcularlo y optimizarlo",
+      "excerpt": "CAC explicado: fórmula, variantes, LTV/CAC ratio, benchmarks por industria y 8 tácticas de optimización.",
+      "categoria": "Growth",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/customer-acquisition-cost.webp",
+      "tiempo_lectura": "10 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "customer acquisition cost",
+        "cac startup",
+        "coste adquisicion cliente"
+      ],
+      "publicado": true,
+      "meta_description": "Guía completa del CAC: fórmula, variantes (blended, por canal), ratio LTV/CAC, payback period, benchmarks y 8 formas de reducirlo.",
+      "schema_faq": [
+        {
+          "q": "¿Cuál es un buen ratio LTV/CAC?",
+          "a": "Mínimo 3:1. Si es menor, no es rentable. Si es mayor de 5:1, probablemente estás subinvirtiendo en crecimiento."
+        },
+        {
+          "q": "¿Qué incluye el CAC?",
+          "a": "Marketing + ventas + herramientas + salarios del equipo comercial, dividido entre clientes nuevos del periodo."
+        },
+        {
+          "q": "¿Cómo reduzco el CAC?",
+          "a": "Content marketing + SEO (orgánico), referral programs, mejorar conversión del funnel, y product-led growth."
+        }
+      ],
+      "related_slugs": [
+        "metricas-startup",
+        "marketing-startup-bajo-presupuesto",
+        "growth-hacking-startups",
+        "churn-rate-que-es"
+      ]
+    },
+    {
+      "slug": "saas-metricas",
+      "titulo": "Métricas SaaS esenciales: MRR, NRR, Rule of 40 y más",
+      "excerpt": "10 KPIs SaaS: MRR, ARR, NRR, gross margin, magic number, Rule of 40. Benchmarks y dashboard por fase.",
+      "categoria": "Growth",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/saas-metricas.webp",
+      "tiempo_lectura": "12 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "saas metricas",
+        "kpis saas",
+        "mrr arr nrr"
+      ],
+      "publicado": true,
+      "meta_description": "Las 10 métricas SaaS que todo founder debe dominar: MRR, ARR, NRR, gross margin, magic number, Rule of 40. Benchmarks por fase y dashboard.",
+      "schema_faq": [
+        {
+          "q": "¿Qué es la Rule of 40?",
+          "a": "Crecimiento (%) + margen de beneficio (%) >= 40%. Si creces 60% con -20% margen, cumples. Es el benchmark de eficiencia SaaS."
+        },
+        {
+          "q": "¿Qué es el NRR y por qué importa?",
+          "a": "Net Revenue Retention: ingresos de clientes existentes este mes vs hace 12 meses. >100% = expansión supera churn. Los mejores SaaS tienen NRR >120%."
+        },
+        {
+          "q": "¿Cuándo empiezo a medir métricas SaaS?",
+          "a": "MRR y churn desde el primer cliente de pago. El resto (NRR, magic number, Rule of 40) cuando tengas >50 clientes y >6 meses de datos."
+        }
+      ],
+      "related_slugs": [
+        "metricas-startup",
+        "churn-rate-que-es",
+        "customer-acquisition-cost",
+        "valoracion-startup"
+      ]
+    },
+    {
+      "slug": "startup-studio-que-es",
+      "titulo": "Startup studio: qué es, cómo funciona y los mejores en España",
+      "excerpt": "Startup studio explicado: modelo, equity, top studios España (Antai, Nuclio, Byld, Demium) y cuándo conviene.",
+      "categoria": "Ecosistema",
+      "cluster": "C1",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/startup-studio-que-es.webp",
+      "tiempo_lectura": "9 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "startup studio que es",
+        "venture builder",
+        "startup studio espana"
+      ],
+      "publicado": true,
+      "meta_description": "Qué es un startup studio (venture builder), cómo funciona, diferencias con aceleradoras y VC. Top studios en España: Antai, Nuclio, Byld, Demium.",
+      "schema_faq": [
+        {
+          "q": "¿Cuánto equity pide un startup studio?",
+          "a": "Entre 40% y 70%, mucho más que una aceleradora (5-10%) o VC (15-25%). A cambio, el studio aporta equipo, capital y operaciones completas."
+        },
+        {
+          "q": "¿Para quién es un startup studio?",
+          "a": "Para emprendedores que prefieren co-crear con un equipo experimentado a cambio de más equity. Ideal si no tienes equipo técnico ni experiencia previa."
+        },
+        {
+          "q": "¿Cuáles son los mejores startup studios en España?",
+          "a": "Antai Venture Builder (Barcelona), Nuclio (Barcelona), Byld (Madrid) y Demium (Valencia/Madrid) son los más activos."
+        }
+      ],
+      "related_slugs": [
+        "aceleradoras-startups-espana",
+        "incubadoras-startups-madrid",
+        "como-crear-una-startup",
+        "como-financiar-una-startup"
+      ]
+    },
+    {
+      "slug": "ley-crea-y-crece",
+      "titulo": "Ley Crea y Crece: capital social 1 EUR, factura electrónica y más",
+      "excerpt": "Ley Crea y Crece: SL con 1 EUR, factura electrónica obligatoria, morosidad 30 días. Guía para startups.",
+      "categoria": "Legal",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/ley-crea-y-crece.webp",
+      "tiempo_lectura": "10 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "ley crea y crece",
+        "capital social 1 euro",
+        "factura electronica obligatoria"
+      ],
+      "publicado": true,
+      "meta_description": "Ley 18/2022 Crea y Crece: SL con 1 EUR de capital, factura electrónica obligatoria B2B, morosidad 30 días y sandbox fintech. Impacto en startups.",
+      "schema_faq": [
+        {
+          "q": "¿Puedo crear una SL con 1 EUR de capital?",
+          "a": "Sí, desde la Ley Crea y Crece. Pero debes destinar el 20% de beneficios a reservas hasta alcanzar 3.000 EUR. En la práctica, muchos asesores recomiendan empezar con 3.000."
+        },
+        {
+          "q": "¿Cuándo es obligatoria la factura electrónica?",
+          "a": "Para empresas con facturación >8M EUR desde 2025. Para el resto de empresas y autónomos, a partir de 2026-2027 según el calendario del reglamento."
+        },
+        {
+          "q": "¿Qué relación tiene con la Ley de Startups?",
+          "a": "Son complementarias. Crea y Crece facilita crear empresas (capital 1 EUR). La Ley de Startups da beneficios fiscales (IS 15%) a empresas innovadoras."
+        }
+      ],
+      "related_slugs": [
+        "como-crear-una-sl",
+        "ley-de-startups-espana",
+        "contratos-startups-mas-importantes",
+        "como-crear-una-startup"
+      ]
     }
   ]
 }
