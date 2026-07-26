@@ -10,15 +10,34 @@
       "imagen": "/blog/que-es-una-startup.webp",
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
-      "keywords": ["startup", "qué es una startup", "definición startup", "tipos de startups"],
+      "keywords": [
+        "startup",
+        "qué es una startup",
+        "definición startup",
+        "tipos de startups"
+      ],
       "publicado": true,
       "meta_description": "Descubre qué es una startup, cómo se diferencia de una empresa tradicional, qué tipos existen y qué fases atraviesa antes de escalar. Guía actualizada 2026.",
       "schema_faq": [
-        {"q": "¿Qué es una startup y en qué se diferencia de una empresa?", "a": "Una startup es una empresa emergente con modelo de negocio escalable, alta incertidumbre y potencial de crecimiento exponencial, a diferencia de una empresa tradicional que busca estabilidad."},
-        {"q": "¿Cuáles son los tipos de startups más comunes?", "a": "Los tipos más comunes son SaaS, marketplace, fintech, deeptech, healthtech y e-commerce, cada uno con modelos de monetización y escalabilidad diferentes."},
-        {"q": "¿Cuándo deja de ser startup una empresa?", "a": "Generalmente cuando alcanza rentabilidad sostenida, un modelo de negocio validado y predecible, o bien tras una salida a bolsa o adquisición."}
+        {
+          "q": "¿Qué es una startup y en qué se diferencia de una empresa?",
+          "a": "Una startup es una empresa emergente con modelo de negocio escalable, alta incertidumbre y potencial de crecimiento exponencial, a diferencia de una empresa tradicional que busca estabilidad."
+        },
+        {
+          "q": "¿Cuáles son los tipos de startups más comunes?",
+          "a": "Los tipos más comunes son SaaS, marketplace, fintech, deeptech, healthtech y e-commerce, cada uno con modelos de monetización y escalabilidad diferentes."
+        },
+        {
+          "q": "¿Cuándo deja de ser startup una empresa?",
+          "a": "Generalmente cuando alcanza rentabilidad sostenida, un modelo de negocio validado y predecible, o bien tras una salida a bolsa o adquisición."
+        }
       ],
-      "related_slugs": ["diferencia-startup-y-empresa", "fases-de-una-startup", "tipos-de-startups", "startup-vs-pyme"]
+      "related_slugs": [
+        "diferencia-startup-y-empresa",
+        "fases-de-una-startup",
+        "tipos-de-startups",
+        "startup-vs-pyme"
+      ]
     },
     {
       "slug": "diferencia-startup-y-empresa",
@@ -30,15 +49,32 @@
       "imagen": "/blog/diferencia-startup-y-empresa.webp",
       "tiempo_lectura": "6 min",
       "autor": "St4rtup",
-      "keywords": ["startup vs empresa", "diferencia startup pyme"],
+      "keywords": [
+        "startup vs empresa",
+        "diferencia startup pyme"
+      ],
       "publicado": true,
       "meta_description": "Conoce las 7 diferencias clave entre startup y empresa tradicional: modelo de negocio, financiación, escalabilidad, cultura y mentalidad del founder.",
       "schema_faq": [
-        {"q": "¿Cuál es la principal diferencia entre una startup y una empresa tradicional?", "a": "La startup busca crecimiento exponencial con un modelo escalable y repetible, mientras que la empresa tradicional prioriza estabilidad y crecimiento lineal."},
-        {"q": "¿Una startup puede convertirse en empresa tradicional?", "a": "Sí, muchas startups maduran hasta convertirse en empresas consolidadas cuando alcanzan rentabilidad estable y un modelo de negocio predecible."},
-        {"q": "¿Es mejor crear una startup o una empresa tradicional?", "a": "Depende de tu objetivo: si buscas crecimiento rápido y escalable, una startup; si prefieres estabilidad y control, una empresa tradicional."}
+        {
+          "q": "¿Cuál es la principal diferencia entre una startup y una empresa tradicional?",
+          "a": "La startup busca crecimiento exponencial con un modelo escalable y repetible, mientras que la empresa tradicional prioriza estabilidad y crecimiento lineal."
+        },
+        {
+          "q": "¿Una startup puede convertirse en empresa tradicional?",
+          "a": "Sí, muchas startups maduran hasta convertirse en empresas consolidadas cuando alcanzan rentabilidad estable y un modelo de negocio predecible."
+        },
+        {
+          "q": "¿Es mejor crear una startup o una empresa tradicional?",
+          "a": "Depende de tu objetivo: si buscas crecimiento rápido y escalable, una startup; si prefieres estabilidad y control, una empresa tradicional."
+        }
       ],
-      "related_slugs": ["que-es-una-startup", "startup-vs-pyme", "tipos-de-startups", "fases-de-una-startup"]
+      "related_slugs": [
+        "que-es-una-startup",
+        "startup-vs-pyme",
+        "tipos-de-startups",
+        "fases-de-una-startup"
+      ]
     },
     {
       "slug": "fases-de-una-startup",
@@ -50,15 +86,33 @@
       "imagen": "/blog/fases-de-una-startup.webp",
       "tiempo_lectura": "10 min",
       "autor": "St4rtup",
-      "keywords": ["fases startup", "etapas startup", "ciclo de vida startup"],
+      "keywords": [
+        "fases startup",
+        "etapas startup",
+        "ciclo de vida startup"
+      ],
       "publicado": true,
       "meta_description": "Las 5 fases de una startup explicadas paso a paso: ideación, validación, crecimiento, expansión y madurez. Métricas clave y retos en cada etapa.",
       "schema_faq": [
-        {"q": "¿Cuáles son las fases de una startup?", "a": "Las 5 fases son: ideación (definir el problema), validación (probar con el mercado), crecimiento (escalar usuarios), expansión (nuevos mercados) y madurez (rentabilidad sostenida)."},
-        {"q": "¿Cuánto dura cada fase de una startup?", "a": "Varía mucho, pero ideación suele durar 3-6 meses, validación 6-12 meses, crecimiento 1-3 anos, expansión 2-5 anos y madurez es indefinida."},
-        {"q": "¿Qué métricas importan en cada fase?", "a": "En ideación: problem-solution fit. En validación: product-market fit y retención. En crecimiento: MRR, CAC y LTV. En expansión: margen y eficiencia operativa."}
+        {
+          "q": "¿Cuáles son las fases de una startup?",
+          "a": "Las 5 fases son: ideación (definir el problema), validación (probar con el mercado), crecimiento (escalar usuarios), expansión (nuevos mercados) y madurez (rentabilidad sostenida)."
+        },
+        {
+          "q": "¿Cuánto dura cada fase de una startup?",
+          "a": "Varía mucho, pero ideación suele durar 3-6 meses, validación 6-12 meses, crecimiento 1-3 anos, expansión 2-5 anos y madurez es indefinida."
+        },
+        {
+          "q": "¿Qué métricas importan en cada fase?",
+          "a": "En ideación: problem-solution fit. En validación: product-market fit y retención. En crecimiento: MRR, CAC y LTV. En expansión: margen y eficiencia operativa."
+        }
       ],
-      "related_slugs": ["que-es-una-startup", "scaleup-que-es", "mvp-que-es-startup", "pre-seed-seed-serie-a-diferencias"]
+      "related_slugs": [
+        "que-es-una-startup",
+        "scaleup-que-es",
+        "mvp-que-es-startup",
+        "pre-seed-seed-serie-a-diferencias"
+      ]
     },
     {
       "slug": "tipos-de-startups",
@@ -70,15 +124,33 @@
       "imagen": "/blog/tipos-de-startups.webp",
       "tiempo_lectura": "7 min",
       "autor": "St4rtup",
-      "keywords": ["tipos de startups", "modelos startup", "SaaS startup"],
+      "keywords": [
+        "tipos de startups",
+        "modelos startup",
+        "SaaS startup"
+      ],
       "publicado": true,
       "meta_description": "Guía completa de tipos de startups: SaaS, marketplace, deeptech, fintech y más. Modelos de negocio, características y ejemplos reales en España.",
       "schema_faq": [
-        {"q": "¿Cuántos tipos de startups existen?", "a": "Los principales son SaaS, marketplace, fintech, deeptech, healthtech, edtech, e-commerce D2C, y hardware/IoT. Cada uno tiene modelos de monetización distintos."},
-        {"q": "¿Qué tipo de startup es más rentable?", "a": "Las startups SaaS suelen tener los mejores márgenes (70-90%) gracias a ingresos recurrentes y costes marginales bajos una vez desarrollado el producto."},
-        {"q": "¿Qué tipo de startup es más fácil de crear?", "a": "Las SaaS y marketplaces son las más accesibles al requerir menor inversión inicial. Las deeptech y hardware necesitan más capital y tiempo de desarrollo."}
+        {
+          "q": "¿Cuántos tipos de startups existen?",
+          "a": "Los principales son SaaS, marketplace, fintech, deeptech, healthtech, edtech, e-commerce D2C, y hardware/IoT. Cada uno tiene modelos de monetización distintos."
+        },
+        {
+          "q": "¿Qué tipo de startup es más rentable?",
+          "a": "Las startups SaaS suelen tener los mejores márgenes (70-90%) gracias a ingresos recurrentes y costes marginales bajos una vez desarrollado el producto."
+        },
+        {
+          "q": "¿Qué tipo de startup es más fácil de crear?",
+          "a": "Las SaaS y marketplaces son las más accesibles al requerir menor inversión inicial. Las deeptech y hardware necesitan más capital y tiempo de desarrollo."
+        }
       ],
-      "related_slugs": ["que-es-una-startup", "unicornio-startup", "diferencia-startup-y-empresa", "mvp-que-es-startup"]
+      "related_slugs": [
+        "que-es-una-startup",
+        "unicornio-startup",
+        "diferencia-startup-y-empresa",
+        "mvp-que-es-startup"
+      ]
     },
     {
       "slug": "angel-investor-que-es",
@@ -90,15 +162,33 @@
       "imagen": "/blog/angel-investor-que-es.webp",
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
-      "keywords": ["angel investor", "business angel", "inversión ángel startup"],
+      "keywords": [
+        "angel investor",
+        "business angel",
+        "inversión ángel startup"
+      ],
       "publicado": true,
       "meta_description": "Qué es un angel investor, cuánto invierte, qué busca en una startup y cómo encontrar business angels en España. Guía práctica para founders.",
       "schema_faq": [
-        {"q": "¿Cuánto dinero invierte un angel investor?", "a": "Un business angel invierte entre 10.000 y 250.000 euros por operación, normalmente en fase pre-seed o seed, a cambio de equity (5-15%)."},
-        {"q": "¿Qué busca un angel investor en una startup?", "a": "Busca un equipo fuerte, un mercado grande, tracción inicial demostrable y un modelo de negocio escalable con potencial de retorno 10x o superior."},
-        {"q": "¿Cómo encontrar business angels en España?", "a": "A través de redes como AEBAN, Big Ban Angels, Keiretsu Forum, eventos de startups, plataformas como Startupxplore y LinkedIn."}
+        {
+          "q": "¿Cuánto dinero invierte un angel investor?",
+          "a": "Un business angel invierte entre 10.000 y 250.000 euros por operación, normalmente en fase pre-seed o seed, a cambio de equity (5-15%)."
+        },
+        {
+          "q": "¿Qué busca un angel investor en una startup?",
+          "a": "Busca un equipo fuerte, un mercado grande, tracción inicial demostrable y un modelo de negocio escalable con potencial de retorno 10x o superior."
+        },
+        {
+          "q": "¿Cómo encontrar business angels en España?",
+          "a": "A través de redes como AEBAN, Big Ban Angels, Keiretsu Forum, eventos de startups, plataformas como Startupxplore y LinkedIn."
+        }
       ],
-      "related_slugs": ["que-es-el-venture-capital", "pre-seed-seed-serie-a-diferencias", "valoracion-startup", "pitch-deck-que-es"]
+      "related_slugs": [
+        "que-es-el-venture-capital",
+        "pre-seed-seed-serie-a-diferencias",
+        "valoracion-startup",
+        "pitch-deck-que-es"
+      ]
     },
     {
       "slug": "que-es-el-venture-capital",
@@ -110,15 +200,33 @@
       "imagen": "/blog/que-es-el-venture-capital.webp",
       "tiempo_lectura": "10 min",
       "autor": "St4rtup",
-      "keywords": ["venture capital", "capital riesgo", "fondos VC España"],
+      "keywords": [
+        "venture capital",
+        "capital riesgo",
+        "fondos VC España"
+      ],
       "publicado": true,
       "meta_description": "Qué es el venture capital, cómo funciona el proceso de inversión, principales fondos VC en España y cuándo buscar capital riesgo para tu startup.",
       "schema_faq": [
-        {"q": "¿Qué es el venture capital y cómo funciona?", "a": "El venture capital es inversión profesional en startups de alto potencial. Los fondos VC invierten capital de terceros (LPs) a cambio de equity, buscando retornos de 10-100x."},
-        {"q": "¿Cuándo debe una startup buscar venture capital?", "a": "Cuando tiene product-market fit validado, métricas de crecimiento sólidas y necesita capital significativo para escalar rápido en un mercado grande."},
-        {"q": "¿Cuáles son los principales fondos VC en España?", "a": "Destacan Seaya Ventures, Kibo Ventures, JME Ventures, Nauta Capital, Samaipata y K Fund, entre otros, con tickets desde 500K hasta varios millones."}
+        {
+          "q": "¿Qué es el venture capital y cómo funciona?",
+          "a": "El venture capital es inversión profesional en startups de alto potencial. Los fondos VC invierten capital de terceros (LPs) a cambio de equity, buscando retornos de 10-100x."
+        },
+        {
+          "q": "¿Cuándo debe una startup buscar venture capital?",
+          "a": "Cuando tiene product-market fit validado, métricas de crecimiento sólidas y necesita capital significativo para escalar rápido en un mercado grande."
+        },
+        {
+          "q": "¿Cuáles son los principales fondos VC en España?",
+          "a": "Destacan Seaya Ventures, Kibo Ventures, JME Ventures, Nauta Capital, Samaipata y K Fund, entre otros, con tickets desde 500K hasta varios millones."
+        }
       ],
-      "related_slugs": ["angel-investor-que-es", "pre-seed-seed-serie-a-diferencias", "bootstrapping", "valoracion-startup"]
+      "related_slugs": [
+        "angel-investor-que-es",
+        "pre-seed-seed-serie-a-diferencias",
+        "bootstrapping",
+        "valoracion-startup"
+      ]
     },
     {
       "slug": "pre-seed-seed-serie-a-diferencias",
@@ -130,15 +238,34 @@
       "imagen": "/blog/pre-seed-seed-serie-a-diferencias.webp",
       "tiempo_lectura": "9 min",
       "autor": "St4rtup",
-      "keywords": ["pre-seed", "seed", "serie A", "rondas financiación"],
+      "keywords": [
+        "pre-seed",
+        "seed",
+        "serie A",
+        "rondas financiación"
+      ],
       "publicado": true,
       "meta_description": "Diferencias entre rondas pre-seed, seed y Serie A: importes típicos, métricas exigidas, dilución esperada y qué inversores participan en cada fase.",
       "schema_faq": [
-        {"q": "¿Cuánto se levanta en cada ronda de financiación?", "a": "Pre-seed: 50K-500K euros. Seed: 500K-2M euros. Serie A: 2M-15M euros. Los importes varían según mercado, sector y geografía."},
-        {"q": "¿Qué métricas necesito para una Serie A?", "a": "Generalmente se espera un MRR de 50K-100K euros, crecimiento mensual del 15-20%, retención neta superior al 100% y un modelo de negocio escalable validado."},
-        {"q": "¿Cuánta equity se cede en cada ronda?", "a": "Lo habitual es ceder un 10-15% en pre-seed, 15-25% en seed y 20-30% en Serie A. Superar el 50% acumulado antes de Serie B es una senal de alerta."}
+        {
+          "q": "¿Cuánto se levanta en cada ronda de financiación?",
+          "a": "Pre-seed: 50K-500K euros. Seed: 500K-2M euros. Serie A: 2M-15M euros. Los importes varían según mercado, sector y geografía."
+        },
+        {
+          "q": "¿Qué métricas necesito para una Serie A?",
+          "a": "Generalmente se espera un MRR de 50K-100K euros, crecimiento mensual del 15-20%, retención neta superior al 100% y un modelo de negocio escalable validado."
+        },
+        {
+          "q": "¿Cuánta equity se cede en cada ronda?",
+          "a": "Lo habitual es ceder un 10-15% en pre-seed, 15-25% en seed y 20-30% en Serie A. Superar el 50% acumulado antes de Serie B es una senal de alerta."
+        }
       ],
-      "related_slugs": ["angel-investor-que-es", "que-es-el-venture-capital", "valoracion-startup", "fases-de-una-startup"]
+      "related_slugs": [
+        "angel-investor-que-es",
+        "que-es-el-venture-capital",
+        "valoracion-startup",
+        "fases-de-una-startup"
+      ]
     },
     {
       "slug": "mvp-que-es-startup",
@@ -150,15 +277,33 @@
       "imagen": "/blog/mvp-que-es-startup.webp",
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
-      "keywords": ["MVP", "producto mínimo viable", "validar startup"],
+      "keywords": [
+        "MVP",
+        "producto mínimo viable",
+        "validar startup"
+      ],
       "publicado": true,
       "meta_description": "Qué es un MVP (Producto Mínimo Viable), cómo construirlo paso a paso y por qué es esencial para validar tu startup antes de invertir tiempo y dinero.",
       "schema_faq": [
-        {"q": "¿Qué es un MVP en el contexto de una startup?", "a": "Un MVP (Minimum Viable Product) es la versión más simple de tu producto que permite validar la hipótesis de negocio con usuarios reales y el mínimo esfuerzo."},
-        {"q": "¿Cuánto tiempo se tarda en construir un MVP?", "a": "Un buen MVP debería construirse en 4-8 semanas. Si tardas más de 3 meses, probablemente estás incluyendo demasiadas funcionalidades innecesarias."},
-        {"q": "¿Cuáles son los errores más comunes al crear un MVP?", "a": "Incluir demasiadas features, no definir métricas de éxito antes de lanzar, no hablar con usuarios y confundir MVP con prototipo o demo."}
+        {
+          "q": "¿Qué es un MVP en el contexto de una startup?",
+          "a": "Un MVP (Minimum Viable Product) es la versión más simple de tu producto que permite validar la hipótesis de negocio con usuarios reales y el mínimo esfuerzo."
+        },
+        {
+          "q": "¿Cuánto tiempo se tarda en construir un MVP?",
+          "a": "Un buen MVP debería construirse en 4-8 semanas. Si tardas más de 3 meses, probablemente estás incluyendo demasiadas funcionalidades innecesarias."
+        },
+        {
+          "q": "¿Cuáles son los errores más comunes al crear un MVP?",
+          "a": "Incluir demasiadas features, no definir métricas de éxito antes de lanzar, no hablar con usuarios y confundir MVP con prototipo o demo."
+        }
       ],
-      "related_slugs": ["errores-comunes-startups", "fases-de-una-startup", "pitch-deck-que-es", "herramientas-ia-startups-2026"]
+      "related_slugs": [
+        "errores-comunes-startups",
+        "fases-de-una-startup",
+        "pitch-deck-que-es",
+        "herramientas-ia-startups-2026"
+      ]
     },
     {
       "slug": "pitch-deck-que-es",
@@ -170,15 +315,33 @@
       "imagen": "/blog/pitch-deck-que-es.webp",
       "tiempo_lectura": "9 min",
       "autor": "St4rtup",
-      "keywords": ["pitch deck", "presentación inversores", "slides pitch"],
+      "keywords": [
+        "pitch deck",
+        "presentación inversores",
+        "slides pitch"
+      ],
       "publicado": true,
       "meta_description": "Qué es un pitch deck, qué slides debe incluir y ejemplos reales que funcionan. Aprende a crear la presentación que convence a inversores.",
       "schema_faq": [
-        {"q": "¿Cuántas slides debe tener un pitch deck?", "a": "Entre 10 y 15 slides. Las esenciales son: problema, solución, mercado, modelo de negocio, tracción, equipo, competencia, finanzas y ask (lo que pides)."},
-        {"q": "¿Qué errores evitar en un pitch deck?", "a": "Demasiado texto, no mostrar tracción real, sobreestimar el mercado, olvidar el ask concreto y no adaptar el deck a cada inversor o audiencia."},
-        {"q": "¿Cómo se envía un pitch deck a inversores?", "a": "En PDF por email con un resumen de 3 líneas. Nunca como archivo adjunto pesado. Usar herramientas como DocSend para trackear quién lo abre."}
+        {
+          "q": "¿Cuántas slides debe tener un pitch deck?",
+          "a": "Entre 10 y 15 slides. Las esenciales son: problema, solución, mercado, modelo de negocio, tracción, equipo, competencia, finanzas y ask (lo que pides)."
+        },
+        {
+          "q": "¿Qué errores evitar en un pitch deck?",
+          "a": "Demasiado texto, no mostrar tracción real, sobreestimar el mercado, olvidar el ask concreto y no adaptar el deck a cada inversor o audiencia."
+        },
+        {
+          "q": "¿Cómo se envía un pitch deck a inversores?",
+          "a": "En PDF por email con un resumen de 3 líneas. Nunca como archivo adjunto pesado. Usar herramientas como DocSend para trackear quién lo abre."
+        }
       ],
-      "related_slugs": ["como-hacer-pitch", "angel-investor-que-es", "que-es-el-venture-capital", "mvp-que-es-startup"]
+      "related_slugs": [
+        "como-hacer-pitch",
+        "angel-investor-que-es",
+        "que-es-el-venture-capital",
+        "mvp-que-es-startup"
+      ]
     },
     {
       "slug": "habilidades-founder-startup",
@@ -190,15 +353,32 @@
       "imagen": "/blog/habilidades-founder-startup.webp",
       "tiempo_lectura": "7 min",
       "autor": "St4rtup",
-      "keywords": ["habilidades founder", "competencias emprendedor"],
+      "keywords": [
+        "habilidades founder",
+        "competencias emprendedor"
+      ],
       "publicado": true,
       "meta_description": "Las 8 habilidades esenciales que todo founder de startup necesita: liderazgo, ventas, resiliencia, producto, finanzas y más. Guía práctica 2026.",
       "schema_faq": [
-        {"q": "¿Qué habilidades necesita un founder de startup?", "a": "Las 8 clave son: liderazgo, ventas, resiliencia, pensamiento de producto, gestión financiera, comunicación, capacidad de ejecución y aprendizaje continuo."},
-        {"q": "¿Se pueden aprender las habilidades de un founder?", "a": "Sí, todas son entrenables. La clave es practicarlas en contexto real: vender tu producto, liderar un equipo pequeno y tomar decisiones con información incompleta."},
-        {"q": "¿Cuál es la habilidad más importante para un founder?", "a": "La capacidad de vender: tu visión al equipo, tu producto a clientes y tu startup a inversores. Sin ventas, ninguna startup sobrevive."}
+        {
+          "q": "¿Qué habilidades necesita un founder de startup?",
+          "a": "Las 8 clave son: liderazgo, ventas, resiliencia, pensamiento de producto, gestión financiera, comunicación, capacidad de ejecución y aprendizaje continuo."
+        },
+        {
+          "q": "¿Se pueden aprender las habilidades de un founder?",
+          "a": "Sí, todas son entrenables. La clave es practicarlas en contexto real: vender tu producto, liderar un equipo pequeno y tomar decisiones con información incompleta."
+        },
+        {
+          "q": "¿Cuál es la habilidad más importante para un founder?",
+          "a": "La capacidad de vender: tu visión al equipo, tu producto a clientes y tu startup a inversores. Sin ventas, ninguna startup sobrevive."
+        }
       ],
-      "related_slugs": ["vesting-startup-que-es", "errores-comunes-startups", "como-hacer-pitch", "ia-productividad-founders"]
+      "related_slugs": [
+        "vesting-startup-que-es",
+        "errores-comunes-startups",
+        "como-hacer-pitch",
+        "ia-productividad-founders"
+      ]
     },
     {
       "slug": "vesting-startup-que-es",
@@ -210,15 +390,33 @@
       "imagen": "/blog/vesting-startup-que-es.webp",
       "tiempo_lectura": "7 min",
       "autor": "St4rtup",
-      "keywords": ["vesting", "equity startup", "cliff period"],
+      "keywords": [
+        "vesting",
+        "equity startup",
+        "cliff period"
+      ],
       "publicado": true,
       "meta_description": "Qué es el vesting en startups, cómo funciona el cliff period, calendarios típicos y por qué protege a cofounders y a la empresa. Guía práctica.",
       "schema_faq": [
-        {"q": "¿Qué es el vesting en una startup?", "a": "El vesting es un mecanismo que otorga equity gradualmente a lo largo del tiempo (normalmente 4 anos), asegurando que los cofounders se ganen sus participaciones."},
-        {"q": "¿Qué es el cliff en un acuerdo de vesting?", "a": "El cliff es un periodo inicial (generalmente 1 ano) en el que no se consolida ninguna equity. Si el cofounder se va antes del cliff, no recibe participaciones."},
-        {"q": "¿Es obligatorio tener vesting entre cofounders?", "a": "No es legalmente obligatorio, pero es altamente recomendable. Los inversores lo exigen casi siempre y protege a todos los socios ante abandonos tempranos."}
+        {
+          "q": "¿Qué es el vesting en una startup?",
+          "a": "El vesting es un mecanismo que otorga equity gradualmente a lo largo del tiempo (normalmente 4 anos), asegurando que los cofounders se ganen sus participaciones."
+        },
+        {
+          "q": "¿Qué es el cliff en un acuerdo de vesting?",
+          "a": "El cliff es un periodo inicial (generalmente 1 ano) en el que no se consolida ninguna equity. Si el cofounder se va antes del cliff, no recibe participaciones."
+        },
+        {
+          "q": "¿Es obligatorio tener vesting entre cofounders?",
+          "a": "No es legalmente obligatorio, pero es altamente recomendable. Los inversores lo exigen casi siempre y protege a todos los socios ante abandonos tempranos."
+        }
       ],
-      "related_slugs": ["habilidades-founder-startup", "pacto-socios", "stock-options", "contratos-startups-mas-importantes"]
+      "related_slugs": [
+        "habilidades-founder-startup",
+        "pacto-socios",
+        "stock-options",
+        "contratos-startups-mas-importantes"
+      ]
     },
     {
       "slug": "contratos-startups-mas-importantes",
@@ -230,15 +428,33 @@
       "imagen": "/blog/contratos-startups-mas-importantes.webp",
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
-      "keywords": ["contratos startup", "documentos legales", "pacto de socios"],
+      "keywords": [
+        "contratos startup",
+        "documentos legales",
+        "pacto de socios"
+      ],
       "publicado": true,
       "meta_description": "Los 7 contratos imprescindibles para startups: pacto de socios, NDA, contrato de trabajo, vesting y más. Documentos legales desde el día uno.",
       "schema_faq": [
-        {"q": "¿Qué contratos necesita una startup al empezar?", "a": "Los 7 esenciales son: pacto de socios, contrato de confidencialidad (NDA), contratos de trabajo, acuerdo de propiedad intelectual, vesting, términos de servicio y política de privacidad."},
-        {"q": "¿Cuánto cuesta preparar los contratos de una startup?", "a": "Con abogado especializado, entre 2.000 y 5.000 euros por el pack básico. Existen plantillas gratuitas, pero se recomienda revisión legal profesional."},
-        {"q": "¿El pacto de socios es obligatorio?", "a": "No es legalmente obligatorio, pero es el documento más importante entre cofounders. Sin él, cualquier desacuerdo puede destruir la startup."}
+        {
+          "q": "¿Qué contratos necesita una startup al empezar?",
+          "a": "Los 7 esenciales son: pacto de socios, contrato de confidencialidad (NDA), contratos de trabajo, acuerdo de propiedad intelectual, vesting, términos de servicio y política de privacidad."
+        },
+        {
+          "q": "¿Cuánto cuesta preparar los contratos de una startup?",
+          "a": "Con abogado especializado, entre 2.000 y 5.000 euros por el pack básico. Existen plantillas gratuitas, pero se recomienda revisión legal profesional."
+        },
+        {
+          "q": "¿El pacto de socios es obligatorio?",
+          "a": "No es legalmente obligatorio, pero es el documento más importante entre cofounders. Sin él, cualquier desacuerdo puede destruir la startup."
+        }
       ],
-      "related_slugs": ["pacto-socios", "stock-options", "propiedad-intelectual", "vesting-startup-que-es"]
+      "related_slugs": [
+        "pacto-socios",
+        "stock-options",
+        "propiedad-intelectual",
+        "vesting-startup-que-es"
+      ]
     },
     {
       "slug": "startup-vs-pyme",
@@ -250,15 +466,32 @@
       "imagen": "/blog/startup-vs-pyme.webp",
       "tiempo_lectura": "6 min",
       "autor": "St4rtup",
-      "keywords": ["startup vs pyme", "diferencias"],
+      "keywords": [
+        "startup vs pyme",
+        "diferencias"
+      ],
       "publicado": true,
       "meta_description": "Startup vs pyme: las 5 diferencias clave en escalabilidad, financiación, innovación, riesgo y crecimiento. Descubre cuál encaja con tu proyecto.",
       "schema_faq": [
-        {"q": "¿Cuál es la diferencia principal entre startup y pyme?", "a": "La startup busca crecimiento exponencial con un modelo escalable y repetible, mientras que la pyme crece de forma lineal y se enfoca en rentabilidad desde el inicio."},
-        {"q": "¿Puede una pyme convertirse en startup?", "a": "Sí, si pivota hacia un modelo de negocio escalable y adopta estrategias de crecimiento acelerado, aunque requiere cambio de mentalidad y posiblemente inversión externa."},
-        {"q": "¿Qué es más arriesgado, una startup o una pyme?", "a": "La startup tiene mayor riesgo (9 de cada 10 fracasan) pero mayor potencial de retorno. La pyme tiene riesgo moderado y retornos más predecibles."}
+        {
+          "q": "¿Cuál es la diferencia principal entre startup y pyme?",
+          "a": "La startup busca crecimiento exponencial con un modelo escalable y repetible, mientras que la pyme crece de forma lineal y se enfoca en rentabilidad desde el inicio."
+        },
+        {
+          "q": "¿Puede una pyme convertirse en startup?",
+          "a": "Sí, si pivota hacia un modelo de negocio escalable y adopta estrategias de crecimiento acelerado, aunque requiere cambio de mentalidad y posiblemente inversión externa."
+        },
+        {
+          "q": "¿Qué es más arriesgado, una startup o una pyme?",
+          "a": "La startup tiene mayor riesgo (9 de cada 10 fracasan) pero mayor potencial de retorno. La pyme tiene riesgo moderado y retornos más predecibles."
+        }
       ],
-      "related_slugs": ["que-es-una-startup", "diferencia-startup-y-empresa", "unicornio-startup", "bootstrapping"]
+      "related_slugs": [
+        "que-es-una-startup",
+        "diferencia-startup-y-empresa",
+        "unicornio-startup",
+        "bootstrapping"
+      ]
     },
     {
       "slug": "unicornio-startup",
@@ -270,15 +503,32 @@
       "imagen": "/blog/unicornio-startup.webp",
       "tiempo_lectura": "7 min",
       "autor": "St4rtup",
-      "keywords": ["unicornio", "startup española"],
+      "keywords": [
+        "unicornio",
+        "startup española"
+      ],
       "publicado": true,
       "meta_description": "Qué es un unicornio startup, qué criterios debe cumplir y cuáles son los unicornios espanoles. Ejemplos reales y claves de su éxito.",
       "schema_faq": [
-        {"q": "¿Qué es un unicornio en el mundo startup?", "a": "Un unicornio es una startup privada valorada en más de 1.000 millones de dólares. El término lo acunó Aileen Lee en 2013 por lo excepcional que era alcanzar esa valoración."},
-        {"q": "¿Cuántos unicornios hay en España?", "a": "España cuenta con varios unicornios como Cabify, Wallbox, Jobandtalent, Idealista y Glovo (antes de su adquisición), y el ecosistema sigue creciendo."},
-        {"q": "¿Qué se necesita para ser un unicornio?", "a": "Un mercado enorme, crecimiento exponencial sostenido, rondas de financiación grandes, un equipo excepcional y un producto que resuelve un problema global."}
+        {
+          "q": "¿Qué es un unicornio en el mundo startup?",
+          "a": "Un unicornio es una startup privada valorada en más de 1.000 millones de dólares. El término lo acunó Aileen Lee en 2013 por lo excepcional que era alcanzar esa valoración."
+        },
+        {
+          "q": "¿Cuántos unicornios hay en España?",
+          "a": "España cuenta con varios unicornios como Cabify, Wallbox, Jobandtalent, Idealista y Glovo (antes de su adquisición), y el ecosistema sigue creciendo."
+        },
+        {
+          "q": "¿Qué se necesita para ser un unicornio?",
+          "a": "Un mercado enorme, crecimiento exponencial sostenido, rondas de financiación grandes, un equipo excepcional y un producto que resuelve un problema global."
+        }
       ],
-      "related_slugs": ["que-es-una-startup", "scaleup-que-es", "tipos-de-startups", "que-es-el-venture-capital"]
+      "related_slugs": [
+        "que-es-una-startup",
+        "scaleup-que-es",
+        "tipos-de-startups",
+        "que-es-el-venture-capital"
+      ]
     },
     {
       "slug": "scaleup-que-es",
@@ -290,15 +540,32 @@
       "imagen": "/blog/scaleup-que-es.webp",
       "tiempo_lectura": "7 min",
       "autor": "St4rtup",
-      "keywords": ["scaleup", "crecimiento startup"],
+      "keywords": [
+        "scaleup",
+        "crecimiento startup"
+      ],
       "publicado": true,
       "meta_description": "Qué es una scaleup, en qué se diferencia de una startup y qué pasos seguir para escalar tu negocio. Métricas, retos y ejemplos reales.",
       "schema_faq": [
-        {"q": "¿Qué es una scaleup?", "a": "Una scaleup es una startup que ya validó su modelo de negocio y crece de forma acelerada (más del 20% anual en ingresos o empleados durante al menos 3 anos)."},
-        {"q": "¿Cuándo pasa una startup a ser scaleup?", "a": "Cuando tiene product-market fit validado, ingresos recurrentes crecientes, un equipo de más de 10 personas y procesos escalables sin depender solo de los founders."},
-        {"q": "¿Qué retos enfrenta una scaleup?", "a": "Contratar talento a escala, mantener la cultura, internacionalización, optimizar unit economics y gestionar la complejidad operativa del crecimiento."}
+        {
+          "q": "¿Qué es una scaleup?",
+          "a": "Una scaleup es una startup que ya validó su modelo de negocio y crece de forma acelerada (más del 20% anual en ingresos o empleados durante al menos 3 anos)."
+        },
+        {
+          "q": "¿Cuándo pasa una startup a ser scaleup?",
+          "a": "Cuando tiene product-market fit validado, ingresos recurrentes crecientes, un equipo de más de 10 personas y procesos escalables sin depender solo de los founders."
+        },
+        {
+          "q": "¿Qué retos enfrenta una scaleup?",
+          "a": "Contratar talento a escala, mantener la cultura, internacionalización, optimizar unit economics y gestionar la complejidad operativa del crecimiento."
+        }
       ],
-      "related_slugs": ["fases-de-una-startup", "unicornio-startup", "que-es-una-startup", "que-es-el-venture-capital"]
+      "related_slugs": [
+        "fases-de-una-startup",
+        "unicornio-startup",
+        "que-es-una-startup",
+        "que-es-el-venture-capital"
+      ]
     },
     {
       "slug": "bootstrapping",
@@ -310,15 +577,32 @@
       "imagen": "/blog/bootstrapping.webp",
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
-      "keywords": ["bootstrapping", "autofinanciación"],
+      "keywords": [
+        "bootstrapping",
+        "autofinanciación"
+      ],
       "publicado": true,
       "meta_description": "Qué es bootstrapping y cómo financiar tu startup sin inversores. Ventajas, estrategias prácticas y ejemplos de empresas que crecieron con autofinanciación.",
       "schema_faq": [
-        {"q": "¿Qué es bootstrapping en startups?", "a": "Bootstrapping es financiar y crecer tu startup con recursos propios, sin inversión externa. Se reinvierten los ingresos generados por el propio negocio."},
-        {"q": "¿Cuáles son las ventajas del bootstrapping?", "a": "Mantienes el 100% del equity, tienes control total de las decisiones, te enfocas en rentabilidad desde el inicio y evitas la presión de inversores externos."},
-        {"q": "¿Es posible escalar una startup sin inversión?", "a": "Sí, empresas como Mailchimp, Basecamp y Zoho escalaron sin VC. La clave es un modelo con márgenes altos, crecimiento orgánico y eficiencia en costes."}
+        {
+          "q": "¿Qué es bootstrapping en startups?",
+          "a": "Bootstrapping es financiar y crecer tu startup con recursos propios, sin inversión externa. Se reinvierten los ingresos generados por el propio negocio."
+        },
+        {
+          "q": "¿Cuáles son las ventajas del bootstrapping?",
+          "a": "Mantienes el 100% del equity, tienes control total de las decisiones, te enfocas en rentabilidad desde el inicio y evitas la presión de inversores externos."
+        },
+        {
+          "q": "¿Es posible escalar una startup sin inversión?",
+          "a": "Sí, empresas como Mailchimp, Basecamp y Zoho escalaron sin VC. La clave es un modelo con márgenes altos, crecimiento orgánico y eficiencia en costes."
+        }
       ],
-      "related_slugs": ["angel-investor-que-es", "que-es-el-venture-capital", "valoracion-startup", "startup-vs-pyme"]
+      "related_slugs": [
+        "angel-investor-que-es",
+        "que-es-el-venture-capital",
+        "valoracion-startup",
+        "startup-vs-pyme"
+      ]
     },
     {
       "slug": "valoracion-startup",
@@ -330,15 +614,32 @@
       "imagen": "/blog/valoracion-startup.webp",
       "tiempo_lectura": "9 min",
       "autor": "St4rtup",
-      "keywords": ["valoración startup", "métodos valoración"],
+      "keywords": [
+        "valoración startup",
+        "métodos valoración"
+      ],
       "publicado": true,
       "meta_description": "Cómo valorar una startup: métodos DCF, múltiplos, Berkus y Scorecard explicados con ejemplos. Guía práctica de valoración para founders e inversores.",
       "schema_faq": [
-        {"q": "¿Cómo se valora una startup sin ingresos?", "a": "Se usan métodos como Berkus (valora 5 factores cualitativos), Scorecard (compara con startups similares) o Venture Capital Method (valoración futura con descuento)."},
-        {"q": "¿Qué método de valoración es mejor para startups?", "a": "Depende de la fase: pre-revenue, Berkus o Scorecard. Con ingresos, múltiplos de ARR (normalmente 5-15x ARR para SaaS). En fases tardías, DCF."},
-        {"q": "¿Cuánto vale una startup en fase seed?", "a": "En España, las valoraciones seed típicas van de 1 a 5 millones de euros, dependiendo del equipo, tracción, tamano del mercado y sector."}
+        {
+          "q": "¿Cómo se valora una startup sin ingresos?",
+          "a": "Se usan métodos como Berkus (valora 5 factores cualitativos), Scorecard (compara con startups similares) o Venture Capital Method (valoración futura con descuento)."
+        },
+        {
+          "q": "¿Qué método de valoración es mejor para startups?",
+          "a": "Depende de la fase: pre-revenue, Berkus o Scorecard. Con ingresos, múltiplos de ARR (normalmente 5-15x ARR para SaaS). En fases tardías, DCF."
+        },
+        {
+          "q": "¿Cuánto vale una startup en fase seed?",
+          "a": "En España, las valoraciones seed típicas van de 1 a 5 millones de euros, dependiendo del equipo, tracción, tamano del mercado y sector."
+        }
       ],
-      "related_slugs": ["pre-seed-seed-serie-a-diferencias", "angel-investor-que-es", "que-es-el-venture-capital", "bootstrapping"]
+      "related_slugs": [
+        "pre-seed-seed-serie-a-diferencias",
+        "angel-investor-que-es",
+        "que-es-el-venture-capital",
+        "bootstrapping"
+      ]
     },
     {
       "slug": "como-hacer-pitch",
@@ -350,15 +651,32 @@
       "imagen": "/blog/como-hacer-pitch.webp",
       "tiempo_lectura": "7 min",
       "autor": "St4rtup",
-      "keywords": ["pitch", "presentación inversores"],
+      "keywords": [
+        "pitch",
+        "presentación inversores"
+      ],
       "publicado": true,
       "meta_description": "Cómo hacer un pitch perfecto en 5 minutos: estructura probada, consejos de storytelling y los errores que debes evitar para convencer a inversores.",
       "schema_faq": [
-        {"q": "¿Cómo estructurar un pitch de 5 minutos?", "a": "Sigue esta estructura: hook (30s), problema (30s), solución (45s), mercado (30s), tracción (45s), modelo de negocio (30s), equipo (30s) y ask (30s)."},
-        {"q": "¿Qué errores evitar al hacer un pitch?", "a": "No practicar lo suficiente, hablar solo de producto sin mercado, no incluir datos de tracción, pedir dinero sin justificar el uso y superar el tiempo asignado."},
-        {"q": "¿Cuántas veces debo practicar mi pitch?", "a": "Al menos 20-30 veces antes de presentarlo a inversores reales. Grábate en vídeo, pide feedback a otros founders y practica con un cronómetro."}
+        {
+          "q": "¿Cómo estructurar un pitch de 5 minutos?",
+          "a": "Sigue esta estructura: hook (30s), problema (30s), solución (45s), mercado (30s), tracción (45s), modelo de negocio (30s), equipo (30s) y ask (30s)."
+        },
+        {
+          "q": "¿Qué errores evitar al hacer un pitch?",
+          "a": "No practicar lo suficiente, hablar solo de producto sin mercado, no incluir datos de tracción, pedir dinero sin justificar el uso y superar el tiempo asignado."
+        },
+        {
+          "q": "¿Cuántas veces debo practicar mi pitch?",
+          "a": "Al menos 20-30 veces antes de presentarlo a inversores reales. Grábate en vídeo, pide feedback a otros founders y practica con un cronómetro."
+        }
       ],
-      "related_slugs": ["pitch-deck-que-es", "angel-investor-que-es", "errores-comunes-startups", "habilidades-founder-startup"]
+      "related_slugs": [
+        "pitch-deck-que-es",
+        "angel-investor-que-es",
+        "errores-comunes-startups",
+        "habilidades-founder-startup"
+      ]
     },
     {
       "slug": "errores-comunes-startups",
@@ -370,15 +688,32 @@
       "imagen": "/blog/errores-comunes-startups.webp",
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
-      "keywords": ["errores startup", "fracaso startup"],
+      "keywords": [
+        "errores startup",
+        "fracaso startup"
+      ],
       "publicado": true,
       "meta_description": "Los 10 errores más comunes al crear una startup y cómo evitarlos. Desde no validar el mercado hasta escalar demasiado pronto. Lecciones reales.",
       "schema_faq": [
-        {"q": "¿Cuál es el error más común al crear una startup?", "a": "Construir un producto sin validar que existe demanda real. El 42% de las startups fracasan por falta de product-market fit, según análisis de CB Insights."},
-        {"q": "¿Por qué fracasan la mayoría de startups?", "a": "Las causas principales son: no hay mercado (42%), falta de capital (29%), equipo incorrecto (23%), competencia (19%) y problemas de pricing (18%)."},
-        {"q": "¿Cómo evitar los errores típicos de startup?", "a": "Hablar con clientes antes de construir, lanzar un MVP rápido, medir métricas reales, controlar el burn rate y rodearte de mentores con experiencia."}
+        {
+          "q": "¿Cuál es el error más común al crear una startup?",
+          "a": "Construir un producto sin validar que existe demanda real. El 42% de las startups fracasan por falta de product-market fit, según análisis de CB Insights."
+        },
+        {
+          "q": "¿Por qué fracasan la mayoría de startups?",
+          "a": "Las causas principales son: no hay mercado (42%), falta de capital (29%), equipo incorrecto (23%), competencia (19%) y problemas de pricing (18%)."
+        },
+        {
+          "q": "¿Cómo evitar los errores típicos de startup?",
+          "a": "Hablar con clientes antes de construir, lanzar un MVP rápido, medir métricas reales, controlar el burn rate y rodearte de mentores con experiencia."
+        }
       ],
-      "related_slugs": ["mvp-que-es-startup", "como-hacer-pitch", "fases-de-una-startup", "habilidades-founder-startup"]
+      "related_slugs": [
+        "mvp-que-es-startup",
+        "como-hacer-pitch",
+        "fases-de-una-startup",
+        "habilidades-founder-startup"
+      ]
     },
     {
       "slug": "pacto-socios",
@@ -390,15 +725,32 @@
       "imagen": "/blog/pacto-socios.webp",
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
-      "keywords": ["pacto de socios", "cofounders"],
+      "keywords": [
+        "pacto de socios",
+        "cofounders"
+      ],
       "publicado": true,
       "meta_description": "Guía completa del pacto de socios para startups: cláusulas esenciales, errores frecuentes y por qué es el documento más importante entre cofounders.",
       "schema_faq": [
-        {"q": "¿Qué es un pacto de socios?", "a": "Es un contrato privado entre los socios de una startup que regula la relación, toma de decisiones, reparto de equity, vesting, salidas y resolución de conflictos."},
-        {"q": "¿Qué cláusulas debe incluir un pacto de socios?", "a": "Las esenciales son: reparto de equity, vesting, dedicación, no competencia, drag-along, tag-along, anti-dilución, toma de decisiones y cláusula de salida."},
-        {"q": "¿Cuándo firmar el pacto de socios?", "a": "Lo antes posible, idealmente antes de constituir la sociedad. Firmarlo cuando todo va bien es fácil; cuando hay problemas, ya es demasiado tarde."}
+        {
+          "q": "¿Qué es un pacto de socios?",
+          "a": "Es un contrato privado entre los socios de una startup que regula la relación, toma de decisiones, reparto de equity, vesting, salidas y resolución de conflictos."
+        },
+        {
+          "q": "¿Qué cláusulas debe incluir un pacto de socios?",
+          "a": "Las esenciales son: reparto de equity, vesting, dedicación, no competencia, drag-along, tag-along, anti-dilución, toma de decisiones y cláusula de salida."
+        },
+        {
+          "q": "¿Cuándo firmar el pacto de socios?",
+          "a": "Lo antes posible, idealmente antes de constituir la sociedad. Firmarlo cuando todo va bien es fácil; cuando hay problemas, ya es demasiado tarde."
+        }
       ],
-      "related_slugs": ["contratos-startups-mas-importantes", "vesting-startup-que-es", "stock-options", "propiedad-intelectual"]
+      "related_slugs": [
+        "contratos-startups-mas-importantes",
+        "vesting-startup-que-es",
+        "stock-options",
+        "propiedad-intelectual"
+      ]
     },
     {
       "slug": "stock-options",
@@ -410,15 +762,33 @@
       "imagen": "/blog/stock-options.webp",
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
-      "keywords": ["stock options", "phantom shares", "ESOP"],
+      "keywords": [
+        "stock options",
+        "phantom shares",
+        "ESOP"
+      ],
       "publicado": true,
       "meta_description": "Stock options en startups espanolas: cómo funcionan, diferencias con phantom shares, fiscalidad ESOP y la nueva ley de startups. Guía práctica.",
       "schema_faq": [
-        {"q": "¿Qué son las stock options en una startup?", "a": "Son opciones que dan derecho a comprar acciones de la empresa a un precio fijo (strike price) en el futuro, normalmente tras un periodo de vesting de 4 anos."},
-        {"q": "¿Cómo tributan las stock options en España?", "a": "Con la Ley de Startups, la exención fiscal sube a 50.000 euros anuales para empresas emergentes certificadas. El exceso tributa como rendimiento del trabajo."},
-        {"q": "¿Qué diferencia hay entre stock options y phantom shares?", "a": "Las stock options dan derecho a comprar acciones reales. Las phantom shares son un bonus económico vinculado al valor de la empresa, sin equity real."}
+        {
+          "q": "¿Qué son las stock options en una startup?",
+          "a": "Son opciones que dan derecho a comprar acciones de la empresa a un precio fijo (strike price) en el futuro, normalmente tras un periodo de vesting de 4 anos."
+        },
+        {
+          "q": "¿Cómo tributan las stock options en España?",
+          "a": "Con la Ley de Startups, la exención fiscal sube a 50.000 euros anuales para empresas emergentes certificadas. El exceso tributa como rendimiento del trabajo."
+        },
+        {
+          "q": "¿Qué diferencia hay entre stock options y phantom shares?",
+          "a": "Las stock options dan derecho a comprar acciones reales. Las phantom shares son un bonus económico vinculado al valor de la empresa, sin equity real."
+        }
       ],
-      "related_slugs": ["vesting-startup-que-es", "pacto-socios", "contratos-startups-mas-importantes", "rgpd-startups"]
+      "related_slugs": [
+        "vesting-startup-que-es",
+        "pacto-socios",
+        "contratos-startups-mas-importantes",
+        "rgpd-startups"
+      ]
     },
     {
       "slug": "propiedad-intelectual",
@@ -430,15 +800,32 @@
       "imagen": "/blog/propiedad-intelectual.webp",
       "tiempo_lectura": "7 min",
       "autor": "St4rtup",
-      "keywords": ["propiedad intelectual", "patentes startup"],
+      "keywords": [
+        "propiedad intelectual",
+        "patentes startup"
+      ],
       "publicado": true,
       "meta_description": "Cómo proteger la propiedad intelectual de tu startup: patentes, marcas registradas, copyright y secretos comerciales. Guía legal práctica para founders.",
       "schema_faq": [
-        {"q": "¿Cómo proteger la propiedad intelectual de una startup?", "a": "Registra tu marca en la OEPM, protege el software con copyright, usa NDAs con empleados y colaboradores, y valora patentar innovaciones técnicas únicas."},
-        {"q": "¿Cuánto cuesta registrar una marca en España?", "a": "Una marca nacional en la OEPM cuesta desde 144 euros (online) por una clase. Cada clase adicional son 97 euros más. La marca europea (EUIPO) desde 850 euros."},
-        {"q": "¿Se puede patentar una idea de startup?", "a": "Las ideas no se patentan, pero sí las invenciones técnicas con aplicación industrial. El software puro no es patentable en Europa, pero sí los procesos técnicos que implementa."}
+        {
+          "q": "¿Cómo proteger la propiedad intelectual de una startup?",
+          "a": "Registra tu marca en la OEPM, protege el software con copyright, usa NDAs con empleados y colaboradores, y valora patentar innovaciones técnicas únicas."
+        },
+        {
+          "q": "¿Cuánto cuesta registrar una marca en España?",
+          "a": "Una marca nacional en la OEPM cuesta desde 144 euros (online) por una clase. Cada clase adicional son 97 euros más. La marca europea (EUIPO) desde 850 euros."
+        },
+        {
+          "q": "¿Se puede patentar una idea de startup?",
+          "a": "Las ideas no se patentan, pero sí las invenciones técnicas con aplicación industrial. El software puro no es patentable en Europa, pero sí los procesos técnicos que implementa."
+        }
       ],
-      "related_slugs": ["contratos-startups-mas-importantes", "pacto-socios", "rgpd-startups", "errores-comunes-startups"]
+      "related_slugs": [
+        "contratos-startups-mas-importantes",
+        "pacto-socios",
+        "rgpd-startups",
+        "errores-comunes-startups"
+      ]
     },
     {
       "slug": "rgpd-startups",
@@ -450,15 +837,33 @@
       "imagen": "/blog/rgpd-startups.webp",
       "tiempo_lectura": "8 min",
       "autor": "St4rtup",
-      "keywords": ["RGPD", "protección datos", "compliance"],
+      "keywords": [
+        "RGPD",
+        "protección datos",
+        "compliance"
+      ],
       "publicado": true,
       "meta_description": "Guía práctica de RGPD para startups: pasos para cumplir la normativa de protección de datos, obligaciones, sanciones y checklist de implementación.",
       "schema_faq": [
-        {"q": "¿Qué obligaciones tiene una startup con el RGPD?", "a": "Registro de actividades de tratamiento, consentimiento explícito, política de privacidad, contratos con encargados, notificación de brechas y, si aplica, DPO."},
-        {"q": "¿Cuánto cuestan las multas por incumplir el RGPD?", "a": "Hasta 20 millones de euros o el 4% de la facturación global anual (lo que sea mayor). Para startups, las multas suelen ser proporcionalmente menores pero igualmente daninas."},
-        {"q": "¿Necesita mi startup un DPO (Delegado de Protección de Datos)?", "a": "Solo es obligatorio si tratas datos a gran escala, datos sensibles o haces monitorización sistemática. La mayoría de startups en fase inicial no lo necesitan."}
+        {
+          "q": "¿Qué obligaciones tiene una startup con el RGPD?",
+          "a": "Registro de actividades de tratamiento, consentimiento explícito, política de privacidad, contratos con encargados, notificación de brechas y, si aplica, DPO."
+        },
+        {
+          "q": "¿Cuánto cuestan las multas por incumplir el RGPD?",
+          "a": "Hasta 20 millones de euros o el 4% de la facturación global anual (lo que sea mayor). Para startups, las multas suelen ser proporcionalmente menores pero igualmente daninas."
+        },
+        {
+          "q": "¿Necesita mi startup un DPO (Delegado de Protección de Datos)?",
+          "a": "Solo es obligatorio si tratas datos a gran escala, datos sensibles o haces monitorización sistemática. La mayoría de startups en fase inicial no lo necesitan."
+        }
       ],
-      "related_slugs": ["contratos-startups-mas-importantes", "propiedad-intelectual", "stock-options", "errores-comunes-startups"]
+      "related_slugs": [
+        "contratos-startups-mas-importantes",
+        "propiedad-intelectual",
+        "stock-options",
+        "errores-comunes-startups"
+      ]
     },
     {
       "slug": "ia-productividad-founders",
@@ -470,15 +875,33 @@
       "imagen": "/blog/ia-productividad-founders.webp",
       "tiempo_lectura": "12 min",
       "autor": "St4rtup",
-      "keywords": ["IA productividad", "herramientas IA founders", "automatizar startup"],
+      "keywords": [
+        "IA productividad",
+        "herramientas IA founders",
+        "automatizar startup"
+      ],
       "publicado": true,
       "meta_description": "Framework de 4 capas para multiplicar tu productividad con IA como founder. Herramientas, automatizaciones y plan de acción para hacer más con menos.",
       "schema_faq": [
-        {"q": "¿Cómo puede la IA mejorar la productividad de un founder?", "a": "Automatizando tareas repetitivas (emails, reportes, data entry), acelerando la toma de decisiones con análisis de datos, generando contenido y optimizando procesos de ventas."},
-        {"q": "¿Cuáles son las 4 capas del framework de productividad con IA?", "a": "1) Automatización de tareas repetitivas, 2) Asistencia en decisiones, 3) Generación de contenido y comunicación, 4) Agentes autónomos para flujos completos."},
-        {"q": "¿Cuánto tiempo puede ahorrar un founder con IA?", "a": "Entre 15 y 25 horas semanales automatizando email, contenido, análisis de datos y tareas administrativas, según estudios de McKinsey y Harvard Business Review."}
+        {
+          "q": "¿Cómo puede la IA mejorar la productividad de un founder?",
+          "a": "Automatizando tareas repetitivas (emails, reportes, data entry), acelerando la toma de decisiones con análisis de datos, generando contenido y optimizando procesos de ventas."
+        },
+        {
+          "q": "¿Cuáles son las 4 capas del framework de productividad con IA?",
+          "a": "1) Automatización de tareas repetitivas, 2) Asistencia en decisiones, 3) Generación de contenido y comunicación, 4) Agentes autónomos para flujos completos."
+        },
+        {
+          "q": "¿Cuánto tiempo puede ahorrar un founder con IA?",
+          "a": "Entre 15 y 25 horas semanales automatizando email, contenido, análisis de datos y tareas administrativas, según estudios de McKinsey y Harvard Business Review."
+        }
       ],
-      "related_slugs": ["herramientas-ia-startups-2026", "automatizar-ventas-ia-startup", "habilidades-founder-startup", "errores-comunes-startups"]
+      "related_slugs": [
+        "herramientas-ia-startups-2026",
+        "automatizar-ventas-ia-startup",
+        "habilidades-founder-startup",
+        "errores-comunes-startups"
+      ]
     },
     {
       "slug": "herramientas-ia-startups-2026",
@@ -490,15 +913,33 @@
       "imagen": "/blog/herramientas-ia-startups-2026.webp",
       "tiempo_lectura": "10 min",
       "autor": "St4rtup",
-      "keywords": ["herramientas IA startups", "stack IA 2026", "mejores herramientas IA"],
+      "keywords": [
+        "herramientas IA startups",
+        "stack IA 2026",
+        "mejores herramientas IA"
+      ],
       "publicado": true,
       "meta_description": "Las 15 mejores herramientas de IA para startups en 2026 organizadas por departamento: ventas, marketing, producto, legal y análisis. Guía práctica.",
       "schema_faq": [
-        {"q": "¿Cuáles son las mejores herramientas de IA para startups en 2026?", "a": "Destacan Claude y ChatGPT para productividad, Jasper para contenido, Apollo.io para ventas, Notion AI para gestión, Midjourney para diseno y GitHub Copilot para desarrollo."},
-        {"q": "¿Cuánto cuesta implementar IA en una startup?", "a": "Puedes empezar con 50-200 euros al mes usando herramientas SaaS. Un stack completo para un equipo de 5 personas ronda los 500-1.500 euros mensuales."},
-        {"q": "¿Qué herramienta de IA es mejor para ventas B2B?", "a": "Apollo.io para prospección, Clay para enriquecimiento de datos y Lavender para emails de ventas. La combinación de las tres automatiza el 80% del outbound."}
+        {
+          "q": "¿Cuáles son las mejores herramientas de IA para startups en 2026?",
+          "a": "Destacan Claude y ChatGPT para productividad, Jasper para contenido, Apollo.io para ventas, Notion AI para gestión, Midjourney para diseno y GitHub Copilot para desarrollo."
+        },
+        {
+          "q": "¿Cuánto cuesta implementar IA en una startup?",
+          "a": "Puedes empezar con 50-200 euros al mes usando herramientas SaaS. Un stack completo para un equipo de 5 personas ronda los 500-1.500 euros mensuales."
+        },
+        {
+          "q": "¿Qué herramienta de IA es mejor para ventas B2B?",
+          "a": "Apollo.io para prospección, Clay para enriquecimiento de datos y Lavender para emails de ventas. La combinación de las tres automatiza el 80% del outbound."
+        }
       ],
-      "related_slugs": ["ia-productividad-founders", "automatizar-ventas-ia-startup", "mvp-que-es-startup", "tipos-de-startups"]
+      "related_slugs": [
+        "ia-productividad-founders",
+        "automatizar-ventas-ia-startup",
+        "mvp-que-es-startup",
+        "tipos-de-startups"
+      ]
     },
     {
       "slug": "automatizar-ventas-ia-startup",
@@ -510,15 +951,33 @@
       "imagen": "/blog/automatizar-ventas-ia-startup.webp",
       "tiempo_lectura": "11 min",
       "autor": "St4rtup",
-      "keywords": ["automatizar ventas IA", "CRM IA startup", "ventas B2B automatizadas"],
+      "keywords": [
+        "automatizar ventas IA",
+        "CRM IA startup",
+        "ventas B2B automatizadas"
+      ],
       "publicado": true,
       "meta_description": "Guía paso a paso para automatizar ventas B2B con IA: 7 etapas del pipeline, herramientas recomendadas y métricas clave para startups que quieren escalar.",
       "schema_faq": [
-        {"q": "¿Cómo automatizar ventas B2B con IA?", "a": "Siguiendo 7 etapas: prospección automatizada, enriquecimiento de datos, scoring con ML, secuencias de email personalizadas, seguimiento inteligente, análisis predictivo y reporting."},
-        {"q": "¿Qué herramientas de IA usar para ventas B2B?", "a": "Apollo.io para prospección, Clay para enriquecimiento, HubSpot o Pipedrive con IA para CRM, Lavender para emails y Gong para análisis de llamadas de ventas."},
-        {"q": "¿Cuánto puede mejorar la IA las ventas de una startup?", "a": "Las startups que implementan IA en ventas reportan un aumento del 30-50% en leads cualificados, 25% menos tiempo en tareas manuales y 20% más conversión."}
+        {
+          "q": "¿Cómo automatizar ventas B2B con IA?",
+          "a": "Siguiendo 7 etapas: prospección automatizada, enriquecimiento de datos, scoring con ML, secuencias de email personalizadas, seguimiento inteligente, análisis predictivo y reporting."
+        },
+        {
+          "q": "¿Qué herramientas de IA usar para ventas B2B?",
+          "a": "Apollo.io para prospección, Clay para enriquecimiento, HubSpot o Pipedrive con IA para CRM, Lavender para emails y Gong para análisis de llamadas de ventas."
+        },
+        {
+          "q": "¿Cuánto puede mejorar la IA las ventas de una startup?",
+          "a": "Las startups que implementan IA en ventas reportan un aumento del 30-50% en leads cualificados, 25% menos tiempo en tareas manuales y 20% más conversión."
+        }
       ],
-      "related_slugs": ["herramientas-ia-startups-2026", "ia-productividad-founders", "como-hacer-pitch", "angel-investor-que-es"]
+      "related_slugs": [
+        "herramientas-ia-startups-2026",
+        "ia-productividad-founders",
+        "como-hacer-pitch",
+        "angel-investor-que-es"
+      ]
     },
     {
       "slug": "como-crear-una-startup",
@@ -530,15 +989,34 @@
       "imagen": "/blog/como-crear-una-startup.webp",
       "tiempo_lectura": "15 min",
       "autor": "St4rtup",
-      "keywords": ["como crear una startup", "crear startup", "emprender startup", "montar startup"],
+      "keywords": [
+        "como crear una startup",
+        "crear startup",
+        "emprender startup",
+        "montar startup"
+      ],
       "publicado": true,
       "meta_description": "Guía completa para crear una startup en España en 2026. 8 pasos: idea, validación, MVP, modelo de negocio, constitución, financiación, lanzamiento y escala.",
       "schema_faq": [
-        {"q": "¿Cuánto cuesta crear una startup en España?", "a": "Constituir una SL cuesta entre 3.200 y 4.300 EUR (capital social 3.000 EUR + notaría + registro). Con la Ley de Startups puedes beneficiarte del tipo reducido del 15% en el Impuesto de Sociedades."},
-        {"q": "¿Cuánto tiempo se tarda en crear una startup?", "a": "La constitución legal lleva 2-4 semanas vía CIRCE. Pero validar la idea y construir un MVP viable lleva entre 2 y 6 meses dependiendo de la complejidad."},
-        {"q": "¿Puedo crear una startup sin dinero?", "a": "Sí, mediante bootstrapping y financiación pública como ENISA (hasta 300.000 EUR sin garantías). También puedes empezar como autónomo y constituir SL cuando tengas tracción."}
+        {
+          "q": "¿Cuánto cuesta crear una startup en España?",
+          "a": "Constituir una SL cuesta entre 3.200 y 4.300 EUR (capital social 3.000 EUR + notaría + registro). Con la Ley de Startups puedes beneficiarte del tipo reducido del 15% en el Impuesto de Sociedades."
+        },
+        {
+          "q": "¿Cuánto tiempo se tarda en crear una startup?",
+          "a": "La constitución legal lleva 2-4 semanas vía CIRCE. Pero validar la idea y construir un MVP viable lleva entre 2 y 6 meses dependiendo de la complejidad."
+        },
+        {
+          "q": "¿Puedo crear una startup sin dinero?",
+          "a": "Sí, mediante bootstrapping y financiación pública como ENISA (hasta 300.000 EUR sin garantías). También puedes empezar como autónomo y constituir SL cuando tengas tracción."
+        }
       ],
-      "related_slugs": ["que-es-una-startup", "mvp-que-es-startup", "fases-de-una-startup", "errores-comunes-startups"]
+      "related_slugs": [
+        "que-es-una-startup",
+        "mvp-que-es-startup",
+        "fases-de-una-startup",
+        "errores-comunes-startups"
+      ]
     },
     {
       "slug": "enisa-prestamo-startup",
@@ -550,15 +1028,34 @@
       "imagen": "/blog/enisa-prestamo-startup.webp",
       "tiempo_lectura": "10 min",
       "autor": "St4rtup",
-      "keywords": ["enisa prestamo", "enisa startup", "financiacion publica startup", "enisa requisitos"],
+      "keywords": [
+        "enisa prestamo",
+        "enisa startup",
+        "financiacion publica startup",
+        "enisa requisitos"
+      ],
       "publicado": true,
       "meta_description": "Guía ENISA 2026: 3 líneas de financiación hasta 300.000 EUR sin garantías para startups. Requisitos, proceso paso a paso, documentación y plazos.",
       "schema_faq": [
-        {"q": "¿Cuánto dinero da ENISA a una startup?", "a": "ENISA ofrece préstamos participativos de 25.000 a 300.000 EUR según la línea: jóvenes emprendedores (hasta 75.000), emprendedores (hasta 300.000) y crecimiento (hasta 1.500.000 EUR)."},
-        {"q": "¿Qué requisitos pide ENISA?", "a": "Ser PYME constituida como sociedad mercantil, tener las cuentas depositadas en el Registro Mercantil, aportar fondos propios mínimo del 50% del préstamo y presentar un plan de negocio viable."},
-        {"q": "¿Se puede pedir ENISA siendo autónomo?", "a": "No directamente. ENISA requiere estar constituido como sociedad mercantil (SL, SA). Debes constituir una SL antes de solicitar el préstamo."}
+        {
+          "q": "¿Cuánto dinero da ENISA a una startup?",
+          "a": "ENISA ofrece préstamos participativos de 25.000 a 300.000 EUR según la línea: jóvenes emprendedores (hasta 75.000), emprendedores (hasta 300.000) y crecimiento (hasta 1.500.000 EUR)."
+        },
+        {
+          "q": "¿Qué requisitos pide ENISA?",
+          "a": "Ser PYME constituida como sociedad mercantil, tener las cuentas depositadas en el Registro Mercantil, aportar fondos propios mínimo del 50% del préstamo y presentar un plan de negocio viable."
+        },
+        {
+          "q": "¿Se puede pedir ENISA siendo autónomo?",
+          "a": "No directamente. ENISA requiere estar constituido como sociedad mercantil (SL, SA). Debes constituir una SL antes de solicitar el préstamo."
+        }
       ],
-      "related_slugs": ["bootstrapping", "angel-investor-que-es", "que-es-el-venture-capital", "como-crear-una-sl"]
+      "related_slugs": [
+        "bootstrapping",
+        "angel-investor-que-es",
+        "que-es-el-venture-capital",
+        "como-crear-una-sl"
+      ]
     },
     {
       "slug": "como-crear-una-sl",
@@ -570,15 +1067,34 @@
       "imagen": "/blog/como-crear-una-sl.webp",
       "tiempo_lectura": "10 min",
       "autor": "St4rtup",
-      "keywords": ["como crear una sl", "constituir sociedad limitada", "crear empresa españa", "ley startups sl"],
+      "keywords": [
+        "como crear una sl",
+        "constituir sociedad limitada",
+        "crear empresa españa",
+        "ley startups sl"
+      ],
       "publicado": true,
       "meta_description": "Paso a paso para crear una SL en España en 2026. Capital mínimo 3.000 EUR, trámites CIRCE, costes desglosados y beneficios fiscales de la Ley de Startups.",
       "schema_faq": [
-        {"q": "¿Cuánto cuesta crear una SL en España?", "a": "Entre 3.200 y 4.300 EUR incluyendo capital social mínimo (3.000 EUR), notaría (200-400 EUR), Registro Mercantil (100-200 EUR) y gestoría opcional (300-600 EUR)."},
-        {"q": "¿Cuánto tarda crear una SL?", "a": "Entre 2 y 4 semanas por vía ordinaria. Vía CIRCE (telemática) puede reducirse a 5-7 días hábiles si toda la documentación está en orden."},
-        {"q": "¿Qué beneficios fiscales tiene la Ley de Startups?", "a": "Tipo reducido del 15% en Impuesto de Sociedades (vs 25% general), exención de stock options hasta 50.000 EUR/año, aplazamiento de deudas tributarias y visa de nómadas digitales."}
+        {
+          "q": "¿Cuánto cuesta crear una SL en España?",
+          "a": "Entre 3.200 y 4.300 EUR incluyendo capital social mínimo (3.000 EUR), notaría (200-400 EUR), Registro Mercantil (100-200 EUR) y gestoría opcional (300-600 EUR)."
+        },
+        {
+          "q": "¿Cuánto tarda crear una SL?",
+          "a": "Entre 2 y 4 semanas por vía ordinaria. Vía CIRCE (telemática) puede reducirse a 5-7 días hábiles si toda la documentación está en orden."
+        },
+        {
+          "q": "¿Qué beneficios fiscales tiene la Ley de Startups?",
+          "a": "Tipo reducido del 15% en Impuesto de Sociedades (vs 25% general), exención de stock options hasta 50.000 EUR/año, aplazamiento de deudas tributarias y visa de nómadas digitales."
+        }
       ],
-      "related_slugs": ["contratos-startups-mas-importantes", "stock-options", "pacto-socios", "enisa-prestamo-startup"]
+      "related_slugs": [
+        "contratos-startups-mas-importantes",
+        "stock-options",
+        "pacto-socios",
+        "enisa-prestamo-startup"
+      ]
     },
     {
       "slug": "validar-idea-de-negocio",
@@ -590,15 +1106,34 @@
       "imagen": "/blog/validar-idea-de-negocio.webp",
       "tiempo_lectura": "12 min",
       "autor": "St4rtup",
-      "keywords": ["validar idea de negocio", "validar startup", "lean startup validacion", "como validar una idea"],
+      "keywords": [
+        "validar idea de negocio",
+        "validar startup",
+        "lean startup validacion",
+        "como validar una idea"
+      ],
       "publicado": true,
       "meta_description": "Guía práctica con 7 métodos para validar tu idea de negocio antes de invertir. Entrevistas, landing pages, preventa, smoke tests y frameworks como Lean Startup y Mom Test.",
       "schema_faq": [
-        {"q": "¿Cuántas personas necesito para validar una idea?", "a": "Para entrevistas cualitativas, 15-20 personas. Para tests cuantitativos (landing, ads), al menos 200-300 visitantes para métricas significativas."},
-        {"q": "¿Puedo validar sin gastar dinero?", "a": "Sí. Las entrevistas de problema, el análisis de competencia y los prototipos en Figma son gratuitos. Puedes validar problema, solución y modelo sin gastar un euro."},
-        {"q": "¿Qué hago si la validación es negativa?", "a": "Pivotar (cambiar solución), iterar (ajustar propuesta) o abandonar. El 65% de las startups exitosas pivotaron. No es un fracaso, es información."}
+        {
+          "q": "¿Cuántas personas necesito para validar una idea?",
+          "a": "Para entrevistas cualitativas, 15-20 personas. Para tests cuantitativos (landing, ads), al menos 200-300 visitantes para métricas significativas."
+        },
+        {
+          "q": "¿Puedo validar sin gastar dinero?",
+          "a": "Sí. Las entrevistas de problema, el análisis de competencia y los prototipos en Figma son gratuitos. Puedes validar problema, solución y modelo sin gastar un euro."
+        },
+        {
+          "q": "¿Qué hago si la validación es negativa?",
+          "a": "Pivotar (cambiar solución), iterar (ajustar propuesta) o abandonar. El 65% de las startups exitosas pivotaron. No es un fracaso, es información."
+        }
       ],
-      "related_slugs": ["mvp-que-es-startup", "como-crear-una-startup", "errores-comunes-startups", "fases-de-una-startup"]
+      "related_slugs": [
+        "mvp-que-es-startup",
+        "como-crear-una-startup",
+        "errores-comunes-startups",
+        "fases-de-una-startup"
+      ]
     },
     {
       "slug": "como-financiar-una-startup",
@@ -610,15 +1145,34 @@
       "imagen": "/blog/como-financiar-una-startup.webp",
       "tiempo_lectura": "11 min",
       "autor": "St4rtup",
-      "keywords": ["como financiar una startup", "financiacion startup", "inversores startup espana", "ayudas startups"],
+      "keywords": [
+        "como financiar una startup",
+        "financiacion startup",
+        "inversores startup espana",
+        "ayudas startups"
+      ],
       "publicado": true,
       "meta_description": "Todas las opciones para financiar tu startup en España: bootstrapping, ENISA, angels, VC, crowdfunding y ayudas públicas. Guía práctica con importes y requisitos.",
       "schema_faq": [
-        {"q": "¿Cuánto dinero necesito para empezar una startup?", "a": "Depende del modelo. Con bootstrapping puedes empezar con 0-5.000 EUR. ENISA ofrece hasta 300.000 EUR sin garantías. Business angels invierten 25.000-150.000 EUR. VCs entran desde 500.000 EUR en seed."},
-        {"q": "¿Cuál es la mejor fuente de financiación para una startup en fase inicial?", "a": "ENISA (préstamo participativo sin garantías) + bootstrapping para primeras fases. Si necesitas más, business angels. VC solo cuando tengas tracción demostrada."},
-        {"q": "¿Puedo combinar varias fuentes de financiación?", "a": "Sí, es lo más común. Una startup típica combina ENISA + angel + bootstrapping en fases iniciales, y añade VC a partir de Serie A."}
+        {
+          "q": "¿Cuánto dinero necesito para empezar una startup?",
+          "a": "Depende del modelo. Con bootstrapping puedes empezar con 0-5.000 EUR. ENISA ofrece hasta 300.000 EUR sin garantías. Business angels invierten 25.000-150.000 EUR. VCs entran desde 500.000 EUR en seed."
+        },
+        {
+          "q": "¿Cuál es la mejor fuente de financiación para una startup en fase inicial?",
+          "a": "ENISA (préstamo participativo sin garantías) + bootstrapping para primeras fases. Si necesitas más, business angels. VC solo cuando tengas tracción demostrada."
+        },
+        {
+          "q": "¿Puedo combinar varias fuentes de financiación?",
+          "a": "Sí, es lo más común. Una startup típica combina ENISA + angel + bootstrapping en fases iniciales, y añade VC a partir de Serie A."
+        }
       ],
-      "related_slugs": ["bootstrapping", "angel-investor-que-es", "que-es-el-venture-capital", "enisa-prestamo-startup"]
+      "related_slugs": [
+        "bootstrapping",
+        "angel-investor-que-es",
+        "que-es-el-venture-capital",
+        "enisa-prestamo-startup"
+      ]
     },
     {
       "slug": "aceleradoras-startups-espana",
@@ -630,15 +1184,34 @@
       "imagen": "/blog/aceleradoras-startups-espana.webp",
       "tiempo_lectura": "12 min",
       "autor": "St4rtup",
-      "keywords": ["aceleradoras startups espana", "mejores aceleradoras", "aceleradoras madrid", "programas aceleracion"],
+      "keywords": [
+        "aceleradoras startups espana",
+        "mejores aceleradoras",
+        "aceleradoras madrid",
+        "programas aceleracion"
+      ],
       "publicado": true,
       "meta_description": "Las 10 mejores aceleradoras de startups en España: Lanzadera, Wayra, SeedRocket, Demium y más. Inversión, equity, duración y cómo aplicar a cada programa.",
       "schema_faq": [
-        {"q": "¿Cuánto equity piden las aceleradoras?", "a": "Entre 5% y 10% de media. Lanzadera no pide equity. Wayra pide 5-10%. SeedRocket 7-8%. Algunas como Bridge for Billions no piden equity ni invierten."},
-        {"q": "¿Cuánto dinero invierten las aceleradoras en España?", "a": "Desde 0 EUR (programas sin inversión como Bridge for Billions) hasta 250.000 EUR (Wayra). La media está en 25.000-50.000 EUR más servicios y mentoring."},
-        {"q": "¿Cuánto dura un programa de aceleración?", "a": "Entre 3 y 6 meses típicamente. Lanzadera puede extenderse hasta 9 meses. Google for Startups ofrece programas de 3-6 meses según el track."}
+        {
+          "q": "¿Cuánto equity piden las aceleradoras?",
+          "a": "Entre 5% y 10% de media. Lanzadera no pide equity. Wayra pide 5-10%. SeedRocket 7-8%. Algunas como Bridge for Billions no piden equity ni invierten."
+        },
+        {
+          "q": "¿Cuánto dinero invierten las aceleradoras en España?",
+          "a": "Desde 0 EUR (programas sin inversión como Bridge for Billions) hasta 250.000 EUR (Wayra). La media está en 25.000-50.000 EUR más servicios y mentoring."
+        },
+        {
+          "q": "¿Cuánto dura un programa de aceleración?",
+          "a": "Entre 3 y 6 meses típicamente. Lanzadera puede extenderse hasta 9 meses. Google for Startups ofrece programas de 3-6 meses según el track."
+        }
       ],
-      "related_slugs": ["que-es-una-startup", "fases-de-una-startup", "como-crear-una-startup", "pitch-deck-que-es"]
+      "related_slugs": [
+        "que-es-una-startup",
+        "fases-de-una-startup",
+        "como-crear-una-startup",
+        "pitch-deck-que-es"
+      ]
     },
     {
       "slug": "marketing-startup-bajo-presupuesto",
@@ -650,15 +1223,34 @@
       "imagen": "/blog/marketing-startup-bajo-presupuesto.webp",
       "tiempo_lectura": "14 min",
       "autor": "St4rtup",
-      "keywords": ["marketing startup bajo presupuesto", "marketing startups", "growth hacking", "marketing barato startup"],
+      "keywords": [
+        "marketing startup bajo presupuesto",
+        "marketing startups",
+        "growth hacking",
+        "marketing barato startup"
+      ],
       "publicado": true,
       "meta_description": "10 tácticas de marketing para startups con menos de 500 EUR/mes: SEO, LinkedIn, Product Hunt, cold email, partnerships y más. Plan de acción 90 días incluido.",
       "schema_faq": [
-        {"q": "¿Cuánto debería gastar una startup en marketing?", "a": "En fase pre-seed, menos de 500 EUR/mes. El 80% de tu marketing debería ser orgánico: contenido, SEO, LinkedIn, comunidad. Los ads pagados vienen después de validar canales orgánicos."},
-        {"q": "¿Cuál es la mejor estrategia de marketing para una startup B2B?", "a": "LinkedIn orgánico + contenido SEO + cold email personalizado. Estas 3 tácticas combinadas generan leads B2B a coste casi cero y escalan bien."},
-        {"q": "¿Merece la pena lanzar en Product Hunt?", "a": "Sí, si tienes un producto tech/SaaS. Un buen lanzamiento puede generar 1.000-5.000 visitas en un día, feedback real y primeros usuarios. Es gratis y el efecto de marca dura meses."}
+        {
+          "q": "¿Cuánto debería gastar una startup en marketing?",
+          "a": "En fase pre-seed, menos de 500 EUR/mes. El 80% de tu marketing debería ser orgánico: contenido, SEO, LinkedIn, comunidad. Los ads pagados vienen después de validar canales orgánicos."
+        },
+        {
+          "q": "¿Cuál es la mejor estrategia de marketing para una startup B2B?",
+          "a": "LinkedIn orgánico + contenido SEO + cold email personalizado. Estas 3 tácticas combinadas generan leads B2B a coste casi cero y escalan bien."
+        },
+        {
+          "q": "¿Merece la pena lanzar en Product Hunt?",
+          "a": "Sí, si tienes un producto tech/SaaS. Un buen lanzamiento puede generar 1.000-5.000 visitas en un día, feedback real y primeros usuarios. Es gratis y el efecto de marca dura meses."
+        }
       ],
-      "related_slugs": ["automatizar-ventas-ia-startup", "herramientas-ia-startups-2026", "validar-idea-de-negocio", "mvp-que-es-startup"]
+      "related_slugs": [
+        "automatizar-ventas-ia-startup",
+        "herramientas-ia-startups-2026",
+        "validar-idea-de-negocio",
+        "mvp-que-es-startup"
+      ]
     },
     {
       "slug": "ley-de-startups-espana",
@@ -670,15 +1262,34 @@
       "imagen": "/blog/ley-de-startups-espana.webp",
       "tiempo_lectura": "12 min",
       "autor": "St4rtup",
-      "keywords": ["ley de startups espana", "ley 28/2022", "empresa emergente", "ley startups"],
+      "keywords": [
+        "ley de startups espana",
+        "ley 28/2022",
+        "empresa emergente",
+        "ley startups"
+      ],
       "publicado": true,
       "meta_description": "Guía completa de la Ley de Startups en España (Ley 28/2022): requisitos empresa emergente, IS al 15%, stock options exentas, visa nómadas y cómo solicitarla.",
       "schema_faq": [
-        {"q": "¿Qué requisitos debe cumplir una empresa para ser considerada startup?", "a": "Antigüedad máxima de 5 años (7 en biotech), sede social en España, al menos el 60% de plantilla en España, no cotizar en bolsa, no distribuir dividendos y tener carácter innovador certificado por ENISA."},
-        {"q": "¿Cuánto ahorra una startup con la Ley 28/2022?", "a": "El tipo reducido del IS al 15% supone un ahorro del 40% respecto al tipo general del 25%. Las stock options exentas hasta 50.000 EUR/año y la deducción del 50% para inversores son beneficios adicionales significativos."},
-        {"q": "¿Cómo se solicita la certificación de empresa emergente?", "a": "A través de ENISA. Se presenta solicitud online con documentación de la empresa, plan de negocio y justificación del carácter innovador. ENISA resuelve en un máximo de 3 meses."}
+        {
+          "q": "¿Qué requisitos debe cumplir una empresa para ser considerada startup?",
+          "a": "Antigüedad máxima de 5 años (7 en biotech), sede social en España, al menos el 60% de plantilla en España, no cotizar en bolsa, no distribuir dividendos y tener carácter innovador certificado por ENISA."
+        },
+        {
+          "q": "¿Cuánto ahorra una startup con la Ley 28/2022?",
+          "a": "El tipo reducido del IS al 15% supone un ahorro del 40% respecto al tipo general del 25%. Las stock options exentas hasta 50.000 EUR/año y la deducción del 50% para inversores son beneficios adicionales significativos."
+        },
+        {
+          "q": "¿Cómo se solicita la certificación de empresa emergente?",
+          "a": "A través de ENISA. Se presenta solicitud online con documentación de la empresa, plan de negocio y justificación del carácter innovador. ENISA resuelve en un máximo de 3 meses."
+        }
       ],
-      "related_slugs": ["como-crear-una-sl", "stock-options", "enisa-prestamo-startup", "como-crear-una-startup"]
+      "related_slugs": [
+        "como-crear-una-sl",
+        "stock-options",
+        "enisa-prestamo-startup",
+        "como-crear-una-startup"
+      ]
     },
     {
       "slug": "kit-digital-startup",
@@ -690,15 +1301,34 @@
       "imagen": "/blog/kit-digital-startup.webp",
       "tiempo_lectura": "10 min",
       "autor": "St4rtup",
-      "keywords": ["kit digital startup", "kit digital pymes", "ayudas digitalizacion", "bono digital"],
+      "keywords": [
+        "kit digital startup",
+        "kit digital pymes",
+        "ayudas digitalizacion",
+        "bono digital"
+      ],
       "publicado": true,
       "meta_description": "Cómo conseguir hasta 29.000 EUR del Kit Digital para tu startup. Segmentos, soluciones cubiertas, proceso paso a paso y compatibilidad con ENISA y Ley Startups.",
       "schema_faq": [
-        {"q": "¿Cuánto dinero da el Kit Digital?", "a": "Depende del segmento: hasta 29.000 EUR (seg. I, 10-49 empleados), 6.000 EUR (seg. II, 3-9), 3.000 EUR (seg. III, 0-2) y 25.000 EUR (seg. IV, 50-249). Es un bono para contratar soluciones digitales."},
-        {"q": "¿Puede una startup solicitar el Kit Digital?", "a": "Sí, si está constituida como sociedad mercantil, tiene antigüedad mínima de 6 meses, está al corriente de obligaciones fiscales y tiene empleados en el segmento correspondiente."},
-        {"q": "¿Es compatible el Kit Digital con ENISA?", "a": "Sí, son compatibles. El Kit Digital es una subvención a fondo perdido y ENISA es un préstamo participativo. Puedes combinar ambos sin problema."}
+        {
+          "q": "¿Cuánto dinero da el Kit Digital?",
+          "a": "Depende del segmento: hasta 29.000 EUR (seg. I, 10-49 empleados), 6.000 EUR (seg. II, 3-9), 3.000 EUR (seg. III, 0-2) y 25.000 EUR (seg. IV, 50-249). Es un bono para contratar soluciones digitales."
+        },
+        {
+          "q": "¿Puede una startup solicitar el Kit Digital?",
+          "a": "Sí, si está constituida como sociedad mercantil, tiene antigüedad mínima de 6 meses, está al corriente de obligaciones fiscales y tiene empleados en el segmento correspondiente."
+        },
+        {
+          "q": "¿Es compatible el Kit Digital con ENISA?",
+          "a": "Sí, son compatibles. El Kit Digital es una subvención a fondo perdido y ENISA es un préstamo participativo. Puedes combinar ambos sin problema."
+        }
       ],
-      "related_slugs": ["herramientas-ia-startups-2026", "como-financiar-una-startup", "como-crear-una-startup", "enisa-prestamo-startup"]
+      "related_slugs": [
+        "herramientas-ia-startups-2026",
+        "como-financiar-una-startup",
+        "como-crear-una-startup",
+        "enisa-prestamo-startup"
+      ]
     },
     {
       "slug": "ley-startups-beneficios-fiscales",
@@ -710,15 +1340,490 @@
       "imagen": "/blog/ley-startups-beneficios-fiscales.webp",
       "tiempo_lectura": "13 min",
       "autor": "St4rtup",
-      "keywords": ["ley startups beneficios fiscales", "impuestos startup espana", "stock options fiscalidad", "IS 15 startup"],
+      "keywords": [
+        "ley startups beneficios fiscales",
+        "impuestos startup espana",
+        "stock options fiscalidad",
+        "IS 15 startup"
+      ],
       "publicado": true,
       "meta_description": "Beneficios fiscales de la Ley de Startups con cálculos reales: IS al 15%, stock options exentas 50.000 EUR, deducción inversores 50% y Ley Beckham 2.0.",
       "schema_faq": [
-        {"q": "¿Cuánto se ahorra con el IS al 15%?", "a": "Con 100.000 EUR de beneficio, pagas 15.000 EUR en vez de 25.000 EUR. Ahorro de 10.000 EUR al año, 40.000 EUR en los 4 ejercicios que dura el beneficio."},
-        {"q": "¿Cómo funcionan las stock options exentas?", "a": "Hasta 50.000 EUR/año por empleado están exentos de tributación en el momento de la entrega. Solo tributan al vender las participaciones, como ganancia patrimonial al 19-26%."},
-        {"q": "¿Qué es la Ley Beckham 2.0 para startups?", "a": "Un régimen fiscal especial para trabajadores desplazados a España. Permite tributar al tipo fijo del 24% sobre los primeros 600.000 EUR de renta, en vez del tipo progresivo que puede llegar al 47%."}
+        {
+          "q": "¿Cuánto se ahorra con el IS al 15%?",
+          "a": "Con 100.000 EUR de beneficio, pagas 15.000 EUR en vez de 25.000 EUR. Ahorro de 10.000 EUR al año, 40.000 EUR en los 4 ejercicios que dura el beneficio."
+        },
+        {
+          "q": "¿Cómo funcionan las stock options exentas?",
+          "a": "Hasta 50.000 EUR/año por empleado están exentos de tributación en el momento de la entrega. Solo tributan al vender las participaciones, como ganancia patrimonial al 19-26%."
+        },
+        {
+          "q": "¿Qué es la Ley Beckham 2.0 para startups?",
+          "a": "Un régimen fiscal especial para trabajadores desplazados a España. Permite tributar al tipo fijo del 24% sobre los primeros 600.000 EUR de renta, en vez del tipo progresivo que puede llegar al 47%."
+        }
       ],
-      "related_slugs": ["como-crear-una-sl", "stock-options", "ley-de-startups-espana", "vesting-startup-que-es"]
+      "related_slugs": [
+        "como-crear-una-sl",
+        "stock-options",
+        "ley-de-startups-espana",
+        "vesting-startup-que-es"
+      ]
+    },
+    {
+      "slug": "inversores-startups-espana",
+      "titulo": "Los mejores inversores y fondos VC para startups en España en 2026",
+      "excerpt": "Directorio completo: Nauta, Kibo, JME, Samaipata, K Fund, Seaya y más. Tickets, sectores y cómo acercarse.",
+      "categoria": "Ecosistema",
+      "cluster": "C1",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/inversores-startups-espana.webp",
+      "tiempo_lectura": "13 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "inversores startups espana",
+        "fondos vc espana",
+        "venture capital espana"
+      ],
+      "publicado": true,
+      "meta_description": "Directorio de los 10 mejores fondos VC y redes de business angels en España. Tickets, sectores, portfolio y cómo acercarte a inversores.",
+      "schema_faq": [
+        {
+          "q": "¿Cuánto invierten los VC en España en seed?",
+          "a": "Entre 200.000 y 1.500.000 EUR en rondas seed. Los fondos más activos son K Fund, Aldea Ventures y 4Founders Capital en esta fase."
+        },
+        {
+          "q": "¿Cómo contactar a un inversor?",
+          "a": "Intro cálida a través de otro founder del portfolio, LinkedIn directo al partner, o pitch en eventos como South Summit o 4YFN."
+        },
+        {
+          "q": "¿Cuánto equity pide un VC?",
+          "a": "Entre 15% y 25% por ronda. En seed español la media es 18-22% con valoraciones de 2-5M EUR."
+        }
+      ],
+      "related_slugs": [
+        "angel-investor-que-es",
+        "que-es-el-venture-capital",
+        "como-financiar-una-startup",
+        "aceleradoras-startups-espana"
+      ]
+    },
+    {
+      "slug": "automatizar-procesos-startup",
+      "titulo": "Cómo automatizar procesos en tu startup: 8 áreas clave con herramientas",
+      "excerpt": "8 procesos clave para automatizar en tu startup con herramientas gratuitas. Calculadora ROI y guía de implementación.",
+      "categoria": "IA & Productividad",
+      "cluster": "C6",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/automatizar-procesos-startup.webp",
+      "tiempo_lectura": "12 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "automatizar procesos startup",
+        "automatizacion startup",
+        "no code automatizacion"
+      ],
+      "publicado": true,
+      "meta_description": "8 procesos que toda startup debe automatizar: onboarding, facturación, email, leads, reporting. Herramientas gratuitas y cálculo de ROI.",
+      "schema_faq": [
+        {
+          "q": "¿Cuánto tiempo se ahorra automatizando?",
+          "a": "Una startup de 5 personas puede ahorrar 37 horas/semana automatizando 8 procesos clave, equivalente a un empleado a tiempo completo."
+        },
+        {
+          "q": "¿Qué herramienta de automatización es mejor para startups?",
+          "a": "n8n (self-hosted, gratis) o Make (cloud, plan gratis) para empezar. Zapier si necesitas integraciones rápidas sin configuración."
+        },
+        {
+          "q": "¿Por dónde empiezo a automatizar?",
+          "a": "Por facturación y email marketing: alto impacto, baja dificultad, ROI inmediato."
+        }
+      ],
+      "related_slugs": [
+        "herramientas-ia-startups-2026",
+        "ia-productividad-founders",
+        "automatizar-ventas-ia-startup",
+        "marketing-startup-bajo-presupuesto"
+      ]
+    },
+    {
+      "slug": "idea-de-negocio-startup",
+      "titulo": "Cómo encontrar una idea de negocio para tu startup: 7 métodos probados",
+      "excerpt": "7 métodos para encontrar tu idea de startup: scratch your own itch, expertise, trends y más. Con matriz de evaluación.",
+      "categoria": "Crear & Lanzar",
+      "cluster": "C3",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/idea-de-negocio-startup.webp",
+      "tiempo_lectura": "9 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "idea de negocio startup",
+        "ideas startup",
+        "encontrar idea negocio"
+      ],
+      "publicado": true,
+      "meta_description": "Descubre 7 métodos probados para encontrar ideas de negocio para tu startup. Incluye matriz de evaluación, ejemplos reales y los errores más comunes a evitar.",
+      "schema_faq": [
+        {
+          "q": "¿Cómo sé si mi idea de startup es buena?",
+          "a": "Evalúala con 4 criterios: problema real y frecuente, mercado grande, puedes construir la solución, y alguien pagaría por ella."
+        },
+        {
+          "q": "¿Necesito una idea original?",
+          "a": "No. El 90% de startups exitosas mejoran algo existente. La ejecución importa más que la originalidad."
+        },
+        {
+          "q": "¿Cuántas ideas debo evaluar antes de elegir?",
+          "a": "Mínimo 3-5. Evalúa cada una con la matriz problema-mercado-ventaja antes de comprometerte."
+        }
+      ],
+      "related_slugs": [
+        "validar-idea-de-negocio",
+        "mvp-que-es-startup",
+        "como-crear-una-startup",
+        "errores-comunes-startups"
+      ]
+    },
+    {
+      "slug": "plan-de-negocio-startup",
+      "titulo": "Plan de negocio para startups: guía moderna con plantilla",
+      "excerpt": "Plan de negocio moderno para startups: lean vs tradicional, secciones clave, TAM/SAM/SOM y plantilla.",
+      "categoria": "Crear & Lanzar",
+      "cluster": "C3",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/plan-de-negocio-startup.webp",
+      "tiempo_lectura": "10 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "plan de negocio startup",
+        "business plan startup",
+        "plan empresa"
+      ],
+      "publicado": true,
+      "meta_description": "Cómo hacer un plan de negocio moderno para startups en 2026. Lean vs tradicional, secciones clave, cálculo TAM/SAM/SOM y plantilla descargable gratis.",
+      "schema_faq": [
+        {
+          "q": "¿Una startup necesita plan de negocio?",
+          "a": "Sí, pero moderno: 10-15 páginas máximo. Lean plan para validar, completo para inversores."
+        },
+        {
+          "q": "¿Qué diferencia hay entre plan lean y tradicional?",
+          "a": "El lean tiene 1 página, se actualiza semanalmente y se centra en hipótesis. El tradicional tiene 30+ páginas y es para inversores/bancos."
+        },
+        {
+          "q": "¿Qué es TAM, SAM y SOM?",
+          "a": "TAM: mercado total. SAM: segmento al que puedes llegar. SOM: lo que capturarás realistamente en 3 años."
+        }
+      ],
+      "related_slugs": [
+        "como-crear-una-startup",
+        "validar-idea-de-negocio",
+        "pitch-deck-que-es",
+        "como-financiar-una-startup"
+      ]
+    },
+    {
+      "slug": "modelo-canvas-startup",
+      "titulo": "Business Model Canvas para startups: tutorial paso a paso",
+      "excerpt": "Tutorial paso a paso del Business Model Canvas. 9 bloques con ejemplos startup, Lean Canvas vs BMC.",
+      "categoria": "Crear & Lanzar",
+      "cluster": "C3",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/modelo-canvas-startup.webp",
+      "tiempo_lectura": "10 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "modelo canvas startup",
+        "business model canvas",
+        "canvas modelo negocio"
+      ],
+      "publicado": true,
+      "meta_description": "Tutorial completo del Business Model Canvas para startups. 9 bloques explicados con ejemplos, Lean Canvas vs BMC y errores comunes.",
+      "schema_faq": [
+        {
+          "q": "¿Cuál es la diferencia entre Canvas y Lean Canvas?",
+          "a": "BMC es general (9 bloques incluyendo partners y recursos). Lean Canvas es para startups: sustituye partners por problema y recursos por métricas."
+        },
+        {
+          "q": "¿Por dónde empiezo a rellenar el Canvas?",
+          "a": "Por Segmento de Clientes y Propuesta de Valor. Sin cliente claro, el resto no tiene sentido."
+        },
+        {
+          "q": "¿Cada cuánto debo actualizar el Canvas?",
+          "a": "Mínimo cada mes en fase de validación. Cada trimestre una vez tengas producto en mercado."
+        }
+      ],
+      "related_slugs": [
+        "plan-de-negocio-startup",
+        "validar-idea-de-negocio",
+        "como-crear-una-startup",
+        "mvp-que-es-startup"
+      ]
+    },
+    {
+      "slug": "growth-hacking-startups",
+      "titulo": "Growth hacking para startups: guía con framework AARRR y 10 tácticas",
+      "excerpt": "Framework AARRR, growth loops, 10 tácticas probadas. Con ejemplos de Dropbox, Slack y Hotmail.",
+      "categoria": "Growth",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/growth-hacking-startups.webp",
+      "tiempo_lectura": "12 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "growth hacking startups",
+        "growth hacking",
+        "crecimiento startup"
+      ],
+      "publicado": true,
+      "meta_description": "Guía de growth hacking para startups: framework AARRR, growth loops, coeficiente viral y 10 tácticas probadas con ejemplos de Dropbox, Hotmail y Slack.",
+      "schema_faq": [
+        {
+          "q": "¿Qué es el framework AARRR?",
+          "a": "Acquisition, Activation, Retention, Revenue, Referral. Las 5 métricas pirata que miden el embudo completo de crecimiento de una startup."
+        },
+        {
+          "q": "¿Growth hacking es lo mismo que marketing?",
+          "a": "No. Growth hacking es experimentación rápida en producto + marketing + datos. Marketing es un subconjunto del growth."
+        },
+        {
+          "q": "¿Cuándo debe una startup empezar con growth?",
+          "a": "Después de tener product-market fit. Hacer growth sin PMF es llenar un cubo con agujeros."
+        }
+      ],
+      "related_slugs": [
+        "marketing-startup-bajo-presupuesto",
+        "automatizar-ventas-ia-startup",
+        "mvp-que-es-startup",
+        "metricas-startup"
+      ]
+    },
+    {
+      "slug": "metricas-startup",
+      "titulo": "Las métricas esenciales para startups: KPIs que todo founder debe conocer",
+      "excerpt": "KPIs esenciales: MRR, churn, CAC, LTV, burn rate y runway. Fórmulas, benchmarks y dashboard recomendado.",
+      "categoria": "Growth",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/metricas-startup.webp",
+      "tiempo_lectura": "11 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "metricas startup",
+        "kpis startup",
+        "mrr arr churn"
+      ],
+      "publicado": true,
+      "meta_description": "Las métricas que todo founder debe dominar: MRR, ARR, churn, CAC, LTV, burn rate, runway y NPS. Fórmulas, benchmarks y cuándo importa cada una.",
+      "schema_faq": [
+        {
+          "q": "¿Cuáles son las 3 métricas más importantes para una startup SaaS?",
+          "a": "MRR (ingresos recurrentes mensuales), churn rate (tasa de cancelación) y ratio LTV/CAC (debe ser >3)."
+        },
+        {
+          "q": "¿Qué es el runway y cómo se calcula?",
+          "a": "Meses que puedes operar con el dinero actual. Fórmula: efectivo disponible / burn rate mensual. Objetivo: mínimo 18 meses."
+        },
+        {
+          "q": "¿Cuándo empiezo a medir métricas?",
+          "a": "Desde el MVP. Al principio: usuarios activos y retención. Con ingresos: MRR, churn, CAC. Con inversión: burn rate y runway."
+        }
+      ],
+      "related_slugs": [
+        "como-financiar-una-startup",
+        "valoracion-startup",
+        "growth-hacking-startups",
+        "plan-de-negocio-startup"
+      ]
+    },
+    {
+      "slug": "crowdfunding-equity-espana",
+      "titulo": "Crowdfunding de equity en España: plataformas, límites y cómo hacerlo",
+      "excerpt": "Equity crowdfunding en España: plataformas, Ley 5/2015, límites, proceso paso a paso y casos de éxito.",
+      "categoria": "Financiación",
+      "cluster": "C2",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/crowdfunding-equity-espana.webp",
+      "tiempo_lectura": "10 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "crowdfunding equity espana",
+        "crowdfunding startups",
+        "inversion participativa"
+      ],
+      "publicado": true,
+      "meta_description": "Guía de equity crowdfunding en España: plataformas (Crowdcube, Capital Cell), marco legal, límites de inversión y proceso paso a paso.",
+      "schema_faq": [
+        {
+          "q": "¿Cuánto se puede captar por crowdfunding en España?",
+          "a": "Hasta 5 millones EUR por campaña según la normativa ECSP. Las campañas exitosas en España captan entre 150.000 y 2.000.000 EUR."
+        },
+        {
+          "q": "¿Qué plataformas de equity crowdfunding hay en España?",
+          "a": "Crowdcube, Capital Cell (biotech), Fellow Funders, Startupxplore y SociosInversores son las principales."
+        },
+        {
+          "q": "¿Es compatible crowdfunding con VC?",
+          "a": "Sí. Muchas startups usan crowdfunding en pre-seed/seed y VC en rondas posteriores. Algunos VC ven el crowdfunding como validación de mercado."
+        }
+      ],
+      "related_slugs": [
+        "como-financiar-una-startup",
+        "angel-investor-que-es",
+        "valoracion-startup",
+        "ley-de-startups-espana"
+      ]
+    },
+    {
+      "slug": "safe-note-espana",
+      "titulo": "SAFE notes en España: qué son, cómo funcionan y adaptación legal",
+      "excerpt": "SAFE notes adaptadas a España: mecánicas de conversión, valuation cap, discount y estructura legal.",
+      "categoria": "Legal",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/safe-note-espana.webp",
+      "tiempo_lectura": "10 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "safe note espana",
+        "safe note startup",
+        "nota convertible"
+      ],
+      "publicado": true,
+      "meta_description": "Guía de SAFE notes adaptadas al derecho español. Mecánicas de conversión, valuation cap, discount, SAFE vs convertible note y cláusulas tipo.",
+      "schema_faq": [
+        {
+          "q": "¿Se pueden usar SAFE notes en España?",
+          "a": "Sí, con adaptaciones legales. No existe la figura directamente en derecho español, pero se estructura como préstamo participativo convertible o pacto parasocial."
+        },
+        {
+          "q": "¿Qué diferencia hay entre SAFE y nota convertible?",
+          "a": "El SAFE no tiene intereses ni fecha de vencimiento. La nota convertible sí: acumula intereses y tiene fecha límite de conversión."
+        },
+        {
+          "q": "¿Cuánto cuesta hacer un SAFE en España?",
+          "a": "Entre 500 y 2.000 EUR de abogado para la adaptación legal. Hay plantillas, pero necesitas revisión profesional."
+        }
+      ],
+      "related_slugs": [
+        "angel-investor-que-es",
+        "pre-seed-seed-serie-a-diferencias",
+        "contratos-startups-mas-importantes",
+        "como-financiar-una-startup"
+      ]
+    },
+    {
+      "slug": "incubadoras-startups-madrid",
+      "titulo": "Las mejores incubadoras de startups en Madrid en 2026",
+      "excerpt": "Directorio completo de incubadoras en Madrid: públicas, universitarias y privadas. Servicios, costes y cómo acceder.",
+      "categoria": "Ecosistema",
+      "cluster": "C1",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/incubadoras-startups-madrid.webp",
+      "tiempo_lectura": "11 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "incubadoras startups madrid",
+        "incubadoras madrid",
+        "espacios coworking startups"
+      ],
+      "publicado": true,
+      "meta_description": "Directorio de incubadoras en Madrid: públicas (La Nave, CEIM), universitarias (IE, CompluEmprende) y privadas (Impact Hub, Wayra). Servicios y cómo acceder.",
+      "schema_faq": [
+        {
+          "q": "¿Cuál es la diferencia entre incubadora y aceleradora?",
+          "a": "La incubadora acompaña desde la idea (6-24 meses, servicios básicos). La aceleradora acelera startups con producto (3-6 meses, inversión + mentoring intensivo)."
+        },
+        {
+          "q": "¿Cuánto cuesta entrar en una incubadora en Madrid?",
+          "a": "Las públicas son gratuitas o muy baratas (50-200 EUR/mes). Las privadas cobran 200-500 EUR/mes. Las universitarias son gratis para alumnos/alumni."
+        },
+        {
+          "q": "¿Necesito estar en Madrid para usar estas incubadoras?",
+          "a": "La mayoría requiere presencia física. Algunas como Bridge for Billions y programas online de IE permiten participación remota."
+        }
+      ],
+      "related_slugs": [
+        "aceleradoras-startups-espana",
+        "como-crear-una-startup",
+        "fases-de-una-startup",
+        "enisa-prestamo-startup"
+      ]
+    },
+    {
+      "slug": "no-code-startups",
+      "titulo": "No code para startups: cómo construir tu producto sin programar",
+      "excerpt": "Herramientas no-code por categoría, 5 casos reales de startups y guía de cuándo migrar a código.",
+      "categoria": "IA & Productividad",
+      "cluster": "C6",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/no-code-startups.webp",
+      "tiempo_lectura": "11 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "no code startups",
+        "no code herramientas",
+        "crear app sin programar"
+      ],
+      "publicado": true,
+      "meta_description": "Construye tu startup sin código: herramientas por categoría (web, app, backend, automatización). 5 casos reales y cuándo migrar a código.",
+      "schema_faq": [
+        {
+          "q": "¿Se puede construir una startup real con no-code?",
+          "a": "Sí. Startups como Comet (valorada en 100M+) empezaron con no-code. Es viable hasta 10.000 usuarios o 50K EUR MRR."
+        },
+        {
+          "q": "¿Cuánto cuesta un stack no-code?",
+          "a": "Desde 0 EUR (Supabase + Carrd + n8n gratis) hasta 200-500 EUR/mes (Bubble + Xano + Make pro). 10-50x más barato que desarrollo custom."
+        },
+        {
+          "q": "¿Cuándo debo migrar de no-code a código?",
+          "a": "Cuando necesites rendimiento extremo, features muy custom, o superes 10.000 usuarios concurrentes. Típicamente en fase seed/Serie A."
+        }
+      ],
+      "related_slugs": [
+        "mvp-que-es-startup",
+        "herramientas-ia-startups-2026",
+        "validar-idea-de-negocio",
+        "automatizar-procesos-startup"
+      ]
+    },
+    {
+      "slug": "tech-stack-startup-2026",
+      "titulo": "Tech stack para startups en 2026: qué usar en cada fase",
+      "excerpt": "Stack recomendado por fase: no-code → Next.js+Supabase → microservicios. Costes reales y decisiones clave.",
+      "categoria": "IA & Productividad",
+      "cluster": "C6",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/tech-stack-startup-2026.webp",
+      "tiempo_lectura": "11 min",
+      "autor": "St4rtup",
+      "keywords": [
+        "tech stack startup 2026",
+        "stack tecnologico startup",
+        "tecnologia startup"
+      ],
+      "publicado": true,
+      "meta_description": "Stack tecnológico recomendado para startups en 2026 por fase: pre-seed (no-code), seed (Next.js + Supabase) y Serie A. Costes reales y decisiones clave.",
+      "schema_faq": [
+        {
+          "q": "¿Cuál es el mejor stack para una startup en 2026?",
+          "a": "Pre-seed: no-code. Seed: Next.js + Supabase + Vercel (0-50 EUR/mes). Serie A: microservicios según necesidad. IA: Claude API o vLLM self-hosted."
+        },
+        {
+          "q": "¿TypeScript o Python para el backend?",
+          "a": "TypeScript si tu equipo es frontend-first (fullstack con Next.js). Python si necesitas IA/ML/data heavy. Ambos son válidos en 2026."
+        },
+        {
+          "q": "¿Cuánto cuesta la infra para una startup?",
+          "a": "Pre-seed: 0-20 EUR/mes (Vercel free + Supabase free). Seed: 50-200 EUR/mes. Serie A: 500-2.000 EUR/mes con carga real."
+        }
+      ],
+      "related_slugs": [
+        "herramientas-ia-startups-2026",
+        "no-code-startups",
+        "como-crear-una-startup",
+        "ia-productividad-founders"
+      ]
     }
   ]
 }
