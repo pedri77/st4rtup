@@ -579,6 +579,26 @@
         {"q": "¿Qué beneficios fiscales tiene la Ley de Startups?", "a": "Tipo reducido del 15% en Impuesto de Sociedades (vs 25% general), exención de stock options hasta 50.000 EUR/año, aplazamiento de deudas tributarias y visa de nómadas digitales."}
       ],
       "related_slugs": ["contratos-startups-mas-importantes", "stock-options", "pacto-socios", "enisa-prestamo-startup"]
+    },
+    {
+      "slug": "validar-idea-de-negocio",
+      "titulo": "Cómo validar una idea de negocio antes de invertir: guía práctica para founders",
+      "excerpt": "7 métodos probados para validar tu idea de startup sin gastar miles de euros. Entrevistas, landing pages, preventa y más.",
+      "categoria": "Crear & Lanzar",
+      "cluster": "C3",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/validar-idea-de-negocio.webp",
+      "tiempo_lectura": "12 min",
+      "autor": "St4rtup",
+      "keywords": ["validar idea de negocio", "validar startup", "lean startup validacion", "como validar una idea"],
+      "publicado": true,
+      "meta_description": "Guía práctica con 7 métodos para validar tu idea de negocio antes de invertir. Entrevistas, landing pages, preventa, smoke tests y frameworks como Lean Startup y Mom Test.",
+      "schema_faq": [
+        {"q": "¿Cuántas personas necesito para validar una idea?", "a": "Para entrevistas cualitativas, 15-20 personas. Para tests cuantitativos (landing, ads), al menos 200-300 visitantes para métricas significativas."},
+        {"q": "¿Puedo validar sin gastar dinero?", "a": "Sí. Las entrevistas de problema, el análisis de competencia y los prototipos en Figma son gratuitos. Puedes validar problema, solución y modelo sin gastar un euro."},
+        {"q": "¿Qué hago si la validación es negativa?", "a": "Pivotar (cambiar solución), iterar (ajustar propuesta) o abandonar. El 65% de las startups exitosas pivotaron. No es un fracaso, es información."}
+      ],
+      "related_slugs": ["mvp-que-es-startup", "como-crear-una-startup", "errores-comunes-startups", "fases-de-una-startup"]
     }
   ]
 }
