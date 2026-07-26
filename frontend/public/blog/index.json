@@ -659,6 +659,66 @@
         {"q": "¿Merece la pena lanzar en Product Hunt?", "a": "Sí, si tienes un producto tech/SaaS. Un buen lanzamiento puede generar 1.000-5.000 visitas en un día, feedback real y primeros usuarios. Es gratis y el efecto de marca dura meses."}
       ],
       "related_slugs": ["automatizar-ventas-ia-startup", "herramientas-ia-startups-2026", "validar-idea-de-negocio", "mvp-que-es-startup"]
+    },
+    {
+      "slug": "ley-de-startups-espana",
+      "titulo": "Ley de startups en España: guía completa de la Ley 28/2022",
+      "excerpt": "Todo sobre la Ley de fomento del ecosistema de empresas emergentes: requisitos, beneficios fiscales, visa nómadas digitales y cómo solicitarla.",
+      "categoria": "Legal",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/ley-de-startups-espana.webp",
+      "tiempo_lectura": "12 min",
+      "autor": "St4rtup",
+      "keywords": ["ley de startups espana", "ley 28/2022", "empresa emergente", "ley startups"],
+      "publicado": true,
+      "meta_description": "Guía completa de la Ley de Startups en España (Ley 28/2022): requisitos empresa emergente, IS al 15%, stock options exentas, visa nómadas y cómo solicitarla.",
+      "schema_faq": [
+        {"q": "¿Qué requisitos debe cumplir una empresa para ser considerada startup?", "a": "Antigüedad máxima de 5 años (7 en biotech), sede social en España, al menos el 60% de plantilla en España, no cotizar en bolsa, no distribuir dividendos y tener carácter innovador certificado por ENISA."},
+        {"q": "¿Cuánto ahorra una startup con la Ley 28/2022?", "a": "El tipo reducido del IS al 15% supone un ahorro del 40% respecto al tipo general del 25%. Las stock options exentas hasta 50.000 EUR/año y la deducción del 50% para inversores son beneficios adicionales significativos."},
+        {"q": "¿Cómo se solicita la certificación de empresa emergente?", "a": "A través de ENISA. Se presenta solicitud online con documentación de la empresa, plan de negocio y justificación del carácter innovador. ENISA resuelve en un máximo de 3 meses."}
+      ],
+      "related_slugs": ["como-crear-una-sl", "stock-options", "enisa-prestamo-startup", "como-crear-una-startup"]
+    },
+    {
+      "slug": "kit-digital-startup",
+      "titulo": "Kit Digital para startups: cómo conseguir hasta 29.000 EUR en ayudas",
+      "excerpt": "Guía del programa Kit Digital: segmentos, importes, categorías de soluciones, proceso de solicitud y compatibilidad con ENISA para startups.",
+      "categoria": "Financiación",
+      "cluster": "C2",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/kit-digital-startup.webp",
+      "tiempo_lectura": "10 min",
+      "autor": "St4rtup",
+      "keywords": ["kit digital startup", "kit digital pymes", "ayudas digitalizacion", "bono digital"],
+      "publicado": true,
+      "meta_description": "Cómo conseguir hasta 29.000 EUR del Kit Digital para tu startup. Segmentos, soluciones cubiertas, proceso paso a paso y compatibilidad con ENISA y Ley Startups.",
+      "schema_faq": [
+        {"q": "¿Cuánto dinero da el Kit Digital?", "a": "Depende del segmento: hasta 29.000 EUR (seg. I, 10-49 empleados), 6.000 EUR (seg. II, 3-9), 3.000 EUR (seg. III, 0-2) y 25.000 EUR (seg. IV, 50-249). Es un bono para contratar soluciones digitales."},
+        {"q": "¿Puede una startup solicitar el Kit Digital?", "a": "Sí, si está constituida como sociedad mercantil, tiene antigüedad mínima de 6 meses, está al corriente de obligaciones fiscales y tiene empleados en el segmento correspondiente."},
+        {"q": "¿Es compatible el Kit Digital con ENISA?", "a": "Sí, son compatibles. El Kit Digital es una subvención a fondo perdido y ENISA es un préstamo participativo. Puedes combinar ambos sin problema."}
+      ],
+      "related_slugs": ["herramientas-ia-startups-2026", "como-financiar-una-startup", "como-crear-una-startup", "enisa-prestamo-startup"]
+    },
+    {
+      "slug": "ley-startups-beneficios-fiscales",
+      "titulo": "Beneficios fiscales de la Ley de Startups: guía con cálculos reales",
+      "excerpt": "Deep-dive fiscal: IS al 15%, stock options exentas 50K, deducción inversores 50%, aplazamiento sin garantías. Con ejemplos y cálculos de ahorro real.",
+      "categoria": "Legal",
+      "cluster": "C4",
+      "fecha": "2026-07-26",
+      "imagen": "/blog/ley-startups-beneficios-fiscales.webp",
+      "tiempo_lectura": "13 min",
+      "autor": "St4rtup",
+      "keywords": ["ley startups beneficios fiscales", "impuestos startup espana", "stock options fiscalidad", "IS 15 startup"],
+      "publicado": true,
+      "meta_description": "Beneficios fiscales de la Ley de Startups con cálculos reales: IS al 15%, stock options exentas 50.000 EUR, deducción inversores 50% y Ley Beckham 2.0.",
+      "schema_faq": [
+        {"q": "¿Cuánto se ahorra con el IS al 15%?", "a": "Con 100.000 EUR de beneficio, pagas 15.000 EUR en vez de 25.000 EUR. Ahorro de 10.000 EUR al año, 40.000 EUR en los 4 ejercicios que dura el beneficio."},
+        {"q": "¿Cómo funcionan las stock options exentas?", "a": "Hasta 50.000 EUR/año por empleado están exentos de tributación en el momento de la entrega. Solo tributan al vender las participaciones, como ganancia patrimonial al 19-26%."},
+        {"q": "¿Qué es la Ley Beckham 2.0 para startups?", "a": "Un régimen fiscal especial para trabajadores desplazados a España. Permite tributar al tipo fijo del 24% sobre los primeros 600.000 EUR de renta, en vez del tipo progresivo que puede llegar al 47%."}
+      ],
+      "related_slugs": ["como-crear-una-sl", "stock-options", "ley-de-startups-espana", "vesting-startup-que-es"]
     }
   ]
 }
