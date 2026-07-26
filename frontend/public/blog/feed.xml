@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>St4rtup Blog</title>
+  <link>https://st4rtup.com/blog</link>
+  <description>Todo lo que necesitas para crear, financiar y escalar tu startup en España.</description>
+  <language>es</language>
+  <lastBuildDate>Sun, 26 Jul 2026 10:11:05 +0000</lastBuildDate>
+  <atom:link href="https://st4rtup.com/blog/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Cómo validar una idea de negocio antes de invertir: guía práctica para founders</title>
+    <link>https://st4rtup.com/blog/validar-idea-de-negocio</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/validar-idea-de-negocio</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Guía práctica con 7 métodos para validar tu idea de negocio antes de invertir. Entrevistas, landing pages, preventa, smoke tests y frameworks como Lean Startup y Mom Test.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>Cómo financiar una startup en España: todas las opciones en 2026</title>
+    <link>https://st4rtup.com/blog/como-financiar-una-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/como-financiar-una-startup</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Todas las opciones para financiar tu startup en España: bootstrapping, ENISA, angels, VC, crowdfunding y ayudas públicas. Guía práctica con importes y requisitos.</description>
+  <category>Financiación</category>
+  </item>
+  <item>
+    <title>Las 10 mejores aceleradoras de startups en España en 2026</title>
+    <link>https://st4rtup.com/blog/aceleradoras-startups-espana</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/aceleradoras-startups-espana</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Las 10 mejores aceleradoras de startups en España: Lanzadera, Wayra, SeedRocket, Demium y más. Inversión, equity, duración y cómo aplicar a cada programa.</description>
+  <category>Ecosistema</category>
+  </item>
+  <item>
+    <title>Marketing para startups con poco presupuesto: 10 tácticas que funcionan</title>
+    <link>https://st4rtup.com/blog/marketing-startup-bajo-presupuesto</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/marketing-startup-bajo-presupuesto</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>10 tácticas de marketing para startups con menos de 500 EUR/mes: SEO, LinkedIn, Product Hunt, cold email, partnerships y más. Plan de acción 90 días incluido.</description>
+  <category>Growth</category>
+  </item>
+  <item>
+    <title>Ley de startups en España: guía completa de la Ley 28/2022</title>
+    <link>https://st4rtup.com/blog/ley-de-startups-espana</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/ley-de-startups-espana</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Guía completa de la Ley de Startups en España (Ley 28/2022): requisitos empresa emergente, IS al 15%, stock options exentas, visa nómadas y cómo solicitarla.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>Kit Digital para startups: cómo conseguir hasta 29.000 EUR en ayudas</title>
+    <link>https://st4rtup.com/blog/kit-digital-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/kit-digital-startup</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Cómo conseguir hasta 29.000 EUR del Kit Digital para tu startup. Segmentos, soluciones cubiertas, proceso paso a paso y compatibilidad con ENISA y Ley Startups.</description>
+  <category>Financiación</category>
+  </item>
+  <item>
+    <title>Beneficios fiscales de la Ley de Startups: guía con cálculos reales</title>
+    <link>https://st4rtup.com/blog/ley-startups-beneficios-fiscales</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/ley-startups-beneficios-fiscales</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Beneficios fiscales de la Ley de Startups con cálculos reales: IS al 15%, stock options exentas 50.000 EUR, deducción inversores 50% y Ley Beckham 2.0.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>Los mejores inversores y fondos VC para startups en España en 2026</title>
+    <link>https://st4rtup.com/blog/inversores-startups-espana</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/inversores-startups-espana</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Directorio de los 10 mejores fondos VC y redes de business angels en España. Tickets, sectores, portfolio y cómo acercarte a inversores.</description>
+  <category>Ecosistema</category>
+  </item>
+  <item>
+    <title>Cómo automatizar procesos en tu startup: 8 áreas clave con herramientas</title>
+    <link>https://st4rtup.com/blog/automatizar-procesos-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/automatizar-procesos-startup</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>8 procesos que toda startup debe automatizar: onboarding, facturación, email, leads, reporting. Herramientas gratuitas y cálculo de ROI.</description>
+  <category>IA &amp; Productividad</category>
+  </item>
+  <item>
+    <title>Cómo encontrar una idea de negocio para tu startup: 7 métodos probados</title>
+    <link>https://st4rtup.com/blog/idea-de-negocio-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/idea-de-negocio-startup</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Descubre 7 métodos probados para encontrar ideas de negocio para tu startup. Incluye matriz de evaluación, ejemplos reales y los errores más comunes a evitar.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>Plan de negocio para startups: guía moderna con plantilla</title>
+    <link>https://st4rtup.com/blog/plan-de-negocio-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/plan-de-negocio-startup</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Cómo hacer un plan de negocio moderno para startups en 2026. Lean vs tradicional, secciones clave, cálculo TAM/SAM/SOM y plantilla descargable gratis.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>Business Model Canvas para startups: tutorial paso a paso</title>
+    <link>https://st4rtup.com/blog/modelo-canvas-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/modelo-canvas-startup</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Tutorial completo del Business Model Canvas para startups. 9 bloques explicados con ejemplos, Lean Canvas vs BMC y errores comunes.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>Growth hacking para startups: guía con framework AARRR y 10 tácticas</title>
+    <link>https://st4rtup.com/blog/growth-hacking-startups</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/growth-hacking-startups</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Guía de growth hacking para startups: framework AARRR, growth loops, coeficiente viral y 10 tácticas probadas con ejemplos de Dropbox, Hotmail y Slack.</description>
+  <category>Growth</category>
+  </item>
+  <item>
+    <title>Las métricas esenciales para startups: KPIs que todo founder debe conocer</title>
+    <link>https://st4rtup.com/blog/metricas-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/metricas-startup</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Las métricas que todo founder debe dominar: MRR, ARR, churn, CAC, LTV, burn rate, runway y NPS. Fórmulas, benchmarks y cuándo importa cada una.</description>
+  <category>Growth</category>
+  </item>
+  <item>
+    <title>Crowdfunding de equity en España: plataformas, límites y cómo hacerlo</title>
+    <link>https://st4rtup.com/blog/crowdfunding-equity-espana</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/crowdfunding-equity-espana</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Guía de equity crowdfunding en España: plataformas (Crowdcube, Capital Cell), marco legal, límites de inversión y proceso paso a paso.</description>
+  <category>Financiación</category>
+  </item>
+  <item>
+    <title>SAFE notes en España: qué son, cómo funcionan y adaptación legal</title>
+    <link>https://st4rtup.com/blog/safe-note-espana</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/safe-note-espana</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Guía de SAFE notes adaptadas al derecho español. Mecánicas de conversión, valuation cap, discount, SAFE vs convertible note y cláusulas tipo.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>Las mejores incubadoras de startups en Madrid en 2026</title>
+    <link>https://st4rtup.com/blog/incubadoras-startups-madrid</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/incubadoras-startups-madrid</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Directorio de incubadoras en Madrid: públicas (La Nave, CEIM), universitarias (IE, CompluEmprende) y privadas (Impact Hub, Wayra). Servicios y cómo acceder.</description>
+  <category>Ecosistema</category>
+  </item>
+  <item>
+    <title>No code para startups: cómo construir tu producto sin programar</title>
+    <link>https://st4rtup.com/blog/no-code-startups</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/no-code-startups</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Construye tu startup sin código: herramientas por categoría (web, app, backend, automatización). 5 casos reales y cuándo migrar a código.</description>
+  <category>IA &amp; Productividad</category>
+  </item>
+  <item>
+    <title>Tech stack para startups en 2026: qué usar en cada fase</title>
+    <link>https://st4rtup.com/blog/tech-stack-startup-2026</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/tech-stack-startup-2026</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Stack tecnológico recomendado para startups en 2026 por fase: pre-seed (no-code), seed (Next.js + Supabase) y Serie A. Costes reales y decisiones clave.</description>
+  <category>IA &amp; Productividad</category>
+  </item>
+  <item>
+    <title>Product market fit: qué es, cómo medirlo y cómo encontrarlo</title>
+    <link>https://st4rtup.com/blog/product-market-fit</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/product-market-fit</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Qué es product market fit, cómo medirlo con el test de Sean Ellis (40%), curvas de retención y NPS. Guía para encontrar el PMF de tu startup.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>Term sheet: qué es, cláusulas clave y cómo negociarlo</title>
+    <link>https://st4rtup.com/blog/term-sheet-que-es</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/term-sheet-que-es</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Qué es un term sheet, cláusulas clave (valoración, liquidation preference, anti-dilución, vesting) y cómo negociarlo como founder.</description>
+  <category>Financiación</category>
+  </item>
+  <item>
+    <title>Product led growth: estrategia de crecimiento liderada por el producto</title>
+    <link>https://st4rtup.com/blog/product-led-growth</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/product-led-growth</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Estrategia PLG para startups: freemium, free trial, self-serve, viral loops. PLG vs sales-led, métricas clave y playbook de implementación.</description>
+  <category>Growth</category>
+  </item>
+  <item>
+    <title>Churn rate: qué es, cómo calcularlo y 8 estrategias para reducirlo</title>
+    <link>https://st4rtup.com/blog/churn-rate-que-es</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/churn-rate-que-es</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Churn rate explicado: customer vs revenue churn, fórmulas, benchmarks por industria y 8 estrategias probadas para reducir la cancelación.</description>
+  <category>Growth</category>
+  </item>
+  <item>
+    <title>Customer acquisition cost (CAC): cómo calcularlo y optimizarlo</title>
+    <link>https://st4rtup.com/blog/customer-acquisition-cost</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/customer-acquisition-cost</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Guía completa del CAC: fórmula, variantes (blended, por canal), ratio LTV/CAC, payback period, benchmarks y 8 formas de reducirlo.</description>
+  <category>Growth</category>
+  </item>
+  <item>
+    <title>Métricas SaaS esenciales: MRR, NRR, Rule of 40 y más</title>
+    <link>https://st4rtup.com/blog/saas-metricas</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/saas-metricas</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Las 10 métricas SaaS que todo founder debe dominar: MRR, ARR, NRR, gross margin, magic number, Rule of 40. Benchmarks por fase y dashboard.</description>
+  <category>Growth</category>
+  </item>
+  <item>
+    <title>Startup studio: qué es, cómo funciona y los mejores en España</title>
+    <link>https://st4rtup.com/blog/startup-studio-que-es</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/startup-studio-que-es</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Qué es un startup studio (venture builder), cómo funciona, diferencias con aceleradoras y VC. Top studios en España: Antai, Nuclio, Byld, Demium.</description>
+  <category>Ecosistema</category>
+  </item>
+  <item>
+    <title>Ley Crea y Crece: capital social 1 EUR, factura electrónica y más</title>
+    <link>https://st4rtup.com/blog/ley-crea-y-crece</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/ley-crea-y-crece</guid>
+    <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Ley 18/2022 Crea y Crece: SL con 1 EUR de capital, factura electrónica obligatoria B2B, morosidad 30 días y sandbox fintech. Impacto en startups.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>Cómo crear una startup en 2026: guía paso a paso desde la idea hasta escalar</title>
+    <link>https://st4rtup.com/blog/como-crear-una-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/como-crear-una-startup</guid>
+    <pubDate>Sat, 25 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Guía completa para crear una startup en España en 2026. 8 pasos: idea, validación, MVP, modelo de negocio, constitución, financiación, lanzamiento y escala.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>Préstamo ENISA para startups: guía completa 2026 con requisitos y proceso</title>
+    <link>https://st4rtup.com/blog/enisa-prestamo-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/enisa-prestamo-startup</guid>
+    <pubDate>Sat, 25 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Guía ENISA 2026: 3 líneas de financiación hasta 300.000 EUR sin garantías para startups. Requisitos, proceso paso a paso, documentación y plazos.</description>
+  <category>Financiación</category>
+  </item>
+  <item>
+    <title>Cómo crear una SL en España en 2026: paso a paso, costes y beneficios fiscales</title>
+    <link>https://st4rtup.com/blog/como-crear-una-sl</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/como-crear-una-sl</guid>
+    <pubDate>Sat, 25 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Paso a paso para crear una SL en España en 2026. Capital mínimo 3.000 EUR, trámites CIRCE, costes desglosados y beneficios fiscales de la Ley de Startups.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>RGPD para startups: guía práctica de cumplimiento</title>
+    <link>https://st4rtup.com/blog/rgpd-startups</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/rgpd-startups</guid>
+    <pubDate>Thu, 21 May 2026 00:00:00 +0000</pubDate>
+    <description>Guía práctica de RGPD para startups: pasos para cumplir la normativa de protección de datos, obligaciones, sanciones y checklist de implementación.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>Propiedad intelectual en startups: protege tu idea</title>
+    <link>https://st4rtup.com/blog/propiedad-intelectual</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/propiedad-intelectual</guid>
+    <pubDate>Tue, 19 May 2026 00:00:00 +0000</pubDate>
+    <description>Cómo proteger la propiedad intelectual de tu startup: patentes, marcas registradas, copyright y secretos comerciales. Guía legal práctica para founders.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>Stock options en startups: cómo funcionan en España</title>
+    <link>https://st4rtup.com/blog/stock-options</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/stock-options</guid>
+    <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+    <description>Stock options en startups espanolas: cómo funcionan, diferencias con phantom shares, fiscalidad ESOP y la nueva ley de startups. Guía práctica.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>Pacto de socios: guía completa para cofounders</title>
+    <link>https://st4rtup.com/blog/pacto-socios</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/pacto-socios</guid>
+    <pubDate>Thu, 14 May 2026 00:00:00 +0000</pubDate>
+    <description>Guía completa del pacto de socios para startups: cláusulas esenciales, errores frecuentes y por qué es el documento más importante entre cofounders.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>Los 10 errores más comunes al crear una startup</title>
+    <link>https://st4rtup.com/blog/errores-comunes-startups</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/errores-comunes-startups</guid>
+    <pubDate>Tue, 12 May 2026 00:00:00 +0000</pubDate>
+    <description>Los 10 errores más comunes al crear una startup y cómo evitarlos. Desde no validar el mercado hasta escalar demasiado pronto. Lecciones reales.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>Cómo hacer un pitch perfecto en 5 minutos</title>
+    <link>https://st4rtup.com/blog/como-hacer-pitch</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/como-hacer-pitch</guid>
+    <pubDate>Sat, 09 May 2026 00:00:00 +0000</pubDate>
+    <description>Cómo hacer un pitch perfecto en 5 minutos: estructura probada, consejos de storytelling y los errores que debes evitar para convencer a inversores.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>Cómo valorar una startup: métodos y ejemplos</title>
+    <link>https://st4rtup.com/blog/valoracion-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/valoracion-startup</guid>
+    <pubDate>Thu, 07 May 2026 00:00:00 +0000</pubDate>
+    <description>Cómo valorar una startup: métodos DCF, múltiplos, Berkus y Scorecard explicados con ejemplos. Guía práctica de valoración para founders e inversores.</description>
+  <category>Financiación</category>
+  </item>
+  <item>
+    <title>Bootstrapping: cómo financiar tu startup sin inversores</title>
+    <link>https://st4rtup.com/blog/bootstrapping</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/bootstrapping</guid>
+    <pubDate>Tue, 05 May 2026 00:00:00 +0000</pubDate>
+    <description>Qué es bootstrapping y cómo financiar tu startup sin inversores. Ventajas, estrategias prácticas y ejemplos de empresas que crecieron con autofinanciación.</description>
+  <category>Financiación</category>
+  </item>
+  <item>
+    <title>Scaleup: qué es y cómo pasar de startup a scaleup</title>
+    <link>https://st4rtup.com/blog/scaleup-que-es</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/scaleup-que-es</guid>
+    <pubDate>Sat, 02 May 2026 00:00:00 +0000</pubDate>
+    <description>Qué es una scaleup, en qué se diferencia de una startup y qué pasos seguir para escalar tu negocio. Métricas, retos y ejemplos reales.</description>
+  <category>Ecosistema</category>
+  </item>
+  <item>
+    <title>¿Qué es un unicornio startup? Ejemplos en España</title>
+    <link>https://st4rtup.com/blog/unicornio-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/unicornio-startup</guid>
+    <pubDate>Thu, 30 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Qué es un unicornio startup, qué criterios debe cumplir y cuáles son los unicornios espanoles. Ejemplos reales y claves de su éxito.</description>
+  <category>Ecosistema</category>
+  </item>
+  <item>
+    <title>Startup vs Pyme: 5 diferencias clave</title>
+    <link>https://st4rtup.com/blog/startup-vs-pyme</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/startup-vs-pyme</guid>
+    <pubDate>Tue, 28 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Startup vs pyme: las 5 diferencias clave en escalabilidad, financiación, innovación, riesgo y crecimiento. Descubre cuál encaja con tu proyecto.</description>
+  <category>Ecosistema</category>
+  </item>
+  <item>
+    <title>Los 7 contratos que toda startup necesita desde el día uno</title>
+    <link>https://st4rtup.com/blog/contratos-startups-mas-importantes</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/contratos-startups-mas-importantes</guid>
+    <pubDate>Sat, 25 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Los 7 contratos imprescindibles para startups: pacto de socios, NDA, contrato de trabajo, vesting y más. Documentos legales desde el día uno.</description>
+  <category>Legal</category>
+  </item>
+  <item>
+    <title>Vesting en startups: qué es, cómo funciona y por qué protege a los cofounders</title>
+    <link>https://st4rtup.com/blog/vesting-startup-que-es</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/vesting-startup-que-es</guid>
+    <pubDate>Thu, 23 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Qué es el vesting en startups, cómo funciona el cliff period, calendarios típicos y por qué protege a cofounders y a la empresa. Guía práctica.</description>
+  <category>Fundadores</category>
+  </item>
+  <item>
+    <title>Las 8 habilidades que todo founder de startup necesita dominar</title>
+    <link>https://st4rtup.com/blog/habilidades-founder-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/habilidades-founder-startup</guid>
+    <pubDate>Tue, 21 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Las 8 habilidades esenciales que todo founder de startup necesita: liderazgo, ventas, resiliencia, producto, finanzas y más. Guía práctica 2026.</description>
+  <category>Fundadores</category>
+  </item>
+  <item>
+    <title>IA y productividad para founders: cómo hacer el trabajo de 10 personas siendo 1</title>
+    <link>https://st4rtup.com/blog/ia-productividad-founders</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/ia-productividad-founders</guid>
+    <pubDate>Mon, 20 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Framework de 4 capas para multiplicar tu productividad con IA como founder. Herramientas, automatizaciones y plan de acción para hacer más con menos.</description>
+  <category>IA &amp; Productividad</category>
+  </item>
+  <item>
+    <title>Las 15 mejores herramientas de IA para startups en 2026: guía práctica por departamento</title>
+    <link>https://st4rtup.com/blog/herramientas-ia-startups-2026</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/herramientas-ia-startups-2026</guid>
+    <pubDate>Mon, 20 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Las 15 mejores herramientas de IA para startups en 2026 organizadas por departamento: ventas, marketing, producto, legal y análisis. Guía práctica.</description>
+  <category>IA &amp; Productividad</category>
+  </item>
+  <item>
+    <title>Cómo automatizar tus ventas con IA: guía práctica para startups B2B</title>
+    <link>https://st4rtup.com/blog/automatizar-ventas-ia-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/automatizar-ventas-ia-startup</guid>
+    <pubDate>Mon, 20 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Guía paso a paso para automatizar ventas B2B con IA: 7 etapas del pipeline, herramientas recomendadas y métricas clave para startups que quieren escalar.</description>
+  <category>IA &amp; Productividad</category>
+  </item>
+  <item>
+    <title>Pitch deck: qué es, qué slides incluir y ejemplos que funcionan</title>
+    <link>https://st4rtup.com/blog/pitch-deck-que-es</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/pitch-deck-que-es</guid>
+    <pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Qué es un pitch deck, qué slides debe incluir y ejemplos reales que funcionan. Aprende a crear la presentación que convence a inversores.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>MVP: qué es, cómo construirlo y por qué es clave para validar tu startup</title>
+    <link>https://st4rtup.com/blog/mvp-que-es-startup</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/mvp-que-es-startup</guid>
+    <pubDate>Thu, 16 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Qué es un MVP (Producto Mínimo Viable), cómo construirlo paso a paso y por qué es esencial para validar tu startup antes de invertir tiempo y dinero.</description>
+  <category>Crear &amp; Lanzar</category>
+  </item>
+  <item>
+    <title>Pre-seed, Seed y Serie A: diferencias, importes y qué se espera en cada ronda</title>
+    <link>https://st4rtup.com/blog/pre-seed-seed-serie-a-diferencias</link>
+    <guid isPermaLink="true">https://st4rtup.com/blog/pre-seed-seed-serie-a-diferencias</guid>
+    <pubDate>Tue, 14 Apr 2026 00:00:00 +0000</pubDate>
+    <description>Diferencias entre rondas pre-seed, seed y Serie A: importes típicos, métricas exigidas, dilución esperada y qué inversores participan en cada fase.</description>
+  <category>Financiación</category>
+  </item>
+</channel>
+</rss>
