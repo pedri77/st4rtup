@@ -1,1 +1,5 @@
+# Blog: serve static Hugo HTML (not SPA)
+/blog/* /blog/:splat 200
+
+# SPA catch-all for everything else
 /* /index.html 200
