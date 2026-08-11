@@ -24,8 +24,8 @@ Riskitera Sales es el CRM comercial interno de **Riskitera**, una plataforma Saa
 | Capa | Tecnología | Hosting |
 |------|-----------|---------|
 | Frontend | React 18 + Vite + TailwindCSS | Cloudflare Pages |
-| Backend | FastAPI + Python 3.11 (async) | Fly.io (región CDG) |
-| Base de datos | PostgreSQL 15 | Fly.io Postgres (región CDG) |
+| Backend | FastAPI + Python 3.12 (async) | Hetzner (systemd, 188.245.166.253) |
+| Base de datos | PostgreSQL 17 | Supabase (riskitera-sales, eu-west-2, session pooler) |
 | Auth | Supabase Auth + JWT (HS256) | Supabase |
 | Email transaccional | Multi-proveedor (Resend, Zoho, Brevo, SES, Mailgun, SMTP) | — |
 | Automatizaciones | n8n (self-hosted o cloud) | — |
@@ -144,7 +144,7 @@ cd backend && ruff check app/
 
 ## Base de Datos
 
-- **PostgreSQL 15** en Fly.io Postgres (async via asyncpg)
+- **PostgreSQL 17** en Supabase riskitera-sales (async via asyncpg, session pooler)
 - **50+ tablas:** leads, visits, emails, account_plans, actions, opportunities, offers, monthly_reviews, surveys, email_templates, contacts, notifications, automations, automation_executions, system_settings, chat_conversations, chat_messages, webhook_logs, webhook_subscriptions, social_posts, social_recurrences, landing_pages, workflow_audit_log, budget_caps, cost_events, guardrail_log, kpi_history, seo_keywords, seo_rankings, etc.
 - **Convenciones:**
   - UUID como PK (gen_random_uuid())
@@ -258,11 +258,11 @@ Riskitera Sales es la herramienta comercial interna para vender la plataforma GR
 
 ## Despliegue
 
-- **Backend (Fly.io):** Push a main → `fly deploy` (app: `riskitera-sales-backend`, región CDG)
+- **Backend (Hetzner):** `./ops/deploy.sh` (rsync + systemd restart en 188.245.166.253)
 - **Frontend (Cloudflare Pages):** Push a main → auto-build `npm run build` → dist/
-- **Database (Fly.io Postgres):** App `riskitera-postgres`, región CDG. Migraciones via alembic o SQL directo
-- **Auth (Supabase):** Solo Supabase Auth para JWT. Datos de usuario en Fly.io Postgres
-- **Variables de entorno:** Ver `.env.example` en cada directorio
+- **Database (Supabase):** Proyecto riskitera-sales, eu-west-2. Migraciones via alembic o SQL Editor
+- **Auth (Supabase):** Supabase Auth para JWT
+- **Variables de entorno:** Servidor `/opt/st4rtup/.env` es fuente de verdad. `deploy.sh` no sincroniza .env
 
 <!-- wiki-brain:start -->
 ## Wiki Knowledge Base (segundo cerebro de David)
