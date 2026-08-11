@@ -11,6 +11,10 @@
 #   - Server: 188.245.166.253 (root@)
 #   - Backend at /opt/st4rtup on server
 #
+# NOTE: This script does NOT sync .env files. The server's /opt/st4rtup/.env
+# is the source of truth for production env vars. To update it, edit directly
+# on the server. Local .env.production is a reference copy only.
+#
 set -euo pipefail
 
 REMOTE_HOST="root@188.245.166.253"
