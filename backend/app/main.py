@@ -464,8 +464,16 @@ async def health_check():
 
 @app.get("/ready")
 async def readiness():
-    """Lightweight readiness probe — no DB check, just confirms ASGI is accepting requests."""
-    return {"status": "ok"}
+    """Readiness probe — verifies DB connection is alive."""
+    try:
+        async with AsyncSessionLocal() as session:
+            await session.execute(text("SELECT 1"))
+        return {"status": "ok"}
+    except Exception as e:
+        return JSONResponse(
+            status_code=503,
+            content={"status": "not_ready", "reason": f"database: {str(e)[:100]}"},
+        )
 
 
 @app.get("/metrics")
