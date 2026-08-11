@@ -2,18 +2,14 @@
   "mcpServers": {
     "postgres": {
       "type": "stdio",
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "@bytebase/dbhub", "--dsn", "${FLY_DATABASE_URL}"],
+      "command": "npx",
+      "args": ["-y", "@bytebase/dbhub", "--dsn", "${FLY_DATABASE_URL}"],
       "env": {}
-    },
-    "github": {
-      "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/"
     },
     "supabase": {
       "type": "stdio",
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "supabase-mcp-server"],
+      "command": "npx",
+      "args": ["-y", "supabase-mcp-server"],
       "env": {
         "SUPABASE_URL": "${SUPABASE_URL}",
         "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}"
@@ -21,13 +17,13 @@
     },
     "fetch": {
       "type": "stdio",
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "@anthropic-ai/mcp-fetch"]
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-fetch"]
     },
     "filesystem": {
       "type": "stdio",
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "@anthropic-ai/mcp-server-filesystem", "c:/Users/zc01607/Documents/Desarrollo/Claude/riskitera-sales"]
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-filesystem", "/Users/pedri77/Documents/Claude_proyectos/Claude/st4rtup"]
     }
   }
 }
