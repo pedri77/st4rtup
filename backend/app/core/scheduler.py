@@ -8,11 +8,16 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from sqlalchemy import select, func, and_
 
+import asyncio
+
 from app.core.config import settings
 from app.core.database import AsyncSessionLocal
 
 logger = logging.getLogger(__name__)
 scheduler: AsyncIOScheduler = None
+
+# Limit concurrent scheduler jobs to prevent PgBouncer pool exhaustion
+_scheduler_semaphore = asyncio.Semaphore(3)
 
 
 async def _get_active_org_ids() -> list[str]:
@@ -1388,29 +1393,30 @@ def init_scheduler():
 
         @functools.wraps(fn)
         async def wrapper():
-            start = datetime.now(timezone.utc)
-            org_ids = await _get_active_org_ids()
-            total_ok, total_err = 0, 0
-            for org_id in (org_ids or [None]):
-                try:
-                    # Pass org_id if the function accepts it
-                    import inspect
-                    sig = inspect.signature(fn)
-                    if 'org_id' in sig.parameters:
-                        await fn(org_id=org_id)
-                    else:
-                        await fn()
-                    total_ok += 1
-                except Exception as e:
-                    total_err += 1
-                    logger.error(f"Job {automation_name} failed for org {org_id}: {e}")
-                # If function doesn't accept org_id, only run once
-                if 'org_id' not in inspect.signature(fn).parameters:
-                    break
-            if code:
-                status = "success" if total_err == 0 else ("partial" if total_ok > 0 else "error")
-                await _log_execution(code, status, items_processed=total_ok + total_err,
-                                     items_succeeded=total_ok, items_failed=total_err, started_at=start)
+            async with _scheduler_semaphore:
+                start = datetime.now(timezone.utc)
+                org_ids = await _get_active_org_ids()
+                total_ok, total_err = 0, 0
+                for org_id in (org_ids or [None]):
+                    try:
+                        # Pass org_id if the function accepts it
+                        import inspect
+                        sig = inspect.signature(fn)
+                        if 'org_id' in sig.parameters:
+                            await fn(org_id=org_id)
+                        else:
+                            await fn()
+                        total_ok += 1
+                    except Exception as e:
+                        total_err += 1
+                        logger.error(f"Job {automation_name} failed for org {org_id}: {e}")
+                    # If function doesn't accept org_id, only run once
+                    if 'org_id' not in inspect.signature(fn).parameters:
+                        break
+                if code:
+                    status = "success" if total_err == 0 else ("partial" if total_ok > 0 else "error")
+                    await _log_execution(code, status, items_processed=total_ok + total_err,
+                                         items_succeeded=total_ok, items_failed=total_err, started_at=start)
         return wrapper
 
     for fn, trigger, job_id, name in JOBS:

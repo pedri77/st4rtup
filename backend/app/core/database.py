@@ -21,8 +21,8 @@ if _is_test:
 else:
     # Production / development pool settings
     _engine_kwargs.update(
-        pool_size=15,
-        max_overflow=25,
+        pool_size=5,
+        max_overflow=10,
         pool_recycle=300,
         pool_timeout=10,
     )
