@@ -38,7 +38,7 @@
   // Inject CSS
   var style = document.createElement('style');
   style.textContent = [
-    '#cmp-banner{position:fixed;bottom:0;left:0;right:0;z-index:99999;',
+    '#cmp-banner{position:fixed;bottom:0;left:0;right:0;z-index:2147483647;',
     'background:#1a1a2e;color:#e0e0e0;padding:16px 20px;',
     'font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;',
     'box-shadow:0 -4px 20px rgba(0,0,0,0.3);display:flex;flex-wrap:wrap;',
@@ -87,26 +87,29 @@
     '</div>'
   ].join('');
 
+  var consentSaved = false;
+
   // Wait for body
   function insertBanner() {
     document.body.appendChild(banner);
 
-    document.getElementById('cmp-accept').addEventListener('click', function () {
+    // Query within banner to avoid ID collisions with host page elements
+    banner.querySelector('#cmp-accept').addEventListener('click', function () {
       saveConsent(true, true);
     });
 
-    document.getElementById('cmp-reject').addEventListener('click', function () {
+    banner.querySelector('#cmp-reject').addEventListener('click', function () {
       saveConsent(false, false);
     });
 
-    document.getElementById('cmp-config').addEventListener('click', function () {
-      var detail = document.getElementById('cmp-detail');
+    banner.querySelector('#cmp-config').addEventListener('click', function () {
+      var detail = banner.querySelector('#cmp-detail');
       detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
     });
 
-    document.getElementById('cmp-save').addEventListener('click', function () {
-      var analytics = document.getElementById('cmp-chk-analytics').checked;
-      var marketing = document.getElementById('cmp-chk-marketing').checked;
+    banner.querySelector('#cmp-save').addEventListener('click', function () {
+      var analytics = banner.querySelector('#cmp-chk-analytics').checked;
+      var marketing = banner.querySelector('#cmp-chk-marketing').checked;
       saveConsent(analytics, marketing);
     });
   }
@@ -118,6 +121,8 @@
   }
 
   function saveConsent(analytics, marketing) {
+    if (consentSaved) return; // Guard against double-click
+    consentSaved = true;
     var consent = {
       date: new Date().toISOString(),
       necessary: true,
@@ -127,6 +132,8 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(consent));
     banner.remove();
     if (analytics || marketing) enableAnalytics();
+    // Notify lead popup it can now check for cookie_consent
+    window.dispatchEvent(new CustomEvent('cmpConsentSaved'));
   }
 
   function enableAnalytics() {
